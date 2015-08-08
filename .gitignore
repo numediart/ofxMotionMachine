@@ -34,7 +34,7 @@ libs/oF/libs/*
 
 # Exclude any app but examples
 apps/*
-!apps/examples
+!apps/examples/*
 
 # Exclude nibs/swap files
 *~.nib
