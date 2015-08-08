@@ -4,15 +4,6 @@
 *.o
 *.obj
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
 # Fortran module files
 *.mod
 
@@ -22,7 +13,61 @@
 *.a
 *.lib
 
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
 # Executables
 *.exe
 *.out
 *.app
+
+# Exclude build/ folder
+build/*
+
+# Exclude openFrameworks bits
+bin/*
+!bin/data
+export/*
+libs/*
+
+# Exclude nibs/swap files
+*~.nib
+*.swp
+
+#Exclude Matlab files
+*.m~
+ 
+# Exclude OS X folder bits
+.DS_Store
+ 
+# Exclude XCode 3 and 4 bits
+*.mode1
+*.mode1v3
+*.mode2v3
+*.perspective
+*.perspectivev3
+*.pbxuser
+*.xcworkspace
+xcuserdata
+
+# Exclude Visual Studio 2012 bits
+*.sdf
+*.suo
+*.exp
+*.opensdf
+*.bsc
+*.pdb
+*.cache
+obj
+
+# Avoid excluding Armadillo lib files
+!lib/win32/blas_win32_MT.dll
+!lib/win32/blas_win32_MT.lib
+!lib/win32/lapack_win32_MT.dll
+!lib/win32/lapack_win32_MT.lib
+
+# Exclude videos
+*.mp4
+*.mov
