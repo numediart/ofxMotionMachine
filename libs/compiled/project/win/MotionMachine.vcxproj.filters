@@ -1,0 +1,681 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="MoMa">
+      <UniqueIdentifier>{06fd38aa-2d3a-4dee-aeab-989f8031298b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\core">
+      <UniqueIdentifier>{cb949b4e-3120-4da9-914e-ec37f80876bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\features">
+      <UniqueIdentifier>{b0c89fc7-d806-47f8-9f06-54b5d5054da2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\features\BoundingBox">
+      <UniqueIdentifier>{eab45719-f591-428d-a22c-ad0a6d579fa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\features\Geometry">
+      <UniqueIdentifier>{fb2f1248-b6da-4c34-98b0-462f9415d838}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\features\Muller">
+      <UniqueIdentifier>{b6f80b9c-676f-47d3-b423-9cf9e834d373}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes">
+      <UniqueIdentifier>{ed4f18fb-5797-41b8-a591-3b4d00d5fe7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF">
+      <UniqueIdentifier>{6992a8d6-cfe3-441b-b03d-f6ae5a5f7ede}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\core">
+      <UniqueIdentifier>{c652578a-9d1b-44b2-b662-802f206a4c19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\features">
+      <UniqueIdentifier>{cbe53be1-19e2-4450-a245-6d3cc0d7936a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\features\Signal">
+      <UniqueIdentifier>{a6adae28-a966-4552-a06e-836b4b5f2b3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\addons">
+      <UniqueIdentifier>{ed555b81-436e-41d0-97fa-40efe081ce96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\addons\ofxOsc">
+      <UniqueIdentifier>{1011a85a-ee42-4801-ae9a-e5360199a257}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\addons\ofxOsc\libs">
+      <UniqueIdentifier>{622bdd2a-cbbe-4b58-8152-ebb13c7a5a15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\addons\ofxOsc\libs\oscpack">
+      <UniqueIdentifier>{48dc644a-a6c3-4a7c-84f7-9c64c28b525c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src">
+      <UniqueIdentifier>{34c0c28b-1d83-40f4-8697-443d2aa18467}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip">
+      <UniqueIdentifier>{909871ec-c988-43dc-94ff-43cef144fd08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\posix">
+      <UniqueIdentifier>{b5ee6f19-02ac-47c2-a3a0-4db0417dd671}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\win32">
+      <UniqueIdentifier>{0ed9ba87-3477-40e2-8e54-f47526396d94}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc">
+      <UniqueIdentifier>{1c7ec332-43a0-42a7-b5ae-895abbc5706c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\addons\ofxOsc\src">
+      <UniqueIdentifier>{1b56d0e9-4eb2-47f2-a106-ba02b35c7a3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\addons\ofxXmlSettings">
+      <UniqueIdentifier>{95e27649-86ea-4137-9ee2-038fb4c01e30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\addons\ofxXmlSettings\libs">
+      <UniqueIdentifier>{93e2e2ad-192f-42f0-b406-58d5cab24a25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\addons\ofxXmlSettings\src">
+      <UniqueIdentifier>{161a627a-680d-4948-a8b0-db5e0774a52e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\addons\ofxQtVideoSaver">
+      <UniqueIdentifier>{b4e8c763-3ebe-49d1-9e9f-2de7b3989b26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\parsers">
+      <UniqueIdentifier>{144654b7-f94e-4796-a97b-0c1545587eea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\features\Walloon">
+      <UniqueIdentifier>{8fc75490-6c8b-4687-a78b-2aba37abe8fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MoMa\scenes\oF\addons\ofxUI">
+      <UniqueIdentifier>{236f1a91-0cd9-4454-903d-20893f3d2a94}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\MoMa\core\mmBoneList.cpp">
+      <Filter>MoMa\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\core\mmFrame.cpp">
+      <Filter>MoMa\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\core\mmNode.cpp">
+      <Filter>MoMa\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\core\mmNodeList.cpp">
+      <Filter>MoMa\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\core\mmTrace.cpp">
+      <Filter>MoMa\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\core\mmTrack.cpp">
+      <Filter>MoMa\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\features\BoundingBox\mmBoundingBox.cpp">
+      <Filter>MoMa\features\BoundingBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\features\Geometry\mmGeometry.cpp">
+      <Filter>MoMa\features\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\features\Muller\mmMuller.cpp">
+      <Filter>MoMa\features\Muller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\core\mmSceneApp.cpp">
+      <Filter>MoMa\scenes\oF\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\features\mmBoundingBoxUI.cpp">
+      <Filter>MoMa\scenes\oF\features</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\features\Signal\mmSignal.cpp">
+      <Filter>MoMa\features\Signal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\core\mmLabelList.cpp">
+      <Filter>MoMa\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\core\mmCam.cpp">
+      <Filter>MoMa\scenes\oF\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\posix\NetworkingUtils.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\posix\UdpSocket.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\posix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtilsWin.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocketWin.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\src\ofxOscBundle.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\src\ofxOscMessage.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\src\ofxOscParameterSync.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\src\ofxOscReceiver.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\src\ofxOscSender.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxXmlSettings\libs\tinyxml.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxXmlSettings\libs\tinyxmlerror.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxXmlSettings\src\ofxXmlSettings.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxXmlSettings\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\core\mmSynoList.cpp">
+      <Filter>MoMa\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\core\mmVideoRecorder.cpp">
+      <Filter>MoMa\scenes\oF\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxQtVideoSaver\ofxQtVideoSaver.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxQtVideoSaver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\parsers\BvhParser.cpp">
+      <Filter>MoMa\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\parsers\mmBvhParser.cpp">
+      <Filter>MoMa\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\parsers\mmC3dParser.cpp">
+      <Filter>MoMa\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\parsers\mmFlatParser.cpp">
+      <Filter>MoMa\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\parsers\mmParser.cpp">
+      <Filter>MoMa\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\parsers\mmV3dParser.cpp">
+      <Filter>MoMa\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\features\Walloon\mmWalloon.cpp">
+      <Filter>MoMa\features\Walloon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\core\mmOfUtils.cpp">
+      <Filter>MoMa\scenes\oF\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\core\mmOfBone.cpp">
+      <Filter>MoMa\scenes\oF\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\core\mmQuaternion.cpp">
+      <Filter>MoMa\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\core\mmArmaUtils.cpp">
+      <Filter>MoMa\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUI2DGraph.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUI2DPad.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIBaseDraws.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIBiLabelSlider.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIButton.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUICanvas.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUICircleSlider.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIDragableLabelButton.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIDropDownList.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIEventArgs.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIFPS.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIFPSSlider.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIImage.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIImageButton.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIImageSampler.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIImageSlider.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIImageToggle.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUILabel.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUILabelButton.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUILabelToggle.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIMinimalSlider.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIMovingGraph.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIMultiImageButton.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIMultiImageToggle.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUINumberDialer.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIRadio.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIRangeSlider.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIRectangle.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIRotarySlider.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIScrollableCanvas.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUISlider.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUISortableList.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUISpacer.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUISpectrum.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUISuperCanvas.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUITabBar.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUITextArea.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUITextInput.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIToggle.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIToggleMatrix.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIValuePlotter.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIWaveform.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIWidget.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIWidgetWithLabel.cpp">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\core\mmCanvas.cpp">
+      <Filter>MoMa\scenes\oF\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\core\mmContainer.cpp">
+      <Filter>MoMa\core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\MoMa\core\mmBoneList.h">
+      <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\core\mmFrame.h">
+      <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\core\mmNode.h">
+      <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\core\mmNodeList.h">
+      <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\core\mmTrace.h">
+      <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\core\mmTrack.h">
+      <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\core\MoMa.h">
+      <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\features\BoundingBox\mmBoundingBox.h">
+      <Filter>MoMa\features\BoundingBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\features\Geometry\mmGeometry.h">
+      <Filter>MoMa\features\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\features\Muller\mmMuller.h">
+      <Filter>MoMa\features\Muller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\core\mmSceneApp.h">
+      <Filter>MoMa\scenes\oF\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\core\MoMaUI.h">
+      <Filter>MoMa\scenes\oF\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\features\mmBoundingBoxUI.h">
+      <Filter>MoMa\scenes\oF\features</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\features\Signal\mmSignal.h">
+      <Filter>MoMa\features\Signal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\core\mmLabelList.h">
+      <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\core\mmCam.h">
+      <Filter>MoMa\scenes\oF\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc\MessageMappingOscPacketListener.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc\OscException.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc\OscHostEndianness.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc\OscPacketListener.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\src\ofxOsc.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\src\ofxOscArg.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\src\ofxOscBundle.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\src\ofxOscMessage.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\src\ofxOscParameterSync.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\src\ofxOscReceiver.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\src\ofxOscSender.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxXmlSettings\libs\tinyxml.h">
+      <Filter>MoMa\scenes\oF\addons\ofxXmlSettings\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxXmlSettings\src\ofxXmlSettings.h">
+      <Filter>MoMa\scenes\oF\addons\ofxXmlSettings\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\PacketListener.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\TimerListener.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\UdpSocket.h">
+      <Filter>MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\core\mmSynoList.h">
+      <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\core\mmVideoRecorder.h">
+      <Filter>MoMa\scenes\oF\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxQtVideoSaver\ofxQtVideoSaver.h">
+      <Filter>MoMa\scenes\oF\addons\ofxQtVideoSaver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\parsers\BvhParser.h">
+      <Filter>MoMa\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\parsers\mmBvhParser.h">
+      <Filter>MoMa\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\parsers\mmC3dParser.h">
+      <Filter>MoMa\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\parsers\mmFlatParser.h">
+      <Filter>MoMa\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\parsers\mmParser.h">
+      <Filter>MoMa\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\parsers\mmV3dParser.h">
+      <Filter>MoMa\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\features\Walloon\mmWalloon.h">
+      <Filter>MoMa\features\Walloon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\core\mmOfUtils.h">
+      <Filter>MoMa\scenes\oF\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\core\mmOfBone.h">
+      <Filter>MoMa\scenes\oF\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\core\mmQuaternion.h">
+      <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\core\mmArmaUtils.h">
+      <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUI.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUI2DGraph.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUI2DPad.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIBaseDraws.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIBiLabelSlider.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIButton.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUICanvas.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUICircleSlider.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIDefines.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIDragableLabelButton.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIDropDownList.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIEventArgs.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIFPS.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIFPSSlider.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIImage.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIImageButton.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIImageSampler.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIImageSlider.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIImageToggle.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUILabel.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUILabelButton.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUILabelToggle.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIMinimalSlider.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIMovingGraph.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIMultiImageButton.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIMultiImageToggle.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUINumberDialer.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIOFWrapper.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIRadio.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIRangeSlider.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIRectangle.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIRotarySlider.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIScrollableCanvas.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUISlider.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUISortableList.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUISpacer.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUISpectrum.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUISuperCanvas.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUITabBar.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUITextArea.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUITextInput.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIToggle.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIToggleMatrix.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIUtils.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIValuePlotter.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIWaveform.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIWidget.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIWidgets.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIWidgetWithLabel.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\addons\ofxUI\src\ofxUIWrapper.h">
+      <Filter>MoMa\scenes\oF\addons\ofxUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\core\mmCanvas.h">
+      <Filter>MoMa\scenes\oF\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\core\mmContainer.h">
+      <Filter>MoMa\core</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,12 @@
+OF_BASE_PATH = ../../../oF
+MM_BASE_PATH = ../../../MoMa
+
+ARMA_HEADER_PATH = /opt/local/include
+ARMA_LIB_PATH = /opt/local/lib/libarmadillo.dylib
+
+OF_HEADER_SEARCH_PATHS = $(OF_BASE_PATH)/libs/openFrameworks/** $(OF_BASE_PATH)/libs/glew/include $(OF_BASE_PATH)/libs/tess2/include $(OF_BASE_PATH)/libs/poco/include $(OF_BASE_PATH)/libs/cairo/include/** $(OF_BASE_PATH)/libs/fmodex/include/**
+
+MM_HEADER_SEARCH_PATHS = $(ARMA_HEADER_PATH) $(MM_BASE_PATH)/core/** $(MM_BASE_PATH)/features/** $(MM_BASE_PATH)/parsers/** $(MM_BASE_PATH)/scenes/oF/application/** $(MM_BASE_PATH)/scenes/oF/features/** $(OF_BASE_PATH)/addons/ofxOsc/** $(OF_BASE_PATH)/MoMa/scenes/oF/addons/ofxXmlSettings/** $(OF_BASE_PATH)/addons/ofxUI/**
+
+HEADER_SEARCH_PATHS = $(OF_HEADER_SEARCH_PATHS) $(MM_HEADER_SEARCH_PATHS)
+OTHER_LDFLAGS = $(ARMA_LIB_PATH)
