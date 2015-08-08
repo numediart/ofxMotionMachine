@@ -21,20 +21,20 @@
 # Executables
 *.exe
 *.out
-*.app
+*.app/*
 
 # Exclude build/ folder
-build/*
-
-# Exclude openFrameworks bits
-bin/*
-!bin/data
-libs/oF/export/*
-libs/oF/libs/*
+*/build/*
 
 # Exclude any app but examples
 apps/*
 !apps/examples/*
+
+# Exclude openFrameworks bits
+apps/examples/*/bin/*
+!apps/examples/*/bin/data/*
+libs/oF/export/*
+libs/oF/libs/*
 
 # Exclude nibs/swap files
 *~.nib
