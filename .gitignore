@@ -29,8 +29,8 @@ build/*
 # Exclude openFrameworks bits
 bin/*
 !bin/data
-export/*
-libs/*
+libs/oF/export/*
+libs/oF/libs/*
 
 # Exclude nibs/swap files
 *~.nib
