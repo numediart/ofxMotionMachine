@@ -8,19 +8,19 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\library\armadillo\include;..\..\..\library\armadillo\include\armadillo_bits;..\..\..\library\MoMa\core;..\..\..\library\MoMa\features;..\..\..\library\MoMa\features\BoundingBox;..\..\..\library\MoMa\features\Geometry;..\..\..\library\MoMa\features\Muller;..\..\..\library\MoMa\features\Signal;..\..\..\library\MoMa\features\Walloon;..\..\..\library\MoMa\parsers;..\..\..\library\MoMa\scenes;..\..\..\library\MoMa\scenes\oF;..\..\..\library\MoMa\scenes\oF\core;..\..\..\library\MoMa\scenes\oF\features;..\..\..\library\MoMa\scenes\oF\addons;..\..\..\library\MoMa\scenes\oF\addons\ofxOsc\libs;..\..\..\library\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack;..\..\..\library\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src;..\..\..\library\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\library\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\posix;..\..\..\library\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\ip\win32;..\..\..\library\MoMa\scenes\oF\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\library\MoMa\scenes\oF\addons\ofxOsc\src;..\..\..\library\MoMa\scenes\oF\addons\ofxQtVideoSaver;..\..\..\library\MoMa\scenes\oF\addons\ofxXmlSettings\libs;..\..\..\library\MoMa\scenes\oF\addons\ofxXmlSettings\src;..\..\..\library\MoMa\scenes\oF\addons\ofxUI\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\libs\armadillo\include;..\..\..\libs\armadillo\include\armadillo_bits;..\..\..\libs\MoMa\core;..\..\..\libs\MoMa\features;..\..\..\libs\MoMa\features\BoundingBox;..\..\..\libs\MoMa\features\Geometry;..\..\..\libs\MoMa\features\Muller;..\..\..\libs\MoMa\features\Signal;..\..\..\libs\MoMa\features\Walloon;..\..\..\libs\MoMa\parsers;..\..\..\libs\MoMa\scenes;..\..\..\libs\MoMa\scenes\oF;..\..\..\libs\MoMa\scenes\oF\application;..\..\..\libs\MoMa\scenes\oF\features;..\..\..\libs\oF\addons;..\..\..\libs\oF\addons\ofxOsc\libs;..\..\..\libs\oF\addons\ofxOsc\libs\oscpack;..\..\..\libs\oF\addons\ofxOsc\libs\oscpack\src;..\..\..\libs\oF\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\libs\oF\addons\ofxOsc\libs\oscpack\src\ip\posix;..\..\..\libs\oF\addons\ofxOsc\libs\oscpack\src\ip\win32;..\..\..\libs\oF\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\libs\oF\addons\ofxOsc\src;..\..\..\libs\oF\addons\ofxXmlSettings\libs;..\..\..\libs\oF\addons\ofxXmlSettings\src;..\..\..\libs\oF\addons\ofxUI\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DISABLE_SOME_FLOATING_POINT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\..\library\armadillo\lib\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\libs\armadillo\lib\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>blas_win32_MT.lib;lapack_win32_MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\export\vs\*.dll" "$(ProjectDir)bin"
-	  xcopy /e /i /y "$(ProjectDir)..\..\..\library\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"</Command>
+	  xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup />

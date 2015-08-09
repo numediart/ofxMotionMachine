@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>    
+	<_PropertySheetDisplayName>openFrameworksDebug</_PropertySheetDisplayName>
+    <OutDir>$(SolutionDir)bin\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\oF\libs\openFrameworks;..\..\..\oF\libs\openFrameworks\graphics;..\..\..\oF\libs\openFrameworks\app;..\..\..\oF\libs\openFrameworks\sound;..\..\..\oF\libs\openFrameworks\utils;..\..\..\oF\libs\openFrameworks\communication;..\..\..\oF\libs\openFrameworks\video;..\..\..\oF\libs\openFrameworks\types;..\..\..\oF\libs\openFrameworks\math;..\..\..\oF\libs\openFrameworks\3d;..\..\..\oF\libs\openFrameworks\gl;..\..\..\oF\libs\openFrameworks\events;..\..\..\oF\libs\glut\include;..\..\..\oF\libs\rtAudio\include;..\..\..\oF\libs\quicktime\include;..\..\..\oF\libs\freetype\include;..\..\..\oF\libs\freetype\include\freetype2;..\..\..\oF\libs\freeImage\include;..\..\..\oF\libs\fmodex\include;..\..\..\oF\libs\videoInput\include;..\..\..\oF\libs\glew\include\;..\..\..\oF\libs\glu\include;..\..\..\oF\libs\tess2\include;..\..\..\oF\libs\cairo\include\cairo;..\..\..\oF\libs\poco\include;..\..\..\oF\libs\glfw\include;..\..\..\oF\libs\openssl\include;..\..\..\..\addons;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;POCO_STATIC;CAIRO_WIN32_STATIC_BUILD;DISABLE_SOME_FLOATING_POINT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\..\oF\libs\glut\lib\vs;..\..\..\oF\libs\glfw\lib\vs;..\..\..\oF\libs\rtAudio\lib\vs;..\..\..\oF\libs\FreeImage\lib\vs;..\..\..\oF\libs\freetype\lib\vs;..\..\..\oF\libs\quicktime\lib\vs;..\..\..\oF\libs\fmodex\lib\vs;..\..\..\oF\libs\videoInput\lib\vs;..\..\..\oF\libs\cairo\lib\vs;..\..\..\oF\libs\glew\lib\vs;..\..\..\oF\libs\glu\lib\vs;..\..\..\oF\libs\openssl\lib\vs;..\..\..\oF\libs\Poco\lib\vs;..\..\..\oF\libs\tess2\lib\vs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>cairo-static.lib;pixman-1.lib;msimg32.lib;OpenGL32.lib;GLu32.lib;kernel32.lib;setupapi.lib;Vfw32.lib;comctl32.lib;glut32.lib;rtAudioD.lib;videoInputD.lib;libfreetype.lib;FreeImage.lib;qtmlClient.lib;dsound.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;glew32s.lib;fmodex_vc.lib;glu32.lib;ssleay32MD.lib;libeay32MD.lib;crypt32.lib;PocoFoundationmdd.lib;PocoNetmdd.lib;PocoUtilmdd.lib;PocoXMLmdd.lib;Ws2_32.lib;tess2.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>PocoFoundationmdd.lib;atlthunk.lib;msvcrt;libcmt;LIBC;LIBCMTD</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\..\export\vs\*.dll" "$(ProjectDir)bin"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>
