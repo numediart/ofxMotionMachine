@@ -4,10 +4,9 @@ SETLOCAL ENABLEEXTENSIONS
 SETLOCAL ENABLEDELAYEDEXPANSION
 
 SET /p projectName=Please Enter Project Name:
-SET "projectDir=..\..\..\examples\alpha\%projectName%"
+SET "projectDir=..\..\apps\sandbox\%projectName%"
 SET "templateName=mmEmptyExample"
-::SET "templateDir=..\..\..\examples\empty\mmEmptyExample"
-SET "templateDir=..\template"
+SET "templateDir=template"
 CLS
 ECHO Generating project...
 
@@ -17,11 +16,9 @@ cd "%projectDir%"
 CLS
 ECHO Replacing all occurrences of %templateName%...
 CALL :explore
-::PAUSE
 CLS
-ECHO New project created in folder MotionMachine\examples\alpha\"%projectName%"
+ECHO New project created in folder MotionMachine\apps\sandbox\%projectName%
 PAUSE
-::EXIT
 GOTO :EOF
 
 :explore

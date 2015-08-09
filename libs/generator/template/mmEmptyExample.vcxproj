@@ -31,13 +31,13 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
-    <Import Project="..\..\..\library\compiled\project\vs\MotionMachineRelease.props" />
+    <Import Project="..\..\..\libs\compiled\project\win\AppOpenFrameworksRelease.props" />
+    <Import Project="..\..\..\libs\compiled\project\win\MotionMachineRelease.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\library\compiled\project\vs\MotionMachineDebug.props" />
-    <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+    <Import Project="..\..\..\libs\compiled\project\win\MotionMachineDebug.props" />
+    <Import Project="..\..\..\libs\compiled\project\win\AppOpenFrameworksDebug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -71,8 +71,8 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\export\vs\*.dll" "$(ProjectDir)bin"
-xcopy /e /i /y "$(ProjectDir)..\..\..\library\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"</Command>
+      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\oF\export\vs\*.dll" "$(ProjectDir)bin"
+xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -100,8 +100,8 @@ xcopy /e /i /y "$(ProjectDir)..\..\..\library\armadillo\lib\win32\*.dll" "$(Proj
       <IgnoreSpecificDefaultLibraries>PocoFoundationmd.lib;PocoFoundationd.lib;atlthunk.lib;LIBC.lib;LIBCMT;PocoXMLd.lib</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\export\vs\*.dll" "$(ProjectDir)bin"
-xcopy /e /i /y "$(ProjectDir)..\..\..\library\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"</Command>
+      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\oF\export\vs\*.dll" "$(ProjectDir)bin"
+xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -112,10 +112,10 @@ xcopy /e /i /y "$(ProjectDir)..\..\..\library\armadillo\lib\win32\*.dll" "$(Proj
     <ClInclude Include="src\ofApp.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\library\compiled\project\vs\MotionMachine.vcxproj">
+    <ProjectReference Include="..\..\..\libs\compiled\project\win\MotionMachine.vcxproj">
       <Project>{acac230c-e514-4f4e-a999-25001921c785}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
+    <ProjectReference Include="..\..\..\libs\oF\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
       <Project>{5837595d-aca9-485c-8e76-729040ce4b0b}</Project>
     </ProjectReference>
   </ItemGroup>

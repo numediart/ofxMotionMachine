@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9FE6E6AB1A9CC34A006F0345 /* MotionMachine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FF1EC711A9C93FE005B2086 /* MotionMachine.a */; };
+		9F6084931B7669A500CE6F40 /* MotionMachine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F5016161B76674E00DB4E47 /* MotionMachine.a */; };
+		9F6084941B7669A500CE6F40 /* openFrameworks.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F5016111B76672500DB4E47 /* openFrameworks.a */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
-		E4328149138ABC9F0047C5CB /* openFrameworks.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworks.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
 		E45BE97D0E8CC7DD009D7055 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */; };
@@ -30,33 +30,33 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		9FF1EC701A9C93FE005B2086 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 9FF1EC6C1A9C93FE005B2086 /* MotionMachine.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 60B90A8B1644E00900AF2156;
-			remoteInfo = MotionMachine;
-		};
-		9FF1EC721A9C9406005B2086 /* PBXContainerItemProxy */ = {
+		9F34BD4C1B7668B200277FBA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 9FF1EC6C1A9C93FE005B2086 /* MotionMachine.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 60B90A8A1644E00900AF2156;
 			remoteInfo = MotionMachine;
 		};
-		E4328147138ABC890047C5CB /* PBXContainerItemProxy */ = {
+		9F34BD501B76691000277FBA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = E4B27C1410CBEB8E00536013;
+			remoteInfo = openFrameworks;
+		};
+		9F5016101B76672500DB4E47 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = E4B27C1510CBEB8E00536013;
 			remoteInfo = openFrameworks;
 		};
-		E4EEB9AB138B136A00A80321 /* PBXContainerItemProxy */ = {
+		9F5016151B76674E00DB4E47 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = E4B27C1410CBEB8E00536013;
-			remoteInfo = openFrameworks;
+			containerPortal = 9FF1EC6C1A9C93FE005B2086 /* MotionMachine.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9F1C077E1A9CBD240067F3B4;
+			remoteInfo = MotionMachine;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -75,9 +75,9 @@
 
 /* Begin PBXFileReference section */
 		9F04E56819A6125100F13B56 /* mmEmptyExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mmEmptyExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9FF1EC6C1A9C93FE005B2086 /* MotionMachine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MotionMachine.xcodeproj; path = ../../../library/compiled/project/osx/MotionMachine.xcodeproj; sourceTree = "<group>"; };
-		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
-		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
+		9FF1EC6C1A9C93FE005B2086 /* MotionMachine.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MotionMachine.xcodeproj; path = ../../../libs/compiled/project/osx/MotionMachine.xcodeproj; sourceTree = "<group>"; };
+		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/oF/libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
+		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/oF/libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
 		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
 		E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
@@ -120,8 +120,8 @@
 				E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */,
 				E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */,
 				E7E077E515D3B63C0020DFD4 /* CoreVideo.framework in Frameworks */,
-				E4328149138ABC9F0047C5CB /* openFrameworks.a in Frameworks */,
-				9FE6E6AB1A9CC34A006F0345 /* MotionMachine.a in Frameworks */,
+				9F6084941B7669A500CE6F40 /* openFrameworks.a in Frameworks */,
+				9F6084931B7669A500CE6F40 /* MotionMachine.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +132,22 @@
 			isa = PBXGroup;
 			children = (
 				9F04E56819A6125100F13B56 /* mmEmptyExample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9F50160D1B76672500DB4E47 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9F5016111B76672500DB4E47 /* openFrameworks.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9F5016121B76674E00DB4E47 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9F5016161B76674E00DB4E47 /* MotionMachine.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -164,14 +180,6 @@
 			name = MotionMachine;
 			sourceTree = "<group>";
 		};
-		9FF1EC6D1A9C93FE005B2086 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				9FF1EC711A9C93FE005B2086 /* MotionMachine.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		BBAB23C913894ECA00AA2426 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -192,14 +200,6 @@
 				E7E077E715D3B6510020DFD4 /* QTKit.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		E4328144138ABC890047C5CB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E4328148138ABC890047C5CB /* openFrameworks.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		E45BE5980E8CC70C009D7055 /* Libraries */ = {
@@ -254,8 +254,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				9FF1EC731A9C9406005B2086 /* PBXTargetDependency */,
-				E4EEB9AC138B136A00A80321 /* PBXTargetDependency */,
+				9F34BD511B76691000277FBA /* PBXTargetDependency */,
+				9F34BD4D1B7668B200277FBA /* PBXTargetDependency */,
 			);
 			name = mmEmptyExample;
 			productName = myOFApp;
@@ -285,11 +285,11 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 9FF1EC6D1A9C93FE005B2086 /* Products */;
+					ProductGroup = 9F5016121B76674E00DB4E47 /* Products */;
 					ProjectRef = 9FF1EC6C1A9C93FE005B2086 /* MotionMachine.xcodeproj */;
 				},
 				{
-					ProductGroup = E4328144138ABC890047C5CB /* Products */;
+					ProductGroup = 9F50160D1B76672500DB4E47 /* Products */;
 					ProjectRef = E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */;
 				},
 			);
@@ -301,18 +301,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		9FF1EC711A9C93FE005B2086 /* MotionMachine.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = MotionMachine.a;
-			remoteRef = 9FF1EC701A9C93FE005B2086 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E4328148138ABC890047C5CB /* openFrameworks.a */ = {
+		9F5016111B76672500DB4E47 /* openFrameworks.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = openFrameworks.a;
-			remoteRef = E4328147138ABC890047C5CB /* PBXContainerItemProxy */;
+			remoteRef = 9F5016101B76672500DB4E47 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		9F5016161B76674E00DB4E47 /* MotionMachine.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = MotionMachine.a;
+			remoteRef = 9F5016151B76674E00DB4E47 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -329,7 +329,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp -f ../../../libs/fmodex/lib/osx/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/libfmodex.dylib\"; install_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\";\nmkdir -p \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Resources/\"\ncp -f \"$ICON_FILE\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Resources/\"\n";
+			shellScript = "cp -f ../../../libs/oF/libs/fmodex/lib/osx/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/libfmodex.dylib\"; install_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\";\nmkdir -p \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Resources/\"\ncp -f \"$ICON_FILE\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Resources/\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -346,15 +346,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		9FF1EC731A9C9406005B2086 /* PBXTargetDependency */ = {
+		9F34BD4D1B7668B200277FBA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = MotionMachine;
-			targetProxy = 9FF1EC721A9C9406005B2086 /* PBXContainerItemProxy */;
+			targetProxy = 9F34BD4C1B7668B200277FBA /* PBXContainerItemProxy */;
 		};
-		E4EEB9AC138B136A00A80321 /* PBXTargetDependency */ = {
+		9F34BD511B76691000277FBA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = openFrameworks;
-			targetProxy = E4EEB9AB138B136A00A80321 /* PBXContainerItemProxy */;
+			targetProxy = 9F34BD501B76691000277FBA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -438,7 +438,7 @@
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/glut/lib/osx\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/oF/libs/glut/lib/osx\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_MODEL_TUNING = NONE;
@@ -448,8 +448,9 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
-					"../../../library/MoMa/**",
 					/opt/local/include,
+					"../../../libs/oF/addons/**",
+					"../../../libs/MoMa/**",
 					src,
 				);
 				ICON = "$(ICON_NAME_DEBUG)";
@@ -519,7 +520,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_50)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_52)",
-					../../../library/compiled/lib/osx,
+					../../../libs/compiled/lib/osx,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_CFLAGS = (
@@ -552,7 +553,7 @@
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/glut/lib/osx\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/oF/libs/glut/lib/osx\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_MODEL_TUNING = NONE;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -561,8 +562,9 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
-					"../../../library/MoMa/**",
 					/opt/local/include,
+					"../../../libs/oF/addons/**",
+					"../../../libs/MoMa/**",
 					src,
 				);
 				ICON = "$(ICON_NAME_RELEASE)";
@@ -632,7 +634,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_49)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_50)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
-					../../../library/compiled/lib/osx,
+					../../../libs/compiled/lib/osx,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_CFLAGS = (
