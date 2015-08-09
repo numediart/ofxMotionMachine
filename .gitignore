@@ -67,10 +67,10 @@ xcuserdata
 obj
 
 # Avoid excluding Armadillo lib files
-!lib/win32/blas_win32_MT.dll
-!lib/win32/blas_win32_MT.lib
-!lib/win32/lapack_win32_MT.dll
-!lib/win32/lapack_win32_MT.lib
+!libs/armadillo/lib/win32/blas_win32_MT.dll
+!libs/armadillo/lib/win32/blas_win32_MT.lib
+!libs/armadillo/lib/win32/lapack_win32_MT.dll
+!libs/armadillo/lib/win32/lapack_win32_MT.lib
 
 # Exclude videos
 *.mp4
