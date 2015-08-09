@@ -2,10 +2,10 @@
 
 # Read new project name from user input
 read -p 'Please Enter Project Name: ' projectName
-projectDir="../../../examples/alpha/$projectName"
+projectDir="../../apps/sandbox/$projectName"
 
 templateName="mmEmptyExample" # It's mmEmptyExample
-templateDir="../../../examples/empty/$templateName"
+templateDir="template" # and it's just in template/
 
 # Prepare project directory
 mkdir -p $projectDir
@@ -18,8 +18,9 @@ find . -type d -name "*$templateName*" -print0 | while read -r -d '' f; do
 	mv -f "$f" "`echo "$f" | sed -e "s/$templateName/$projectName/g"`"
 done
 
-# Replace in all files any occurrence of "templateName" with "projectName"
-# And then replace all file names containing "templateName" with "projectName"
+# In all files, replace any occurrence of "templateName"
+# with "projectName" and then replace all file names
+# containing "templateName" with "projectName"
 find . -type f -print0 | while read -r -d '' f; do
 	sed -i "" "s/$templateName/$projectName/g" "$f"
 	mv -f "$f" "`echo "$f" | sed -e "s/$templateName/$projectName/g"`"
