@@ -71,6 +71,9 @@ obj
 !libs/armadillo/lib/win32/blas_win32_MT.lib
 !libs/armadillo/lib/win32/lapack_win32_MT.dll
 !libs/armadillo/lib/win32/lapack_win32_MT.lib
+!libs/armadillo/lib/osx/libarmadillo.4.45.0.dylib
+!libs/armadillo/lib/osx/libarmadillo.4.dylib
+!libs/armadillo/lib/osx/libarmadillo.dylib
 
 # Exclude videos
 *.mp4
