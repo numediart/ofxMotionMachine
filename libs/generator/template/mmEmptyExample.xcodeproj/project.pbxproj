@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9F6084931B7669A500CE6F40 /* MotionMachine.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F5016161B76674E00DB4E47 /* MotionMachine.a */; };
-		9F6084941B7669A500CE6F40 /* openFrameworks.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F5016111B76672500DB4E47 /* openFrameworks.a */; };
+		9F6084941B7669A500CE6F40 /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F5016111B76672500DB4E47 /* openFrameworksDebug.a */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
 		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
@@ -120,7 +120,7 @@
 				E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */,
 				E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */,
 				E7E077E515D3B63C0020DFD4 /* CoreVideo.framework in Frameworks */,
-				9F6084941B7669A500CE6F40 /* openFrameworks.a in Frameworks */,
+				9F6084941B7669A500CE6F40 /* openFrameworksDebug.a in Frameworks */,
 				9F6084931B7669A500CE6F40 /* MotionMachine.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -139,7 +139,7 @@
 		9F50160D1B76672500DB4E47 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9F5016111B76672500DB4E47 /* openFrameworks.a */,
+				9F5016111B76672500DB4E47 /* openFrameworksDebug.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -301,10 +301,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		9F5016111B76672500DB4E47 /* openFrameworks.a */ = {
+		9F5016111B76672500DB4E47 /* openFrameworksDebug.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = openFrameworks.a;
+			path = openFrameworksDebug.a;
 			remoteRef = 9F5016101B76672500DB4E47 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -448,7 +448,7 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
-					/opt/local/include,
+					"$(ARMA_HEADER_PATH)",
 					"../../../libs/oF/addons/**",
 					"../../../libs/MoMa/**",
 					src,
@@ -534,7 +534,7 @@
 					"-DNDEBUG",
 				);
 				OTHER_LDFLAGS = (
-					/opt/local/lib/libarmadillo.dylib,
+					"$(ARMA_LIB_PATH)",
 					"$(OF_CORE_LIBS)",
 				);
 				PRODUCT_NAME = mmEmptyExample;
@@ -562,7 +562,7 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(OF_CORE_HEADERS)",
-					/opt/local/include,
+					"$(ARMA_HEADER_PATH)",
 					"../../../libs/oF/addons/**",
 					"../../../libs/MoMa/**",
 					src,
@@ -648,7 +648,7 @@
 					"-DNDEBUG",
 				);
 				OTHER_LDFLAGS = (
-					/opt/local/lib/libarmadillo.dylib,
+					"$(ARMA_LIB_PATH)",
 					"$(OF_CORE_LIBS)",
 				);
 				PRODUCT_NAME = mmEmptyExample;
