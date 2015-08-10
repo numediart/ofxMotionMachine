@@ -6,7 +6,7 @@ OF_PATH = ../../../libs/oF
 #include "../../../libs/oF/libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig"
 
 ARMA_HEADER_PATH = ../../../libs/armadillo/include
-ARMA_LIB_PATH = ../../../libs/armadillo/lib/osx/libarmadillo.dylib
+ARMA_LIB_PATH = ../../../libs/armadillo/lib/osx/libarmadillo.a
 
 // ICONS - NEW IN 0072
 ICON_NAME_DEBUG = icon-debug.icns
