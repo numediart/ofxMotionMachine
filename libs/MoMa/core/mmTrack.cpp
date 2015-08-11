@@ -255,8 +255,10 @@ int Track::index( std::string name ) {
 
 void Track::clear( void ) {
     
+    rotationOffset.clear();
     rotation.clear();
     position.clear();
+    hasRotation = false;
 }
 
 void Track::subTrack( Track &subTr, int beg, int end) {
