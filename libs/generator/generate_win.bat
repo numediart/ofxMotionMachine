@@ -38,6 +38,7 @@ FOR %%f IN (*) DO (
 	IF %%~xf==.bsc set "ext=false"
 	IF %%~xf==.pdb set "ext=false"
 	IF %%~xf==.cache set "ext=false"
+	IF %%~xf==.plist set "ext=false"
 	::echo !ext!
 	IF !ext!==true (
 		FOR /F tokens^=*^ delims^=^ eol^= %%A IN ('"type "%%f""') DO (
