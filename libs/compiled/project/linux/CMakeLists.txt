@@ -56,7 +56,7 @@ FOREACH(FEATURE_DIR ${FEATURES_LIST})
 ENDFOREACH()
 
 # Dependency on Armadillo --> find compatible install
-# 4.100 is not compatible with MoMa, 4.650.3 is. Difficult to bisect.
+# 4.200 is not compatible with MoMa, 4.650.3 is. Difficult to bisect.
 # this will look for version >= 4.650
 SET(Armadillo_FIND_VERSION 4.650)
 # FindArmadillo.cmake is part of default cmake install
@@ -67,6 +67,8 @@ INCLUDE_DIRECTORIES(${ARMADILLO_INCLUDE_DIRS})
 FILE(GLOB SRC_CORE ${CORE_DIR}/*.cpp)
 FILE(GLOB SRC_PARSERS ${PARSERS_DIR}/*.cpp)
 FILE(GLOB SRC_FEATURES ${FEATURES_DIR}/*/*.cpp)
+
+FILE(GLOB HDR_INSTALL ${CORE_DIR}/*.h ${PARSERS_DIR}/*.h ${FEATURES_DIR}/*.h)
 
 # Create libmoma.so (or libmoma.a if BUILD_SHARED_LIBS is OFF)
 ADD_LIBRARY(${TARGET_NAME} ${SRC_CORE} ${SRC_PARSERS} ${SRC_FEATURES})
@@ -80,3 +82,7 @@ TARGET_LINK_LIBRARIES(${TARGET_NAME} m ${ARMADILLO_LIBRARIES})
 #TARGET_LINK_LIBRARIES(${TARGET_CORE} m ${ARMADILLO_LIBRARIES})
 #TARGET_LINK_LIBRARIES(${TARGET_PARSERS} ${TARGET_CORE})
 #TARGET_LINK_LIBRARIES(${TARGET_FEATURES} ${TARGET_CORE})
+
+INSTALL(TARGETS ${TARGET_NAME} DESTINATION lib)
+INSTALL(FILES ${HDR_INSTALL} DESTINATION include/moma)
+
