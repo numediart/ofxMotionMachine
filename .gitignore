@@ -21,7 +21,7 @@
 # Executables
 *.exe
 *.out
-*.app/*
+**.app/*
 
 # Exclude build/ folder
 */build/*
