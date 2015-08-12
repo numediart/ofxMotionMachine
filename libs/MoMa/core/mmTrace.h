@@ -31,10 +31,10 @@ namespace MoMa {
         Trace( void ); // Default constructor
         
         std::string name( void ) { return( _name ); } // Get name
-        void setName( std::string n ) { _name = n; } // Set name
+        inline void setName( std::string n ) { _name = n; } // Set name
         
         bool hasTime( void ) { return( position.isTimestamped() &&(hasRotation()?rotation.isTimestamped():1)); } // Flag
-        void setTimeFlag( bool tim ) { _hasTime = tim; } // Force it//TODO verify if it is necessary, a trace has necessarely a time, but not a timedstamp time scale.
+        inline void setTimeFlag( bool tim ) { _hasTime = tim; } // Force it//TODO verify if it is necessary, a trace has necessarely a time, but not a timedstamp time scale.
         
         bool hasRotation( void ) { return( _hasRotation ); } // Use rotation?
         inline void setRotationFlag( bool rot ) { _hasRotation = rot; } // Force it
@@ -47,11 +47,11 @@ namespace MoMa {
         inline arma::vec  nodeRotationOffset( ) { return( rotationOffset ); } // By index
         
         
-        void setPosition(const arma::mat &data,float fr){position.setData(fr, data);};
-        void setRotation(const arma::mat &data,float fr){rotation.setData(fr, data);};
-        void setRotationOffset(const arma::vec &data){rotationOffset = data;};
-        void setPosition(const arma::mat &data,const arma::vec &time){position.setTimedData(time, data);};
-        void setRotation(const arma::mat &data,const arma::vec &time ){rotation.setTimedData(time, data);};
+        inline void setPosition(const arma::mat &data,float fr){position.setData(fr, data);};
+        inline void setRotation(const arma::mat &data,float fr){rotation.setData(fr, data);};
+        inline void setRotationOffset(const arma::vec &data){rotationOffset = data;};
+        inline void setPosition(const arma::mat &data,const arma::vec &time){position.setTimedData(time, data);};
+        inline void setRotation(const arma::mat &data,const arma::vec &time ){rotation.setTimedData(time, data);};
         
         inline arma::vec  operator[]( int index ); // Short version of node()
         inline arma::vec  operator[]( double time ); // Short version of node()

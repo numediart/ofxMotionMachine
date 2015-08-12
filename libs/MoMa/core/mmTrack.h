@@ -28,14 +28,6 @@
 
 namespace MoMa {
     
-    enum FileType {
-    
-        FLAT,
-        V3D,
-        C3D,
-        BVH
-    };
-    
     class Track {
     
       public:
@@ -43,21 +35,38 @@ namespace MoMa {
         Track( void ); // Default constructor
         virtual ~Track( void ); // Default destructor
         
+        // - Loading files -
+        
+        void load( std::string const &fileName ); // // Load & parse any file
         void nodes( std::string fileName ); // Attach track to a given node file
         void bones( std::string fileName ); // Attach track to a given bone file
-        void load( std::string const &fileName ); // // Load & parse any file
         
-        inline arma::mat positions( int index ); // Query frame by index in the track
-        arma::mat positions( double time ); // Query frame by time in the track
-        
-        inline arma::mat rotations( int index ); // Query frame by index in the track
-        arma::mat rotations( double time ); // Query frame by time in the track
+        // - Extracting frames and frame-related matrices
         
         inline Frame frame( int index ); // Extract frame from track (by index)
         inline Frame frame( double time ); // Extract frame from track (by time tag)
         
         inline Frame operator[]( int index ); // Short version of frame()
         inline Frame operator[]( double time ); // Short version of frame()
+        
+        inline arma::mat framePosition( int index ); // Query frame by index in the track
+        inline arma::mat framePosition( double time ); // Query frame by time in the track
+        
+        inline arma::mat frameRotation( int index ); // Query frame by index in the track
+        inline arma::mat frameRotation( double time ); // Query frame by time in the track
+        
+        // - Extracting traces and trace-related matrices
+        
+        inline MoMa::Trace trace( std::string name ); // Extract trace (by name)
+        inline MoMa::Trace trace( int index ); // Extract trace (by index)
+        
+        inline Trace operator()( std::string name ); // Short version of trace()
+        inline Trace operator()( int index ); // Short version of trace()
+        
+        inline arma::mat tracePosition( int index ); // Query frame by index in the track
+        inline arma::mat traceRotation( int index ); // Query frame by index in the track
+        
+        // - Ringubffer-related methods -
         
         void setRingBufferSize( int size ); // Set as ring buffer + max size
         void subTrack( Track &subTr, int beg, int end ); // Extract a subtrack
@@ -70,11 +79,7 @@ namespace MoMa {
 
         void push( Frame _frame ); // Push new frame into the track (at the end)
         
-        MoMa::Trace trace( std::string name ); // Extract trace (by name)
-        MoMa::Trace trace( int index ); // Extract trace (by index)
-        
-        inline Trace operator()( std::string name ); // Short version of trace()
-        inline Trace operator()( int index ); // Short version of trace()
+        // - Misc -
         
         void setName( std::string name ); // Define track name
         void setFileName( std::string name ); // Define track name
@@ -84,7 +89,7 @@ namespace MoMa {
         inline int nOfNodes( void ); // Get # nodes
         void clear( void ); // Clear the track
         
-        // ---
+        // unprotected:
         
         std::string easyName; // Track name
         std::string fileName; // Track file name
@@ -109,7 +114,7 @@ namespace MoMa {
         bool isRing; // Is ringbuffer?
     };
     
-    // Inlined functions
+    // - Inlined functions -
     
     Frame Track::frame( int index ) {
         
@@ -163,6 +168,144 @@ namespace MoMa {
         return( oneFrame );
     }
     
+    Frame Track::operator[]( int index ) {
+        
+        return( frame( index ) );
+    }
+    
+    Frame Track::operator[]( double time ) {
+        
+        return( frame( time ) );
+    }
+    
+    arma::mat Track::framePosition( int index ) {
+    
+        return( position.getIndexedFrame( index ) );
+    }
+    
+    arma::mat Track::framePosition( double time ) {
+    
+        return( position.getTimedFrame( time ) );
+    }
+    
+    arma::mat Track::frameRotation( int index ) {
+    
+        return( rotation.getIndexedFrame( index ) );
+    }
+    
+    arma::mat Track::frameRotation( double time ) {
+    
+        return( rotation.getTimedFrame( time ) );
+    }
+    
+    Trace Track::trace( std::string name ) {
+        
+        Trace oneTrace;
+        int nIdx = -1; // Initialise
+        bool isFound = false; // Flag
+        
+        if( hasNodeList ) {
+            
+            for( int n=0; n<nodeList->size(); n++ ) {
+                
+                // If we find a matching name, we save index
+                if( nodeList->at(n).compare( name ) == 0 ) {
+                    
+                    isFound = true;
+                    nIdx = n;
+                }
+            }
+            
+            if( hasSynoList && !isFound ) {
+                
+                for( int n=0; n<nodeList->size(); n++ ) {
+                    
+                    std::string nNameQuery = "nq"; // Synonym of name query
+                    std::string nFromList = "fl"; // Synonym of nth in list
+                    
+                    synoList->search( name, nNameQuery ); // Search name
+                    synoList->search( nodeList->at(n), nFromList ); // & list
+                    
+                    if( nFromList.compare( nNameQuery ) == 0 ) {
+                        
+                        nIdx = n;
+                        isFound = true;
+                    }
+                }
+            }
+            
+            if( isFound ) {
+                
+                // Return trace @ idx if found
+                return( this->trace( nIdx ) );
+                
+            } else {
+                
+                std::cout << "Frame::node: Node not found" << std::endl;
+            }
+            
+        } else {
+            
+            std::cout << "Frame::node: No node name list" << std::endl;
+        }
+        
+        return( oneTrace ); // If not found, return empty trace
+    }
+    
+    Trace Track::trace( int index ) {
+        
+        Trace oneTrace;
+        
+        oneTrace.setTimeFlag( true );
+        oneTrace.setRotationFlag( hasRotation );
+        oneTrace.setName( nodeList->at( index ) );
+        
+        if( position.isTimestamped() ) {
+            
+            oneTrace.setPosition( position.getData().tube( 0, index, 2 , index ), position.getTimeStamps() );
+            
+        } else {
+            
+            oneTrace.setPosition( position.getData().tube( 0,index, 2, index ), position.getFrameRate() );
+        }
+        
+        if( hasRotation ) {
+            
+            if( rotation.isTimestamped() ) {
+                
+                oneTrace.setRotation( rotation.getData().tube( 0,index, 2, index ), position.getTimeStamps() );
+                oneTrace.setRotationOffset( rotationOffset.col( index ) );
+                
+            } else {
+                
+                oneTrace.setRotation( rotation.getData().tube( 0, index, 2, index ), position.getFrameRate() );
+                oneTrace.setRotationOffset( rotationOffset.col( index ) );
+            }
+        }
+        
+        return( oneTrace );
+    }
+    
+    Trace Track::operator()( std::string name ){
+        
+        return( trace( name ) );
+    }
+    
+    Trace Track::operator()( int index ) {
+        
+        return( trace( index ) );
+    }
+    
+    arma::mat Track::tracePosition( int index ) {
+        
+        return( position.getData().tube( 0, index, 2 , index ) );
+    }
+    
+    arma::mat Track::traceRotation( int index ) {
+        
+        return( rotation.getData().tube( 0, index, 2 , index ) );
+    }
+    
     int Track::nOfFrames( void ) {
         
         return( std::max( position.nOfFrames(), rotation.nOfFrames() ) );
@@ -171,26 +314,6 @@ namespace MoMa {
     int Track::nOfNodes( void ) {
         
         return( std::max( rotation.nOfNodes(), position.nOfNodes() ) );
-    }
-    
-    Frame Track::operator[]( int index ) {
-    
-        return( frame( index ) );
-    }
-    
-    Frame Track::operator[]( double time ) {
-    
-        return( frame( time ) );
-    }
-    
-    Trace Track::operator()( std::string name ){
-    
-        return( trace( name ) );
-    }
-    
-    Trace Track::operator()( int index ) {
-    
-        return( trace( index ) );
     }
 }
 
