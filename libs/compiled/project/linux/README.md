@@ -2,12 +2,12 @@
 
 On Linux, Motion Machine (MoMa) is composed of two parts, as opposed to what is done in OSX and Windows where xcode/VS configs take care of everything as one big project. The two parts are:
 
-1. libmoma, a shared library based on the files in ./libs/MoMa/{core,features,parsers}. You can use it to load, access and process mocap data in your applications independently of openFrameworks.
+1. libmoma, a shared library based on the files in `./libs/MoMa/{core,features,parsers}`. You can use it to load, access and process mocap data in your applications independently of openFrameworks.
 2. ofxMoMa, an openFrameworks (oFx) "adapter" to make it easy to use MoMa into oFx.
 
-Additionaly, examples of oFx applications are available into ./apps/ and they can be used as starting points to your own applications.
+Additionaly, examples of oFx applications are available into `./apps/` and they can be used as starting points to your own applications.
 
-In the following, we assume that you downloaded openFrameworks and unzipped it into a folder $(OF_ROOT) (/opt/openframeworks is the default set into the example of MoMa, adapt accordingly) and that MoMa is installed into a folder $(MOMA_ROOT)
+In the following, we assume that you downloaded openFrameworks and unzipped it into a folder `$(OF_ROOT)` (`/opt/openframeworks` is the default set into the example of MoMa, adapt accordingly) and that MoMa is installed into a folder `$(MOMA_ROOT)`
 
 ##Compilation of libmoma
 
@@ -23,9 +23,9 @@ $ sudo make install
 $ sudo ldconfig
 ```
 
-(you can also not use a "build" subfolder and do ```cmake .``` directly into the folder where CMakeLists.txt is. Using a build folder makes it easier to clean cmake stuffs)
+(you can also not use a `build` subfolder and do `cmake .` directly into the folder where CMakeLists.txt is. Using a build folder makes it easier to clean cmake stuffs)
 
-```libmoma.so``` (we don't use version numbers in file naming yet) should be installed into ```/usr/local/lib``` and all header files should go into a new folder ```/usr/local/include/moma/```
+`libmoma.so` (we don't use version numbers in file naming yet) should be installed into `/usr/local/lib` and all header files should go into a new folder `/usr/local/include/moma/`
 
 ##ofxMoMa addon
 
@@ -41,11 +41,11 @@ That's it.
 
 ##Other plugins
 
-Apart from ofxMoMa, the basic empty example in MoMa depends on three other addons, ofxUI, ofxOsc and ofxXmlSettings. Depending on your version of openFrameworks (only version 0.8.4 has been tested so far for Linux), these may or may not work properly (*cough* ofxUI *cough*). In order to avoid any inconvenience, we suggest you use the fixed versions we have in ```$(MOMA_ROOT)/libs/oF/addons/```. To do so, simply copy them to overwrite the ones in ```$(OF_ROOT)/addons/```
+Apart from ofxMoMa, the basic empty example in MoMa depends on three other addons, ofxUI, ofxOsc and ofxXmlSettings. Depending on your version of openFrameworks (only version 0.8.4 has been tested so far for Linux), these may or may not work properly (\*cough\* ofxUI \*cough\*). In order to avoid any inconvenience, we suggest you use the fixed versions we have in `$(MOMA_ROOT)/libs/oF/addons/`. To do so, simply copy them to overwrite the ones in `$(OF_ROOT)/addons/`
 
 ##Compiling and running the empty example
 
-The example supposes that openFrameworks is installed into ```/opt/openframeworks```, edit and adapt the file config.make as needed if that's not the case.
+The example supposes that openFrameworks is installed into `/opt/openframeworks`, edit and adapt the file config.make as needed if that's not the case.
 
 ```
 $ cd $(MOMA_ROOT)/apps/example/mmEmptyExample
