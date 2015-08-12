@@ -31,6 +31,7 @@ namespace MoMa {
         inline const arma::vec &getTimeStamps(){return timeStamp;};
         inline arma::vec &getRefTimeStamps(){return timeStamp;};
         inline bool isTimestamped(){return timedFlag;};
+        inline double getFrameTime(unsigned int index){return (timedFlag?timeStamp[index]:frameRate*index);}
         bool setFrameRate(float pFrameRate){
             if (timedFlag)
                 return false;
@@ -58,8 +59,7 @@ namespace MoMa {
                 return false;
             data.insert_rows(data.n_elem, 1);
             data(data.n_elem-1)=pData;
-            return true;
-        };
+            return true;        };
 
         bool pushTimedFrame(double pData,double pTime);
         void pop_front(){
