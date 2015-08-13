@@ -15,8 +15,8 @@
 
 namespace MoMa {
     
-    const int DefNodeSize = 40;
-    const int DefGridSize = 40;
+    const int DefaultNodeSize = 40;
+    const int DefaultGridSize = 40;
 
     class Canvas;
     
