@@ -82,6 +82,18 @@
     <Filter Include="oF\addons\ofxUI">
       <UniqueIdentifier>{236f1a91-0cd9-4454-903d-20893f3d2a94}</UniqueIdentifier>
     </Filter>
+    <Filter Include="oF">
+      <UniqueIdentifier>{23278141-61d2-416f-a18a-af105b8fd0af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="oF\addons">
+      <UniqueIdentifier>{3b4d3b57-2d54-418f-a383-cf324766f40b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="oF\addons\ofxOsc">
+      <UniqueIdentifier>{b9658a48-de9f-4991-bbf5-bf97b3d3f786}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="oF\addons\ofxOsc\src">
+      <UniqueIdentifier>{37c657dc-f69f-42ee-aed5-1ba7c4dad0b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\MoMa\core\mmBoneList.cpp">
@@ -350,6 +362,21 @@
     </ClCompile>
     <ClCompile Include="..\..\..\MoMa\core\mmContainer.cpp">
       <Filter>MoMa\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\oF\addons\ofxOsc\src\ofxOscBundle.cpp">
+      <Filter>oF\addons\ofxOsc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\oF\addons\ofxOsc\src\ofxOscMessage.cpp">
+      <Filter>oF\addons\ofxOsc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\oF\addons\ofxOsc\src\ofxOscParameterSync.cpp">
+      <Filter>oF\addons\ofxOsc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\oF\addons\ofxOsc\src\ofxOscReceiver.cpp">
+      <Filter>oF\addons\ofxOsc\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\oF\addons\ofxOsc\src\ofxOscSender.cpp">
+      <Filter>oF\addons\ofxOsc\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -655,6 +682,27 @@
     </ClInclude>
     <ClInclude Include="..\..\..\MoMa\core\mmContainer.h">
       <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\oF\addons\ofxOsc\src\ofxOsc.h">
+      <Filter>oF\addons\ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\oF\addons\ofxOsc\src\ofxOscArg.h">
+      <Filter>oF\addons\ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\oF\addons\ofxOsc\src\ofxOscBundle.h">
+      <Filter>oF\addons\ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\oF\addons\ofxOsc\src\ofxOscMessage.h">
+      <Filter>oF\addons\ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\oF\addons\ofxOsc\src\ofxOscParameterSync.h">
+      <Filter>oF\addons\ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\oF\addons\ofxOsc\src\ofxOscReceiver.h">
+      <Filter>oF\addons\ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\oF\addons\ofxOsc\src\ofxOscSender.h">
+      <Filter>oF\addons\ofxOsc\src</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
