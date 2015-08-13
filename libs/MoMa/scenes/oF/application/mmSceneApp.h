@@ -14,6 +14,9 @@
 #include "mmCanvas.h"
 
 namespace MoMa {
+    
+    const int DefNodeSize = 40;
+    const int DefGridSize = 40;
 
     class Canvas;
     

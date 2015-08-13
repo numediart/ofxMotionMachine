@@ -15,8 +15,8 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     ofEnableSmoothing();
 
     setViewDistance( 1000 );
-    setNodeSize( 40 );
-    setGridSize( 40 );
+    setNodeSize( DefNodeSize );
+    setGridSize( DefGridSize );
 
     showGround( true );
     show3dScene( true );
