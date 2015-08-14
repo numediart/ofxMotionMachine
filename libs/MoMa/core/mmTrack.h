@@ -38,6 +38,7 @@ namespace MoMa {
         // - Loading files -
         
         void load( std::string const &fileName ); // // Load & parse any file
+        void synolist( std::string fileName ); // Attach track to a given file of synonyms
         void nodes( std::string fileName ); // Attach track to a given node file
         void bones( std::string fileName ); // Attach track to a given bone file
         

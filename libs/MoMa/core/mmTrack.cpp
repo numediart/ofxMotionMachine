@@ -49,6 +49,18 @@ Track::~Track( void ) {
     if( hasSynoList ) delete synoList; // Deallocation
 }
 
+void Track::synolist( string fileName ) {
+
+    if( hasSynoList == true ) {
+
+        delete synoList;
+        hasSynoList = false;
+    }
+
+    synoList = new SynoList( fileName );
+    hasSynoList = true;
+}
+
 void Track::nodes( string fileName ) {
 
     if( hasNodeList == true ) delete nodeList;
