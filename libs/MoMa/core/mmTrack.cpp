@@ -30,14 +30,10 @@ Track::Track( void ) {
     boneList = NULL; // Not allocated
     hasBoneList = false; // No node name list
 
-#ifdef _WIN32
-    synoList = new SynoList( "../../../../libs/MoMa/resources/SynoList.txt" );
-#else
-    synoList = new SynoList( "../../../../../../../libs/MoMa/resources/SynoList.txt" );
-#endif
-
-    if( synoList != NULL ) hasSynoList = true;
-
+    //FIXME this should not be in constructor, among other things, it causes unnecessary
+    //      load of the SynoList when creating a subtrack.
+    this->synolist(SynoList::DefaultPath);
+    
     ringSize = 0; // Init ring buffer size
     isRing = false; // Not ring buffer
 }

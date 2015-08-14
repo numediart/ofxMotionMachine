@@ -11,6 +11,12 @@
 using namespace std;
 using namespace MoMa;
 
+#ifdef _WIN32
+const std::string SynoList::DefaultPath = "../../../../libs/MoMa/resources/SynoList.txt";
+#else
+const std::string SynoList::DefaultPath = "../../../../../../../libs/MoMa/resources/SynoList.txt";
+#endif
+
 SynoList::SynoList( string fileName ) {
     
     load( fileName );
