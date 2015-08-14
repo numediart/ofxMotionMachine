@@ -1007,6 +1007,11 @@ void MoMa::SceneApp::draw( Frame frame ) {
 
 void MoMa::SceneApp::setNumOfTracks( int nOfTracks ) {
 
+    for( int k=0; k<_track.size(); k++ ) {
+
+        delete _track[k].track;
+    }
+
     _track.clear(); // New vec
     _track.resize( nOfTracks );
 
