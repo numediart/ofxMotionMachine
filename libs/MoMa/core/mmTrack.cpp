@@ -21,7 +21,7 @@ Track::Track( void ) {
     synoList = NULL; // Not allocated
     hasSynoList = false; // No synonym list
 
-    frameRate = 177.0f; // Qualisys
+    setFrameRate( 177.0f ); // Qualisys
     hasRotation = false; // No rotation
 
     nodeList = NULL; // Not allocated
@@ -101,13 +101,13 @@ void Track::push( Frame _frame ) {
         
         hasRotation = true;
         
-        if( rotation.isTimestamped() && _frame.hasTime() ) {
+        if( rotation.isTimed() && _frame.hasTime() ) {
             
-            rotation.pushTimedFrame( _frame.getRotation(), _frame.time() );
+            rotation.push( _frame.getRotation(), _frame.time() );
             
         } else {
             
-            rotation.pushFrame( _frame.getRotation() );
+            rotation.push( _frame.getRotation() );
         }
         
         if( rotationOffset.n_elem == 0 ) {
@@ -116,14 +116,14 @@ void Track::push( Frame _frame ) {
         }
     }
     
-    if( position.isTimestamped() && _frame.hasTime() ) {
+    if( position.isTimed() && _frame.hasTime() ) {
         
-        position.pushTimedFrame( _frame.getPosition(), _frame.time() );
+        position.push( _frame.getPosition(), _frame.time() );
         
     } else {
         
         arma::mat temp = _frame.getPosition();
-        position.pushFrame( temp );
+        position.push( temp );
     }
 }
 
@@ -155,11 +155,23 @@ int Track::index( std::string name ) {
 
     if( nOfFrames() > 0 && hasNodeList ) {
 
-        Frame oneFrame = frame( 0 );
+        Frame oneFrame = frame( (unsigned int)0 );
         nIdx = oneFrame.index( name );
     }
 
     return( nIdx );
+}
+
+void Track::setFrameRate( float rate ) {
+    
+    _frameRate = rate;
+    
+    position.setFrameRate( rate );
+    
+    if( hasRotation ) {
+    
+        rotation.setFrameRate( rate );
+    }
 }
 
 void Track::clear( void ) {
@@ -198,7 +210,7 @@ void Track::subTrack( Track &subTr, int beg, int end) {
     
     subTr.easyName = easyName;
     subTr.fileName = fileName;
-    subTr.frameRate = frameRate;
+    subTr._frameRate = _frameRate;
     subTr.ringSize = ringSize;
     subTr.isRing = isRing;
     
@@ -206,28 +218,28 @@ void Track::subTrack( Track &subTr, int beg, int end) {
     
     if( hasRotation ) {
         
-        if( rotation.isTimestamped() ) {
+        if( rotation.isTimed() ) {
             
             // TODO
             
-            subTr.rotation.setTimedData( rotation.getTimeStamps().subvec( beg, end ), rotation.getData().slices( beg, end ) );
+            subTr.rotation.setData( rotation.getTimeVec().subvec( beg, end ), rotation.getData().slices( beg, end ) );
             subTr.rotationOffset = rotationOffset;
             
         } else {
             
-            subTr.rotation.setData( rotation.getFrameRate(), rotation.getData().slices( beg, end ) );
+            subTr.rotation.setData( rotation.frameRate(), rotation.getData().slices( beg, end ) );
             subTr.rotationOffset = rotationOffset;
         }
     }
     
-    if( position.isTimestamped() ) {
+    if( position.isTimed() ) {
         
         // TODO
         
-        subTr.position.setTimedData( position.getTimeStamps().subvec( beg, end ),position.getData().slices( beg, end ) );
+        subTr.position.setData( position.getTimeVec().subvec( beg, end ),position.getData().slices( beg, end ) );
         
     } else {
         
-        subTr.position.setData( position.getFrameRate(), position.getData().slices( beg, end ) );
+        subTr.position.setData( position.frameRate(), position.getData().slices( beg, end ) );
     }
 }

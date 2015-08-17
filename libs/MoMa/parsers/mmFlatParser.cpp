@@ -114,16 +114,8 @@ void FlatParser::load( string const &fileName, Track *track ) {
         }
     }
     
-            
-          //  oneFrame.setRotationFlag( track->hasRotation );
-            
-          //  oneFrame.hasNodeList = track->hasNodeList;
-          //  oneFrame.nodeList = track->nodeList;
-            
-          //  oneFrame.hasBoneList = track->hasBoneList;
-          //  oneFrame.boneList = track->boneList;
-
-	track->position.setData(track->frameRate,positionData);
-
+    track->setFrameRate( 177 );
+    track->position.setData( track->frameRate(), positionData );
+    
     datFile.close();
 }

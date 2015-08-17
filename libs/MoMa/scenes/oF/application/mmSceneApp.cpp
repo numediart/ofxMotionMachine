@@ -13,10 +13,11 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     ofEnableAlphaBlending();
     ofEnableAntiAliasing();
     ofEnableSmoothing();
-
-    setViewDistance( 1000 );
+    
     setNodeSize( DefaultNodeSize );
     setGridSize( DefaultGridSize );
+    setViewDistance( DefaultViewDist );
+    setPlotResolution( DefaultPlotRes );
 
     showGround( true );
     show3dScene( true );
@@ -33,7 +34,7 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     showTimeline( false );
 
     isPlayback = false;
-    frameRate = 179.0f;
+    frameRate = 100.0f;
     isBegin = true;
 
     idxMin = 0; idxMax = 1;
@@ -139,7 +140,7 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
         }
     }
     
-    appIndex = floor( fAppIndex + 0.5 );
+    appIndex = (unsigned int)floor( fAppIndex + 0.5 );
 
     while( receiver.hasWaitingMessages() ) {
 
@@ -703,7 +704,7 @@ void MoMa::SceneApp::dragged( ofDragInfo &drag ) {
         }
 
         setPlayerSize( dragEventRegTrack->nOfFrames() );
-        setFrameRate( dragEventRegTrack->frameRate );
+        setFrameRate( dragEventRegTrack->frameRate() );
     }
     
     if( hasDragEventRegLabelList ) {
@@ -764,7 +765,7 @@ void MoMa::SceneApp::render2d( void ) {
 
                 float x = ofMap( n, idxMin, idxMax, 0, ofGetWidth() ); // Scale data
                 float y = ofMap( _figure[fIdx].plot[f].data[n], _figure[fIdx].yMin,
-                    _figure[fIdx].yMax, _figure[fIdx].yBot-5, _figure[fIdx].yTop+5 );
+                _figure[fIdx].yMax, _figure[fIdx].yBot-5, _figure[fIdx].yTop+5 );
 
                 _figure[fIdx].plot[f].line.addVertex( ofVec2f( x, y ) ); // Add
             }
@@ -877,10 +878,11 @@ void MoMa::SceneApp::draw( mat data, string name ) {
     }
 }
 
-void MoMa::SceneApp::draw(Trace trace, string name ) {
+void MoMa::SceneApp::draw( Trace trace, string name ) {
 
     if( is2D ) {
-        //TODO: to manage the case with timestamped value for X-Axis.
+        
+        // TODO: to manage the case with timestamped value for X-Axis.
 
         mat traceMtx = trace.getPosition();
         if (trace.hasRotation())
@@ -897,7 +899,7 @@ void MoMa::SceneApp::draw(Trace trace, string name ) {
         int nMin = idxMin+1; if( nMin < 1 ) nMin = 1; // We adjust trace to zoom range
         int nMax = idxMax+1; if( nMax > trace.nOfFrames() ) nMax = trace.nOfFrames();
 
-        for( int n=nMin; n<nMax; n++ ) {
+        for( unsigned int n=nMin; n<nMax; n++ ) {
 
             ofPushStyle();
             ofSetColor( ofGetStyle().color, 128 ); ofSetLineWidth( 1 );
@@ -906,6 +908,39 @@ void MoMa::SceneApp::draw(Trace trace, string name ) {
         }
     }
 }
+
+/*
+void MoMa::SceneApp::draw( TimedVec data, int hue, std::string name ) {
+    
+    Plot plot;
+    
+    plot.name = name;
+    plot.data.resize( plotResolution );
+    plot.color.setHsb( hue, 255, 255, 128 );
+    
+    if( data.nOfFrames() > 1 ) {
+        
+        for( int k=0; k<plotResolution; k++ ) {
+            
+            double t = ofMap( k, 0, plotResolution, 0.0f, data.maxTime() );
+            plot.data( k ) = data.at( t ); // Store interpolated data
+        }
+        
+        if( _figure[figureIdx].yMin > (float)plot.data.min() ) _figure[figureIdx].yMin = (float)plot.data.min();
+        if( _figure[figureIdx].yMax < (float)plot.data.max() ) _figure[figureIdx].yMax = (float)plot.data.max();
+        
+        _figure[figureIdx].plot.push_back( plot );
+        _figure[figureIdx].plotId++;
+    }
+}
+*/
+
+/*
+void MoMa::SceneApp::draw( TimedMat trace, string name ) {
+    
+    
+}
+*/
 
 void MoMa::SceneApp::draw( LabelList labelList ) {
 
@@ -1208,18 +1243,29 @@ void MoMa::SceneApp::setFrameRate( float rate ) {
     frameRate = rate;
 }
 
-void MoMa::SceneApp::setPlayerSize( int size ) {
+void MoMa::SceneApp::setPlayerSize( int nOfFrames ) {
 
-    playerSize = size; idxMax = size-1;
+    playerSize = nOfFrames; idxMax = nOfFrames-1;
     if( idxMax < 1 ) idxMax = 1;
     
     if( appIndex > idxMax ) appIndex = idxMax;
     if( fAppIndex > idxMax ) fAppIndex = idxMax;
 }
 
-int MoMa::SceneApp::getAppIndex( void ) {
+void MoMa::SceneApp::setPlayerSize( double time ) {
+
+    int n = (int)( frameRate * time );
+    setPlayerSize( n ); // Dirty way
+}
+
+unsigned int MoMa::SceneApp::getAppIndex( void ) {
 
     return( appIndex );
+}
+
+double MoMa::SceneApp::getAppTime( void ) {
+    
+    return( (double)fAppIndex / (double)frameRate );
 }
 
 void MoMa::SceneApp::play( void ) {
@@ -1290,6 +1336,11 @@ void MoMa::SceneApp::setViewDistance( float distance ) {
     camera.setTarget( ofVec3f( 0, 0, 0 ) ); // oF commands to move cam
     camera.setFarClip( 10000 + 10.0f*distance ); camera.setNearClip( 0 );
     light.setPosition( ofVec3f( 3.5f, 2.0f, 2.0f )*distance );
+}
+
+void MoMa::SceneApp::setPlotResolution( int reso ) {
+    
+    plotResolution = reso;
 }
 
 void MoMa::SceneApp::setActiveMode( int mode ) {
