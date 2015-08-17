@@ -92,8 +92,8 @@ void FlatParser::load( string const &fileName, Track *track ) {
                 curStrm >> value[2];
                 
                 if( ( value[0] == "NaN" && value[1] == "NaN" && value[2] == "NaN" ) ||
-                ( atof(value[0].c_str()) > 100000000000 && atof( value[0].c_str() ) >
-                100000000000 && atof( value[0].c_str()) > 100000000000 ) ) {
+                ( atof(value[0].c_str()) > MOMAINF && atof( value[0].c_str() ) >
+                MOMAINF && atof( value[0].c_str()) > MOMAINF ) ) {
                        
                     // Data are ignored and the oneNode stays with ARMA NaNs
                     
