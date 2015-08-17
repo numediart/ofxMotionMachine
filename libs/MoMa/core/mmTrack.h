@@ -26,6 +26,8 @@
 #include "mmTrace.h"
 #include "mmNode.h"
 
+#define MOMAINF 1000000000
+
 namespace MoMa {
     
     class Track {

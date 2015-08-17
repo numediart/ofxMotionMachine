@@ -221,7 +221,8 @@ void V3dParser::load( string const &fileName, Track *track ) {
                             thisStream >> value[11];
                         }
 
-                        if( value[0] == "NaN" ||  atof( value[0].c_str() ) > 100000000000 ) {
+                        if( value[0] == "NaN" ||  atof( value[0].c_str() ) > MOMAINF ) {
+
 
                             // Data are ignored and the
                             // tempNode keeps arma's nans for positions
