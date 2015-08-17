@@ -134,7 +134,7 @@ void C3dParser::load( string const &fileName, Track *track ) {
     else NanalogChannels=0;
 
     reading(&VideoFrameRate,sizeof(float),1,fid);
-    track->frameRate=(float)VideoFrameRate;
+    track->setFrameRate( (float)VideoFrameRate );
     AnalogFrameRate=VideoFrameRate*NanalogFramesPerVideoFrame;
 
     if(printing){

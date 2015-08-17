@@ -16,6 +16,7 @@
 
 #include "mmArmaUtils.h"
 #include "mmQuaternion.h"
+#include "mmContainer.h"
 
 #include "mmTrack.h"
 #include "mmFrame.h"

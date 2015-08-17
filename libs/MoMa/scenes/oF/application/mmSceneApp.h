@@ -17,6 +17,8 @@ namespace MoMa {
     
     const int DefaultNodeSize = 40;
     const int DefaultGridSize = 40;
+    const int DefaultViewDist = 1000;
+    const int DefaultPlotRes = 1000;
 
     class Canvas;
     
@@ -99,7 +101,7 @@ namespace MoMa {
     static const ofColor Red = ofColor( 255, 0, 0 );
     
     // -- SceneApp --
-
+    
     class SceneApp : public ofBaseApp {
 
       public:
@@ -147,6 +149,9 @@ namespace MoMa {
         void draw( arma::mat data, string name="" ); // Mat and
         void draw( Trace trace, std::string name="" ); // Trace
         
+        // void draw( TimedVec data, int hue, std::string name="" ); // TimedVec
+        // void draw( TimedMat trace, std::string name="" ); // TimedMat
+        
         void draw( LabelList labelList ); // Label list
         
         // - Built-in track related methods -
@@ -183,10 +188,10 @@ namespace MoMa {
         void setPlaybackMode( int mode ); // Set playback mode
         void setFrameRate( float rate ); // Set playback rate
         
-        // TODO replace setTrackSize() by setPlayerSize()
-        
-        void setPlayerSize( int size ); // Define track size
-        int getAppIndex( void ); // Query app index
+        void setPlayerSize( int nOfFrames ); // Define size in frames
+        void setPlayerSize( double time ); // Define size in seconds
+        unsigned int getAppIndex( void ); // Query app index
+        double getAppTime( void ); // Query app time
         
         void zoom( int iMin, int iMax ); // Zoom
         void showAll( void ); // Back to fullsize
@@ -216,6 +221,8 @@ namespace MoMa {
         void setNodeSize( float size ); // Set node size
         void setGridSize( float size ); // Set grid size
         void setViewDistance( float dist ); // Set distance
+        
+        void setPlotResolution( int reso ); // Set resolution
         
         void setActiveMode( int mode ); // Set active mode
         
@@ -299,6 +306,7 @@ namespace MoMa {
         bool is2D; // Check drawing context
         vector<Figure> _figure; // List of figures
         int figureIdx; // Figure to be drawn in
+        int plotResolution; // Plot resolution
         
         // - X axis mapping -
         
@@ -310,8 +318,8 @@ namespace MoMa {
         int playbackMode; // Playback mode flag
         float frameRate; // Frame rate from playback
         bool isPlayback; // Do we keep play it back?
+        unsigned int appIndex; // App index
         float fAppIndex; // Float index
-        int appIndex; // App index
         bool isBegin; // Is begin?
         
         // - Video recorder -
@@ -331,11 +339,6 @@ namespace MoMa {
         LabelList *dragEventRegLabelList; // Registered label list
         bool hasMouseEventRegLabelList; // Has mouse-event registered?
         LabelList *mouseEventRegLabelList; // Registered label list
-        
-        //bool hasRegisteredAnnotationDragEvent; // Has registered?
-        //LabelList *registeredLabelList; // Registered label list
-        
-        //LabelList labelList; // TMP: current label list
         
         bool insertNewLabel; // Are we inserting a new label?
         bool isLabelSelected; // Is a label currently selected?

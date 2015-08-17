@@ -51,7 +51,7 @@ namespace MoMa {
         //track->clear();
         unsigned int nFrames=parser.mFrames;
         unsigned int nNodes=parser.getNofJoints();
-        track->frameRate=parser.mFrameRate;
+        track->setFrameRate( parser.mFrameRate );
         //vector<vector<float> > jointOffsetRotation;
         //jointOffsetRotation=parser.getJointOffsetRotation();
         for (int i=0;i<nFrames;i++){

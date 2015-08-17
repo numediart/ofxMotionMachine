@@ -307,10 +307,7 @@ void V3dParser::load( string const &fileName, Track *track ) {
                         track->rotation.getRefData().slice(frameCpt)=rotMat;
 
                     //track->push( tempFrame );
-                    track->position.setFrameRate(177);
-                    if (track->hasRotation)
-                        track->rotation.setFrameRate(177);
-                    track->frameRate = 177; // TODO to define to look for
+                    track->setFrameRate( 177 ); // TODO to define to look for
                     //std::cout<<frameCpt<<std::endl<<track->position.getRefData().slice(frameCpt)<<std::endl;
                     frameCpt++;
                 }

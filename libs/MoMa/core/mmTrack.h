@@ -44,16 +44,16 @@ namespace MoMa {
         
         // - Extracting frames and frame-related matrices
         
-        inline Frame frame( int index ); // Extract frame from track (by index)
+        inline Frame frame( unsigned int index ); // Extract frame from track (by index)
         inline Frame frame( double time ); // Extract frame from track (by time tag)
         
-        inline Frame operator[]( int index ); // Short version of frame()
+        inline Frame operator[]( unsigned int index ); // Short version of frame()
         inline Frame operator[]( double time ); // Short version of frame()
         
-        inline arma::mat framePosition( int index ); // Query frame by index in the track
+        inline const arma::mat &framePosition( unsigned int index ); // Query frame by index in the track
         inline arma::mat framePosition( double time ); // Query frame by time in the track
         
-        inline arma::mat frameRotation( int index ); // Query frame by index in the track
+        inline const arma::mat &frameRotation( unsigned int index ); // Query frame by index in the track
         inline arma::mat frameRotation( double time ); // Query frame by time in the track
         
         // - Extracting traces and trace-related matrices
@@ -67,16 +67,16 @@ namespace MoMa {
         inline arma::mat tracePosition( int index ); // Query frame by index in the track
         inline arma::mat traceRotation( int index ); // Query frame by index in the track
         
-        // - Ringubffer-related methods -
+        // - Ringbuffer-related methods -
         
         void setRingBufferSize( int size ); // Set as ring buffer + max size
         void subTrack( Track &subTr, int beg, int end ); // Extract a subtrack
         
         void pushPosition( arma::mat frame ); // Add frame + checking if ringbuffer
-        void popPosition( void ) { position.pop_front(); } // Remove frame
+        void popPosition( void ) { position.pop(); } // Remove frame
 
-        void pushRotations( arma::mat frame ); // Add frame + checking if ringbuffer
-        void popRotations( void ) { position.pop_front(); } // Remove frame
+        void pushRotation( arma::mat frame ); // Add frame + checking if ringbuffer
+        void popRotation( void ) { position.pop(); } // Remove frame
 
         void push( Frame _frame ); // Push new frame into the track (at the end)
         
@@ -85,6 +85,9 @@ namespace MoMa {
         void setName( std::string name ); // Define track name
         void setFileName( std::string name ); // Define track name
         int index( std::string name ); // Get index from name
+        
+        void setFrameRate( float rate ); // Set/get frame rate
+        inline float frameRate( void ) { return _frameRate; }
         
         inline int nOfFrames( void ); // Get # frames
         inline int nOfNodes( void ); // Get # nodes
@@ -95,8 +98,8 @@ namespace MoMa {
         std::string easyName; // Track name
         std::string fileName; // Track file name
         
-        timed3dContainer position; // Position frames
-        timed3dContainer rotation; // Quaternion frames
+        TimedCube position; // Position frames
+        TimedCube rotation; // Quaternion frames
         arma::mat rotationOffset; // Rotation offset
         bool hasRotation; // Has track rotations?
         
@@ -109,7 +112,7 @@ namespace MoMa {
         SynoList *synoList; // List of synonyms?
         bool hasSynoList; // Has track synoList?
         
-        float frameRate; // Track frame rate
+        float _frameRate; // Track frame rate
         
         int ringSize; // Ringbuffer size
         bool isRing; // Is ringbuffer?
@@ -117,19 +120,18 @@ namespace MoMa {
     
     // - Inlined functions -
     
-    Frame Track::frame( int index ) {
+    Frame Track::frame( unsigned int index ) {
         
         Frame oneFrame;
         
-        if( index >= 0 && index < nOfFrames() ) {
-            
-            oneFrame.setPositionData(position.getIndexedFrame(index));
+        if( index < nOfFrames() ) {
             
             oneFrame.setRotationFlag( hasRotation );
+            oneFrame.setPositionData( position.at( index ) );
             
-            if( hasRotation ){
+            if( hasRotation ) { // We do copy rotation information only if necessary
                 
-                oneFrame.setRotationData( rotation.getIndexedFrame(index), rotationOffset );
+                oneFrame.setRotationData( rotation.at( index ), rotationOffset );
             }
             
             oneFrame.hasNodeList = hasNodeList;
@@ -149,27 +151,32 @@ namespace MoMa {
         
         Frame oneFrame;
         
-        oneFrame.setPositionData( position.getTimedFrame( time ) );
-        oneFrame.setRotationFlag( hasRotation );
+        double maxTime = (double)nOfFrames() / (double)frameRate();
         
-        if( hasRotation ) {
+        if( time >= 0.0f && time < maxTime ) {
             
-            oneFrame.setRotationData( rotation.getTimedFrame( time ), rotationOffset );
+            oneFrame.setRotationFlag( hasRotation );
+            oneFrame.setPositionData( position.at( time ) );
+            
+            if( hasRotation ) { // We do copy rotation information only if necessary
+                
+                oneFrame.setRotationData( rotation.at( time ), rotationOffset );
+            }
+            
+            oneFrame.hasNodeList = hasNodeList;
+            oneFrame.nodeList = nodeList;
+            
+            oneFrame.hasBoneList = hasBoneList;
+            oneFrame.boneList = boneList;
+            
+            oneFrame.hasSynoList = hasSynoList;
+            oneFrame.synoList = synoList;
         }
-        
-        oneFrame.hasNodeList = hasNodeList;
-        oneFrame.nodeList = nodeList;
-        
-        oneFrame.hasBoneList = hasBoneList;
-        oneFrame.boneList = boneList;
-        
-        oneFrame.hasSynoList = hasSynoList;
-        oneFrame.synoList = synoList;
         
         return( oneFrame );
     }
     
-    Frame Track::operator[]( int index ) {
+    Frame Track::operator[]( unsigned int index ) {
         
         return( frame( index ) );
     }
@@ -179,24 +186,24 @@ namespace MoMa {
         return( frame( time ) );
     }
     
-    arma::mat Track::framePosition( int index ) {
+    const arma::mat &Track::framePosition( unsigned int index ) {
     
-        return( position.getIndexedFrame( index ) );
+        return( position.at( index ) );
     }
     
     arma::mat Track::framePosition( double time ) {
     
-        return( position.getTimedFrame( time ) );
+        return( position.at( time ) );
     }
     
-    arma::mat Track::frameRotation( int index ) {
+    const arma::mat &Track::frameRotation( unsigned int index ) {
     
-        return( rotation.getIndexedFrame( index ) );
+        return( rotation.at( index ) );
     }
     
     arma::mat Track::frameRotation( double time ) {
     
-        return( rotation.getTimedFrame( time ) );
+        return( rotation.at( time ) );
     }
     
     Trace Track::trace( std::string name ) {
@@ -261,25 +268,25 @@ namespace MoMa {
         oneTrace.setRotationFlag( hasRotation );
         oneTrace.setName( nodeList->at( index ) );
         
-        if( position.isTimestamped() ) {
+        if( position.isTimed() ) {
             
-            oneTrace.setPosition( position.getData().tube( 0, index, 2 , index ), position.getTimeStamps() );
+            oneTrace.setPosition( position.getData().tube( 0, index, 2 , index ), position.getTimeVec() );
             
         } else {
             
-            oneTrace.setPosition( position.getData().tube( 0,index, 2, index ), position.getFrameRate() );
+            oneTrace.setPosition( position.getData().tube( 0,index, 2, index ), position.frameRate() );
         }
         
         if( hasRotation ) {
             
-            if( rotation.isTimestamped() ) {
+            if( rotation.isTimed() ) {
                 
-                oneTrace.setRotation( rotation.getData().tube( 0,index, 2, index ), position.getTimeStamps() );
+                oneTrace.setRotation( rotation.getData().tube( 0,index, 2, index ), position.getTimeVec() );
                 oneTrace.setRotationOffset( rotationOffset.col( index ) );
                 
             } else {
                 
-                oneTrace.setRotation( rotation.getData().tube( 0, index, 2, index ), position.getFrameRate() );
+                oneTrace.setRotation( rotation.getData().tube( 0, index, 2, index ), position.frameRate() );
                 oneTrace.setRotationOffset( rotationOffset.col( index ) );
             }
         }
@@ -314,7 +321,7 @@ namespace MoMa {
     
     int Track::nOfNodes( void ) {
         
-        return( std::max( rotation.nOfNodes(), position.nOfNodes() ) );
+        return( std::max( rotation.nOfCols(), position.nOfCols() ) );
     }
 }
 

@@ -74,5 +74,7 @@ void FlatParser::load( string const &fileName, Track *track ) {
         }
     }
     
+    track->setFrameRate( 177 );
+    
     datFile.close();
 }
