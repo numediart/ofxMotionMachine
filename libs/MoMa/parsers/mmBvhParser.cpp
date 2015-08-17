@@ -54,29 +54,47 @@ namespace MoMa {
         track->frameRate=parser.mFrameRate;
         //vector<vector<float> > jointOffsetRotation;
         //jointOffsetRotation=parser.getJointOffsetRotation();
-        for (int i=0;i<nFrames;i++){
-            std::cout<<i<<std::endl;
+        arma::cube positionData(3,nNodes,nFrames);
+        arma::cube rotationData(4,nNodes,nFrames);
+		for (int i=0;i<nFrames;i++){
+            if (i%100==0)
+				std::cout<<i<<std::endl;
             vector<vector<float> > bvhFrame=parser.bvh2xyz(i);
             vector<vector<float> > bvhRotationFrame;
             if (hasRotation){
                 bvhRotationFrame=parser.bvh2quat(i);
             }
-            MoMa::Frame lFrame;
-            lFrame.setRotationFlag(hasRotation);
-            lFrame.setSynoList(track->synoList);
+            //MoMa::Frame lFrame;
+            //lFrame.setRotationFlag(hasRotation);
+            //lFrame.setSynoList(track->synoList);
 
             for (int j=0;j<bvhFrame.size();j++){
-                MoMa::Node lNode(bvhFrame[j][0]*10,bvhFrame[j][1]*10,bvhFrame[j][2]*10);
+                //MoMa::Node lNode(bvhFrame[j][0]*10,bvhFrame[j][1]*10,bvhFrame[j][2]*10);
+				positionData(0,j,i)=bvhFrame[j][0]*10;
+				positionData(1,j,i)=bvhFrame[j][1]*10;
+				positionData(2,j,i)=bvhFrame[j][2]*10;
                 if (hasRotation){
-                    lNode.setRotation(bvhRotationFrame[j][0],bvhRotationFrame[j][1],bvhRotationFrame[j][2],bvhRotationFrame[j][3]);
-                    //std::cout<<" "<<bvhRotationFrame[j][0]<<" "<<bvhRotationFrame[j][1]<<" "<<bvhRotationFrame[j][2]<<" "<<bvhRotationFrame[j][3]<<std::endl;
+					//	lNode.setRotation(bvhRotationFrame[j][0],bvhRotationFrame[j][1],bvhRotationFrame[j][2],bvhRotationFrame[j][3]);
+					rotationData(0,j,i)=bvhRotationFrame[j][0];
+					rotationData(1,j,i)=bvhRotationFrame[j][1];
+					rotationData(2,j,i)=bvhRotationFrame[j][2];
+					rotationData(3,j,i)=bvhRotationFrame[j][3];
+					//std::cout<<" "<<bvhRotationFrame[j][0]<<" "<<bvhRotationFrame[j][1]<<" "<<bvhRotationFrame[j][2]<<" "<<bvhRotationFrame[j][3]<<std::endl;
                     //lNode.setOffsetRotation(jointOffsetRotation[j][0],jointOffsetRotation[j][1],jointOffsetRotation[j][2],jointOffsetRotation[j][3]);
                 }
-                lNode.setName(parser.getNodeName(j));
-                lNode.setTime(i*parser.mFrameRate);
-                lFrame.push(lNode);
+                //lNode.setName(parser.getNodeName(j));
+                //lNode.setTime(i*parser.mFrameRate);
+                //lFrame.push(lNode);
             }
-            track->push(lFrame);
+            //track->push(lFrame);
+
+			if (hasRotation){
+				track->rotation.setData(parser.mFrameRate,rotationData);
+			}
+
+			track->position.setData(parser.mFrameRate,positionData);
+			track->frameRate=parser.mFrameRate;
+
         }
         track->nodeList=new NodeList;
         track->hasNodeList=true;
