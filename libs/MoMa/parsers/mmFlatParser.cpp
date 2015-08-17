@@ -19,7 +19,51 @@ void FlatParser::load( string const &fileName, Track *track ) {
     }
     
     track->clear();
-    
+	unsigned int nbFrames=0,nbNodes=0;
+    while ( datFile.good() ) {
+        
+        string curLine;
+        stringstream curStrm;
+        vector<string> rawData;
+        
+        getline( datFile, curLine );
+        
+        if( curLine != "" && curLine != " "
+        && curLine != "\t" && curLine != "\n" ) {
+            curStrm.clear();
+            curStrm << curLine;
+            if (nbFrames==0){
+            while( curStrm.good() ) {
+                
+                
+                
+                string value[3];
+                
+                curStrm >> value[0];
+                curStrm >> value[1];
+                curStrm >> value[2];
+                
+                if( ( value[0] == "NaN" && value[1] == "NaN" && value[2] == "NaN" ) ||
+                ( atof(value[0].c_str()) > 100000000000 && atof( value[0].c_str() ) >
+                100000000000 && atof( value[0].c_str()) > 100000000000 ) ) {
+                       
+                    // Data are ignored and the oneNode stays with ARMA NaNs
+                    
+                } else {
+					nbNodes++;
+                       
+                }
+                
+            }
+			}
+			nbFrames++;
+           
+        }
+    }
+	datFile.clear() ;
+	datFile.seekg(0, ios::beg) ;
+	arma::cube positionData(3,nbNodes,nbFrames);
+	unsigned int cptFrames=0;
     while ( datFile.good() ) {
         
         string curLine;
@@ -35,10 +79,11 @@ void FlatParser::load( string const &fileName, Track *track ) {
             
             curStrm.clear();
             curStrm << curLine;
+			unsigned int cptNodes=0;
             
             while( curStrm.good() ) {
                 
-                Node oneNode;
+                //Node oneNode;
                 
                 string value[3];
                 
@@ -54,27 +99,23 @@ void FlatParser::load( string const &fileName, Track *track ) {
                     
                 } else {
                        
-                    oneNode.position(X) = atof( value[0].c_str() );
-                    oneNode.position(Y) = atof( value[1].c_str() );
-                    oneNode.position(Z) = atof( value[2].c_str() );
+                   // oneNode.position(X) = atof( value[0].c_str() );
+                   // oneNode.position(Y) = atof( value[1].c_str() );
+                   // oneNode.position(Z) = atof( value[2].c_str() );
+					positionData(X,cptNodes,cptFrames)= atof( value[0].c_str() );
+                    positionData(Y,cptNodes,cptFrames) = atof( value[1].c_str() );
+                    positionData(Z,cptNodes,cptFrames) = atof( value[2].c_str() );
+					cptNodes++;
                 }
                 
-                oneFrame.push( oneNode );
             }
-            
-            oneFrame.setRotationFlag( track->hasRotation );
-            
-            oneFrame.hasNodeList = track->hasNodeList;
-            oneFrame.nodeList = track->nodeList;
-            
-            oneFrame.hasBoneList = track->hasBoneList;
-            oneFrame.boneList = track->boneList;
-            
-            track->push( oneFrame );
+			cptFrames++;
+//            track->push( oneFrame );
         }
     }
     
     track->setFrameRate( 177 );
+    track->position.setData( track->frameRate(), positionData );
     
     datFile.close();
 }

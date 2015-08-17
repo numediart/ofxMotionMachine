@@ -461,12 +461,12 @@ void C3dParser::load( string const &fileName, Track *track ) {
         if( printing ) {
         cout << "Markers data format : float\n";
         }
-
+		arma::cube positionData(3,Nmarkers,NvideoFrames);
         for(int i=0;i<NvideoFrames;i++){
-            Frame tempFrame;
+            //Frame tempFrame;
             for(int j=0;j<Nmarkers;j++){
-                Node tempNode;
-                tempNode.setPosition( arma::datum::nan, arma::datum::nan, arma::datum::nan );
+                //Node tempNode;
+                //tempNode.setPosition( arma::datum::nan, arma::datum::nan, arma::datum::nan );
                 for(int k=0;k<3;k++){
                     reading(&(Markers[i][j][k]),sizeof(float),1,fid);
                     //printf("Marker %d %d %d : %f \t", i,j,k,Markers[i][j][k]);
@@ -482,14 +482,17 @@ void C3dParser::load( string const &fileName, Track *track ) {
                     lowbyte=b-highbyte*256;
                     CameraInfo[i][j]=highbyte;
                     ResidualError[i][j]=lowbyte*abs(Scale);
-                    tempNode.setPosition(Markers[i][j][0],Markers[i][j][1],Markers[i][j][2]);
+					positionData(0,j,i)=Markers[i][j][0];
+					positionData(1,j,i)=Markers[i][j][1];
+					positionData(2,j,i)=Markers[i][j][2];
+                    //tempNode.setPosition(Markers[i][j][0],Markers[i][j][1],Markers[i][j][2]);
                 }
                 else{
                     //cout << "Invalid 3D Point (the marker is missing).\nPoint : " << Markers[i][j][0] << "," << Markers[i][j][1] << "," << Markers[i][j][2] << endl;
                 }
-                tempFrame.push(tempNode);
+                //tempFrame.push(tempNode);
             }
-            track->push(tempFrame);
+//            track->push(tempFrame);
 
             for(int j=0;j<NanalogFramesPerVideoFrame;j++){
 
@@ -498,6 +501,8 @@ void C3dParser::load( string const &fileName, Track *track ) {
             }
 
         }
+		track->position.setData(VideoFrameRate,positionData);
+
         delete analogtmp;
     }
 
