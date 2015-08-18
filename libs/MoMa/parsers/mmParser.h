@@ -11,6 +11,7 @@
 #include "mmV3dParser.h"
 #include "mmC3dParser.h"
 #include "mmBvhParser.h"
+#include "mmCmpParser.h"
 
 namespace MoMa {
 

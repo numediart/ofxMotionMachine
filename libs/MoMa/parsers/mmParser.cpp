@@ -91,21 +91,39 @@ Parser::Parser( string const &fName, Track *tr ) {
                 delete track->boneList;
         }
     }
-
+    
     else if( extension == "bvh" ) {
-
+        
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
-
+        
         BvhParser::load( fileName, track );
-
+        
         // Check validity of list of bones
         if( track->nOfNodes() != previousSize &&
-            previousSize !=0 && track->hasBoneList == true ) {
-
-                // different number of
-                // markers => different skeleton
-                track->hasBoneList = false;
-                delete track->boneList;
+           previousSize !=0 && track->hasBoneList == true ) {
+            
+            // different number of
+            // markers => different skeleton
+            track->hasBoneList = false;
+            delete track->boneList;
+        }
+        this->setJointOffsetRotation(tr);
+    }
+    else if( extension == "cmp" ) {
+        
+        track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
+        
+        CmpParser Parser;
+        Parser.load( fileName, track );
+        
+        // Check validity of list of bones
+        if( track->nOfNodes() != previousSize &&
+           previousSize !=0 && track->hasBoneList == true ) {
+            
+            // different number of
+            // markers => different skeleton
+            track->hasBoneList = false;
+            delete track->boneList;
         }
         this->setJointOffsetRotation(tr);
     }

@@ -193,6 +193,8 @@
 		9F6202181AA5B75200041A3E /* mmSynoList.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F6202161AA5B75200041A3E /* mmSynoList.h */; };
 		E8AD431A1AF27E1A00165BAE /* mmQuaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AD43181AF27E1A00165BAE /* mmQuaternion.cpp */; };
 		E8AD431B1AF27E1A00165BAE /* mmQuaternion.h in Headers */ = {isa = PBXBuildFile; fileRef = E8AD43191AF27E1A00165BAE /* mmQuaternion.h */; };
+		E8C048FD1B7BA0CD0012DA2D /* mmCmpParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C048FB1B7BA0CD0012DA2D /* mmCmpParser.cpp */; };
+		E8C048FE1B7BA0CD0012DA2D /* mmCmpParser.h in Headers */ = {isa = PBXBuildFile; fileRef = E8C048FC1B7BA0CD0012DA2D /* mmCmpParser.h */; };
 		E8C8EFF41B418CCF00AD198F /* mmContainer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8C8EFF21B418CCF00AD198F /* mmContainer.cpp */; };
 		E8C8EFF51B418CCF00AD198F /* mmContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = E8C8EFF31B418CCF00AD198F /* mmContainer.h */; };
 		E8E2E9C91AFCBE4900D690BE /* mmArmaUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8E2E9C71AFCBE4900D690BE /* mmArmaUtils.cpp */; };
@@ -388,6 +390,8 @@
 		9F6202161AA5B75200041A3E /* mmSynoList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmSynoList.h; path = ../../../MoMa/core/mmSynoList.h; sourceTree = "<group>"; };
 		E8AD43181AF27E1A00165BAE /* mmQuaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmQuaternion.cpp; path = ../../../MoMa/core/mmQuaternion.cpp; sourceTree = "<group>"; };
 		E8AD43191AF27E1A00165BAE /* mmQuaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmQuaternion.h; path = ../../../MoMa/core/mmQuaternion.h; sourceTree = "<group>"; };
+		E8C048FB1B7BA0CD0012DA2D /* mmCmpParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmCmpParser.cpp; path = ../../../MoMa/parsers/mmCmpParser.cpp; sourceTree = "<group>"; };
+		E8C048FC1B7BA0CD0012DA2D /* mmCmpParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmCmpParser.h; path = ../../../MoMa/parsers/mmCmpParser.h; sourceTree = "<group>"; };
 		E8C8EFF21B418CCF00AD198F /* mmContainer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmContainer.cpp; path = ../../../MoMa/core/mmContainer.cpp; sourceTree = "<group>"; };
 		E8C8EFF31B418CCF00AD198F /* mmContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmContainer.h; path = ../../../MoMa/core/mmContainer.h; sourceTree = "<group>"; };
 		E8E2E9C71AFCBE4900D690BE /* mmArmaUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmArmaUtils.cpp; path = ../../../MoMa/core/mmArmaUtils.cpp; sourceTree = "<group>"; };
@@ -410,9 +414,9 @@
 		60B90A801644E00900AF2156 = {
 			isa = PBXGroup;
 			children = (
-				9F00DC8D1A9C8B0F0022A309 /* Sources */,
-				9F1C07801A9CBE9B0067F3B4 /* Products */,
 				9F00DC8C1A9C8AFA0022A309 /* Config */,
+				9F1C07801A9CBE9B0067F3B4 /* Products */,
+				9F00DC8D1A9C8B0F0022A309 /* Sources */,
 			);
 			sourceTree = "<group>";
 		};
@@ -834,6 +838,8 @@
 				9F4FB7D01AC76502003C2C5A /* mmBvhParser.h */,
 				9F4FB7CD1AC76502003C2C5A /* BvhParser.cpp */,
 				9F4FB7CE1AC76502003C2C5A /* BvhParser.h */,
+				E8C048FB1B7BA0CD0012DA2D /* mmCmpParser.cpp */,
+				E8C048FC1B7BA0CD0012DA2D /* mmCmpParser.h */,
 			);
 			name = Parsers;
 			sourceTree = "<group>";
@@ -877,6 +883,7 @@
 				9F2E1C141B76645000DB082C /* mmOfUtils.h in Headers */,
 				9F2E1FE01B7664B800DB082C /* ofxUIWidgetWithLabel.h in Headers */,
 				9F497BDF1AC751FB00F4DE3D /* mmParser.h in Headers */,
+				E8C048FE1B7BA0CD0012DA2D /* mmCmpParser.h in Headers */,
 				9F2E1F6E1B7664B800DB082C /* OscHostEndianness.h in Headers */,
 				9F2E1FB51B7664B800DB082C /* ofxUIMultiImageToggle.h in Headers */,
 				9F497BE91AC752E700F4DE3D /* mmFlatParser.h in Headers */,
@@ -1075,6 +1082,7 @@
 				9F2E1F7A1B7664B800DB082C /* ofxOscBundle.cpp in Sources */,
 				9F2E1FBD1B7664B800DB082C /* ofxUIRectangle.cpp in Sources */,
 				9F2E1F941B7664B800DB082C /* ofxUIDragableLabelButton.cpp in Sources */,
+				E8C048FD1B7BA0CD0012DA2D /* mmCmpParser.cpp in Sources */,
 				9F2E1FBF1B7664B800DB082C /* ofxUIRotarySlider.cpp in Sources */,
 				9F00DC621A9C8A1F0022A309 /* mmNode.cpp in Sources */,
 				9F2E1F721B7664B800DB082C /* OscPrintReceivedElements.cpp in Sources */,
