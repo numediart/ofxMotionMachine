@@ -93,7 +93,7 @@ namespace MoMa {
 			}
 
 			track->position.setData(parser.mFrameRate,positionData);
-			track->frameRate=parser.mFrameRate;
+			track->setFrameRate(parser.mFrameRate);
 
         }
         track->nodeList=new NodeList;
