@@ -677,9 +677,14 @@ namespace MoMa {
         if( data.n_elem == 0 ) data.resize( pData.n_rows, pData.n_cols, 1 );
         else data.insert_slices( data.n_slices, 1 ); // Set the right slot
         
-        data.slice( data.n_slices-1 ) = pData; // Copy data into slot
-        
+        if( data.n_slices > 0 ) {
+            
+            data.slice( data.n_slices-1 ) = pData; // Copy data into slot
+        }
+        else return false;
+
         return true;
+        
     };
     
     void TimedCube::pop( void ) {
