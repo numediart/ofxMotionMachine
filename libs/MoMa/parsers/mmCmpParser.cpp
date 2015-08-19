@@ -140,12 +140,13 @@ namespace MoMa {
             
         }
         tr->position.setData(1.0E7/hdr.sampPeriod, trackCont);
-        tr->frameRate=1.0E7/hdr.sampPeriod;
+        tr->setFrameRate( 1.0E7/hdr.sampPeriod );
         
-        
+        return true;
     }
     bool CmpParser::closeFile(){
         if (file.is_open()==true)
         file.close();
+        return true;
     }//ReadHTKHeader();
 }
