@@ -15,6 +15,30 @@ using namespace MoMa;
 
 Track::Track( void ) {
     
+    init();
+}
+
+Track::Track( Frame frame )  {
+
+    init();
+    push( frame );
+
+    hasNodeList = frame.hasNodeList;
+    if(hasNodeList) nodeList = new NodeList(*(frame.nodeList));
+     
+    hasBoneList = frame.hasBoneList;
+    if(hasBoneList) boneList = new BoneList(*(frame.boneList));
+}
+
+Track::~Track( void ) {
+
+    if( hasNodeList ) delete nodeList; // Deallocation
+    if( hasBoneList ) delete boneList; // Deallocation
+    if( hasSynoList ) delete synoList; // Deallocation
+}
+
+void Track::init( void ) {
+
     easyName = ""; // No name
     fileName = ""; // No file name
     
@@ -36,19 +60,6 @@ Track::Track( void ) {
     
     ringSize = 0; // Init ring buffer size
     isRing = false; // Not ring buffer
-}
-
-Track::Track( Frame frame ) {
-
-    Track();
-    push( frame );
-}
-
-Track::~Track( void ) {
-
-    if( hasNodeList ) delete nodeList; // Deallocation
-    if( hasBoneList ) delete boneList; // Deallocation
-    if( hasSynoList ) delete synoList; // Deallocation
 }
 
 void Track::synolist( string fileName ) {
