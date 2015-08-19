@@ -25,6 +25,7 @@ float velocityToNPlane( const arma::vec &a1, const arma::vec &a2, const arma::ve
 
 float angleBtwVectors( const arma::vec &a, const arma::vec &b, const arma::vec &c, const arma::vec &d );
 
+float angleBtwVectors2D( const arma::vec &a, const arma::vec &b, const arma::vec &c, const arma::vec &d );
 }
 }
 

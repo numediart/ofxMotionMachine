@@ -102,7 +102,23 @@ float Geometry::angleBtwVectors( const arma::vec &a, const arma::vec &b, const a
     v1 = b - a;
     v2 = d - c;
     
-    angle = atan2( norm( cross( v1, v2 ) ), dot( v1, v2 ) );
+    angle = atan2( norm( cross( v1, v2 ) ), arma::dot( v1, v2 ) );
+    
+    return( angle );
+}
+
+float Geometry::angleBtwVectors2D( const arma::vec &a, const arma::vec &b, const arma::vec &c, const arma::vec &d ) {
+    
+    vec v1, v2;
+    float angle;
+    
+    v1 = b - a;
+    v2 = d - c;
+    float tmp = arma::dot(v1,v2);
+    tmp=norm(v1);
+    tmp = norm(v2);
+    tmp = arma::dot(v1,v2)/(norm(v1)*norm(v2));
+    angle = acos(arma::dot(v1,v2)/(norm(v1)*norm(v2)));
     
     return( angle );
 }
