@@ -225,6 +225,7 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
             
                 listener[l].track->push( oscFrame );
                 setPlayerSize( listener[l].track->nOfFrames() );
+                onOscReceived(); // Trigger custom code here
             }
         }
     }

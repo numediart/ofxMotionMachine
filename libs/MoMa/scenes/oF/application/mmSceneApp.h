@@ -151,6 +151,8 @@ namespace MoMa {
         virtual void onReachBegin( void ) {}
         virtual void onReachEnd( void ) {}
         
+        virtual void onOscReceived( void ) {}
+        
         // - New 3D/2D MoMa methods -
         
         virtual void scene3d( void ) {}
