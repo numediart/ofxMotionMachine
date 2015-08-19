@@ -43,7 +43,7 @@ namespace MoMa {
         inline double time( unsigned int index );
         inline double maxTime( void ); // Time getters
         
-        virtual int nOfFrames( void ) { return( 0 ); }
+        virtual unsigned int nOfFrames( void ) { return( 0 ); }
         inline bool setFrameRate( float pFrameRate );
         inline float frameRate( void ); // Frame
         
@@ -65,14 +65,15 @@ namespace MoMa {
         
         // Return/compute time at current index
         if( mTimed ) return( mTimeVec[ index ] );
-        else return( mFrameRate*((double)index) );
+        else return( ( (double)index ) / mFrameRate );
     }
     
     double TimedData::maxTime( void ) {
         
         // Return/compute time at the last index of time
         if( mTimed ) return( mTimeVec[ mTimeVec.n_elem-1 ] );
-        else return( ( (double)( nOfFrames()-1 ) )/mFrameRate );
+        else if( nOfFrames() > 0 ) return( ( (double)( nOfFrames()-1 ) ) / mFrameRate );
+        else return( 0.0f ); // We make sure that an empty container is maxTime = 0
     }
     
     bool TimedData::setFrameRate( float pFrameRate ) {
@@ -111,8 +112,8 @@ namespace MoMa {
         inline const arma::vec &getData( void ) { return data; }
         inline arma::vec &getRefData( void ) { return data; }
         
-        int nOfFrames( void ) { return( data.n_elem ); }
-        int nOfElems( void ) { return( 1 ); }
+        unsigned int nOfFrames( void ) { return( data.n_elem ); }
+        unsigned int nOfElems( void ) { return( 1 ); }
         void clear( void ) { data.clear(); }
         
       protected:
@@ -299,8 +300,8 @@ namespace MoMa {
         inline arma::mat &getRefData( void ) { return data; } // Get data ref
         
         bool setInterpAlgo( InterpTypes interpAlgo );
-        int nOfFrames( void ) { return( data.n_cols ); }
-        int nOfElems( void ) { return( data.n_rows ); }
+        unsigned int nOfFrames( void ) { return( data.n_cols ); }
+        unsigned int nOfElems( void ) { return( data.n_rows ); }
         void clear( void ) { data.clear(); }
     
       protected:
@@ -512,9 +513,9 @@ namespace MoMa {
         inline arma::cube &getRefData( void ) { return data; } // Get data ref
         
         bool setInterpAlgo( InterpTypes interpAlgo ); // Set interp algo
-        int nOfFrames( void ) { return( data.n_slices ); } // # of frames
-        int nOfRows( void ) { return( data.n_rows ); } // # of rows
-        int nOfCols( void ) { return( data.n_cols ); } // # of cols
+        unsigned int nOfFrames( void ) { return( data.n_slices ); } // # of frames
+        unsigned int nOfRows( void ) { return( data.n_rows ); } // # of rows
+        unsigned int nOfCols( void ) { return( data.n_cols ); } // # of cols
         void clear( void ) { data.clear(); } // Clear
         
       protected:

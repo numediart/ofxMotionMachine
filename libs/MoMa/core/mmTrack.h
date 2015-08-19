@@ -91,11 +91,14 @@ namespace MoMa {
         void setFrameRate( float rate ); // Set/get frame rate
         inline float frameRate( void ) { return _frameRate; }
         
-        inline int nOfFrames( void ); // Get # frames
-        inline int nOfNodes( void ); // Get # nodes
+        inline double maxTime( void ); // Get the max time
+        inline unsigned int nOfFrames( void ); // Get # frames
+        inline unsigned int nOfNodes( void ); // Get # nodes
         void clear( void ); // Clear the track
         
-        // unprotected:
+        // protected:
+        
+        // TODO Re-protect this
         
         std::string easyName; // Track name
         std::string fileName; // Track file name
@@ -316,12 +319,17 @@ namespace MoMa {
         return( rotation.getData().tube( 0, index, 2 , index ) );
     }
     
-    int Track::nOfFrames( void ) {
+    double Track::maxTime( void ) {
+    
+        return( std::max( position.maxTime(), rotation.maxTime() ) );
+    }
+    
+    unsigned int Track::nOfFrames( void ) {
         
         return( std::max( position.nOfFrames(), rotation.nOfFrames() ) );
     }
     
-    int Track::nOfNodes( void ) {
+    unsigned int Track::nOfNodes( void ) {
         
         return( std::max( rotation.nOfCols(), position.nOfCols() ) );
     }
