@@ -31,7 +31,7 @@ namespace MoMa {
         // - SCENE2D: clicks and keys affect the 2D figures
         // - ANNOTATE: clicks and keys affect the annotation
         // - CANVAS: clicks affect UI canvas (automatic)
-    
+        
         SCENE3D,
         SCENE2D,
         ANNOTATE,
@@ -44,15 +44,22 @@ namespace MoMa {
         // - PLAY: like a player, start and stop on space bar
         // - SCRUB: position of the mouse = position in the file
         // - STREAM: just displays latest frame (for ringbuffer)
-    
+        
         PLAY,
         SCRUB,
         STREAM
     };
     
+    struct AtPos {
+        
+        unsigned int index;
+        double time;
+    };
+    
     struct Plot { // Plot = one 2D curve in oF
         
-        arma::vec data; // Raw data to synchronize with
+        // arma::vec data; // Raw data to synchronize with
+        MoMa::TimedVec data; // Raw timed data to synchronise
         ofPolyline line; // Actual polyline to draw in oF
         std::string name; // Name of the curve ( if any )
         ofColor color; // Color of the curve in oF
@@ -143,14 +150,15 @@ namespace MoMa {
         void draw( Node node ); // Draw a node
         void draw( Frame frame ); // Draw a frame
         
-        void draw( arma::vec data, int hue, std::string name="" );
-        void draw( arma::vec data, std::string name="" ); // Vec
+        void draw( TimedVec tvec, int hue, std::string name="" ); // TimedVec
+        void draw( TimedVec tvec, std::string name="" ); // TimedVec (no hue)
+        void draw( TimedMat trace, std::string name="" ); // TimedMat
         
-        void draw( arma::mat data, string name="" ); // Mat and
         void draw( Trace trace, std::string name="" ); // Trace
         
-        // void draw( TimedVec data, int hue, std::string name="" ); // TimedVec
-        // void draw( TimedMat trace, std::string name="" ); // TimedMat
+        void draw( arma::vec data, int hue, std::string name="" );
+        void draw( arma::vec data, std::string name="" ); // Vec
+        void draw( arma::mat data, string name="" ); // and Mat
         
         void draw( LabelList labelList ); // Label list
         
@@ -188,8 +196,8 @@ namespace MoMa {
         void setPlaybackMode( int mode ); // Set playback mode
         void setFrameRate( float rate ); // Set playback rate
         
-        void setPlayerSize( int nOfFrames ); // Define size in frames
-        void setPlayerSize( double time ); // Define size in seconds
+        void setPlayerSize( unsigned int nOfFrames ); // Define size
+        void setPlayerSize( double time ); // Define size in sec
         unsigned int getAppIndex( void ); // Query app index
         double getAppTime( void ); // Query app time
         
@@ -267,8 +275,10 @@ namespace MoMa {
         
         virtual void dragged( ofDragInfo &drag );
         
-        // - 2D rendering method -
+        // - Protected methods -
         
+        unsigned int getIndexFromTime( double time );
+        double getTimeFromIndex( unsigned int idx );
         void render2d( void );
         
         // - Visualisation types -
@@ -310,7 +320,7 @@ namespace MoMa {
         
         // - X axis mapping -
         
-        int idxMin, idxMax, playerSize; // x values
+        AtPos lowBound, highBound, maxBound; // @
         int zoomLowBound, zoomHighBound; // Zoom
         
         // - Playback types -
@@ -318,8 +328,9 @@ namespace MoMa {
         int playbackMode; // Playback mode flag
         float frameRate; // Frame rate from playback
         bool isPlayback; // Do we keep play it back?
-        unsigned int appIndex; // App index
-        float fAppIndex; // Float index
+        AtPos appAtPos; // App idnex/time @ position
+        // unsigned int appIndex; // App index
+        float fAppAtPosIndex; // Float index
         bool isBegin; // Is begin?
         
         // - Video recorder -

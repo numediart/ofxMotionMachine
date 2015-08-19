@@ -36,10 +36,15 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     isPlayback = false;
     frameRate = 100.0f;
     isBegin = true;
+    
+    lowBound.index = 0;
+    highBound.index = 1;
+    appAtPos.index = 0;
 
-    idxMin = 0; idxMax = 1;
-    fAppIndex = 0.0f;
-
+    lowBound.time = 0.0f;
+    highBound.time = 1.0f;
+    appAtPos.time = 0.0f;
+    
     zoomLowBound = -1;
     zoomHighBound = -1;
     isZoom = false;
@@ -97,8 +102,8 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
             
             if( activeMode == SCENE2D || activeMode == ANNOTATE ) {
                 
-                fAppIndex = ofMap( ofGetMouseX(), 0,
-                ofGetWidth(), idxMin, idxMax, true );
+                appAtPos.index = ofMap( ofGetMouseX(), 0, ofGetWidth(), lowBound.index, highBound.index, true );
+                appAtPos.time = ofMap( ofGetMouseX(), 0, ofGetWidth(), lowBound.time, highBound.time, true );
             }
             
             break;
@@ -106,7 +111,8 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
             
         case STREAM: {
             
-            fAppIndex = (float)idxMax;
+            appAtPos.index = highBound.index;
+            appAtPos.time = highBound.time;
             
             break;
         }
@@ -115,11 +121,12 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
             
             if( ofGetElapsedTimef() > 3.0f ) {
                 
-                float indexStep = frameRate / ofGetFrameRate();
+                double timeStep = 1.0f / ofGetFrameRate();
                 
                 if( isPlayback ) {
                     
-                    fAppIndex = fAppIndex + indexStep;
+                    appAtPos.time = appAtPos.time + timeStep;
+                    appAtPos.index = getIndexFromTime( appAtPos.time );
                     
                     if( isBegin ) {
                         
@@ -127,10 +134,16 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
                         isBegin = false;
                     }
                     
-                    if( fAppIndex > (float)idxMax ) {
+                    if( appAtPos.time > highBound.time ) {
                         
-                        fAppIndex = (float)idxMax; onReachEnd();
-                        fAppIndex = (float)idxMin;
+                        appAtPos.time = highBound.time; // Set to max first
+                        appAtPos.index = getIndexFromTime( appAtPos.time );
+                        
+                        onReachEnd();
+                        
+                        appAtPos.time = lowBound.time; // Then set to min
+                        appAtPos.index = getIndexFromTime( appAtPos.time );
+                        
                         isBegin = true;
                     }
                 }
@@ -140,7 +153,7 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
         }
     }
     
-    appIndex = (unsigned int)floor( fAppIndex + 0.5 );
+    // ---
 
     while( receiver.hasWaitingMessages() ) {
 
@@ -248,11 +261,11 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
         float selHighBound = 0;
         float absPlaybackPos = 0;
         
-        if( playerSize > 0 ) {
+        if( maxBound.index > 0 ) {
         
-            selLowBound = ofMap( idxMin, 0, playerSize, 1.5f, ofGetWidth()-0.5f );
-            selHighBound = ofMap( idxMax, 0, playerSize, 1.5f, ofGetWidth()-0.5f );
-            absPlaybackPos = ofMap( fAppIndex, 0, playerSize, 0, ofGetWidth() );
+            selLowBound = ofMap( lowBound.index, 0, maxBound.index, 1.5f, ofGetWidth()-0.5f );
+            selHighBound = ofMap( highBound.index, 0, maxBound.index, 1.5f, ofGetWidth()-0.5f );
+            absPlaybackPos = ofMap( appAtPos.index, 0, maxBound.index, 0, ofGetWidth() );
         }
         
         ofPushStyle();
@@ -441,8 +454,17 @@ void MoMa::SceneApp::keyPressed( ofKeyEventArgs &key ) {
             
             if ( !isPlaying() ) {
                 
-                if ( key.key == OF_KEY_LEFT ) fAppIndex--;
-                if ( key.key == OF_KEY_RIGHT ) fAppIndex++;
+                if ( key.key == OF_KEY_LEFT ) {
+                    
+                    appAtPos.index--; // Decrement and update time
+                    appAtPos.time = getTimeFromIndex( appAtPos.index );
+                }
+                
+                if ( key.key == OF_KEY_RIGHT ) {
+                    
+                    appAtPos.index++; // Increment and update time
+                    appAtPos.time = getTimeFromIndex( appAtPos.index );
+                }
             }
         }
         
@@ -539,8 +561,9 @@ void MoMa::SceneApp::mousePressed( ofMouseEventArgs &mouse ){
                 
                 if( insertNewLabel == true && newLabel == true ) {
                     
-                    (*mouseEventRegLabelList).push_back( Label( ofMap(
-                    mouse.x, 0, ofGetWidth(), idxMin, idxMax), "new" ) );
+                    // TODO Label times could be saved as seconds
+                    // (*mouseEventRegLabelList).push_back( Label( ofMap( mouse.x, 0, ofGetWidth(), lowBound.time, highBound.time ), "new" ) );
+                    (*mouseEventRegLabelList).push_back( Label( ofMap( mouse.x, 0, ofGetWidth(), lowBound.index, highBound.index ), "new" ) );
                     
                     selectedLabelIdx = (*mouseEventRegLabelList).size()-1;
                     (*mouseEventRegLabelList).back().state = SELECTED;
@@ -569,8 +592,8 @@ void MoMa::SceneApp::mouseReleased( ofMouseEventArgs &mouse ) {
                 
                 zoomHighBound = mouse.x;
                 
-                int newMin = ofMap( zoomLowBound, 0, ofGetWidth(), idxMin, idxMax );
-                int newMax = ofMap( zoomHighBound, 0, ofGetWidth(), idxMin, idxMax );
+                int newMin = ofMap( zoomLowBound, 0, ofGetWidth(), lowBound.index, highBound.index );
+                int newMax = ofMap( zoomHighBound, 0, ofGetWidth(), lowBound.index, highBound.index );
                 
                 zoomLowBound = zoomHighBound = -1;
                 zoom( newMin, newMax );
@@ -584,8 +607,8 @@ void MoMa::SceneApp::mouseReleased( ofMouseEventArgs &mouse ) {
                 
                 zoomHighBound = mouse.x;
                 
-                int newMin = ofMap( zoomLowBound, 0, ofGetWidth(), idxMin, idxMax );
-                int newMax = ofMap( zoomHighBound, 0, ofGetWidth(), idxMin, idxMax );
+                int newMin = ofMap( zoomLowBound, 0, ofGetWidth(), lowBound.index, highBound.index );
+                int newMax = ofMap( zoomHighBound, 0, ofGetWidth(), lowBound.index, highBound.index );
                 
                 zoomLowBound = zoomHighBound = -1;
                 zoom( newMin, newMax );
@@ -624,8 +647,11 @@ void MoMa::SceneApp::mouseDragged( ofMouseEventArgs &mouse ) {
             
             if( hasMouseEventRegLabelList && isLabelSelected ) {
                 
-                (*mouseEventRegLabelList)[selectedLabelIdx].idx
-                = ofMap( mouse.x, 0, ofGetWidth(), idxMin, idxMax );
+                // TODO Handle time here too
+                // (*mouseEventRegLabelList)[selectedLabelIdx].time = ofMap(
+                // mouse.x, 0, ofGetWidth(), lowBound.time, highBound.time );
+                (*mouseEventRegLabelList)[selectedLabelIdx].idx = ofMap(
+                mouse.x, 0, ofGetWidth(), lowBound.index, highBound.index );
             }
             
             break;
@@ -653,11 +679,13 @@ void MoMa::SceneApp::mouseMoved( ofMouseEventArgs &mouse ) {
                 
                 for( int l=0; l<(*mouseEventRegLabelList).size(); l++ ) {
                     
-                    int pixLabel = ofMap( (*mouseEventRegLabelList)[l].idx, idxMin, idxMax, 0, ofGetWidth() );
+                    int pixLabel = ofMap( (*mouseEventRegLabelList)[l].idx,
+                    lowBound.index, highBound.index, 0, ofGetWidth() );
                     
                     if( (*mouseEventRegLabelList)[l].state != SELECTED ) {
                         
-                        if( mouse.x>pixLabel-tolerance && mouse.x<pixLabel+tolerance ) {
+                        if( mouse.x > pixLabel-tolerance
+                        && mouse.x < pixLabel+tolerance ) {
                             
                             (*mouseEventRegLabelList)[l].state = HOVERED;
                             
@@ -727,6 +755,16 @@ void MoMa::SceneApp::dragged( ofDragInfo &drag ) {
     dragEvent( drag );
 }
 
+unsigned int MoMa::SceneApp::getIndexFromTime( double time ) {
+    
+    return( (unsigned int)( time * frameRate ) );
+}
+
+double MoMa::SceneApp::getTimeFromIndex( unsigned int idx ) {
+
+    return( (double)idx / frameRate );
+}
+
 void MoMa::SceneApp::render2d( void ) {
 
     for( int fIdx=0; fIdx<_figure.size(); fIdx++ ) {
@@ -734,40 +772,43 @@ void MoMa::SceneApp::render2d( void ) {
         float shift; // Values
         bool lowTextLoc = false;
         float nIndex = 23; // Names
+        
+        // -- Display plot names --
 
         for( int f=0; f<_figure[fIdx].plot.size(); f++ ) {
 
             ofPushStyle();
 
-            ofSetColor( _figure[fIdx].plot[f].color );
-            ofDrawBitmapString( _figure[fIdx].plot[f].name, 13,
-            _figure[fIdx].yTop+nIndex );
+            ofSetColor( _figure[fIdx].plot[f].color ); // Grab name from plot name field
+            ofDrawBitmapString( _figure[fIdx].plot[f].name, 13, _figure[fIdx].yTop+nIndex );
 
             ofPopStyle();
 
             nIndex += 14;
         }
-
+        
+        // -- Display zero line --
+        
         ofPushStyle();
-
+        
         ofSetLineWidth( 1.5f ); ofSetColor( 160, 160, 160, 128 );
-        float zLn = ofMap( 0, _figure[fIdx].yMin, _figure[fIdx].yMax,
-        _figure[fIdx].yBot-5, _figure[fIdx].yTop+5 );
+        float zLn = ofMap( 0, _figure[fIdx].yMin, _figure[fIdx].yMax, _figure[fIdx].yBot-5, _figure[fIdx].yTop+5 );
         ofLine( 0, zLn, ofGetWidth(), zLn );
 
         ofPopStyle();
+        
+        // -- Display figures --
 
         for( int f=0; f<_figure[fIdx].plot.size(); f++ ) {
 
             _figure[fIdx].plot[f].line.clear(); // Clear first
+            
+            for( unsigned int n=0; n<_figure[fIdx].plot[f].data.nOfFrames(); n++ ) {
+                
+                float x = ofMap( _figure[fIdx].plot[f].data.time( n ), lowBound.time, highBound.time, 0, ofGetWidth() ); // Apply screen mapping here
+                float y = ofMap( _figure[fIdx].plot[f].data.at( n ), _figure[fIdx].yMin, _figure[fIdx].yMax, _figure[fIdx].yBot-5, _figure[fIdx].yTop+5 );
 
-            for( int n=0; n<_figure[fIdx].plot[f].data.n_rows; n++ ) {
-
-                float x = ofMap( n, idxMin, idxMax, 0, ofGetWidth() ); // Scale data
-                float y = ofMap( _figure[fIdx].plot[f].data[n], _figure[fIdx].yMin,
-                _figure[fIdx].yMax, _figure[fIdx].yBot-5, _figure[fIdx].yTop+5 );
-
-                _figure[fIdx].plot[f].line.addVertex( ofVec2f( x, y ) ); // Add
+                _figure[fIdx].plot[f].line.addVertex( ofVec2f( x, y ) ); // Add vertex
             }
 
             ofPushStyle();
@@ -777,24 +818,27 @@ void MoMa::SceneApp::render2d( void ) {
 
             ofPopStyle();
         }
-
-        float findex = (float)getAppIndex(); // Sync fig index with app index
-        float fidxPos = ofMap( findex, idxMin, idxMax, 0, ofGetWidth(), true );
-
+        
+        // -- Display playback head --
+        
         ofPushStyle();
-
-        ofSetLineWidth( 1.5f ); ofSetColor( 160, 160, 160, 128 ); // Draw index
-        ofLine( fidxPos, 0, fidxPos, ofGetHeight() ); // horizontal line & value @ bottom
-        ofDrawBitmapString( ofToString( findex ), fidxPos+6, _figure[fIdx].yBot-5 );
+        
+        double appAtTime = getAppTime(); // Sync fig time reading with application time
+        float appTimeX = ofMap( appAtTime, lowBound.time, highBound.time, 0, ofGetWidth(), true );
+        
+        ofSetLineWidth( 1.5f ); ofSetColor( 160, 160, 160, 128 ); // Draw PB time line
+        ofLine( appTimeX, 0, appTimeX, ofGetHeight() ); // horizontal line & value @ bottom
+        ofDrawBitmapString( ofToString( appAtTime ), appTimeX+6, _figure[fIdx].yBot-5 );
 
         ofPopStyle();
 
         for( int f=0; f<_figure[fIdx].plot.size(); f++ ) {
-
-            // Mapped y axis from screen value to original value from data
-            ofPoint pnt = _figure[fIdx].plot[f].line.getPointAtIndexInterpolated( findex );
-            float value = ofMap( pnt.y, _figure[fIdx].yBot-5, _figure[fIdx].yTop+5,
-            _figure[fIdx].yMin, _figure[fIdx].yMax );
+            
+            // Compute plot-specific index at which we can grab plot value
+            float appAtIdx = appAtTime * _figure[fIdx].plot[f].data.frameRate(); // TODO : put that in timed container
+            
+            ofPoint pnt = _figure[fIdx].plot[f].line.getPointAtIndexInterpolated( appAtIdx ); // Apply screen mapping here
+            float value = ofMap( pnt.y, _figure[fIdx].yBot-5, _figure[fIdx].yTop+5, _figure[fIdx].yMin, _figure[fIdx].yMax );
 
             if( lowTextLoc == false ) { shift = -3.0f; lowTextLoc = true; }
             else { shift = +11.0f; lowTextLoc = false; } // Alternating
@@ -832,7 +876,7 @@ void MoMa::SceneApp::draw( Node node ) {
     string tag = "";
     if( isNodeNames ) tag  = node.name();
     if( node.hasTime() && isTimeTags ) tag
-        += ( "(" + ofToString( node.time() ) + ")" );
+    += ( "(" + ofToString( node.time() ) + ")" );
 
     ofPushStyle();
     ofSetColor( ofGetStyle().color, 120 ); // Keep color but add alpha
@@ -840,110 +884,146 @@ void MoMa::SceneApp::draw( Node node ) {
     ofPopStyle();
 }
 
-void MoMa::SceneApp::draw( vec data, int hue, string name ) {
-
-    Plot plot;
-
-    plot.data = data; plot.name = name;
-    plot.color.setHsb( hue, 255, 255, 128 );
-
-    if( data.n_rows > 1 ) {
-
-        // It doesn't make sense to adjust min/max if there is
-        // not at least two points in the vector -> div by zero!
-
-        if( _figure[figureIdx].yMin > (float)data.min() ) _figure[figureIdx].yMin = (float)data.min();
-        if( _figure[figureIdx].yMax < (float)data.max() ) _figure[figureIdx].yMax = (float)data.max();
-    }
-
-    _figure[figureIdx].plot.push_back( plot );
-    _figure[figureIdx].plotId++;
-}
-
-void MoMa::SceneApp::draw( vec data, string name ) {
-
-    _figure[figureIdx].hue = ( 150 + 40*_figure[figureIdx].plotId )%255;
-    draw( data, _figure[figureIdx].hue, name );
-}
-
-void MoMa::SceneApp::draw( mat data, string name ) {
-
+void MoMa::SceneApp::draw( TimedVec tvec, int hue, std::string name ) {
+    
     if( is2D ) {
+        
+        Plot plot;
+        
+        plot.data = tvec; plot.name = name;
+        plot.color.setHsb( hue, 255, 255, 128 );
+        
+        if( tvec.nOfFrames() > 1 ) {
+            
+            if( _figure[figureIdx].yMin > (float)tvec.getData().min() ) _figure[figureIdx].yMin = (float)tvec.getData().min();
+            if( _figure[figureIdx].yMax < (float)tvec.getData().max() ) _figure[figureIdx].yMax = (float)tvec.getData().max();
+            
+            _figure[figureIdx].plot.push_back( plot );
+            _figure[figureIdx].plotId++;
+        }
+    }
+}
 
-        for( int r=0; r<data.n_rows; r++ ) {
+void MoMa::SceneApp::draw( TimedVec tvec, std::string name ) {
+    
+    if( is2D ) {
+    
+        _figure[figureIdx].hue = ( 150 + 40*_figure[figureIdx].plotId )%255;
+        draw( tvec, _figure[figureIdx].hue, name ); // Automatic hue
+    }
+}
 
-            vec row = data.row( r ).t(); // Slice mat into vecs
-            draw( row, name+ " ( " + ofToString( r ) + " )" );
+void MoMa::SceneApp::draw( TimedMat tmat, string name ) {
+    
+    if( is2D ) {
+    
+        for( int r=0; r<tmat.nOfElems(); r++ ) {
+        
+            TimedVec tvec = tmat.elem( r );
+            draw( tvec, name + " ( " + ofToString( r ) + " )" );
         }
     }
 }
 
 void MoMa::SceneApp::draw( Trace trace, string name ) {
-
+    
     if( is2D ) {
+    
+        draw( trace.position, trace.name() + " ( position )" );
         
-        // TODO: to manage the case with timestamped value for X-Axis.
-
-        mat traceMtx = trace.getPosition();
-        if (trace.hasRotation())
-            traceMtx = join_rows(traceMtx, trace.getRotation());
+        if( trace.hasRotation() ) {
         
-
-//        if( traceMtx.n_cols == 4 ) traceMtx.shed_col( traceMtx.n_cols-1 );
-//        if( traceMtx.n_cols == 7 ) traceMtx.shed_col( traceMtx.n_cols-1 );
-
-        draw( traceMtx, trace.name() );
-
-    } else {
-
-        int nMin = idxMin+1; if( nMin < 1 ) nMin = 1; // We adjust trace to zoom range
-        int nMax = idxMax+1; if( nMax > trace.nOfFrames() ) nMax = trace.nOfFrames();
-
-        for( unsigned int n=nMin; n<nMax; n++ ) {
-
-            ofPushStyle();
-            ofSetColor( ofGetStyle().color, 128 ); ofSetLineWidth( 1 );
-            ofLine( toVec3f( trace.getFramePosition(n-1) ), toVec3f( trace.getFramePosition(n) ) );
-            ofPopStyle();
+            draw( trace.rotation, trace.name() + " ( rotation )" );
         }
     }
+    
+    /*
+     if( is2D ) {
+     
+     // TODO: to manage the case with timestamped value for X-Axis.
+     
+     mat traceMtx = trace.getPosition();
+     if( trace.hasRotation() ) traceMtx = join_rows(traceMtx, trace.getRotation());
+     
+     draw( traceMtx, trace.name() );
+     
+     } else {
+     
+     int nMin = idxMin+1; if( nMin < 1 ) nMin = 1; // We adjust trace to zoom range
+     int nMax = idxMax+1; if( nMax > trace.nOfFrames() ) nMax = trace.nOfFrames();
+     
+     for( unsigned int n=nMin; n<nMax; n++ ) {
+     
+     ofPushStyle();
+     ofSetColor( ofGetStyle().color, 128 ); ofSetLineWidth( 1 );
+     ofLine( toVec3f( trace.getFramePosition(n-1) ), toVec3f( trace.getFramePosition(n) ) );
+     ofPopStyle();
+     }
+     }
+     */
 }
 
-/*
-void MoMa::SceneApp::draw( TimedVec data, int hue, std::string name ) {
+void MoMa::SceneApp::draw( vec data, int hue, string name ) {
     
-    Plot plot;
+    TimedVec tvec;
     
-    plot.name = name;
-    plot.data.resize( plotResolution );
-    plot.color.setHsb( hue, 255, 255, 128 );
+    tvec.setData( frameRate, data );
+    draw( tvec, hue, name );
     
-    if( data.nOfFrames() > 1 ) {
-        
-        for( int k=0; k<plotResolution; k++ ) {
-            
-            double t = ofMap( k, 0, plotResolution, 0.0f, data.maxTime() );
-            plot.data( k ) = data.at( t ); // Store interpolated data
-        }
-        
-        if( _figure[figureIdx].yMin > (float)plot.data.min() ) _figure[figureIdx].yMin = (float)plot.data.min();
-        if( _figure[figureIdx].yMax < (float)plot.data.max() ) _figure[figureIdx].yMax = (float)plot.data.max();
-        
-        _figure[figureIdx].plot.push_back( plot );
-        _figure[figureIdx].plotId++;
-    }
+    /*
+     Plot plot;
+     
+     plot.data = data; plot.name = name;
+     plot.color.setHsb( hue, 255, 255, 128 );
+     
+     if( data.n_rows > 1 ) {
+     
+     // It doesn't make sense to adjust min/max if there is
+     // not at least two points in the vector -> div by zero!
+     
+     if( _figure[figureIdx].yMin > (float)data.min() ) _figure[figureIdx].yMin = (float)data.min();
+     if( _figure[figureIdx].yMax < (float)data.max() ) _figure[figureIdx].yMax = (float)data.max();
+     }
+     
+     _figure[figureIdx].plot.push_back( plot );
+     _figure[figureIdx].plotId++;
+     */
 }
-*/
 
-/*
-void MoMa::SceneApp::draw( TimedMat trace, string name ) {
+void MoMa::SceneApp::draw( vec data, string name ) {
     
+    TimedVec tvec;
     
+    tvec.setData( frameRate, data );
+    draw( tvec, name );
+    
+    /*
+     _figure[figureIdx].hue = ( 150 + 40*_figure[figureIdx].plotId )%255;
+     draw( data, _figure[figureIdx].hue, name );
+     */
 }
-*/
+
+void MoMa::SceneApp::draw( mat data, string name ) {
+    
+    TimedMat tmat;
+    
+    tmat.setData( frameRate, data );
+    draw( tmat, name );
+    
+    /*
+     if( is2D ) {
+     
+     for( int r=0; r<data.n_rows; r++ ) {
+     
+     vec row = data.row( r ).t(); // Slice mat into vecs
+     draw( row, name+ " ( " + ofToString( r ) + " )" );
+     }
+     }
+     */
+}
 
 void MoMa::SceneApp::draw( LabelList labelList ) {
-
+/*
     for( int l=0; l<labelList.size(); l++ ) {
 
         ofPushStyle();
@@ -965,13 +1045,14 @@ void MoMa::SceneApp::draw( LabelList labelList ) {
             ofColor selected; selected.setHsb( labelHue, 240, 255 );
             ofSetColor( selected, 200 ); ofSetLineWidth( 3 );
         }
-
-        float labPos = ofMap( labelList[l].idx, idxMin, idxMax, 0, ofGetWidth() );
-        ofLine( labPos, 0, labPos, ofGetHeight() ); // We draw labels line & names
+        
+        float labPos = ofMap( labelList[l].idx, lowBound.index, highBound.index, 0, ofGetWidth() );
+        ofLine( labPos, 0, labPos, ofGetHeight() ); // We draw labels line and label names
         ofDrawBitmapString( labelList[l].name, labPos+6, 14 );
-
+        
         ofPopStyle();
     }
+*/
 }
 
 void MoMa::SceneApp::draw( Frame frame ) {
@@ -1243,29 +1324,32 @@ void MoMa::SceneApp::setFrameRate( float rate ) {
     frameRate = rate;
 }
 
-void MoMa::SceneApp::setPlayerSize( int nOfFrames ) {
+void MoMa::SceneApp::setPlayerSize( unsigned int nOfFrames ) {
 
-    playerSize = nOfFrames; idxMax = nOfFrames-1;
-    if( idxMax < 1 ) idxMax = 1;
+    maxBound.index = nOfFrames;
+    highBound.index = nOfFrames-1;
     
-    if( appIndex > idxMax ) appIndex = idxMax;
-    if( fAppIndex > idxMax ) fAppIndex = idxMax;
+    if( highBound.index < 1 ) highBound.index = 1;
+    
+    highBound.time = getTimeFromIndex( highBound.index );
+    
+    if( appAtPos.index > highBound.index ) appAtPos.index = highBound.index;
+    appAtPos.time = getTimeFromIndex( appAtPos.index ); // Check app time
 }
 
 void MoMa::SceneApp::setPlayerSize( double time ) {
-
-    int n = (int)( frameRate * time );
-    setPlayerSize( n ); // Dirty way
+    
+    setPlayerSize( getIndexFromTime( time ) );
 }
 
 unsigned int MoMa::SceneApp::getAppIndex( void ) {
 
-    return( appIndex );
+    return( appAtPos.index );
 }
 
 double MoMa::SceneApp::getAppTime( void ) {
     
-    return( (double)fAppIndex / (double)frameRate );
+    return( appAtPos.time );
 }
 
 void MoMa::SceneApp::play( void ) {
@@ -1282,7 +1366,9 @@ void MoMa::SceneApp::pause( void ) {
 
 void MoMa::SceneApp::stop( void ) {
 
-    fAppIndex = (float)idxMin;
+    appAtPos.index = lowBound.index;
+    appAtPos.time = getTimeFromIndex( appAtPos.index );
+    
     isPlayback = false;
     isBegin = true;
     onStop();
@@ -1295,15 +1381,26 @@ bool MoMa::SceneApp::isPlaying( void ) {
 
 void MoMa::SceneApp::zoom( int iMin, int iMax ) {
 
-    idxMin = iMin; idxMax = iMax;
-    if( idxMin < 0 ) idxMin = 0;
-    if( idxMax < 1 ) idxMax = 1;
-    fAppIndex = (float)idxMin;
+    lowBound.index = iMin;
+    highBound.index = iMax;
+    
+    if( lowBound.index <= 0 ) lowBound.index = 0;
+    if( highBound.index < 1 ) highBound.index = 1;
+    
+    lowBound.time = getTimeFromIndex( lowBound.index );
+    highBound.time = getTimeFromIndex( highBound.index );
+    
+    appAtPos.index = lowBound.index;
+    appAtPos.time = lowBound.time;
 }
 
 void MoMa::SceneApp::showAll( void ) {
 
-    idxMin = 0; idxMax = playerSize-1;
+    highBound.index = maxBound.index-1;
+    lowBound.index = 0;
+    
+    highBound.time = getTimeFromIndex( highBound.index );
+    lowBound.time = getTimeFromIndex( lowBound.index );
 }
 
 void MoMa::SceneApp::addOscListener( std::string header, MoMa::Track &track ) {

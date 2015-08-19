@@ -85,7 +85,10 @@ namespace MoMa {
         }
         void print( void ); // Print the content of the trace
         
-    protected:
+    // protected:
+        
+        // TODO Re-protect this
+        
         TimedMat position;
         TimedMat rotation;
         arma::vec rotationOffset;

@@ -16,7 +16,7 @@ namespace Muller {
     
     enum{ RESCALE, BINARY };
     
-    const int nOfMullerFeatures = 39;
+    const int nOfMullerFeatures = 40;
     
     float meanHumerusLength( Track &track );
     float meanShoulderWidth( Track &track );

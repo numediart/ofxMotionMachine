@@ -545,17 +545,17 @@
 		9F2E1BFC1B76645000DB082C /* Application */ = {
 			isa = PBXGroup;
 			children = (
-				9F2E1BFD1B76645000DB082C /* mmCam.cpp */,
-				9F2E1BFE1B76645000DB082C /* mmCam.h */,
+				9F2E1C091B76645000DB082C /* MoMaUI.h */,
+				9F2E1C051B76645000DB082C /* mmSceneApp.cpp */,
+				9F2E1C061B76645000DB082C /* mmSceneApp.h */,
 				9F2E1BFF1B76645000DB082C /* mmCanvas.cpp */,
 				9F2E1C001B76645000DB082C /* mmCanvas.h */,
 				9F2E1C011B76645000DB082C /* mmOfBone.cpp */,
 				9F2E1C021B76645000DB082C /* mmOfBone.h */,
 				9F2E1C031B76645000DB082C /* mmOfUtils.cpp */,
 				9F2E1C041B76645000DB082C /* mmOfUtils.h */,
-				9F2E1C051B76645000DB082C /* mmSceneApp.cpp */,
-				9F2E1C061B76645000DB082C /* mmSceneApp.h */,
-				9F2E1C091B76645000DB082C /* MoMaUI.h */,
+				9F2E1BFD1B76645000DB082C /* mmCam.cpp */,
+				9F2E1BFE1B76645000DB082C /* mmCam.h */,
 			);
 			name = Application;
 			path = ../../../MoMa/scenes/oF/application;
