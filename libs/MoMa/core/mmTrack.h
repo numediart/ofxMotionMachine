@@ -320,18 +320,21 @@ namespace MoMa {
     }
     
     double Track::maxTime( void ) {
-    
-        return( std::max( position.maxTime(), rotation.maxTime() ) );
+        
+        if( hasRotation ) return( std::max( position.maxTime(), rotation.maxTime() ) );
+        else return( position.maxTime() ); // Make a robust version of this return
     }
     
     unsigned int Track::nOfFrames( void ) {
         
-        return( std::max( position.nOfFrames(), rotation.nOfFrames() ) );
+        if( hasRotation ) return( std::max( position.nOfFrames(), rotation.nOfFrames() ) );
+        else return( position.nOfFrames() ); // Make a robust version of this return
     }
     
     unsigned int Track::nOfNodes( void ) {
         
-        return( std::max( rotation.nOfCols(), position.nOfCols() ) );
+        if( hasRotation ) return( std::max( rotation.nOfCols(), position.nOfCols() ) );
+        else return( position.nOfCols() ); // Make a robust version of this return
     }
 }
 
