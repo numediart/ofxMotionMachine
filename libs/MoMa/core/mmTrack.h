@@ -36,7 +36,8 @@ namespace MoMa {
         
         Track( void ); // Default constructor
         virtual ~Track( void ); // Default destructor
-        
+        Track( Frame frame ); // Construt a track containing one frame
+
         // - Loading files -
         
         void load( std::string const &fileName ); // // Load & parse any file

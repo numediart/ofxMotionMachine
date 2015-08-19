@@ -38,6 +38,12 @@ Track::Track( void ) {
     isRing = false; // Not ring buffer
 }
 
+Track::Track( Frame frame ) {
+
+    Track();
+    push( frame );
+}
+
 Track::~Track( void ) {
 
     if( hasNodeList ) delete nodeList; // Deallocation
