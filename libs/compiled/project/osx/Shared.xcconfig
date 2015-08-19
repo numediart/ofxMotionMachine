@@ -1,0 +1,15 @@
+OF_PATH = ../../../oF
+
+#include "../../../oF/libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig"
+
+
+MM_PATH = ../../../MoMa
+
+#include "Config.xcconfig"
+
+OTHER_LDFLAGS = $(OF_CORE_LIBS)
+HEADER_SEARCH_PATHS = $(OF_CORE_HEADERS) $(MM_HEADER_SEARCH_PATHS)
+
+CONFIGURATION_BUILD_DIR = $(SRCROOT)/build/
+DEAD_CODE_STRIPPING = YES
+GCC_AUTO_VECTORIZATION = YES

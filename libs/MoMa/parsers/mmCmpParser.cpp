@@ -140,7 +140,7 @@ namespace MoMa {
             
         }
         tr->position.setData(1.0E7/hdr.sampPeriod, trackCont);
-        tr->frameRate=1.0E7/hdr.sampPeriod;
+        tr->setFrameRate(1.0E7/hdr.sampPeriod);
         
         
     }

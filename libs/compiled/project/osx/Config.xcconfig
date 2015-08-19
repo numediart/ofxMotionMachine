@@ -1,12 +1,24 @@
-OF_BASE_PATH = ../../../oF
-MM_BASE_PATH = ../../../MoMa
 
-ARMA_HEADER_PATH = ../../../armadillo/include
-ARMA_LIB_PATH = ../../../armadillo/lib/osx/libarmadillo.a
+ARMA_HEADER_PATH = $(MM_PATH)/../armadillo/include
+ARMA_LIB_PATH = $(MM_PATH)/../armadillo/lib/osx/libarmadillo.a
 
-OF_HEADER_SEARCH_PATHS = $(OF_BASE_PATH)/libs/openFrameworks/** $(OF_BASE_PATH)/libs/glew/include $(OF_BASE_PATH)/libs/tess2/include $(OF_BASE_PATH)/libs/poco/include $(OF_BASE_PATH)/libs/cairo/include/** $(OF_BASE_PATH)/libs/fmodex/include/**
+MM_HEADER_SEARCH_PATHS = $(MM_PATH)/core/** $(MM_PATH)/features/** $(MM_PATH)/parsers/** $(MM_PATH)/scenes/oF/application/** $(MM_PATH)/scenes/oF/features/** $(MM_PATH)/../oF/addons/ofxOsc/** $(MM_PATH)/../oF/addons/ofxXmlSettings/** $(MM_PATH)/../oF/addons/ofxUI/** $(ARMA_HEADER_PATH)
 
-MM_HEADER_SEARCH_PATHS = $(ARMA_HEADER_PATH) $(MM_BASE_PATH)/core/** $(MM_BASE_PATH)/features/** $(MM_BASE_PATH)/parsers/** $(MM_BASE_PATH)/scenes/oF/application/** $(MM_BASE_PATH)/scenes/oF/features/** $(OF_BASE_PATH)/addons/ofxOsc/** $(OF_BASE_PATH)/MoMa/scenes/oF/addons/ofxXmlSettings/** $(OF_BASE_PATH)/addons/ofxUI/**
+DEBUG_OF_LIB=$(OF_PATH)/libs/openFrameworksCompiled/lib/osx/openFrameworksDebug.a
+DEBUG_MM_LIB=$(MM_PATH)/../compiled/lib/osx/MotionMachine.a
 
-HEADER_SEARCH_PATHS = $(OF_HEADER_SEARCH_PATHS) $(MM_HEADER_SEARCH_PATHS)
-OTHER_LDFLAGS = $(ARMA_LIB_PATH)
+
+RELEASE_OF_LIB=$(OF_PATH)/libs/openFrameworksCompiled/lib/osx/openFrameworks.a
+RELEASE_MM_LIB=$(MM_PATH)/../compiled/lib/osx/MotionMachine.a
+
+
+OTHER_LDFLAGS =   $(RELEASE_MM_LIB) $(OF_CORE_LIBS) $(ARMA_LIB_PATH) $(OTHER_LDFLAGS)
+HEADER_SEARCH_PATHS =  $(OF_CORE_HEADERS) $(MM_HEADER_SEARCH_PATHS) $(ARMA_HEADER_PATH) $(HEADER_SEARCH_PATHS)
+
+// ICONS - NEW IN 0072
+ICON_NAME_DEBUG = icon-debug.icns
+ICON_NAME_RELEASE = icon.icns
+ICON_FILE_PATH = $(OF_PATH)/libs/openFrameworksCompiled/project/osx/
+CONFIGURATION_BUILD_DIR = $(SRCROOT)/bin/
+DEAD_CODE_STRIPPING = YES
+GCC_AUTO_VECTORIZATION = YES

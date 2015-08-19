@@ -388,6 +388,7 @@
 		9F4FB7D01AC76502003C2C5A /* mmBvhParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmBvhParser.h; path = ../../../MoMa/parsers/mmBvhParser.h; sourceTree = "<group>"; };
 		9F6202151AA5B75200041A3E /* mmSynoList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmSynoList.cpp; path = ../../../MoMa/core/mmSynoList.cpp; sourceTree = "<group>"; };
 		9F6202161AA5B75200041A3E /* mmSynoList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmSynoList.h; path = ../../../MoMa/core/mmSynoList.h; sourceTree = "<group>"; };
+		E88F98D31B83EE0800CEB63F /* Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
 		E8AD43181AF27E1A00165BAE /* mmQuaternion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmQuaternion.cpp; path = ../../../MoMa/core/mmQuaternion.cpp; sourceTree = "<group>"; };
 		E8AD43191AF27E1A00165BAE /* mmQuaternion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmQuaternion.h; path = ../../../MoMa/core/mmQuaternion.h; sourceTree = "<group>"; };
 		E8C048FB1B7BA0CD0012DA2D /* mmCmpParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmCmpParser.cpp; path = ../../../MoMa/parsers/mmCmpParser.cpp; sourceTree = "<group>"; };
@@ -514,6 +515,7 @@
 		9F00DC8C1A9C8AFA0022A309 /* Config */ = {
 			isa = PBXGroup;
 			children = (
+				E88F98D31B83EE0800CEB63F /* Shared.xcconfig */,
 				E8F00C201ADBFEB6006A7A56 /* Debug.xcconfig */,
 				E8F00C211ADBFEB6006A7A56 /* Release.xcconfig */,
 				60B90AAA1644E09400AF2156 /* Config.xcconfig */,
@@ -1162,6 +1164,7 @@
 		};
 		60B90A901644E00900AF2156 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8F00C201ADBFEB6006A7A56 /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
@@ -1178,19 +1181,7 @@
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../addons/ofxBt/libs/bullet/lib/osx\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/osx\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/android/armeabi\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/android/armeabi-v7a\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/ios\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/linux\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/linux64\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/vs2010\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/win_cb\"",
-					"\"$(SRCROOT)/../../../addons/ofxBt/libs/bullet/lib/vs2010\"",
-					/Users/kyojindo/Desktop/MotionMachine/libs/oF/addons/ofxAssimpModelLoader/libs/assimp/lib/osx,
-					"/Users/kyojindo/Desktop/MotionMachine/libs/oF/addons/ofxKinect/libs/libusb-1.0/lib/osx",
-					/Users/kyojindo/Desktop/MotionMachine/libs/oF/addons/ofxOpenCv/libs/opencv/lib/osx,
+					/Users/thiravet/Desktop/CAPTure/development/MotionMachine/release/MotionMachine/libs/compiled/lib/osx,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OBJROOT = "$(SRCROOT)/../../lib/osx";
@@ -1199,8 +1190,6 @@
 					"$(OTHER_CFLAGS)",
 					"-D__MACOSX_CORE__",
 				);
-				OTHER_LDFLAGS = "$(ARMA_LIB_PATH)";
-				PRODUCT_NAME = MotionMachine;
 				SDKROOT = macosx;
 				SYMROOT = build;
 				VALID_ARCHS = "i386 x86_64";
@@ -1209,6 +1198,7 @@
 		};
 		60B90A911644E00900AF2156 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E8F00C211ADBFEB6006A7A56 /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
@@ -1225,19 +1215,7 @@
 				INSTALL_PATH = /usr/local/lib;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/../../../addons/ofxBt/libs/bullet/lib/osx\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/osx\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/android/armeabi\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/android/armeabi-v7a\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/ios\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/linux\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/linux64\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/vs2010\"",
-					"\"$(SRCROOT)/../../../../addons/ofxOpenCv/libs/opencv/lib/win_cb\"",
-					"\"$(SRCROOT)/../../../addons/ofxBt/libs/bullet/lib/vs2010\"",
-					/Users/kyojindo/Desktop/MotionMachine/libs/oF/addons/ofxAssimpModelLoader/libs/assimp/lib/osx,
-					"/Users/kyojindo/Desktop/MotionMachine/libs/oF/addons/ofxKinect/libs/libusb-1.0/lib/osx",
-					/Users/kyojindo/Desktop/MotionMachine/libs/oF/addons/ofxOpenCv/libs/opencv/lib/osx,
+					/Users/thiravet/Desktop/CAPTure/development/MotionMachine/release/MotionMachine/libs/compiled/lib/osx,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OBJROOT = "$(SRCROOT)/../../lib/osx";
@@ -1245,8 +1223,6 @@
 					"$(OTHER_CFLAGS)",
 					"-D__MACOSX_CORE__",
 				);
-				OTHER_LDFLAGS = "$(ARMA_LIB_PATH)";
-				PRODUCT_NAME = MotionMachine;
 				SDKROOT = macosx;
 				SYMROOT = build;
 				VALID_ARCHS = "i386 x86_64";

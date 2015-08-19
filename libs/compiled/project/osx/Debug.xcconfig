@@ -1,6 +1,7 @@
+#include "Shared.xcconfig"
 
-#include "Config.xcconfig"
-
+OTHER_LDFLAGS =$(OF_PATH)/libs/openFrameworksCompiled/lib/osx/openFrameworksDebug.a $(OTHER_LDFLAGS)
+PRODUCT_NAME = MotionMachine
 ARCHS = $(NATIVE_ARCH)
 COPY_PHASE_STRIP = NO
 GCC_ENABLE_SSE3_EXTENSIONS = YES
