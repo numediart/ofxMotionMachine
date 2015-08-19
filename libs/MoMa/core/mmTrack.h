@@ -270,30 +270,33 @@ namespace MoMa {
         
         Trace oneTrace;
         
-        oneTrace.setTimeFlag( true );
-        oneTrace.setRotationFlag( hasRotation );
-        oneTrace.setName( nodeList->at( index ) );
-        
-        if( position.isTimed() ) {
+        if( nOfNodes() > 0 ) {
             
-            oneTrace.setPosition( position.getData().tube( 0, index, 2 , index ), position.getTimeVec() );
+            oneTrace.setTimeFlag( true );
+            oneTrace.setRotationFlag( hasRotation );
+            oneTrace.setName( nodeList->at( index ) );
             
-        } else {
-            
-            oneTrace.setPosition( position.getData().tube( 0,index, 2, index ), position.frameRate() );
-        }
-        
-        if( hasRotation ) {
-            
-            if( rotation.isTimed() ) {
+            if( position.isTimed() ) {
                 
-                oneTrace.setRotation( rotation.getData().tube( 0,index, 2, index ), position.getTimeVec() );
-                oneTrace.setRotationOffset( rotationOffset.col( index ) );
+                oneTrace.setPosition( position.getData().tube( 0, index, 2 , index ), position.getTimeVec() );
                 
             } else {
                 
-                oneTrace.setRotation( rotation.getData().tube( 0, index, 2, index ), position.frameRate() );
-                oneTrace.setRotationOffset( rotationOffset.col( index ) );
+                oneTrace.setPosition( position.getData().tube( 0, index, 2, index ), position.frameRate() );
+            }
+            
+            if( hasRotation ) {
+                
+                if( rotation.isTimed() ) {
+                    
+                    oneTrace.setRotation( rotation.getData().tube( 0,index, 2, index ), position.getTimeVec() );
+                    oneTrace.setRotationOffset( rotationOffset.col( index ) );
+                    
+                } else {
+                    
+                    oneTrace.setRotation( rotation.getData().tube( 0, index, 2, index ), position.frameRate() );
+                    oneTrace.setRotationOffset( rotationOffset.col( index ) );
+                }
             }
         }
         
