@@ -103,7 +103,7 @@ void Track::setRingBufferSize( int size ) {
 
 void Track::push( Frame _frame ) {
     
-    if( _frame.hasRotation() && ( (!nOfFrames()) || hasRotation ) ) {
+    if( _frame.hasRotation() && ( ( !nOfFrames() ) || hasRotation ) ) {
         
         hasRotation = true;
         
@@ -130,6 +130,12 @@ void Track::push( Frame _frame ) {
         
         arma::mat temp = _frame.getPosition();
         position.push( temp );
+    }
+    
+    if( isRing ) {
+        
+        if( position.nOfFrames() > ringSize ) position.pop(); // Ring buffer behavior
+        if( _frame.hasRotation() && rotation.nOfFrames() > ringSize ) rotation.pop();
     }
 }
 
