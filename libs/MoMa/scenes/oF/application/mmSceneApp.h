@@ -19,6 +19,9 @@ namespace MoMa {
     const int DefaultGridSize = 40;
     const int DefaultViewDist = 1000;
     const int DefaultPlotRes = 1000;
+    
+    const string PositionHeader = "/position";
+    const string RotationHeader = "/rotation";
 
     class Canvas;
     
@@ -48,6 +51,12 @@ namespace MoMa {
         PLAY,
         SCRUB,
         STREAM
+    };
+    
+    enum OscParseMode {
+    
+        POSITIONS,
+        ROTATIONS
     };
     
     struct AtPos {
@@ -88,6 +97,9 @@ namespace MoMa {
     
     struct Listener { // Container for OSC-exposed track
     
+        Listener( void ) { mode = POSITIONS; }
+        
+        bool mode; // Receiving mode: positions or rotations
         std::string header; // OSC header associated with track
         Track *track; // Pointer to track to be filled with OSC
     };

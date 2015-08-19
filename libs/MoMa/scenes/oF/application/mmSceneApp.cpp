@@ -156,15 +156,26 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
     // ---
 
     while( receiver.hasWaitingMessages() ) {
-
-        Frame oscFrame;
+        
         ofxOscMessage message;
         receiver.getNextMessage( &message );
 
         for( int l=0; l<listener.size(); l++ ) {
+            
+            Frame oscFrame;
+            bool hasReceivedFrame = false;
 
-            if( message.getAddress() == listener[l].header ) {
-
+            if( message.getAddress() == listener[l].header+PositionHeader ) {
+                
+                oscFrame.setRotationFlag( false );
+                listener[l].track->hasRotation = false;
+                
+                if( listener[l].mode == ROTATIONS ) {
+                
+                    listener[l].mode = POSITIONS;
+                    listener[l].track->clear();
+                }
+                
                 int nOfNodes = message.getNumArgs()/3;
 
                 for( int n=0; n<nOfNodes; n++ ) {
@@ -176,7 +187,42 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
                     Node nod( x, y, z );
                     oscFrame.push( nod );
                 }
-
+                
+                hasReceivedFrame = true;
+            }
+            
+            if( message.getAddress() == listener[l].header+RotationHeader ) {
+                
+                oscFrame.setRotationFlag( true );
+                listener[l].track->hasRotation = true;
+                
+                if( listener[l].mode == POSITIONS ) {
+                    
+                    listener[l].mode = ROTATIONS;
+                    listener[l].track->clear();
+                }
+                
+                int nOfNodes = message.getNumArgs()/7;
+                
+                for( int n=0; n<nOfNodes; n++ ) {
+                    
+                    float x = message.getArgAsFloat( 3*n );
+                    float y = message.getArgAsFloat( 3*n+1 );
+                    float z = message.getArgAsFloat( 3*n+2 );
+                    float rx = message.getArgAsFloat( 3*n+3 );
+                    float ry = message.getArgAsFloat( 3*n+4 );
+                    float rz = message.getArgAsFloat( 3*n+5 );
+                    float rw = message.getArgAsFloat( 3*n+6 );
+                    
+                    Node nod( x, y, z, rx, ry, rz, rw );
+                    oscFrame.push( nod );
+                }
+                
+                hasReceivedFrame = true;
+            }
+            
+            if( hasReceivedFrame ) {
+            
                 listener[l].track->push( oscFrame );
                 setPlayerSize( listener[l].track->nOfFrames() );
             }
