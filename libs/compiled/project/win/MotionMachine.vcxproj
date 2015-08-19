@@ -29,6 +29,7 @@
     <ClCompile Include="..\..\..\MoMa\parsers\BvhParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmBvhParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmC3dParser.cpp" />
+    <ClCompile Include="..\..\..\MoMa\parsers\mmCmpParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmFlatParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmV3dParser.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="..\..\..\MoMa\parsers\BvhParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmBvhParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmC3dParser.h" />
+    <ClInclude Include="..\..\..\MoMa\parsers\mmCmpParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmFlatParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmV3dParser.h" />

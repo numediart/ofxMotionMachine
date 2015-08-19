@@ -378,6 +378,9 @@
     <ClCompile Include="..\..\..\oF\addons\ofxOsc\src\ofxOscSender.cpp">
       <Filter>oF\addons\ofxOsc\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\parsers\mmCmpParser.cpp">
+      <Filter>MoMa\parsers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\MoMa\core\mmBoneList.h">
@@ -703,6 +706,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\oF\addons\ofxOsc\src\ofxOscSender.h">
       <Filter>oF\addons\ofxOsc\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\parsers\mmCmpParser.h">
+      <Filter>MoMa\parsers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
