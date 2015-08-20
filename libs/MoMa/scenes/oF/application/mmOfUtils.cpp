@@ -24,7 +24,7 @@ namespace MoMa {
         return( ofQuaternion( data( 0 ), data( 1 ), data( 2 ),data(3) ) );
     }
     
-    ofVec3f getNodePosition( std::string bonename, MoMa::Track track, int frame ) {
+    ofVec3f getNodePosition( std::string bonename, MoMa::Track &track, int frame ) {
         unsigned int bID = track.index( bonename );
         if ( bID == -1 ) {
             std::cerr << "MoMa::getBonePosition: '" << bonename << "' is not defined int this track!!!" << endl;
@@ -34,11 +34,11 @@ namespace MoMa {
     }
     
     
-    ofQuaternion getNodeRotation( std::string bonename, MoMa::Track track, int frame ) {
+    ofQuaternion getNodeRotation( std::string bonename, MoMa::Track &track, int frame ) {
         unsigned int bID = track.index( bonename );
         if ( bID == -1 ) {
             std::cerr << "MoMa::getBoneRotation: '" << bonename << "' is not defined int this track!!!" << endl;
-            return ofVec3f();
+            return ofQuaternion();
         }
         return toQuaternion( track.rotation.getData().slice( frame ).col( bID ) );
     }

@@ -36,9 +36,8 @@ namespace MoMa {
      */
     ofQuaternion toQuaternion( arma::vec data );
     
-    ofVec3f getNodePosition( std::string bonename, MoMa::Track track, int frame );
-    ofQuaternion getBoneRotation( std::string bonename, MoMa::Track track, int frame );
-    
+    ofVec3f getNodePosition( std::string bonename, MoMa::Track &track, int frame );
+    ofQuaternion getBoneRotation( std::string bonename, MoMa::Track &track, int frame );
     
     
 }
