@@ -1,6 +1,6 @@
 #include "Shared.xcconfig"
 
-OTHER_LDFLAGS =$(OF_PATH)/libs/openFrameworksCompiled/lib/osx/openFrameworks.a $(OTHER_LDFLAGS)
+OTHER_LDFLAGS =$(OF_PATH)/libs/openFrameworksCompiled/lib/osx/openFrameworks.a $(MM_LIBS)
 PRODUCT_NAME = MotionMachine
 
 COPY_PHASE_STRIP = YES
