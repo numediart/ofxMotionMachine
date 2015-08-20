@@ -151,19 +151,12 @@ Parser::Parser( string const &fName, Track *tr ) {
                 delete track->boneList;
             }
         }
-        if (track->hasBoneList)
-            for (int i=0;i<track->nOfFrames();i++){
-                for (int j=0;j<track->boneList->size();j++){
-                    track->rotation.getRefData().slice(i).unsafe_col(track->boneList->at(j).first)  = track->rotation.getData().slice(i).col(track->boneList->at(j).second);
-                }
-            }
-            
-        this->setJointOffsetRotation(tr);
+
     }
 
     else if( extension == "bones" ) {
         track->bones( fileName );
-        this->setJointOffsetRotation(tr);
+        //this->setJointOffsetRotation(tr);
     }
 
     else if( extension == "nodes" ) track->nodes( fileName );
@@ -238,14 +231,18 @@ bool Parser::setJointOffsetRotation(Track *tr) {
     for (int i=0;i<tr->boneList->size();i++){
         int orig=tr->boneList->at(i).first;
         int dest=tr->boneList->at(i).second;
-        if( debug ) std::cout<<frame0.node(orig).name()<<"->"<<frame0.node(dest).name()<<std::endl;
+        if( debug ){
+            std::cout<<orig<<" "<<dest<<std::endl;
+        }
         std::vector<float> val;
         arma::mat offsetMatrix;
         offsetMatrix.eye(3,3);
         arma::colvec tempVecX,tempVecY,tempVecZ;
         tempVecX<<frame0.node(dest).position[0]-frame0.node(orig).position[0]<<frame0.node(dest).position[1]-frame0.node(orig).position[1]<<frame0.node(dest).position[2]-frame0.node(orig).position[2];
         tempVecX=arma::normalise(tempVecX);
-
+        if( debug ){
+            std::cout<<tempVecX<<std::endl;
+        }
         if (std::abs(arma::dot(tempVecX,sagAxis))>std::abs(arma::dot(tempVecX,longAxis))&&std::abs(arma::dot(tempVecX,sagAxis))>std::abs(arma::dot(tempVecX,frontalAxis))){
 
             tempVecZ=arma::cross(tempVecX,frontalAxis);
@@ -279,6 +276,7 @@ bool Parser::setJointOffsetRotation(Track *tr) {
         quaternion lquat(origQuat.inverse()*offsetQuat);
 
         if( debug ) std::cout<<lquat(0)<<" "<<lquat(1)<<" "<<lquat(2)<<" "<<lquat(3)<<std::endl;
+        
         tr->rotationOffset.col(dest)=lquat;
     }
 

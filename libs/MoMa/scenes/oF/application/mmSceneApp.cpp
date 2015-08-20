@@ -1,5 +1,5 @@
 #include "mmSceneApp.h"
-
+#define _KINECT_
 using namespace std;
 using namespace arma;
 
@@ -1137,7 +1137,11 @@ void MoMa::SceneApp::draw( Frame frame ) {
                 float s=arma::norm(frame.node( frame.boneList->at( b ).first ).position -frame.node( frame.boneList->at( b ).second ).position );
                 bones[b].setScale(s, 1, 1);
                 bones[b].setPosition( toVec3f( frame.node( frame.boneList->at( b ).first ).position ) );
+#ifdef _KINECT_
+                bones[b].setOrientation( toQuaternion( frame.node( frame.boneList->at( b ).second ).rotationOffset  ) *toQuaternion( frame.node( frame.boneList->at( b ).second ).rotation  ));//
+#else
                 bones[b].setOrientation( toQuaternion( frame.node( frame.boneList->at( b ).second ).rotationOffset  ) *toQuaternion( frame.node( frame.boneList->at( b ).first ).rotation  ));//
+#endif
                 bones[b].draw();
             }
         }
