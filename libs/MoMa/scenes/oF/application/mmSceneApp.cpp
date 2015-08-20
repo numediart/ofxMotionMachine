@@ -1369,6 +1369,8 @@ bool MoMa::SceneApp::isRecording( void ) {
 void MoMa::SceneApp::setFrameRate( float rate ) {
 
     frameRate = rate;
+    highBound.time = getTimeFromIndex( highBound.index );
+    appAtPos.time = getTimeFromIndex( appAtPos.index ); // Check app time
 }
 
 void MoMa::SceneApp::setPlayerSize( unsigned int nOfFrames ) {
