@@ -15,6 +15,12 @@
 #include "ofMain.h"
 
 namespace MoMa {
+
+    struct MoMaBone {
+        bool exists;
+        ofVec3f head;
+        ofVec3f tail;
+    };
     
     /**
      * @brief Create a oF 3D vector from a 3-dim Armadillo vector
@@ -35,6 +41,11 @@ namespace MoMa {
      * @return The ofVec3f with the input elements
      */
     ofQuaternion toQuaternion( arma::vec data );
+    
+    ofVec3f getNodePosition( std::string nodename, Track &track, int frame );
+    ofQuaternion getNodeRotation( std::string nodename, Track &track, int frame );
+    MoMaBone getBoneByTail( std::string tailname, Track &track, int frame );
+    
 }
 
 #endif
