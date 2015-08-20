@@ -206,13 +206,13 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
                 
                 for( int n=0; n<nOfNodes; n++ ) {
                     
-                    float x = message.getArgAsFloat( 3*n );
-                    float y = message.getArgAsFloat( 3*n+1 );
-                    float z = message.getArgAsFloat( 3*n+2 );
-                    float rx = message.getArgAsFloat( 3*n+3 );
-                    float ry = message.getArgAsFloat( 3*n+4 );
-                    float rz = message.getArgAsFloat( 3*n+5 );
-                    float rw = message.getArgAsFloat( 3*n+6 );
+                    float x = message.getArgAsFloat( 7*n );
+                    float y = message.getArgAsFloat( 7*n+1 );
+                    float z = message.getArgAsFloat( 7*n+2 );
+                    float rx = message.getArgAsFloat( 7*n+3 );
+                    float ry = message.getArgAsFloat( 7*n+4 );
+                    float rz = message.getArgAsFloat( 7*n+5 );
+                    float rw = message.getArgAsFloat( 7*n+6 );
                     
                     Node nod( x, y, z, rx, ry, rz, rw );
                     oscFrame.push( nod );
