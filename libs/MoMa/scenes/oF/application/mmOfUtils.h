@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <armadillo>
 #include "ofMain.h"
+#include "mmTrack.h"
 
 namespace MoMa {
 
