@@ -1,5 +1,5 @@
 #include "mmKinParser.h"
-
+#include "mmQuaternion.h"
 using namespace std;
 using namespace MoMa;
 
@@ -37,15 +37,17 @@ void KinParser::load( string const &fileName, Track *track ) {
             while( curStrm.good() ) {
                 
                 Node oneNode;
-                string value[8];
+                string value[7];
 				curStrm >> value[0];
+                if (value[0]==std::string(""))
+                    continue;
 				curStrm >> value[1];
 				curStrm >> value[2];
 				curStrm >> value[3];
 				curStrm >> value[4];
 				curStrm >> value[5];
 				curStrm >> value[6];
-				curStrm >> value[7];
+				//curStrm >> value[7];
                 
 				if ((value[0] == "NaN" && value[1] == "NaN" && value[2] == "NaN" && value[3] == "NaN" && value[4] == "NaN" && value[5] == "NaN" && value[6] == "NaN" && value[7] == "NaN" ) ||
                 ( atof(value[0].c_str()) > 100000000000 && atof( value[0].c_str() ) >
@@ -78,6 +80,138 @@ void KinParser::load( string const &fileName, Track *track ) {
             track->push( oneFrame );
         }
     }
-    
     datFile.close();
+    {
+        track->rotationOffset.zeros(4, track->nOfNodes());
+        int i,orig,dest;
+        MoMa::quaternion lquat,lquat2;
+        i=0;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=1;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=2;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=3;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=4;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=5;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat2<<0<<0<<-0.7<<0.7;
+        lquat<<0<<-0.7<<-0<<0.7;
+        track->rotationOffset.col(dest)=lquat2*lquat;
+        i=6;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat2<<0<<0<<0.7<<0.7;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=7;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=8;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=9;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=10;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=11;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=12;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=13;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=14;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=15;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=16;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=17;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=18;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=19;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=20;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=21;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=22;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=23;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        i=23;
+        orig=track->boneList->at(i).first;
+        dest=track->boneList->at(i).second;
+        lquat<<0<<-0.7<<0<<0.7;
+        track->rotationOffset.col(dest)=lquat;
+        
+    }
 }
