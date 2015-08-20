@@ -806,7 +806,7 @@ void MoMa::SceneApp::render2d( void ) {
             for( unsigned int n=0; n<_figure[fIdx].plot[f].data.nOfFrames(); n++ ) {
                 
                 float x = ofMap( _figure[fIdx].plot[f].data.time( n ), lowBound.time, highBound.time, 0, ofGetWidth() ); // Apply screen mapping here
-                float y = ofMap( _figure[fIdx].plot[f].data.at( n ), _figure[fIdx].yMin, _figure[fIdx].yMax, _figure[fIdx].yBot-5, _figure[fIdx].yTop+5 );
+                float y = ofMap( _figure[fIdx].plot[f].data.get( n ), _figure[fIdx].yMin, _figure[fIdx].yMax, _figure[fIdx].yBot-5, _figure[fIdx].yTop+5 );
 
                 _figure[fIdx].plot[f].line.addVertex( ofVec2f( x, y ) ); // Add vertex
             }

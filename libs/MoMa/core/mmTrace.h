@@ -40,10 +40,10 @@ namespace MoMa {
         inline void setRotationFlag( bool rot ) { _hasRotation = rot; } // Force it
         arma::mat matrix( void ) ;
         Node nodeFrame( double time );
-        inline arma::vec getFramePosition( unsigned int index ) { return( position.at(index) ); } // By index
-        arma::vec getFramePosition( double time ){ return( position.at(time) ); }; // Query node by time in the trace
-        inline arma::vec getFramerotation( unsigned int index ) { return( rotation.at(index) ); } // By index
-        arma::vec getFramerotation( double time ){ return( rotation.at(time) ); }; // Query node by time in the trace
+        inline arma::vec getFramePosition( unsigned int index ) { return( position.get(index) ); } // By index
+        arma::vec getFramePosition( double time ){ return( position.get(time) ); }; // Query node by time in the trace
+        inline arma::vec getFramerotation( unsigned int index ) { return( rotation.get(index) ); } // By index
+        arma::vec getFramerotation( double time ){ return( rotation.get(time) ); }; // Query node by time in the trace
         inline arma::vec  nodeRotationOffset( ) { return( rotationOffset ); } // By index
         
         inline void setPosition(const arma::mat &data,float fr){position.setData(fr, data);};
@@ -101,12 +101,12 @@ namespace MoMa {
     
     arma::vec Trace::operator[]( unsigned int index ){
         
-        return( position.at(index) );
+        return( position.get(index) );
     }
     
     arma::vec Trace::operator[]( double time ){
         
-        return( position.at(time ) );
+        return( position.get(time ) );
     }
 }
 

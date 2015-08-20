@@ -127,6 +127,39 @@ Parser::Parser( string const &fName, Track *tr ) {
         }
         this->setJointOffsetRotation(tr);
     }
+    else if( extension == "kin" ) {
+        
+        track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
+        KinParser kinParser( fileName, track );
+        // Check validity of lists of bones and nodes
+        
+        if( track->nOfNodes() != previousSize && previousSize != 0 ) {
+            
+            // different number of
+            // markers => different labels
+            if( track->hasNodeList == true ) {
+                
+                track->hasNodeList = false;
+                delete track->nodeList;
+            }
+            
+            //different number of
+            // markers => different skeleton
+            if( track->hasBoneList == true ) {
+                
+                track->hasBoneList = false;
+                delete track->boneList;
+            }
+        }
+        if (track->hasBoneList)
+            for (int i=0;i<track->nOfFrames();i++){
+                for (int j=0;j<track->boneList->size();j++){
+                    track->rotation.getRefData().slice(i).unsafe_col(track->boneList->at(j).first)  = track->rotation.getData().slice(i).col(track->boneList->at(j).second);
+                }
+            }
+            
+        this->setJointOffsetRotation(tr);
+    }
 
     else if( extension == "bones" ) {
         track->bones( fileName );

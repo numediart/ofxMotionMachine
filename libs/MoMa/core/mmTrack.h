@@ -133,11 +133,11 @@ namespace MoMa {
         if( index < nOfFrames() ) {
             
             oneFrame.setRotationFlag( hasRotation );
-            oneFrame.setPositionData( position.at( index ) );
+            oneFrame.setPositionData( position.get( index ) );
             
             if( hasRotation ) { // We do copy rotation information only if necessary
                 
-                oneFrame.setRotationData( rotation.at( index ), rotationOffset );
+                oneFrame.setRotationData( rotation.get( index ), rotationOffset );
             }
             
             oneFrame.hasNodeList = hasNodeList;
@@ -162,11 +162,11 @@ namespace MoMa {
         if( time >= 0.0f && time < maxTime ) {
             
             oneFrame.setRotationFlag( hasRotation );
-            oneFrame.setPositionData( position.at( time ) );
+            oneFrame.setPositionData( position.get( time ) );
             
             if( hasRotation ) { // We do copy rotation information only if necessary
                 
-                oneFrame.setRotationData( rotation.at( time ), rotationOffset );
+                oneFrame.setRotationData( rotation.get( time ), rotationOffset );
             }
             
             oneFrame.hasNodeList = hasNodeList;
@@ -194,22 +194,22 @@ namespace MoMa {
     
     const arma::mat &Track::framePosition( unsigned int index ) {
     
-        return( position.at( index ) );
+        return( position.get( index ) );
     }
     
     arma::mat Track::framePosition( double time ) {
     
-        return( position.at( time ) );
+        return( position.get( time ) );
     }
     
     const arma::mat &Track::frameRotation( unsigned int index ) {
     
-        return( rotation.at( index ) );
+        return( rotation.get( index ) );
     }
     
     arma::mat Track::frameRotation( double time ) {
     
-        return( rotation.at( time ) );
+        return( rotation.get( time ) );
     }
     
     Trace Track::trace( std::string name ) {

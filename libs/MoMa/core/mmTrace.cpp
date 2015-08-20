@@ -22,11 +22,11 @@ Trace::Trace( void ) {
 Node Trace::nodeFrame( double time ) {
 
     Node oneNode;
-    oneNode.setPosition(position.at(time));
+    oneNode.setPosition(position.get(time));
     oneNode.setName(this->name());
     oneNode.setRotationFlag( hasRotation() );
     if (hasRotation()){
-        oneNode.setRotation(rotation.at(time));
+        oneNode.setRotation(rotation.get(time));
         oneNode.setOffsetRotation(rotationOffset);
     }
     if (hasTime())

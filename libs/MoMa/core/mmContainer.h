@@ -94,11 +94,11 @@ namespace MoMa {
         
       public:
         
-        inline double at( unsigned int pIndex );
-        inline double at( double pTime );
+        inline double get( unsigned int pIndex );
+        inline double get( double pTime );
         
-        inline bool at( double pData, unsigned int pIndex );
-        inline bool at( double pData, double pTime );
+        inline bool set( double pData, unsigned int pIndex );
+        inline bool set( double pData, double pTime );
         
         inline bool push( double pData, double pTime );
         inline bool push( double pData );
@@ -123,12 +123,12 @@ namespace MoMa {
     
     // - Inlined functions -
     
-    double TimedVec::at( unsigned int pIndex ) {
+    double TimedVec::get( unsigned int pIndex ) {
         
         return data( pIndex );
     }
     
-    double TimedVec::at( double pTime ) {
+    double TimedVec::get( double pTime ) {
         
         if( mTimed ) {
             
@@ -146,7 +146,7 @@ namespace MoMa {
         return( 0.0 );
     }
     
-    bool TimedVec::at( double pData, unsigned int pIndex ) {
+    bool TimedVec::set( double pData, unsigned int pIndex ) {
         
         if( mTimed ) return false;
         
@@ -172,7 +172,7 @@ namespace MoMa {
         return true;
     }
     
-    bool TimedVec::at( double pData, double pTime ) {
+    bool TimedVec::set( double pData, double pTime ) {
         
         if( mTimed ) {
             
@@ -241,7 +241,7 @@ namespace MoMa {
     bool TimedVec::push( double pData, double pTime ) {
         
         if( pTime < this->mTimeVec( mTimeVec.n_elem-1 ) ) return false;
-        this->at( pData, pTime );
+        this->set( pData, pTime );
         
         return true;
     }
@@ -280,11 +280,11 @@ namespace MoMa {
         
         TimedMat( void ) { interpolAlgo = LINEAR; }
         
-        inline arma::vec at( unsigned int pIndex ); // Frame getter
-        inline arma::vec at( double pTime ); // by index and time
+        inline arma::vec get( unsigned int pIndex ); // Frame getter
+        inline arma::vec get( double pTime ); // by index and time
         
-        inline bool at( const arma::vec &pData, unsigned int pIndex ); // Frame setter
-        inline bool at( const arma::vec &pData, double pTime ); // by index and time
+        inline bool set( const arma::vec &pData, unsigned int pIndex ); // Frame setter
+        inline bool set( const arma::vec &pData, double pTime ); // by index and time
         
         inline bool push( const arma::vec &pData, double pTime ); // Push timed
         inline bool push( const arma::vec &pData ); // Push at the end of data
@@ -314,12 +314,12 @@ namespace MoMa {
     
     // - Inlined functions -
     
-    arma::vec TimedMat::at( unsigned int pIndex ) {
+    arma::vec TimedMat::get( unsigned int pIndex ) {
         
         return data.col( pIndex );
     }
     
-    arma::vec TimedMat::at( double pTime ) {
+    arma::vec TimedMat::get( double pTime ) {
         
         if( mTimed ) {
             
@@ -343,7 +343,7 @@ namespace MoMa {
         return arma::zeros( 1, 1 );
     }
     
-    bool TimedMat::at( const arma::vec &pData, unsigned int pIndex ) {
+    bool TimedMat::set( const arma::vec &pData, unsigned int pIndex ) {
         
         if( mTimed ) return false;
         if( !checkInput(pData) ) return false;
@@ -369,7 +369,7 @@ namespace MoMa {
         return true;
     }
     
-    bool TimedMat::at( const arma::vec &pData, double pTime ) {
+    bool TimedMat::set( const arma::vec &pData, double pTime ) {
         
         if( !checkInput(pData) ) return( false );
         
@@ -450,7 +450,7 @@ namespace MoMa {
     bool TimedMat::push( const arma::vec &pData, double pTime ) {
         
         if( pTime<this->mTimeVec( mTimeVec.n_elem-1 ) ) return( false );
-        this->at( pData, pTime );
+        this->set( pData, pTime );
         return( true );
         
     }
@@ -492,11 +492,11 @@ namespace MoMa {
         
         TimedCube( void ) { interpolAlgo = LINEAR; }
         
-        inline const arma::mat &at( unsigned int pIndex ); // Frame getter
-        inline arma::mat at( double pTime ); // by index and time
+        inline const arma::mat &get( unsigned int pIndex ); // Frame getter
+        inline arma::mat get( double pTime ); // by index and time
         
-        inline bool at( const arma::mat &pData, unsigned int pIndex ); // Frame setter
-        inline bool at( const arma::mat &pData, double pTime ); // by index and time
+        inline bool set( const arma::mat &pData, unsigned int pIndex ); // Frame setter
+        inline bool set( const arma::mat &pData, double pTime ); // by index and time
         
         inline bool push( const arma::mat &pData, double pTime ); // Push timed
         inline bool push( const arma::mat &pData ); // Push at the end of data
@@ -528,12 +528,12 @@ namespace MoMa {
     
     // - Inlined functions -
     
-    const arma::mat &TimedCube::at( unsigned int pIndex ) {
+    const arma::mat &TimedCube::get( unsigned int pIndex ) {
         
         return data.slice( pIndex );
     }
     
-    arma::mat TimedCube::at( double pTime ) {
+    arma::mat TimedCube::get( double pTime ) {
         
         if( mTimed ) {
             
@@ -565,7 +565,7 @@ namespace MoMa {
         return arma::zeros( 1, 1 );
     }
     
-    bool TimedCube::at( const arma::mat &pData, unsigned int pIndex ) {
+    bool TimedCube::set( const arma::mat &pData, unsigned int pIndex ) {
         
         if( mTimed ) return false;
         if( !checkInput( pData ) ) return false;
@@ -593,7 +593,7 @@ namespace MoMa {
         }
     }
     
-    bool TimedCube::at( const arma::mat &pData, const double pTime ) {
+    bool TimedCube::set( const arma::mat &pData, const double pTime ) {
         
         if( !checkInput( pData ) ) return( false );
         
@@ -664,7 +664,7 @@ namespace MoMa {
     bool TimedCube::push( const arma::mat &pData, double pTime ) {
         
         if( pTime < this->mTimeVec( mTimeVec.n_elem-1 ) ) return false;
-        this->at( pData, pTime );
+        this->set( pData, pTime );
         
         return true;
     }
