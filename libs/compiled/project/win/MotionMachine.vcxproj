@@ -31,6 +31,7 @@
     <ClCompile Include="..\..\..\MoMa\parsers\mmC3dParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmCmpParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmFlatParser.cpp" />
+    <ClCompile Include="..\..\..\MoMa\parsers\mmKinParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmV3dParser.cpp" />
     <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp" />
@@ -124,6 +125,7 @@
     <ClInclude Include="..\..\..\MoMa\parsers\mmC3dParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmCmpParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmFlatParser.h" />
+    <ClInclude Include="..\..\..\MoMa\parsers\mmKinParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmV3dParser.h" />
     <ClInclude Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h" />

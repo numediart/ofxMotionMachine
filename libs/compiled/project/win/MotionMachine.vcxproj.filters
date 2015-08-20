@@ -381,6 +381,9 @@
     <ClCompile Include="..\..\..\MoMa\parsers\mmCmpParser.cpp">
       <Filter>MoMa\parsers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\parsers\mmKinParser.cpp">
+      <Filter>MoMa\parsers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\MoMa\core\mmBoneList.h">
@@ -708,6 +711,9 @@
       <Filter>oF\addons\ofxOsc\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\MoMa\parsers\mmCmpParser.h">
+      <Filter>MoMa\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\parsers\mmKinParser.h">
       <Filter>MoMa\parsers</Filter>
     </ClInclude>
   </ItemGroup>
