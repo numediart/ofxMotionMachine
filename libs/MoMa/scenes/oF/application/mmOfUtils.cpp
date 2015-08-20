@@ -6,8 +6,6 @@
 //  Copyright (c) 2015 YCAMInterlab. All rights reserved.
 //
 
-#include <moma/mmTrack.h>
-
 #include "mmOfUtils.h"
 
 using namespace arma;
