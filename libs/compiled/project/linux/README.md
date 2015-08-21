@@ -52,3 +52,15 @@ $ cd $(MOMA_ROOT)/apps/example/mmEmptyExample
 $ make
 $ make run
 ```
+
+If your project has dependencies, you need to edit its config.make and adapt `PROJECT_LDFLAGS` and `PROJECT_CFLAGS`. For instance if you have a dependency to armadillo, you need to add an `-laramdillo` flag to the linker parameters:
+
+```
+PROJECT_LDFLAGS = -lmoma -larmadillo
+```
+
+Same thing if the header files are not in the default path, you need to edit the compiler flags:
+
+```
+PROJECT_CFLAGS = -I/usr/local/include/moma -I/usr/local/include/myawesomelib
+```
