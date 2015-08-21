@@ -19,6 +19,8 @@ namespace MoMa {
 
     struct MoMaBone {
         bool exists;
+        unsigned int headID;
+        unsigned int tailID;
         ofVec3f head;
         ofVec3f tail;
     };
@@ -43,9 +45,17 @@ namespace MoMa {
      */
     ofQuaternion toQuaternion( arma::vec data );
     
+    // frankiezafe utils
+    
+    // structure info
+    int getNodeID( std::string nodename, Track &track );
+    int getNodeOriginID( std::string nodename, Track &track );
+    std::vector< unsigned int > getNoneChildrensID( std::string nodename, Track &track );
+
+    // data retrieval
     ofVec3f getNodePosition( std::string nodename, Track &track, int frame );
     ofQuaternion getNodeRotation( std::string nodename, Track &track, int frame );
-    MoMaBone getBoneByTail( std::string tailname, Track &track, int frame );
+    MoMaBone getBoneByTail( std::string tailname, Track &track, int frame  );
     
 }
 

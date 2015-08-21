@@ -23,28 +23,21 @@ namespace MoMa {
     }
     
     ofVec3f getNodePosition( std::string nodename, MoMa::Track &track, int frame ) {
-        unsigned int nID = track.index( nodename );
-        if ( nID == -1 ) {
-            std::cerr << "MoMa::getBonePosition: '" << nodename << "' is not defined int this track!!!" << endl;
-            return ofVec3f();
-        }
+        int nID = getNodeID( nodename, track );
+        if ( nID == -1 ) return ofVec3f();
         return toVec3f( track.position.getData().slice( frame ).col( nID ) );
     }
     
     
     ofQuaternion getNodeRotation( std::string nodename, MoMa::Track &track, int frame ) {
-        unsigned int nID = track.index( nodename );
-        if ( nID == -1 ) {
-            std::cerr << "MoMa::getNodeRotation: '" << nodename << "' is not defined int this track!!!" << endl;
-            return ofQuaternion();
-        }
+        int nID = getNodeID( nodename, track );
+        if ( nID == -1 ) return ofQuaternion();
         return toQuaternion( track.rotation.getData().slice( frame ).col( nID ) );
     }
     
     MoMaBone getBoneByTail( std::string tailname, Track &track, int frame ) {
-        unsigned int nID = track.index( tailname );
+        int nID = getNodeID( tailname, track );
         if ( nID == -1 ) {
-            std::cerr << "MoMa::getBoneByTail: '" << tailname << "' is not defined int this track!!!" << endl;
             MoMaBone mmb;
             mmb.exists = false;
             return mmb;
@@ -54,14 +47,49 @@ namespace MoMa {
             if ( (*itb).second == nID ) {
                 MoMaBone mmb;
                 mmb.exists = true;
-                mmb.head = toVec3f( track.position.getData().slice( frame ).col( (*itb).first ) );
-                mmb.tail = toVec3f( track.position.getData().slice( frame ).col( nID ) );
+                mmb.headID = (*itb).first;
+                mmb.tailID = nID;
+                mmb.head = toVec3f( track.position.getData().slice( frame ).col( mmb.headID ) );
+                mmb.tail = toVec3f( track.position.getData().slice( frame ).col( mmb.tailID  ) );
                 return mmb;
             }
         }
         MoMaBone mmb;
         mmb.exists = false;
         return mmb;
+    }
+    
+    int getNodeID( std::string nodename, Track &track ) {
+        int nID = track.index( nodename );
+        if ( nID == -1 ) {
+            std::cerr << "MoMa::getBoneID: '" << nodename << "' is not defined int this track!!!" << endl;
+        }
+        return nID;
+    }
+    
+    int getNodeOriginID( std::string nodename, Track &track ) {
+        int nID = track.index( nodename );
+        if ( nID == -1 ) {
+            std::cerr << "MoMa::getBoneID: '" << nodename << "' is not defined int this track!!!" << endl;
+        } else {
+            vector< std::pair<int,int> > * bones = ( vector< std::pair<int,int> > * ) track.boneList;
+            for ( vector< std::pair<int,int> >::iterator itb = bones->begin(); itb != bones->end(); itb++ ) {
+                if ( (*itb).second == nID ) return (*itb).first;
+            }
+        }
+        return -1;
+    }
+    
+    vector< unsigned int > getNoneChildrensID( std::string nodename, Track &track ) {
+        vector< unsigned int > out;
+        int nID = getNodeID( nodename, track );
+        if ( nID != -1 ) {
+            vector< std::pair<int,int> > * bones = ( vector< std::pair<int,int> > * ) track.boneList;
+            for ( vector< std::pair<int,int> >::iterator itb = bones->begin(); itb != bones->end(); itb++ ) {
+                if ( (*itb).first == nID ) out.push_back( (*itb).second );
+            }
+        }
+        return out;
     }
     
 }
