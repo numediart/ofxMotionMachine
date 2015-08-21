@@ -1,6 +1,8 @@
 #ifndef __mmSceneApp__
 #define __mmSceneApp__
 
+namespace MoMa {class SceneApp;}
+
 #include <armadillo>
 
 #include "ofMain.h"
@@ -23,7 +25,8 @@ namespace MoMa {
     const string PositionHeader = "/position";
     const string RotationHeader = "/rotation";
 
-    class Canvas;
+    //class Canvas;
+    class MenuView;
     
     // -- Data structres used in SceneApp --
     
@@ -267,6 +270,10 @@ namespace MoMa {
         
         std::string getAppPath( void ); // App path
         std::string getLibPath( void ); // Lib path
+
+        // - Built-in canvas methods -
+
+        void addMenuView( void ); // Add menu view to the canvas
     
       //protected:
         
@@ -375,9 +382,9 @@ namespace MoMa {
         
         bool isShortcut; // Shortcuts enabled?
         
-        // - Built-in canvas -
+        // - Built-in canvas -        
         
-        MoMa::Canvas *menuView;
+        MoMa::MenuView *menuView;
     };
 }
 

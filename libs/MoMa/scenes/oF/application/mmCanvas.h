@@ -26,6 +26,8 @@
 #ifndef __mmCanvas__
 #define __mmCanvas__
 
+namespace MoMa { class Canvas;}
+
 #include "mmSceneApp.h"
 #include "ofMain.h"
 #include "ofxUI.h"
@@ -45,7 +47,7 @@ namespace MoMa {
         BOTTOM
     };
     
-    class SceneApp;
+    //class SceneApp;
     
     class Canvas : public ofxUISuperCanvas {
 
