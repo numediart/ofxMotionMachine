@@ -1,5 +1,4 @@
 #include "mmSceneApp.h"
-#define _KINECT_
 using namespace std;
 using namespace arma;
 
@@ -206,13 +205,13 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
                 
                 for( int n=0; n<nOfNodes; n++ ) {
                     
-                    float x = message.getArgAsFloat( 3*n );
-                    float y = message.getArgAsFloat( 3*n+1 );
-                    float z = message.getArgAsFloat( 3*n+2 );
-                    float rx = message.getArgAsFloat( 3*n+3 );
-                    float ry = message.getArgAsFloat( 3*n+4 );
-                    float rz = message.getArgAsFloat( 3*n+5 );
-                    float rw = message.getArgAsFloat( 3*n+6 );
+                    float x = message.getArgAsFloat( 7*n );
+                    float y = message.getArgAsFloat( 7*n+1 );
+                    float z = message.getArgAsFloat( 7*n+2 );
+                    float rx = message.getArgAsFloat( 7*n+3 );
+                    float ry = message.getArgAsFloat( 7*n+4 );
+                    float rz = message.getArgAsFloat( 7*n+5 );
+                    float rw = message.getArgAsFloat( 7*n+6 );
                     
                     Node nod( x, y, z, rx, ry, rz, rw );
                     oscFrame.push( nod );
@@ -1134,15 +1133,17 @@ void MoMa::SceneApp::draw( Frame frame ) {
             bones.resize( frame.boneList->size() );
 
             for( int b=0; b<bones.size(); b++ ) {
+                if (frame.node( frame.boneList->at( b ).second ).rotationOffset.is_finite()){
                 float s=arma::norm(frame.node( frame.boneList->at( b ).first ).position -frame.node( frame.boneList->at( b ).second ).position );
                 bones[b].setScale(s, 1, 1);
                 bones[b].setPosition( toVec3f( frame.node( frame.boneList->at( b ).first ).position ) );
-#ifdef _KINECT_
-                bones[b].setOrientation( toQuaternion( frame.node( frame.boneList->at( b ).second ).rotationOffset  ) *toQuaternion( frame.node( frame.boneList->at( b ).second ).rotation  ));//
-#else
-                bones[b].setOrientation( toQuaternion( frame.node( frame.boneList->at( b ).second ).rotationOffset  ) *toQuaternion( frame.node( frame.boneList->at( b ).first ).rotation  ));//
-#endif
-                bones[b].draw();
+
+                    if (frame.boneList->hasOrigNodeRot_as_boneRot)
+                        bones[b].setOrientation( toQuaternion( frame.node( frame.boneList->at( b ).second ).rotationOffset  ) *toQuaternion( frame.node( frame.boneList->at( b ).first ).rotation  ));//
+                    else
+                        bones[b].setOrientation( toQuaternion( frame.node( frame.boneList->at( b ).second ).rotationOffset  ) *toQuaternion( frame.node( frame.boneList->at( b ).second ).rotation  ));//
+                    bones[b].draw();
+                }
             }
         }
 
@@ -1200,13 +1201,12 @@ void MoMa::SceneApp::addNewTrack( std::string name, bool isShown ) {
 }
 
 MoMa::Track &MoMa::SceneApp::track( std::string name ) {
-    
     int kFound = -1;
     bool isFound = false;
     
     for( int k=0; k<_track.size(); k++ ) {
         
-        if( _track[ k ].track->easyName.compare( name ) == 0 ) {
+        if( _track[ k ].track->easyName== name ) {
             
             isFound = true;
             kFound = k;

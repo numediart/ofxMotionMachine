@@ -26,7 +26,7 @@ namespace MoMa {
 
         std::string checkFileName( std::string const &fileName );
         
-        bool setJointOffsetRotation(Track *tr);
+       // bool setJointOffsetRotation(Track *tr);
         std::string extension;
         std::string fileName;
         

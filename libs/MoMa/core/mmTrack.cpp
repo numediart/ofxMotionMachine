@@ -60,6 +60,8 @@ void Track::init( void ) {
     
     ringSize = 0; // Init ring buffer size
     isRing = false; // Not ring buffer
+    
+    hasOrigNodeRot_as_boneRot=true;
 }
 
 void Track::synolist( string fileName ) {
@@ -146,7 +148,7 @@ void Track::push( Frame _frame ) {
     if( isRing ) {
         
         if( position.nOfFrames() > ringSize ) position.pop(); // Ring buffer behavior
-        if( _frame.hasRotation() && rotation.nOfFrames() > ringSize ) rotation.pop();
+        if( _frame.hasRotation() && (rotation.nOfFrames() > ringSize )) rotation.pop();
     }
 }
 
@@ -265,4 +267,117 @@ void Track::subTrack( Track &subTr, int beg, int end) {
         
         subTr.position.setData( position.frameRate(), position.getData().slices( beg, end ) );
     }
+}
+
+bool Track::setJointOffsetRotation() {
+    
+    if (this->hasBoneList==false||this->hasNodeList==false)
+        return false;
+    boneList->hasOrigNodeRot_as_boneRot=this->hasOrigNodeRot_as_boneRot;
+    if (hasOrigNodeRot_as_boneRot){
+        if (this->rotation.getData().size()==0)
+            return false;
+        this->rotationOffset.resize(4,this->rotation.nOfCols());
+        bool debug = false;
+        if (!this->boneList || !this->hasNodeList || !this->hasRotation || !this->hasSynoList)
+            return false;
+        
+        this->rotationOffset.resize(4,this->nOfNodes());
+        Frame frame0 = this->frame((unsigned int)0);
+        arma::colvec frontalAxis;
+        arma::colvec tempVec;
+        
+        tempVec<<frame0.node("LShoulder").position[0] <<frame0.node("LShoulder").position[1]<<frame0.node("LShoulder").position[2];
+        frontalAxis<<frame0.node("RShoulder").position[0] <<frame0.node("RShoulder").position[1]<<frame0.node("RShoulder").position[2];
+        frontalAxis=normalise(tempVec-frontalAxis);
+        
+        
+        arma::colvec longAxis;
+        
+        tempVec.clear();
+        
+        tempVec<<frame0.node("Head").position[0] <<frame0.node("Head").position[1]<<frame0.node("Head").position[2];
+        longAxis<<frame0.node("Pelvis").position[0] <<frame0.node("Pelvis").position[1]<<frame0.node("Pelvis").position[2];
+        
+        longAxis=normalise(tempVec-longAxis);
+        arma::colvec sagAxis;
+        sagAxis=arma::cross(frontalAxis,longAxis);
+        if( debug ) std::cout<<"frontal"<<std::endl;
+        if( debug ) std::cout<<frontalAxis<<std::endl;
+        
+        if( debug ) std::cout<<"long"<<std::endl;
+        if( debug ) std::cout<<longAxis<<std::endl;
+        if( debug ) std::cout<<"sag"<<std::endl;
+        if( debug ) std::cout<<sagAxis  <<std::endl;
+        
+        for (int i=0;i<this->boneList->size();i++){
+            int orig=this->boneList->at(i).first;
+            int dest=this->boneList->at(i).second;
+            if( debug ){
+                std::cout<<orig<<" "<<dest<<std::endl;
+            }
+            std::vector<float> val;
+            arma::mat offsetMatrix;
+            offsetMatrix.eye(3,3);
+            arma::colvec tempVecX,tempVecY,tempVecZ;
+            tempVecX<<frame0.node(dest).position[0]-frame0.node(orig).position[0]<<frame0.node(dest).position[1]-frame0.node(orig).position[1]<<frame0.node(dest).position[2]-frame0.node(orig).position[2];
+            tempVecX=arma::normalise(tempVecX);
+            if( debug ){
+                std::cout<<tempVecX<<std::endl;
+            }
+            if (std::abs(arma::dot(tempVecX,sagAxis))>std::abs(arma::dot(tempVecX,longAxis))&&std::abs(arma::dot(tempVecX,sagAxis))>std::abs(arma::dot(tempVecX,frontalAxis))){
+                
+                tempVecZ=arma::cross(tempVecX,frontalAxis);
+                tempVecY=arma::cross(tempVecZ,tempVecX);
+                
+            }
+            else if (std::abs(arma::dot(tempVecX,frontalAxis))>std::abs(arma::dot(tempVecX,longAxis))){
+                
+                tempVecY=arma::cross(longAxis,tempVecX);
+                tempVecZ=arma::cross(tempVecX,tempVecY);
+                
+            }
+            else if (arma::dot(tempVecX,longAxis)>0){
+                
+                tempVecZ=arma::cross(frontalAxis,tempVecX);
+                tempVecY=arma::cross(tempVecZ,tempVecX);
+            }
+            else {
+                tempVecZ=arma::cross(tempVecX,frontalAxis);
+                tempVecY=arma::cross(tempVecZ,tempVecX);
+            }
+            
+            offsetMatrix.col(0)=arma::normalise( tempVecX);
+            offsetMatrix.col(1)=arma::normalise( tempVecY);
+            offsetMatrix.col(2)=arma::normalise( tempVecZ);
+            if( debug ) std::cout<<offsetMatrix<<std::endl;
+            
+            quaternion origQuat(frame0.node(orig).rotation);
+            quaternion offsetQuat;
+            offsetQuat.set(offsetMatrix);
+            quaternion lquat(origQuat.inverse()*offsetQuat);
+            
+            if( debug ) std::cout<<lquat(0)<<" "<<lquat(1)<<" "<<lquat(2)<<" "<<lquat(3)<<std::endl;
+            
+            this->rotationOffset.col(dest)=lquat;
+        }
+    }
+    else{
+        
+        this->rotationOffset.zeros(4, nodeList->size());
+        for (int i=0;i<boneList->size();i++){
+            int orig,dest;
+            MoMa::quaternion lquat,lquat2;
+            
+            orig=this->boneList->at(i).first;
+            dest=this->boneList->at(i).second;
+            lquat<<0<<-0.7<<0<<0.7;
+            this->rotationOffset.col(dest)=lquat;
+            
+        }
+        
+        
+    }
+    
+    return true;
 }

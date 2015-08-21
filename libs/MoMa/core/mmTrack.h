@@ -77,6 +77,8 @@ namespace MoMa {
         void setRingBufferSize( int size ); // Set as ring buffer + max size
         void subTrack( Track &subTr, int beg, int end ); // Extract a subtrack
         
+        bool setJointOffsetRotation();
+        
         void pushPosition( arma::mat frame ); // Add frame + checking if ringbuffer
         void popPosition( void ) { position.pop(); } // Remove frame
 
@@ -110,6 +112,7 @@ namespace MoMa {
         TimedCube rotation; // Quaternion frames
         arma::mat rotationOffset; // Rotation offset
         bool hasRotation; // Has track rotations?
+        bool hasOrigNodeRot_as_boneRot;//difference between V3D BVH skel and kinect
         
         NodeList *nodeList; // List of node names
         bool hasNodeList; // Has track nodeList?

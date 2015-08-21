@@ -72,7 +72,7 @@ Parser::Parser( string const &fName, Track *tr ) {
                 track->hasBoneList = false;
                 delete track->boneList;
         }
-        this->setJointOffsetRotation(tr);
+        tr->setJointOffsetRotation();
     }
 
     else if( extension == "c3d" ) {
@@ -107,7 +107,7 @@ Parser::Parser( string const &fName, Track *tr ) {
             track->hasBoneList = false;
             delete track->boneList;
         }
-        this->setJointOffsetRotation(tr);
+        tr->setJointOffsetRotation();
     }
     else if( extension == "cmp" ) {
         
@@ -125,7 +125,7 @@ Parser::Parser( string const &fName, Track *tr ) {
             track->hasBoneList = false;
             delete track->boneList;
         }
-        this->setJointOffsetRotation(tr);
+//        tr->setJointOffsetRotation(true);
     }
     else if( extension == "kin" ) {
         
@@ -151,12 +151,13 @@ Parser::Parser( string const &fName, Track *tr ) {
                 delete track->boneList;
             }
         }
+         tr->setJointOffsetRotation();
 
     }
 
     else if( extension == "bones" ) {
         track->bones( fileName );
-        //this->setJointOffsetRotation(tr);
+        tr->setJointOffsetRotation();
     }
 
     else if( extension == "nodes" ) track->nodes( fileName );
@@ -193,92 +194,3 @@ string Parser::checkFileName( string const &fName ) {
 }
 
 
-bool Parser::setJointOffsetRotation(Track *tr) {
-    
-    tr->rotationOffset.resize(4,tr->rotation.nOfCols());
-    bool debug = false;
-    if (!tr->boneList || !tr->hasNodeList || !tr->hasRotation || !tr->hasSynoList)
-        return false;
-
-    tr->rotationOffset.resize(4,tr->nOfNodes());
-    Frame frame0 = tr->frame((unsigned int)0);
-    arma::colvec frontalAxis;
-    arma::colvec tempVec;
-
-    tempVec<<frame0.node("LShoulder").position[0] <<frame0.node("LShoulder").position[1]<<frame0.node("LShoulder").position[2];
-    frontalAxis<<frame0.node("RShoulder").position[0] <<frame0.node("RShoulder").position[1]<<frame0.node("RShoulder").position[2];
-    frontalAxis=normalise(tempVec-frontalAxis);
-
-
-    arma::colvec longAxis;
-
-    tempVec.clear();
-
-    tempVec<<frame0.node("Head").position[0] <<frame0.node("Head").position[1]<<frame0.node("Head").position[2];
-    longAxis<<frame0.node("Pelvis").position[0] <<frame0.node("Pelvis").position[1]<<frame0.node("Pelvis").position[2];
-
-    longAxis=normalise(tempVec-longAxis);
-    arma::colvec sagAxis;
-    sagAxis=arma::cross(frontalAxis,longAxis);
-    if( debug ) std::cout<<"frontal"<<std::endl;
-    if( debug ) std::cout<<frontalAxis<<std::endl;
-
-    if( debug ) std::cout<<"long"<<std::endl;
-    if( debug ) std::cout<<longAxis<<std::endl;
-    if( debug ) std::cout<<"sag"<<std::endl;
-    if( debug ) std::cout<<sagAxis  <<std::endl;
-
-    for (int i=0;i<tr->boneList->size();i++){
-        int orig=tr->boneList->at(i).first;
-        int dest=tr->boneList->at(i).second;
-        if( debug ){
-            std::cout<<orig<<" "<<dest<<std::endl;
-        }
-        std::vector<float> val;
-        arma::mat offsetMatrix;
-        offsetMatrix.eye(3,3);
-        arma::colvec tempVecX,tempVecY,tempVecZ;
-        tempVecX<<frame0.node(dest).position[0]-frame0.node(orig).position[0]<<frame0.node(dest).position[1]-frame0.node(orig).position[1]<<frame0.node(dest).position[2]-frame0.node(orig).position[2];
-        tempVecX=arma::normalise(tempVecX);
-        if( debug ){
-            std::cout<<tempVecX<<std::endl;
-        }
-        if (std::abs(arma::dot(tempVecX,sagAxis))>std::abs(arma::dot(tempVecX,longAxis))&&std::abs(arma::dot(tempVecX,sagAxis))>std::abs(arma::dot(tempVecX,frontalAxis))){
-
-            tempVecZ=arma::cross(tempVecX,frontalAxis);
-            tempVecY=arma::cross(tempVecZ,tempVecX);
-
-        }
-        else if (std::abs(arma::dot(tempVecX,frontalAxis))>std::abs(arma::dot(tempVecX,longAxis))){
-
-            tempVecY=arma::cross(longAxis,tempVecX);
-            tempVecZ=arma::cross(tempVecX,tempVecY);
-
-        }
-        else if (arma::dot(tempVecX,longAxis)>0){
-
-            tempVecZ=arma::cross(frontalAxis,tempVecX);
-            tempVecY=arma::cross(tempVecZ,tempVecX);
-        }
-        else {
-            tempVecZ=arma::cross(tempVecX,frontalAxis);
-            tempVecY=arma::cross(tempVecZ,tempVecX);
-        }
-
-        offsetMatrix.col(0)=arma::normalise( tempVecX);
-        offsetMatrix.col(1)=arma::normalise( tempVecY);
-        offsetMatrix.col(2)=arma::normalise( tempVecZ);
-        if( debug ) std::cout<<offsetMatrix<<std::endl;
-
-        quaternion origQuat(frame0.node(orig).rotation);
-        quaternion offsetQuat;
-        offsetQuat.set(offsetMatrix);
-        quaternion lquat(origQuat.inverse()*offsetQuat);
-
-        if( debug ) std::cout<<lquat(0)<<" "<<lquat(1)<<" "<<lquat(2)<<" "<<lquat(3)<<std::endl;
-        
-        tr->rotationOffset.col(dest)=lquat;
-    }
-
-    return true;
-}

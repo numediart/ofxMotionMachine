@@ -111,6 +111,7 @@ namespace MoMa {
         }
 //        track->hasSynoList=false;
         track->hasRotation=hasRotation;
+        track->hasOrigNodeRot_as_boneRot=true;
         return true;
     }
 }
