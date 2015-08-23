@@ -17,6 +17,31 @@
 
 namespace MoMa {
 
+    class MoMaFeature {
+    public:
+        MoMaFeature( string name, Track * track, arma::mat * src );
+        ~MoMaFeature();
+        bool isInitialised() { return initialised; }
+        bool hasValue( unsigned int nodeID );
+        string getName() { return name; }
+        float getRaw( unsigned int nodeID, unsigned int frame );
+        float getNormalisedLocal( unsigned int nodeID, unsigned int frame );
+        float getNormalisedGlobal( unsigned int nodeID, unsigned int frame );
+        float getDelta( unsigned int nodeID, unsigned int frame );
+    private:
+        bool initialised;
+        string name;
+        Track * track;
+        unsigned int rows;
+        unsigned int cols;
+        map< int, int > ids_map;
+        arma::mat raw;
+        arma::mat normalised_local; // normalisation per row
+        arma::mat normalised_global;
+        arma::mat delta;
+        void process( arma::mat * src );
+    };
+    
     struct MoMaBone {
         bool exists;
         unsigned int headID;
@@ -56,6 +81,9 @@ namespace MoMa {
     ofVec3f getNodePosition( std::string nodename, Track &track, int frame );
     ofQuaternion getNodeRotation( std::string nodename, Track &track, int frame );
     MoMaBone getBoneByTail( std::string tailname, Track &track, int frame  );
+    
+    // prepare feature (normalisations)
+    MoMaFeature * processMoMaFeature( string name, Track * track, arma::mat * src );
     
 }
 
