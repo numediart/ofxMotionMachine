@@ -47,6 +47,7 @@ Canvas::Canvas( SceneApp *app, std::string title, Canvas *parent, int group,  bo
 
 void Canvas::setupCanvas() {
 
+	_allIndex = allCanvas.size();
     allCanvas.push_back(this);
     childrenCanvas.reserve(1);
 
@@ -220,6 +221,29 @@ void Canvas::resetPositions() {
     }
 }
 
+void Canvas::remove() {
+
+	//delete children
+	for(int g=0;g<childrenCanvas.size();g++) {
+        for(int i=0;i<childrenCanvas[g].size();i++) {
+
+            childrenCanvas[g][i]->remove();
+
+        }
+    }
+	
+	//erase from canvas groups
+	if(_parent == NULL) {
+
+		mainCanvas.erase(mainCanvas.begin()+_index);
+    }
+    else {  
+
+		_parent->childrenCanvas.erase(_parent->childrenCanvas.begin()+_group,_parent->childrenCanvas.begin()+_index);
+    }
+	allCanvas.erase(allCanvas.begin()+_allIndex);
+	delete this;
+}
 
 void Canvas::deleteCanvas() {
 

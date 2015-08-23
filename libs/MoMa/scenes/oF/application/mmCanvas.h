@@ -58,6 +58,7 @@ namespace MoMa {
 
         /** setPos : set position of the canvas relative to another */
         void setPos(Position position, Position alignment, Canvas* relative = NULL);
+		void remove();
 
         /** resetPositions (static) : reset positions of the main canvas */
         static void resetPositions();
@@ -88,14 +89,14 @@ namespace MoMa {
         /** Canvas parameters (position and alignment relative to the parent, index in the vector of Canvass, and is the canvas minified at initialization) */
         Canvas *_relative, *_parent;
         Position _position, _alignment;
-        int _index, _group;
+        int _index, _group, _allIndex;
         bool _minified;
 
         /** setupCanvas : setup the canvas */
         void setupCanvas();
 
         /** initCanvas : initialize the canvas (size, position and minified) */
-        void initCanvas();
+        virtual void initCanvas();
 
         /** methods to open and close canvas */
         void openChildren(int group = 0);

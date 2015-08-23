@@ -35,6 +35,7 @@
     <ClCompile Include="..\..\..\MoMa\parsers\mmParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmV3dParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmMenuView.cpp" />
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmPlayBar.cpp" />
     <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp" />
     <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\posix\NetworkingUtils.cpp" />
     <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\posix\UdpSocket.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="..\..\..\MoMa\parsers\mmParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmV3dParser.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmMenuView.h" />
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmPlayBar.h" />
     <ClInclude Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h" />
     <ClInclude Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h" />
     <ClInclude Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\PacketListener.h" />

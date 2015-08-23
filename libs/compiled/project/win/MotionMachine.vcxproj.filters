@@ -387,6 +387,9 @@
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmMenuView.cpp">
       <Filter>MoMa\scenes\oF\application</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmPlayBar.cpp">
+      <Filter>MoMa\scenes\oF\application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\MoMa\core\mmBoneList.h">
@@ -720,6 +723,9 @@
       <Filter>MoMa\parsers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmMenuView.h">
+      <Filter>MoMa\scenes\oF\application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmPlayBar.h">
       <Filter>MoMa\scenes\oF\application</Filter>
     </ClInclude>
   </ItemGroup>

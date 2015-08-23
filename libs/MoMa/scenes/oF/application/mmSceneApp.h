@@ -25,8 +25,8 @@ namespace MoMa {
     const string PositionHeader = "/position";
     const string RotationHeader = "/rotation";
 
-    //class Canvas;
     class MenuView;
+	class PlayBar;
     
     // -- Data structres used in SceneApp --
     
@@ -274,6 +274,7 @@ namespace MoMa {
         // - Built-in canvas methods -
 
         void addMenuView( void ); // Add menu view to the canvas
+		void removeMenuView( void ); // Remove menu view to the canvas
     
       //protected:
         
@@ -385,6 +386,7 @@ namespace MoMa {
         // - Built-in canvas -        
         
         MoMa::MenuView *menuView;
+		MoMa::PlayBar *playBar;
     };
 }
 
