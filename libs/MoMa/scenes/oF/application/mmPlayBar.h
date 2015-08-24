@@ -26,17 +26,16 @@ namespace MoMa {
 
         PlayBar( SceneApp *app, MoMa::Position position = DEFAULT, MoMa::Position alignment = MoMa::DEFAULT, MoMa::Canvas *parentUI = NULL, bool minified = false );
 
-		
         void update();
         void canvasEvent( ofxUIEventArgs &e );
-		void initCanvas();
+        void initCanvas();
 
     protected:
         
         SceneApp *app;
-		ofxUIRadio *playRadio;
-		ofxUIImageToggle *bt_play, *bt_pause;
-		ofxUIImageButton *bt_stop;
+        ofxUIRadio *playRadio;
+        ofxUIImageToggle *bt_play, *bt_pause;
+        ofxUIImageButton *bt_stop;
     };
 }
 

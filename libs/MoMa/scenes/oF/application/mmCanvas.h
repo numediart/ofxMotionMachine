@@ -3,18 +3,18 @@
 *    Specific functionnalities :
 *        - automatically handle MoMa views management
 *        - handle canvas positions (automatically and manually)
-*		- automatically manage children canvas
+*        - automatically manage children canvas
 *        - adapted parameters relative to the MoMa.
 *    Constructor :
-*			MoMa::SceneApp *app : pointer to the current scene application, used to interact with it
-*			std::string title = "" : title of the ofxUISuperCanvas
-*		Optional options (positioning and parent/children hierarchy) :
-*			Position position = DEFAULT : position of the canvas, relative to another canvas (the relative), or to the main ofWindow (if relative = NULL)
-*			Position alignment = DEFAULT : alignment of the canvas with the relative (defines which edges of the rectangles are aligned)
-*			Canvas *relative = NULL : relative canvas (for position)
-*			Canvas *parent = NULL : parent canvas (the parent can open/close its children canvas)
-*			int group = 1 : (begins at 1) a parent may have several groups of children. group defines in which group add the child 
-*			bool minified = false : minify or not the canvas at its construction
+*           MoMa::SceneApp *app : pointer to the current scene application, used to interact with it
+*           std::string title = "" : title of the ofxUISuperCanvas
+*       Optional options (positioning and parent/children hierarchy) :
+*           Position position = DEFAULT : position of the canvas, relative to another canvas (the relative), or to the main ofWindow (if relative = NULL)
+*           Position alignment = DEFAULT : alignment of the canvas with the relative (defines which edges of the rectangles are aligned)
+*           Canvas *relative = NULL : relative canvas (for position)
+*           Canvas *parent = NULL : parent canvas (the parent can open/close its children canvas)
+*           int group = 1 : (begins at 1) a parent may have several groups of children. group defines in which group add the child 
+*           bool minified = false : minify or not the canvas at its construction
 *
 * Created by Mickaël Tits on 03/07/2015
 * @file mmCanvas.h
@@ -58,7 +58,7 @@ namespace MoMa {
 
         /** setPos : set position of the canvas relative to another */
         void setPos(Position position, Position alignment, Canvas* relative = NULL);
-		void remove();
+        void remove();
 
         /** resetPositions (static) : reset positions of the main canvas */
         static void resetPositions();
