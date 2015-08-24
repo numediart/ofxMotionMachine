@@ -781,9 +781,9 @@ void MoMa::SceneApp::dragged( ofDragInfo &drag ) {
 
             dragEventRegTrack->load( trackFileNames[k] );
         }
-
-        setPlayerSize( dragEventRegTrack->nOfFrames() );
+        
         setFrameRate( dragEventRegTrack->frameRate() );
+        setPlayerSize( dragEventRegTrack->maxTime() );
     }
 
     if( hasDragEventRegLabelList ) {

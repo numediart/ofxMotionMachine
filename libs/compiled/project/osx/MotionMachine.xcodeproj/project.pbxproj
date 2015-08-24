@@ -557,11 +557,11 @@
 		9F2E1BFC1B76645000DB082C /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				9F2E1C091B76645000DB082C /* MoMaUI.h */,
 				E877132E1B8B1943003C2FEF /* mmMenuView.cpp */,
 				E877132F1B8B1943003C2FEF /* mmMenuView.h */,
 				E877132A1B8B192F003C2FEF /* mmPlayBar.cpp */,
 				E877132B1B8B192F003C2FEF /* mmPlayBar.h */,
-				9F2E1C091B76645000DB082C /* MoMaUI.h */,
 				9F2E1C051B76645000DB082C /* mmSceneApp.cpp */,
 				9F2E1C061B76645000DB082C /* mmSceneApp.h */,
 				9F2E1BFF1B76645000DB082C /* mmCanvas.cpp */,
