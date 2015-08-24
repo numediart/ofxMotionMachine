@@ -34,34 +34,35 @@ namespace MoMa {
     
       public:
         
-        Label( int i, std::string n) {
+        Label( double t, std::string n ) {
             
-            idx = i; name = n;
+            time = t; name = n;
             state = UNSELECTED;
         }
         
-        int idx;
         std::string name;
+        double time;
         int state;
     };
     
     class LabelList : public std::vector<Label> {
         
-    public:
+      public:
         
         LabelList( void ) : std::vector<Label>() {}
         LabelList( std::string fName ); // Create object from text file
         
-        void load( std::string fName ); // Load/save labels from text file
-        void save( std::string fName, int type = EVENT, int trackSize = 0 );
+        void load( std::string fName ); // Load/save labels from a text file
+        void save( std::string fName, int type = EVENT, double maxTime = 0.0f );
         
-        void insert( int idx, std::string name );
-        void remove( int idx ); // Insert & remove
+        void insert( double time, std::string name );
+        void remove( double time ); // Insert & remove
+        void remove( int idx ); // here remove @ index
         
         void print( void ); // Print labels
         
-        std::string name;
         std::string fileName;
+        std::string name;
     };
 }
 

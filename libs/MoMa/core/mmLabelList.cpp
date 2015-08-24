@@ -34,7 +34,7 @@ void LabelList::load( string fName ) {
         stringstream curStrm;
         
         string labName;
-        int labIdx;
+        double labTime;
         
         getline( labFile, curLine ); // Grab the line
         
@@ -43,18 +43,17 @@ void LabelList::load( string fName ) {
             
             curStrm << curLine;
             
-            curStrm >> labIdx; curStrm >> labName;
-            if (curStrm.good()) {
-                curStrm >> labName;
-            }
-            this->push_back( Label( labIdx, labName ) );
+            curStrm >> labTime; curStrm >> labName;
+            if( curStrm.good() ) curStrm >> labName;
+            
+            this->push_back( Label( labTime, labName ) );
         }
     }
 }
 
-void LabelList::save( string fName, int type, int trackSize ){
+void LabelList::save( string fName, int type, double maxTime ) {
     
-    if( size()>0 ){
+    if( size() > 0 ) {
         
         std::ofstream ofs ( fName.c_str(), std::ofstream::out );
         
@@ -64,21 +63,21 @@ void LabelList::save( string fName, int type, int trackSize ){
                 
                 for( int i=0; i<size(); i++ ) {
                     
-                    ofs << at( i ).idx << " " << at( i ).name << endl;
+                    ofs << at( i ).time << " " << at( i ).name << endl;
                 }
                 
                 break;
                 
             case SEGMENT:
                 
-                ofs << "0 " << at( 0 ).idx << " _" << endl;
+                ofs << "0 " << at( 0 ).time << " _" << endl;
                 
                 for( int i=0; i<size()-1; i++ ) {
                     
-                    ofs << at( i ).idx << " " << at( i+1 ).idx << " " << at( i ).name << endl;
+                    ofs << at( i ).time << " " << at( i+1 ).time << " " << at( i ).name << endl;
                 }
                 
-                ofs << at( size()-1 ).idx << " " << trackSize << " " << at( size()-1 ).name << endl;
+                ofs << at( size()-1 ).time << " " << maxTime << " " << at( size()-1 ).name << endl;
                 
                 break;
                 
@@ -91,26 +90,31 @@ void LabelList::save( string fName, int type, int trackSize ){
     }
 }
 
-void LabelList::insert( int idx, std::string name ) {
+void LabelList::insert( double time, std::string name ) {
 
-    push_back( Label( idx, name ) );
+    push_back( Label( time, name ) );
 }
 
-void LabelList::remove( int idx ) {
+void LabelList::remove( double time ) {
 
     for( int l=0; l<size(); l++ ) {
     
-        if( at(l).idx == idx ) {
+        if( at(l).time-time < 1.0e-6 ) {
         
-            erase( begin()+idx );
+            erase( begin()+l );
         }
     }
+}
+
+void LabelList::remove( int idx ) {
+    
+    erase( begin()+idx );
 }
 
 void LabelList::print( void ) {
     
     for( int n=0; n<size(); n++ ) {
         
-        cout << at( n ).idx << " " << at( n ).name << endl;
+        cout << at( n ).time << " " << at( n ).name << endl;
     }
 }
