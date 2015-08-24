@@ -94,7 +94,8 @@ mat Muller::continuous( Track &track ) {
     
     if( track.nOfFrames() > 0 && track.hasNodeList ) {
         
-        cont = zeros(track.nOfFrames(), nOfMullerFeatures);
+        cont.set_size(track.nOfFrames(), nOfMullerFeatures);
+        cont.zeros();
         
         if( track.nOfFrames() > 1 ) {
             
@@ -264,12 +265,11 @@ mat Muller::binary( mat &cont, float meanHl, float meanSw, float meanHw ) {
 
     mat bina;
     
-    bina.set_size( cont.n_rows, cont.n_cols );
-    
-    if( bina.n_rows > 0 ) {
+    if( cont.n_rows > 0 && cont.n_cols > 0 ) {
         
-        bina( 0, 0 ) = 0.0f; // Initialise matrix
-        
+        bina.set_size( cont.n_rows, cont.n_cols );
+        bina.zeros();
+
         bina.col( 0 )= Signal::thresh( cont.col( 0 ), 1.8 * meanHl, 1.3 * meanHl, 0, 1 );
         bina.col( 1 ) = Signal::thresh( cont.col( 1 ), 1.8 * meanHl, 1.3 * meanHl, 0, 1 );
         bina.col( 2 ) = Signal::thresh( cont.col( 2 ), 0.2 * meanHl, 0, 0, 1 );
@@ -311,9 +311,7 @@ mat Muller::binary( mat &cont, float meanHl, float meanSw, float meanHw ) {
         bina.col( 38 ) = Signal::thresh( cont.col( 38 ), 2.3 * meanHl, 1.9 * meanHl, 0, 1 );
 
         //Approximate derivative of cont.col(39) to have the rotation around the body spine
-        vec diffCol39;
-        diffCol39.set_size(cont.n_rows);
-        diffCol39.row(0)=0;
+        vec diffCol39 = zeros(cont.n_rows);
         for(int i=1; i<cont.n_rows; i++){
             diffCol39.row(i)=abs(cont.col( 39 ).row(i)-cont.col( 39 ).row(i-1));
         }
