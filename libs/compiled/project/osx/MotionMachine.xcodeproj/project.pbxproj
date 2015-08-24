@@ -191,6 +191,10 @@
 		9F4FB7D51AC76502003C2C5A /* mmBvhParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F4FB7D01AC76502003C2C5A /* mmBvhParser.h */; };
 		9F6202171AA5B75200041A3E /* mmSynoList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F6202151AA5B75200041A3E /* mmSynoList.cpp */; };
 		9F6202181AA5B75200041A3E /* mmSynoList.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F6202161AA5B75200041A3E /* mmSynoList.h */; };
+		E877132C1B8B192F003C2FEF /* mmPlayBar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E877132A1B8B192F003C2FEF /* mmPlayBar.cpp */; };
+		E877132D1B8B192F003C2FEF /* mmPlayBar.h in Headers */ = {isa = PBXBuildFile; fileRef = E877132B1B8B192F003C2FEF /* mmPlayBar.h */; };
+		E87713301B8B1943003C2FEF /* mmMenuView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E877132E1B8B1943003C2FEF /* mmMenuView.cpp */; };
+		E87713311B8B1943003C2FEF /* mmMenuView.h in Headers */ = {isa = PBXBuildFile; fileRef = E877132F1B8B1943003C2FEF /* mmMenuView.h */; };
 		E88F98EE1B84B64300CEB63F /* mmKinParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E88F98EC1B84B64300CEB63F /* mmKinParser.cpp */; };
 		E88F98EF1B84B64300CEB63F /* mmKinParser.h in Headers */ = {isa = PBXBuildFile; fileRef = E88F98ED1B84B64300CEB63F /* mmKinParser.h */; };
 		E8AD431A1AF27E1A00165BAE /* mmQuaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E8AD43181AF27E1A00165BAE /* mmQuaternion.cpp */; };
@@ -390,6 +394,10 @@
 		9F4FB7D01AC76502003C2C5A /* mmBvhParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmBvhParser.h; path = ../../../MoMa/parsers/mmBvhParser.h; sourceTree = "<group>"; };
 		9F6202151AA5B75200041A3E /* mmSynoList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmSynoList.cpp; path = ../../../MoMa/core/mmSynoList.cpp; sourceTree = "<group>"; };
 		9F6202161AA5B75200041A3E /* mmSynoList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmSynoList.h; path = ../../../MoMa/core/mmSynoList.h; sourceTree = "<group>"; };
+		E877132A1B8B192F003C2FEF /* mmPlayBar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mmPlayBar.cpp; sourceTree = "<group>"; };
+		E877132B1B8B192F003C2FEF /* mmPlayBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mmPlayBar.h; sourceTree = "<group>"; };
+		E877132E1B8B1943003C2FEF /* mmMenuView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mmMenuView.cpp; sourceTree = "<group>"; };
+		E877132F1B8B1943003C2FEF /* mmMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mmMenuView.h; sourceTree = "<group>"; };
 		E88F98D31B83EE0800CEB63F /* Shared.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Shared.xcconfig; sourceTree = "<group>"; };
 		E88F98EC1B84B64300CEB63F /* mmKinParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmKinParser.cpp; path = ../../../MoMa/parsers/mmKinParser.cpp; sourceTree = "<group>"; };
 		E88F98ED1B84B64300CEB63F /* mmKinParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmKinParser.h; path = ../../../MoMa/parsers/mmKinParser.h; sourceTree = "<group>"; };
@@ -549,6 +557,10 @@
 		9F2E1BFC1B76645000DB082C /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				E877132E1B8B1943003C2FEF /* mmMenuView.cpp */,
+				E877132F1B8B1943003C2FEF /* mmMenuView.h */,
+				E877132A1B8B192F003C2FEF /* mmPlayBar.cpp */,
+				E877132B1B8B192F003C2FEF /* mmPlayBar.h */,
 				9F2E1C091B76645000DB082C /* MoMaUI.h */,
 				9F2E1C051B76645000DB082C /* mmSceneApp.cpp */,
 				9F2E1C061B76645000DB082C /* mmSceneApp.h */,
@@ -884,6 +896,7 @@
 				9F2E1C161B76645000DB082C /* mmSceneApp.h in Headers */,
 				9F2E1F691B7664B800DB082C /* UdpSocket.h in Headers */,
 				9F2E1FA71B7664B800DB082C /* ofxUIImageToggle.h in Headers */,
+				E87713311B8B1943003C2FEF /* mmMenuView.h in Headers */,
 				9F2E1FBC1B7664B800DB082C /* ofxUIRangeSlider.h in Headers */,
 				9F00DC7B1A9C8A580022A309 /* mmGeometry.h in Headers */,
 				9F2E1F9F1B7664B800DB082C /* ofxUIImage.h in Headers */,
@@ -961,6 +974,7 @@
 				9F2E1FB31B7664B800DB082C /* ofxUIMultiImageButton.h in Headers */,
 				9F497BEB1AC752E700F4DE3D /* mmV3dParser.h in Headers */,
 				9F2E1FD01B7664B800DB082C /* ofxUITextArea.h in Headers */,
+				E877132D1B8B192F003C2FEF /* mmPlayBar.h in Headers */,
 				9F00DC5F1A9C8A1F0022A309 /* mmFrame.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1023,6 +1037,7 @@
 				9F2E1C111B76645000DB082C /* mmOfBone.cpp in Sources */,
 				9F2E1C0F1B76645000DB082C /* mmCanvas.cpp in Sources */,
 				9F2E1FA81B7664B800DB082C /* ofxUILabel.cpp in Sources */,
+				E877132C1B8B192F003C2FEF /* mmPlayBar.cpp in Sources */,
 				9F00DC7E1A9C8A580022A309 /* mmSignal.cpp in Sources */,
 				9F00DC781A9C8A580022A309 /* mmBoundingBox.cpp in Sources */,
 				E8C8EFF41B418CCF00AD198F /* mmContainer.cpp in Sources */,
@@ -1088,6 +1103,7 @@
 				9F2E1F661B7664B800DB082C /* NetworkingUtils.cpp in Sources */,
 				9F2E1FA61B7664B800DB082C /* ofxUIImageToggle.cpp in Sources */,
 				9F497BE81AC752E700F4DE3D /* mmFlatParser.cpp in Sources */,
+				E87713301B8B1943003C2FEF /* mmMenuView.cpp in Sources */,
 				9F2E1F7A1B7664B800DB082C /* ofxOscBundle.cpp in Sources */,
 				9F2E1FBD1B7664B800DB082C /* ofxUIRectangle.cpp in Sources */,
 				9F2E1F941B7664B800DB082C /* ofxUIDragableLabelButton.cpp in Sources */,
