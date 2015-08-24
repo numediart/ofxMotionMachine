@@ -228,7 +228,7 @@ void Canvas::remove() {
         for(int i=0;i<childrenCanvas[g].size();i++) {
 
             childrenCanvas[g][i]->remove();
-
+            if(childrenCanvas.size()<=g) break;
         }
     }
     
@@ -239,7 +239,8 @@ void Canvas::remove() {
     }
     else {  
 
-        _parent->childrenCanvas.erase(_parent->childrenCanvas.begin()+_group,_parent->childrenCanvas.begin()+_index);
+        _parent->childrenCanvas[_group].erase(_parent->childrenCanvas[_group].begin()+_index);
+        if( _parent->childrenCanvas[_group].size() == 0 ) _parent->childrenCanvas.erase( _parent->childrenCanvas.begin()+_group );
     }
     allCanvas.erase(allCanvas.begin()+_allIndex);
     delete this;

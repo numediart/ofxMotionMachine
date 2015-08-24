@@ -32,8 +32,7 @@ namespace MoMa {
     protected:
         
         SceneApp *app;
-        ofxUITextArea *activeMode;
-        ofxUIRadio *modeRadio, *playRadio;
+        ofxUIRadio *modeRadio;//, *playRadio;
     };
 }
 

@@ -58,6 +58,7 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     _figure[figureIdx].yTop = 0; // figure
     _figure[figureIdx].yBot = ofGetHeight();
     menuView = NULL;
+    playBar = NULL;
     addMenuView();
 
     hasDragEventRegTrack = false;
@@ -507,14 +508,12 @@ void MoMa::SceneApp::keyPressed( ofKeyEventArgs &key ) {
 
                 if ( key.key == OF_KEY_LEFT ) {
 
-                    appAtPos.index--; // Decrement and update time
-                    appAtPos.time = getTimeFromIndex( appAtPos.index );
+                    previousIndex();
                 }
 
                 if ( key.key == OF_KEY_RIGHT ) {
 
-                    appAtPos.index++; // Increment and update time
-                    appAtPos.time = getTimeFromIndex( appAtPos.index );
+                    nextIndex();
                 }
             }
         }
@@ -781,7 +780,7 @@ void MoMa::SceneApp::dragged( ofDragInfo &drag ) {
 
             dragEventRegTrack->load( trackFileNames[k] );
         }
-        
+
         setFrameRate( dragEventRegTrack->frameRate() );
         setPlayerSize( dragEventRegTrack->maxTime() );
     }
@@ -1432,6 +1431,20 @@ void MoMa::SceneApp::stop( void ) {
     onStop();
 }
 
+void MoMa::SceneApp::previousIndex( void ) {
+
+    if( appAtPos.index < lowBound.index ) appAtPos.index = highBound.index-1;
+    else appAtPos.index--; // Decrement and update time
+    appAtPos.time = getTimeFromIndex( appAtPos.index );
+}
+
+void MoMa::SceneApp::nextIndex( void ) {
+
+    if( appAtPos.index == highBound.index-1 ) appAtPos.index = lowBound.index;
+    else appAtPos.index++; // Increment and update time
+    appAtPos.time = getTimeFromIndex( appAtPos.index );
+}
+
 bool MoMa::SceneApp::isPlaying( void ) {
 
     return( isPlayback );
@@ -1574,8 +1587,9 @@ void MoMa::SceneApp::disableShortcuts( void ) {
 void MoMa::SceneApp::addMenuView( void ) {
 
     if(!menuView) {
-        
+
         menuView = new MenuView(this);
+        if(playBar) playBar->remove();            
         playBar = new PlayBar(this, DEFAULT, DEFAULT, menuView);
     }
 }
@@ -1587,4 +1601,17 @@ void MoMa::SceneApp::removeMenuView( void ) {
         menuView->remove();
         //delete menuView;
     }
+    menuView = NULL;
+    playBar = NULL;
+}
+
+void MoMa::SceneApp::addPlayerBar( void ) {
+
+    if(!playBar) new PlayBar(this);
+}
+
+void MoMa::SceneApp::removePlayerBar( void ) {
+
+    if(playBar) playBar->remove();
+    playBar = NULL;
 }
