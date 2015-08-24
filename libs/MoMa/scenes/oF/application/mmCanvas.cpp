@@ -42,11 +42,12 @@ Canvas::Canvas( SceneApp *app, std::string title, Canvas *parent, int group,  bo
     _alignment(DEFAULT), 
     _minified(minified) {
 
-        setupCanvas();
+    setupCanvas();
 }
 
 void Canvas::setupCanvas() {
 
+    _allIndex = allCanvas.size();
     allCanvas.push_back(this);
     childrenCanvas.reserve(1);
 
@@ -87,58 +88,58 @@ void Canvas::initCanvas() {
     if( ( relative == NULL && position == DEFAULT && _index > 0 ) ||
         ( relative == NULL && position == DEFAULT && _parent != NULL ) ) {
 
-            // Default relative placement ( first canvas (index = 0) placed on
-            // Top/Right corner; next ones placed below, right edge aligned )
+        // Default relative placement ( first canvas (index = 0) placed on
+        // Top/Right corner; next ones placed below, right edge aligned )
 
-            if(_parent != NULL) { //Children placement
+        if(_parent != NULL) { //Children placement
 
-                if(_index != 0) relative = _parent->childrenCanvas[_group][_index-1]; //Child placed relative to the previous child
-                else relative = _parent; //First cihld placed relative to the parent
-            }
-            else relative = mainCanvas[_index-1]; //Main canvas placed relative to previous canvas
+            if(_index != 0) relative = _parent->childrenCanvas[_group][_index-1]; //Child placed relative to the previous child
+            else relative = _parent; //First cihld placed relative to the parent
+        }
+        else relative = mainCanvas[_index-1]; //Main canvas placed relative to previous canvas
 
-            float H = getRect()->getHeight();
-            float W = getRect()->getWidth();
-            float relativeX = relative->getRect()->getX();
-            float relativeY = relative->getRect()->getY();
-            float relativeH = relative->getRect()->getHeight();
-            float relativeW = relative->getRect()->getWidth();
+        float H = getRect()->getHeight();
+        float W = getRect()->getWidth();
+        float relativeX = relative->getRect()->getX();
+        float relativeY = relative->getRect()->getY();
+        float relativeH = relative->getRect()->getHeight();
+        float relativeW = relative->getRect()->getWidth();
 
-            if(relativeY + relativeH + 10 + H < ofGetHeight() && _limit <1 ) { // test window bottom limit
+        if(relativeY + relativeH + 10 + H < ofGetHeight() && _limit <1 ) { // test window bottom limit
 
-                position = BELOW;
-                alignment = RIGHT;
-            }
-            else if(relativeX - 10 - W > 0 && _limit < 2) { // test window left limit
+            position = BELOW;
+            alignment = RIGHT;
+        }
+        else if(relativeX - 10 - W > 0 && _limit < 2) { // test window left limit
 
-                position = LEFT;
-                if(_limit == 0) alignment = BOTTOM;
-                else alignment = BELOW;
-                _limit = 1;
-            }
-            else if(relativeY - 10 - H > 0 && _limit < 3) { // test window top limit
+            position = LEFT;
+            if(_limit == 0) alignment = BOTTOM;
+            else alignment = BELOW;
+            _limit = 1;
+        }
+        else if(relativeY - 10 - H > 0 && _limit < 3) { // test window top limit
 
-                position = ABOVE;
-                if(_limit == 1 ) alignment = LEFTSIDE;			
-                else alignment = LEFT;			
-                _limit = 2;
-            }  
-            else if(relativeX + relativeW + 10 + W  < ofGetWidth() - 10 - mainCanvas[0]->getRect()->getWidth() - 10 && _limit < 4) { // test window right limit (taking into account the first Canvas canvas supposed to be on the top/right corner)
+            position = ABOVE;
+            if(_limit == 1 ) alignment = LEFTSIDE;          
+            else alignment = LEFT;          
+            _limit = 2;
+        }  
+        else if(relativeX + relativeW + 10 + W  < ofGetWidth() - 10 - mainCanvas[0]->getRect()->getWidth() - 10 && _limit < 4) { // test window right limit (taking into account the first Canvas canvas supposed to be on the top/right corner)
 
-                position = RIGHT;
-                if(_limit == 2 ) alignment = TOP;
-                else alignment = ABOVE;			
-                _limit = 3;
-            }  
+            position = RIGHT;
+            if(_limit == 2 ) alignment = TOP;
+            else alignment = ABOVE;         
+            _limit = 3;
+        }  
 
-            else {
+        else {
 
-                relative = NULL;
-                _limit = 4;
-                cout << "Too much mainCanvas for default handle\n";
-                setPosition(0,0);
-                return;            
-            } 
+            relative = NULL;
+            _limit = 4;
+            cout << "Too much mainCanvas for default handle\n";
+            setPosition(0,0);
+            return;            
+        } 
     }
 
     setPos(position,alignment,relative);
@@ -220,6 +221,29 @@ void Canvas::resetPositions() {
     }
 }
 
+void Canvas::remove() {
+
+    //delete children
+    for(int g=0;g<childrenCanvas.size();g++) {
+        for(int i=0;i<childrenCanvas[g].size();i++) {
+
+            childrenCanvas[g][i]->remove();
+
+        }
+    }
+    
+    //erase from canvas groups
+    if(_parent == NULL) {
+
+        mainCanvas.erase(mainCanvas.begin()+_index);
+    }
+    else {  
+
+        _parent->childrenCanvas.erase(_parent->childrenCanvas.begin()+_group,_parent->childrenCanvas.begin()+_index);
+    }
+    allCanvas.erase(allCanvas.begin()+_allIndex);
+    delete this;
+}
 
 void Canvas::deleteCanvas() {
 

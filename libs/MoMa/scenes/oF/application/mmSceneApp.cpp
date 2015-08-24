@@ -1,5 +1,6 @@
 #include "mmSceneApp.h"
 #include "mmMenuView.h"
+#include "mmPlayBar.h"
 
 using namespace std;
 using namespace arma;
@@ -56,11 +57,12 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     _figure.resize( 1 ); // full-screen
     _figure[figureIdx].yTop = 0; // figure
     _figure[figureIdx].yBot = ofGetHeight();
+    menuView = NULL;
+    addMenuView();
 
     hasDragEventRegTrack = false;
-    hasMouseEventRegLabelList = false;
-
-    oscRcvPort = 7000; setup();
+    hasMouseEventRegLabelList = false;  
+    oscRcvPort = 7000;  setup();
     receiver.setup( oscRcvPort );
 
     insertNewLabel = false;
@@ -1571,5 +1573,18 @@ void MoMa::SceneApp::disableShortcuts( void ) {
 
 void MoMa::SceneApp::addMenuView( void ) {
 
-    menuView = new MenuView(this);
+    if(!menuView) {
+        
+        menuView = new MenuView(this);
+        playBar = new PlayBar(this, DEFAULT, DEFAULT, menuView);
+    }
+}
+
+void MoMa::SceneApp::removeMenuView( void ) {
+
+    if(menuView) {
+
+        menuView->remove();
+        //delete menuView;
+    }
 }
