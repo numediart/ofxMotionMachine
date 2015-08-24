@@ -94,29 +94,28 @@ mat Muller::continuous( Track &track ) {
     
     if( track.nOfFrames() > 0 && track.hasNodeList ) {
         
-        cont.set_size( track.nOfFrames(), nOfMullerFeatures );
-        cont( 0, 0 ) = 0.0f; // Initialise feature matrix
-        
-        int Neck = track.index( "Neck" );
-        int LShoulder = track.index( "LShoulder" );
-        int RShoulder = track.index( "RShoulder" );
-        int LElbow = track.index( "LElbow" );
-        int RElbow = track.index( "RElbow" );
-        int LWrist = track.index( "LWrist" );
-        int RWrist = track.index( "RWrist" );
-        int Thorax = track.index( "Thorax" );
-        int Pelvis = track.index( "Pelvis" );
-        int LHip = track.index( "LHip" );
-        int RHip = track.index( "RHip" );
-        int LKnee = track.index( "LKnee" );
-        int RKnee = track.index( "RKnee" );
-        int LAnkle = track.index( "LAnkle" );
-        int RAnkle = track.index( "RAnkle" );
-        int LFoot = track.index( "LFoot" );
-        int RFoot = track.index( "RFoot" );
+        cont = zeros(track.nOfFrames(), nOfMullerFeatures);
         
         if( track.nOfFrames() > 1 ) {
             
+            int Neck = track.index( "Neck" );
+            int LShoulder = track.index( "LShoulder" );
+            int RShoulder = track.index( "RShoulder" );
+            int LElbow = track.index( "LElbow" );
+            int RElbow = track.index( "RElbow" );
+            int LWrist = track.index( "LWrist" );
+            int RWrist = track.index( "RWrist" );
+            int Thorax = track.index( "Thorax" );
+            int Pelvis = track.index( "Pelvis" );
+            int LHip = track.index( "LHip" );
+            int RHip = track.index( "RHip" );
+            int LKnee = track.index( "LKnee" );
+            int RKnee = track.index( "RKnee" );
+            int LAnkle = track.index( "LAnkle" );
+            int RAnkle = track.index( "RAnkle" );
+            int LFoot = track.index( "LFoot" );
+            int RFoot = track.index( "RFoot" );
+
             for( int t=1; t<track.nOfFrames(); t++ ) {
                 
                 vec nullVec = zeros( 3, 1 );
