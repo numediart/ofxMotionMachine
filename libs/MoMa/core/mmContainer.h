@@ -36,16 +36,16 @@ namespace MoMa {
         
         TimedData( void ) { mTimed = false; mFrameRate = 1.0f; }
         
-        inline const arma::vec &getTimeVec( void ){ return( mTimeVec ); }
+        inline const arma::vec &getTimeVec( void ) const{ return( mTimeVec ); }
         inline arma::vec &getTimeVecRef( void ){ return( mTimeVec ); }
-        inline bool isTimed( void ){ return( mTimed ); }
+        inline bool isTimed( void ) const { return( mTimed ); }
         
         inline double time( unsigned int index );
         inline double maxTime( void ); // Time getters
         
         virtual unsigned int nOfFrames( void ) { return( 0 ); }
         inline bool setFrameRate( float pFrameRate );
-        inline float frameRate( void ); // Frame
+        inline double frameRate( void ) const; // Frame
         
       protected:
         
@@ -82,7 +82,7 @@ namespace MoMa {
         else { mFrameRate = pFrameRate; return( true ); }
     }
     
-    float TimedData::frameRate( void ) {
+    double TimedData::frameRate( void ) const {
         
         // Get frame rate ( if any )
         return( mTimed?-1.0f:mFrameRate );
@@ -109,7 +109,7 @@ namespace MoMa {
         bool setData( float pFrameRate, const arma::vec &pData );
         bool setData( arma::vec const &pTime, const arma::vec &pData );
         
-        inline const arma::vec &getData( void ) { return data; }
+        inline const arma::vec &getData( void ) const { return data; }
         inline arma::vec &getRefData( void ) { return data; }
         
         unsigned int nOfFrames( void ) { return( data.n_elem ); }
@@ -296,7 +296,7 @@ namespace MoMa {
         bool setData( float pFrameRate, const arma::mat &pData ); // Set indexed
         bool setData( const arma::vec &pTime, const arma::mat &pData ); // Set timed
         
-        inline const arma::mat &getData( void ) { return data; } // Get data copy
+        inline const arma::mat &getData( void ) const { return data; } // Get data copy
         inline arma::mat &getRefData( void ) { return data; } // Get data ref
         
         bool setInterpAlgo( InterpTypes interpAlgo );
@@ -509,7 +509,7 @@ namespace MoMa {
         bool setData( float pFrameRate, const arma::cube &pData ); // Set indexed
         bool setData( const arma::vec &pTime, const arma::cube &pData ); // Set timed
         
-        inline const arma::cube &getData( void ) { return data; } // Get data copy
+        inline const arma::cube &getData( void ) const{ return data; } // Get data copy
         inline arma::cube &getRefData( void ) { return data; } // Get data ref
         
         bool setInterpAlgo( InterpTypes interpAlgo ); // Set interp algo
