@@ -34,18 +34,22 @@ namespace MoMa {
         
       public:
         
-        TimedData( void ) { mTimed = false; mFrameRate = 1.0f; }
+        TimedData( void ) { mTimed = false; mFrameRate = 1.0f;mInitialTime=0.f; }
         
         inline const arma::vec &getTimeVec( void ) const{ return( mTimeVec ); }
         inline arma::vec &getTimeVecRef( void ){ return( mTimeVec ); }
         inline bool isTimed( void ) const { return( mTimed ); }
         
-        inline double time( unsigned int index );
-        inline double maxTime( void ); // Time getters
+        inline double time( unsigned int index ) const;
+        inline unsigned int nearestIndex( double time ) const;
+        inline double maxTime( void ) ; // Time getters
         
         virtual unsigned int nOfFrames( void ) { return( 0 ); }
         inline bool setFrameRate( float pFrameRate );
+        inline bool setInitialTime( float pInitialTime );
         inline double frameRate( void ) const; // Frame
+        inline double initialTime( void ) const; // Frame
+        
         
       protected:
         
@@ -54,25 +58,38 @@ namespace MoMa {
         void interpIndexFind( const arma::vec pVec, double pValue, unsigned int &index1,
         double &weight1, unsigned int &index2, double &weight2 ); // Interpolation data
         
+    protected:
         arma::vec mTimeVec; // Time stamp vector
         float mFrameRate; // Frame rate (if any)
+        float mInitialTime;
         bool mTimed; // Is it timed or not?
     };
     
     // - Inlined functions -
     
-    double TimedData::time( unsigned int index ) {
+    double TimedData::time( unsigned int index ) const{
         
         // Return/compute time at current index
         if( mTimed ) return( mTimeVec[ index ] );
-        else return( ( (double)index ) / mFrameRate );
+        else return( mInitialTime+( (double)index ) / mFrameRate );
     }
     
+    unsigned int TimedData::nearestIndex( double time ) const{
+        if (!mTimed){
+            unsigned int lIndex=(time-mInitialTime)*mFrameRate;
+            return lIndex;
+        }
+        else{
+            unsigned int lIndex;
+            arma::abs(mTimeVec-time).min(lIndex);
+            return lIndex;
+        }
+    }
     double TimedData::maxTime( void ) {
         
         // Return/compute time at the last index of time
         if( mTimed ) return( mTimeVec[ mTimeVec.n_elem-1 ] );
-        else if( nOfFrames() > 0 ) return( ( (double)( nOfFrames()-1 ) ) / mFrameRate );
+        else if( nOfFrames() > 0 ) return( ( mInitialTime+(double)( nOfFrames()-1 ) ) / mFrameRate );
         else return( 0.0f ); // We make sure that an empty container is maxTime = 0
     }
     
@@ -82,10 +99,22 @@ namespace MoMa {
         else { mFrameRate = pFrameRate; return( true ); }
     }
     
+    bool TimedData::setInitialTime( float pInitialTime ) {
+        
+        if( mTimed ) return( false ); // Set frame rate
+        else { mInitialTime = pInitialTime; return( true ); }
+    }
+    
     double TimedData::frameRate( void ) const {
         
         // Get frame rate ( if any )
         return( mTimed?-1.0f:mFrameRate );
+    }
+    
+    double TimedData::initialTime( void ) const {
+        
+        // Get Initial Time ( if any )
+        return( mTimed?-1.0f:mInitialTime );
     }
     
     // == TIMED VEC ==
@@ -140,7 +169,7 @@ namespace MoMa {
         
         } else {
             
-            return( this->data( (int)(pTime*mFrameRate) ) );
+            return( this->data( (int)((pTime-mInitialTime)*mFrameRate) ) );
         }
         
         return( 0.0 );
@@ -223,12 +252,14 @@ namespace MoMa {
             }
         
         } else {
-            
-            if( std::abs( (pTime-mFrameRate*round(pTime/mFrameRate)) ) <= 1E-6 ) {
+            double lTime=pTime-mInitialTime;
+            if (lTime<0.0)
+                return false;
+            if( std::abs( (lTime-mFrameRate*round(lTime/mFrameRate)) ) <= 1E-6 ) {
                 
-                if( (int)round(pTime/mFrameRate) < data.n_elem ) {
+                if( (int)round(lTime/mFrameRate) < data.n_elem ) {
                     
-                    data( (int)round(pTime/mFrameRate) ) = pData;
+                    data( (int)round(lTime/mFrameRate) ) = pData;
                     
                     return true;
                 
@@ -239,7 +270,7 @@ namespace MoMa {
     }
     
     bool TimedVec::push( double pData, double pTime ) {
-        
+        if (!mTimed) return false;
         if( pTime < this->mTimeVec( mTimeVec.n_elem-1 ) ) return false;
         this->set( pData, pTime );
         
@@ -264,10 +295,15 @@ namespace MoMa {
     
     TimedVec TimedVec::sub( int pBegIndex, int pEndIndex ) {
     
-        TimedVec oneVec = *this;
+        TimedVec oneVec;
         
-        oneVec.data = data.subvec( pBegIndex, pEndIndex ); // Chopping data vector and timestamps
-        if( isTimed() ) oneVec.getTimeVecRef() = getTimeVecRef().subvec( pBegIndex, pEndIndex );
+        if( isTimed() )
+            oneVec.setData(this->getTimeVecRef().subvec( pBegIndex, pEndIndex ),this->data.subvec( pBegIndex, pEndIndex ));
+        else
+        {
+            oneVec.setData(mFrameRate,this->data.subvec( pBegIndex, pEndIndex ));
+            oneVec.setInitialTime(this->mInitialTime+pBegIndex*mFrameRate);
+        }
         
         return( oneVec );
     }
@@ -333,11 +369,11 @@ namespace MoMa {
         
         } else {
             
-            if( ( pTime*mFrameRate ) > ( data.n_elem-1 ) ) {
+            if( ( (pTime-mInitialTime)*mFrameRate ) > ( data.n_elem-1 ) ) {
                 
                 return arma::zeros( 1, 1 );
             
-            } else return this->data.col( (int)(pTime*mFrameRate) );
+            } else return this->data.col( (int)((pTime-mInitialTime)*mFrameRate) );
         }
         
         return arma::zeros( 1, 1 );
@@ -423,11 +459,14 @@ namespace MoMa {
         
         } else {
             
-            if( std::abs( pTime-mFrameRate*round(pTime/mFrameRate) ) <= 1E-6 ) {
+            double lTime=pTime-mInitialTime;
+            if (lTime<0.0)
+                return false;
+            if( std::abs( lTime-mFrameRate*round(lTime/mFrameRate) ) <= 1E-6 ) {
                 
-                if( (int)round(pTime/mFrameRate) < data.n_cols ) {
+                if( (int)round(lTime/mFrameRate) < data.n_cols ) {
                     
-                    data.col( (int)round(pTime/mFrameRate) ) = pData;
+                    data.col( (int)round(lTime/mFrameRate) ) = pData;
                     
                     return true;
                 
@@ -463,10 +502,15 @@ namespace MoMa {
     
     TimedMat TimedMat::sub( int pBegIndex, int pEndIndex ) {
         
-        TimedMat oneMat = *this;
+        TimedMat oneMat;
         
-        oneMat.data = data.submat( 0, pBegIndex, data.n_rows-1, pEndIndex ); // Chopping matrix
-        if( isTimed() ) oneMat.getTimeVecRef() = getTimeVecRef().subvec( pBegIndex, pEndIndex );
+        if( isTimed() )
+            oneMat.setData(this->getTimeVecRef().subvec( pBegIndex, pEndIndex ),this->data.cols( pBegIndex, pEndIndex ));
+        else
+        {
+            oneMat.setData(mFrameRate,this->data.cols( pBegIndex, pEndIndex ));
+            oneMat.setInitialTime(this->mInitialTime+pBegIndex*mFrameRate);
+        }
         
         return( oneMat );
     }
@@ -477,10 +521,11 @@ namespace MoMa {
         arma::vec elemVec;
         
         elemVec = data.row( pIndex ).t();
-        
         if( mTimed ) elem.setData( mTimeVec, elemVec );
-        else elem.setData( mFrameRate, elemVec );
-        
+        else {
+            elem.setData( mFrameRate, elemVec );
+            elem.setInitialTime(this->mInitialTime);
+        }
         return( elem );
     }
     
@@ -559,7 +604,7 @@ namespace MoMa {
             
         } else {
             
-            return this->data.slice( (int)( pTime*mFrameRate ) );
+            return this->data.slice( (int)( (pTime-mInitialTime)*mFrameRate ) );
         }
         
         return arma::zeros( 1, 1 );
@@ -647,11 +692,14 @@ namespace MoMa {
         
         } else {
             
-            if( std::abs( pTime-this->mFrameRate*round( pTime/mFrameRate ) ) <= 1E-6 ) {
+            double lTime=pTime-mInitialTime;
+            if (lTime<0.0)
+                return false;
+            if( std::abs( lTime-this->mFrameRate*round( lTime/mFrameRate ) ) <= 1E-6 ) {
                 
-                if( (int)round( pTime/mFrameRate ) < data.n_slices ) {
+                if( (int)round( lTime/mFrameRate ) < data.n_slices ) {
                     
-                    data.slice( (int)round( pTime/mFrameRate ) ) = pData;
+                    data.slice( (int)round( lTime/mFrameRate ) ) = pData;
                     
                     return true;
                 
@@ -662,7 +710,8 @@ namespace MoMa {
     }
     
     bool TimedCube::push( const arma::mat &pData, double pTime ) {
-        
+        if (!mTimed)
+            return false;
         if( pTime < this->mTimeVec( mTimeVec.n_elem-1 ) ) return false;
         this->set( pData, pTime );
         
@@ -670,7 +719,8 @@ namespace MoMa {
     }
     
     bool TimedCube::push( const arma::mat &pData ) {
-        
+        if (mTimed)
+            return false;
         if( data.n_elem > 0 && ( pData.n_rows != data.n_rows
         || pData.n_cols != data.n_cols ) ) return false;
         
@@ -684,7 +734,6 @@ namespace MoMa {
         else return false;
 
         return true;
-        
     };
     
     void TimedCube::pop( void ) {
@@ -695,10 +744,15 @@ namespace MoMa {
     
     TimedCube TimedCube::sub( int pBegIndex, int pEndIndex ) {
         
-        TimedCube oneCube = *this;
+        TimedCube oneCube;
         
-        oneCube.data = data.subcube( 0, 0, pBegIndex, data.n_rows-1, data.n_cols-1, pEndIndex );
-        if( isTimed() ) oneCube.getTimeVecRef() = getTimeVecRef().subvec( pBegIndex, pEndIndex );
+        if( isTimed() )
+            oneCube.setData(this->getTimeVecRef().subvec( pBegIndex, pEndIndex ),this->data.slices( pBegIndex, pEndIndex ));
+        else
+        {
+            oneCube.setData(mFrameRate,this->data.slices( pBegIndex, pEndIndex ));
+            oneCube.setInitialTime(this->mInitialTime+pBegIndex*mFrameRate);
+        }
         
         return( oneCube );
     }

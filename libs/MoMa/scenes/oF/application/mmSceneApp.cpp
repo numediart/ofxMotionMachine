@@ -850,7 +850,7 @@ void MoMa::SceneApp::render2d( void ) {
         for( int f=0; f<_figure[fIdx].plot.size(); f++ ) {
 
             // Compute plot-specific index at which we can grab plot value
-            float appAtIdx = appAtTime * _figure[fIdx].plot[f].data.frameRate(); // TODO : put that in timed container
+            float appAtIdx = _figure[fIdx].plot[f].data.nearestIndex(appAtTime); 
 
             ofPoint pnt = _figure[fIdx].plot[f].line.getPointAtIndexInterpolated( appAtIdx ); // Apply screen mapping here
             float value = ofMap( pnt.y, _figure[fIdx].yBot-5, _figure[fIdx].yTop+5, _figure[fIdx].yMin, _figure[fIdx].yMax );
