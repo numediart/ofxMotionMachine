@@ -1278,10 +1278,10 @@ void MoMa::SceneApp::setFrameRate( float rate ) {
 
     frameRate = rate;
     
-    lowBound.setTime( lowBound.time(), frameRate );
-    highBound.setTime( highBound.time(), frameRate );
-    maxBound.setTime( maxBound.time(), frameRate );
-    appMoment.setTime( appMoment.time(), frameRate );
+    lowBound.setFrameRate( frameRate );
+    highBound.setFrameRate( frameRate );
+    maxBound.setFrameRate( frameRate );
+    appMoment.setFrameRate( frameRate );
     
     // highBound.time = getTimeFromIndex( highBound.index );
     // appAtPos.time = getTimeFromIndex( appAtPos.index ); // Check app time
