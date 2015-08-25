@@ -22,6 +22,7 @@ Moment::Moment( unsigned int idx, double frameRate ) {
 void Moment::setFrameRate( double frameRate ) {
 
     _frameRate = frameRate;
+    _time = (double)_index / _frameRate;
 }
 
 void Moment::setTime( double time, double frameRate ) {
