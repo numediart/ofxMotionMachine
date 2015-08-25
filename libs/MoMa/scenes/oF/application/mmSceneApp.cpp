@@ -39,14 +39,11 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     frameRate = 100.0f;
     isBegin = true;
 
-    lowBound.index = 0;
-    highBound.index = 1;
-    appAtPos.index = 0;
-
-    lowBound.time = 0.0f;
-    highBound.time = 1.0f;
-    appAtPos.time = 0.0f;
-
+    lowBound.setIndex( 0, frameRate );
+    highBound.setIndex( 1, frameRate );
+    maxBound.setIndex( 1, frameRate );
+    appMoment.setIndex( 0, frameRate );
+    
     zoomLowBound = -1;
     zoomHighBound = -1;
     isZoom = false;
@@ -106,9 +103,12 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
     case SCRUB: {
 
         if( activeMode == SCENE2D || activeMode == ANNOTATE ) {
+            
+            appMoment.setTime( ofMap( ofGetMouseX(), 0, ofGetWidth(),
+            lowBound.time(), highBound.time(), true ), frameRate );
 
-            appAtPos.index = ofMap( ofGetMouseX(), 0, ofGetWidth(), lowBound.index, highBound.index, true );
-            appAtPos.time = ofMap( ofGetMouseX(), 0, ofGetWidth(), lowBound.time, highBound.time, true );
+            // appAtPos.index = ofMap( ofGetMouseX(), 0, ofGetWidth(), lowBound.index, highBound.index, true );
+            // appAtPos.time = ofMap( ofGetMouseX(), 0, ofGetWidth(), lowBound.time, highBound.time, true );
         }
 
         break;
@@ -116,8 +116,10 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
 
     case STREAM: {
 
-        appAtPos.index = highBound.index;
-        appAtPos.time = highBound.time;
+        // appAtPos.index = highBound.index;
+        // appAtPos.time = highBound.time;
+        
+        appMoment.setTime( highBound.time(), frameRate );
 
         break;
                  }
@@ -130,8 +132,10 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
 
             if( isPlayback ) {
 
-                appAtPos.time = appAtPos.time + timeStep;
-                appAtPos.index = getIndexFromTime( appAtPos.time );
+                // appAtPos.time = appAtPos.time + timeStep;
+                // appAtPos.index = getIndexFromTime( appAtPos.time );
+                
+                appMoment.setTime( appMoment.time() + timeStep, frameRate );
 
                 if( isBegin ) {
 
@@ -139,15 +143,19 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
                     isBegin = false;
                 }
 
-                if( appAtPos.time > highBound.time ) {
+                if( appMoment.time() > highBound.time() ) {
 
-                    appAtPos.time = highBound.time; // Set to max first
-                    appAtPos.index = getIndexFromTime( appAtPos.time );
+                    // appAtPos.time = highBound.time; // Set to max first
+                    // appAtPos.index = getIndexFromTime( appAtPos.time );
+                    
+                    appMoment.setTime( highBound.time(), frameRate );
 
                     onReachEnd();
 
-                    appAtPos.time = lowBound.time; // Then set to min
-                    appAtPos.index = getIndexFromTime( appAtPos.time );
+                    // appAtPos.time = lowBound.time; // Then set to min
+                    // appAtPos.index = getIndexFromTime( appAtPos.time );
+                    
+                    appMoment.setTime( lowBound.time(), frameRate );
 
                     isBegin = true;
                 }
@@ -313,11 +321,11 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
         float selHighBound = 0;
         float absPlaybackPos = 0;
 
-        if( maxBound.index > 0 ) {
+        if( maxBound.time() > 0.0f ) {
 
-            selLowBound = ofMap( lowBound.index, 0, maxBound.index, 1.5f, ofGetWidth()-0.5f );
-            selHighBound = ofMap( highBound.index, 0, maxBound.index, 1.5f, ofGetWidth()-0.5f );
-            absPlaybackPos = ofMap( appAtPos.index, 0, maxBound.index, 0, ofGetWidth() );
+            selLowBound = ofMap( lowBound.time(), 0, maxBound.time(), 1.5f, ofGetWidth()-0.5f );
+            selHighBound = ofMap( highBound.time(), 0, maxBound.time(), 1.5f, ofGetWidth()-0.5f );
+            absPlaybackPos = ofMap( appMoment.time(), 0, maxBound.time(), 0, ofGetWidth() );
         }
 
         ofPushStyle();
@@ -577,13 +585,12 @@ void MoMa::SceneApp::mousePressed( ofMouseEventArgs &mouse ){
             }
 
             if( insertNewLabel == true && newLabel == true ) {
-
-                // TODO Label times could be saved as seconds
-                ( *mouseEventRegLabelList ).push_back( Label( ofMap( mouse.x,
-                0, ofGetWidth(), lowBound.time, highBound.time ), "new" ) );
                 
-                selectedLabelIdx = (*mouseEventRegLabelList).size()-1;
-                (*mouseEventRegLabelList).back().state = SELECTED;
+                ( *mouseEventRegLabelList ).push_back( Label( Moment( ofMap( mouse.x, 0,
+                ofGetWidth(), lowBound.time(), highBound.time() ), frameRate ), "new" ) );
+                
+                selectedLabelIdx = ( *mouseEventRegLabelList ).size()-1;
+                ( *mouseEventRegLabelList ).back().state = SELECTED;
                 isLabelSelected = true;
             }
         }
@@ -609,8 +616,8 @@ void MoMa::SceneApp::mouseReleased( ofMouseEventArgs &mouse ) {
 
             zoomHighBound = mouse.x;
 
-            int newMin = ofMap( zoomLowBound, 0, ofGetWidth(), lowBound.index, highBound.index );
-            int newMax = ofMap( zoomHighBound, 0, ofGetWidth(), lowBound.index, highBound.index );
+            double newMin = ofMap( zoomLowBound, 0, ofGetWidth(), lowBound.time(), highBound.time() );
+            double newMax = ofMap( zoomHighBound, 0, ofGetWidth(), lowBound.time(), highBound.time() );
 
             zoomLowBound = zoomHighBound = -1;
             zoom( newMin, newMax );
@@ -624,8 +631,8 @@ void MoMa::SceneApp::mouseReleased( ofMouseEventArgs &mouse ) {
 
             zoomHighBound = mouse.x;
 
-            int newMin = ofMap( zoomLowBound, 0, ofGetWidth(), lowBound.index, highBound.index );
-            int newMax = ofMap( zoomHighBound, 0, ofGetWidth(), lowBound.index, highBound.index );
+            double newMin = ofMap( zoomLowBound, 0, ofGetWidth(), lowBound.time(), highBound.time() );
+            double newMax = ofMap( zoomHighBound, 0, ofGetWidth(), lowBound.time(), highBound.time() );
 
             zoomLowBound = zoomHighBound = -1;
             zoom( newMin, newMax );
@@ -663,10 +670,9 @@ void MoMa::SceneApp::mouseDragged( ofMouseEventArgs &mouse ) {
         }
 
         if( hasMouseEventRegLabelList && isLabelSelected ) {
-
-            // TODO Handle time here too
-            ( *mouseEventRegLabelList )[ selectedLabelIdx ].time = ofMap(
-            mouse.x, 0, ofGetWidth(), lowBound.time, highBound.time );
+            
+            ( *mouseEventRegLabelList )[ selectedLabelIdx ].moment.setTime( ofMap(
+            mouse.x, 0, ofGetWidth(), lowBound.time(), highBound.time() ), frameRate );
         }
 
         break;
@@ -694,8 +700,8 @@ void MoMa::SceneApp::mouseMoved( ofMouseEventArgs &mouse ) {
 
             for( int l=0; l<(*mouseEventRegLabelList).size(); l++ ) {
 
-                int pixLabel = ofMap( ( *mouseEventRegLabelList )[l].time,
-                lowBound.time, highBound.time, 0, ofGetWidth() ); // Get px
+                int pixLabel = ofMap( ( *mouseEventRegLabelList )[l].moment.time(),
+                lowBound.time(), highBound.time(), 0, ofGetWidth() ); // Get pixels
 
                 if( (*mouseEventRegLabelList)[l].state != SELECTED ) {
 
@@ -761,23 +767,13 @@ void MoMa::SceneApp::dragged( ofDragInfo &drag ) {
 
             if( ext == "lab" ) {
 
-                dragEventRegLabelList->load( labFileName );
+                dragEventRegLabelList->load( labFileName, frameRate );
 
             }
         }
     }
 
     dragEvent( drag );
-}
-
-unsigned int MoMa::SceneApp::getIndexFromTime( double time ) {
-
-    return( (unsigned int)( time * frameRate ) );
-}
-
-double MoMa::SceneApp::getTimeFromIndex( unsigned int idx ) {
-
-    return( (double)idx / frameRate );
 }
 
 void MoMa::SceneApp::render2d( void ) {
@@ -820,7 +816,7 @@ void MoMa::SceneApp::render2d( void ) {
 
             for( unsigned int n=0; n<_figure[fIdx].plot[f].data.nOfFrames(); n++ ) {
 
-                float x = ofMap( _figure[fIdx].plot[f].data.time( n ), lowBound.time, highBound.time, 0, ofGetWidth() ); // Apply screen mapping here
+                float x = ofMap( _figure[fIdx].plot[f].data.time( n ), lowBound.time(), highBound.time(), 0, ofGetWidth() ); // Apply screen mapping here
                 float y = ofMap( _figure[fIdx].plot[f].data.get( n ), _figure[fIdx].yMin, _figure[fIdx].yMax, _figure[fIdx].yBot-5, _figure[fIdx].yTop+5 );
 
                 _figure[fIdx].plot[f].line.addVertex( ofVec2f( x, y ) ); // Add vertex
@@ -839,7 +835,7 @@ void MoMa::SceneApp::render2d( void ) {
         ofPushStyle();
 
         double appAtTime = getAppTime(); // Sync fig time reading with application time
-        float appTimeX = ofMap( appAtTime, lowBound.time, highBound.time, 0, ofGetWidth(), true );
+        float appTimeX = ofMap( appAtTime, lowBound.time(), highBound.time(), 0, ofGetWidth(), true );
 
         ofSetLineWidth( 1.5f ); ofSetColor( 160, 160, 160, 128 ); // Draw PB time line
         ofLine( appTimeX, 0, appTimeX, ofGetHeight() ); // horizontal line & value @ bottom
@@ -891,7 +887,7 @@ void MoMa::SceneApp::draw( Node node ) {
     string tag = "";
     if( isNodeNames ) tag  = node.name();
     if( node.hasTime() && isTimeTags ) tag
-        += ( "(" + ofToString( node.time() ) + ")" );
+    += ( "(" + ofToString( node.time() ) + ")" );
 
     ofPushStyle();
     ofSetColor( ofGetStyle().color, 120 ); // Keep color but add alpha
@@ -1001,7 +997,7 @@ void MoMa::SceneApp::draw( LabelList labelList ) {
             ofSetColor( selected, 200 ); ofSetLineWidth( 3 );
         }
         
-        float labPos = ofMap( labelList[l].time, lowBound.time, highBound.time, 0, ofGetWidth() );
+        float labPos = ofMap( labelList[l].moment.time(), lowBound.time(), highBound.time(), 0, ofGetWidth() );
         ofLine( labPos, 0, labPos, ofGetHeight() ); // We draw labels line and label names
         ofDrawBitmapString( labelList[l].name, labPos+6, 14 );
         
@@ -1166,7 +1162,7 @@ void MoMa::SceneApp::addNewLabelList( std::string name, bool isShown ) {
 
     _ll.isShown = isShown;
     _ll.labelList = new LabelList();
-    _ll.labelList->name = name;
+    _ll.labelList->_name = name;
 
     _labelList.push_back( _ll );
 
@@ -1180,7 +1176,7 @@ MoMa::LabelList &MoMa::SceneApp::labelList( std::string name ) {
 
     for( int k=0; k<_labelList.size(); k++ ) {
 
-        if( _labelList[ k ].labelList->name.compare( name ) == 0 ) {
+        if( _labelList[ k ].labelList->_name.compare( name ) == 0 ) {
 
             isFound = true;
             kFound = k;
@@ -1281,36 +1277,54 @@ return( recorder.isRecording() );
 void MoMa::SceneApp::setFrameRate( float rate ) {
 
     frameRate = rate;
-    highBound.time = getTimeFromIndex( highBound.index );
-    appAtPos.time = getTimeFromIndex( appAtPos.index ); // Check app time
+    
+    lowBound.setTime( lowBound.time(), frameRate );
+    highBound.setTime( highBound.time(), frameRate );
+    maxBound.setTime( maxBound.time(), frameRate );
+    appMoment.setTime( appMoment.time(), frameRate );
+    
+    // highBound.time = getTimeFromIndex( highBound.index );
+    // appAtPos.time = getTimeFromIndex( appAtPos.index ); // Check app time
 }
 
 void MoMa::SceneApp::setPlayerSize( unsigned int nOfFrames ) {
+    
+    maxBound.setIndex( nOfFrames-1, frameRate );
+    highBound.setIndex( maxBound.index(), frameRate );
+    
+    if( highBound.index() < 1 ) highBound.setIndex( 1, frameRate ); // Reajust current moments
+    if( appMoment.index() > highBound.index() ) appMoment.setIndex( highBound.index(), frameRate );
 
-    maxBound.index = nOfFrames;
-    highBound.index = nOfFrames-1;
+    // maxBound.index = nOfFrames;
+    // highBound.index = nOfFrames-1;
 
-    if( highBound.index < 1 ) highBound.index = 1;
+    // if( highBound.index < 1 ) highBound.index = 1;
+    
+    // highBound.time = getTimeFromIndex( highBound.index );
 
-    highBound.time = getTimeFromIndex( highBound.index );
-
-    if( appAtPos.index > highBound.index ) appAtPos.index = highBound.index;
-    appAtPos.time = getTimeFromIndex( appAtPos.index ); // Check app time
+    // if( appAtPos.index > highBound.index ) appAtPos.index = highBound.index;
+    // appAtPos.time = getTimeFromIndex( appAtPos.index ); // Check app time
 }
 
 void MoMa::SceneApp::setPlayerSize( double time ) {
+    
+    maxBound.setTime( time, frameRate );
+    highBound.setTime( maxBound.time(), frameRate );
+    
+    if( highBound.index() < 1 ) highBound.setIndex( 1, frameRate ); // Reajust current moments
+    if( appMoment.index() > highBound.index() ) appMoment.setIndex( highBound.index(), frameRate );
 
-    setPlayerSize( getIndexFromTime( time ) );
+    // setPlayerSize( getIndexFromTime( time ) );
 }
 
 unsigned int MoMa::SceneApp::getAppIndex( void ) {
 
-    return( appAtPos.index );
+    return( appMoment.index() );
 }
 
 double MoMa::SceneApp::getAppTime( void ) {
 
-    return( appAtPos.time );
+    return( appMoment.time() );
 }
 
 void MoMa::SceneApp::play( void ) {
@@ -1327,8 +1341,10 @@ void MoMa::SceneApp::pause( void ) {
 
 void MoMa::SceneApp::stop( void ) {
 
-    appAtPos.index = lowBound.index;
-    appAtPos.time = getTimeFromIndex( appAtPos.index );
+    // appAtPos.index = lowBound.index;
+    // appAtPos.time = getTimeFromIndex( appAtPos.index );
+    
+    appMoment.setTime( lowBound.time(), frameRate );
 
     isPlayback = false;
     isBegin = true;
@@ -1337,16 +1353,18 @@ void MoMa::SceneApp::stop( void ) {
 
 void MoMa::SceneApp::previousIndex( void ) {
 
-    if( appAtPos.index < lowBound.index ) appAtPos.index = highBound.index-1;
-    else appAtPos.index--; // Decrement and update time
-    appAtPos.time = getTimeFromIndex( appAtPos.index );
+    if( appMoment.index() < lowBound.index() ) appMoment.setIndex( highBound.index()-1, frameRate );
+    else appMoment.setIndex( appMoment.index()-1, frameRate ); // Decrement and update time
+    
+    // appAtPos.time = getTimeFromIndex( appAtPos.index );
 }
 
 void MoMa::SceneApp::nextIndex( void ) {
 
-    if( appAtPos.index == highBound.index-1 ) appAtPos.index = lowBound.index;
-    else appAtPos.index++; // Increment and update time
-    appAtPos.time = getTimeFromIndex( appAtPos.index );
+    if( appMoment.index() == highBound.index()-1 ) appMoment.setIndex( lowBound.index(), frameRate );
+    else appMoment.setIndex( appMoment.index()+1, frameRate ); // Increment and update time
+    
+    // appAtPos.time = getTimeFromIndex( appAtPos.index );
 }
 
 bool MoMa::SceneApp::isPlaying( void ) {
@@ -1354,28 +1372,33 @@ bool MoMa::SceneApp::isPlaying( void ) {
     return( isPlayback );
 }
 
-void MoMa::SceneApp::zoom( int iMin, int iMax ) {
+void MoMa::SceneApp::zoom( double tMin, double tMax ) {
 
-    lowBound.index = iMin;
-    highBound.index = iMax;
+    lowBound.setTime( tMin, frameRate );
+    highBound.setTime( tMax, frameRate );
 
-    if( lowBound.index <= 0 ) lowBound.index = 0;
-    if( highBound.index < 1 ) highBound.index = 1;
+    if( lowBound.index() <= 0 ) lowBound.setIndex( 0, frameRate );
+    if( highBound.index() < 1 ) highBound.setIndex( 1, frameRate );
 
-    lowBound.time = getTimeFromIndex( lowBound.index );
-    highBound.time = getTimeFromIndex( highBound.index );
+    // lowBound.time = getTimeFromIndex( lowBound.index );
+    // highBound.time = getTimeFromIndex( highBound.index );
+    
+    appMoment.setTime( lowBound.time(), frameRate );
 
-    appAtPos.index = lowBound.index;
-    appAtPos.time = lowBound.time;
+    // appAtPos.index = lowBound.index;
+    // appAtPos.time = lowBound.time;
 }
 
 void MoMa::SceneApp::showAll( void ) {
+    
+    lowBound.setTime( 0.0f, frameRate );
+    highBound.setTime( maxBound.time(), frameRate );
 
-    highBound.index = maxBound.index-1;
-    lowBound.index = 0;
+    // highBound.index = maxBound.index-1;
+    // lowBound.index = 0;
 
-    highBound.time = getTimeFromIndex( highBound.index );
-    lowBound.time = getTimeFromIndex( lowBound.index );
+    // highBound.time = getTimeFromIndex( highBound.index );
+    // lowBound.time = getTimeFromIndex( lowBound.index );
 }
 
 void MoMa::SceneApp::addOscListener( std::string header, MoMa::Track &track ) {

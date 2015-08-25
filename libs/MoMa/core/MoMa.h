@@ -14,6 +14,7 @@
 #include "mmBoneList.h"
 #include "mmLabelList.h"
 
+#include "mmMoment.h"
 #include "mmArmaUtils.h"
 #include "mmQuaternion.h"
 #include "mmContainer.h"

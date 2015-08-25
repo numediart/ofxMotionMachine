@@ -62,12 +62,6 @@ namespace MoMa {
         ROTATIONS
     };
     
-    struct AtPos {
-        
-        unsigned int index;
-        double time;
-    };
-    
     struct Plot { // Plot = one 2D curve in oF
         
         // arma::vec data; // Raw data to synchronize with
@@ -218,7 +212,7 @@ namespace MoMa {
         unsigned int getAppIndex( void ); // Query app index
         double getAppTime( void ); // Query app time
         
-        void zoom( int iMin, int iMax ); // Zoom
+        void zoom( double tMin, double tMax ); // Zoom
         void showAll( void ); // Back to fullsize
         
         void play( void ); // Play the sequence
@@ -303,8 +297,6 @@ namespace MoMa {
         
         // - Protected methods -
         
-        unsigned int getIndexFromTime( double time );
-        double getTimeFromIndex( unsigned int idx );
         void render2d( void );
         
         // - Visualisation types -
@@ -346,7 +338,7 @@ namespace MoMa {
         
         // - X axis mapping -
         
-        AtPos lowBound, highBound, maxBound; // @
+        MoMa::Moment lowBound, highBound, maxBound;
         int zoomLowBound, zoomHighBound; // Zoom
         
         // - Playback types -
@@ -354,9 +346,8 @@ namespace MoMa {
         int playbackMode; // Playback mode flag
         float frameRate; // Frame rate from playback
         bool isPlayback; // Do we keep play it back?
-        AtPos appAtPos; // App idnex/time @ position
-        // unsigned int appIndex; // App index
-        float fAppAtPosIndex; // Float index
+        MoMa::Moment appMoment; // Current app moment
+        float fAppMomentIndex; // Float moment index
         bool isBegin; // Is begin?
         
         // - Video recorder -

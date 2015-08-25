@@ -11,12 +11,12 @@
 using namespace std;
 using namespace MoMa;
 
-LabelList::LabelList( string fName ) {
+LabelList::LabelList( string fName, double frameRate ) {
     
-    load( fName );
+    load( fName, frameRate );
 }
 
-void LabelList::load( string fName ) {
+void LabelList::load( string fName, double frameRate ) {
     
     ifstream labFile( fName.c_str() );
     
@@ -26,7 +26,7 @@ void LabelList::load( string fName ) {
         return; // We alert in stdout and quit if no/wrong file!
     }
     
-    fileName = fName;
+    _fileName = fName;
     
     while( labFile.good() ) {
         
@@ -46,7 +46,7 @@ void LabelList::load( string fName ) {
             curStrm >> labTime; curStrm >> labName;
             if( curStrm.good() ) curStrm >> labName;
             
-            this->push_back( Label( labTime, labName ) );
+            this->push_back( Label( Moment( labTime, frameRate ), labName ) );
         }
     }
 }
@@ -63,21 +63,21 @@ void LabelList::save( string fName, int type, double maxTime ) {
                 
                 for( int i=0; i<size(); i++ ) {
                     
-                    ofs << at( i ).time << " " << at( i ).name << endl;
+                    ofs << at( i ).moment.time() << " " << at( i ).name << endl;
                 }
                 
                 break;
                 
             case SEGMENT:
                 
-                ofs << "0 " << at( 0 ).time << " _" << endl;
+                ofs << "0 " << at( 0 ).moment.time() << " _" << endl;
                 
                 for( int i=0; i<size()-1; i++ ) {
                     
-                    ofs << at( i ).time << " " << at( i+1 ).time << " " << at( i ).name << endl;
+                    ofs << at( i ).moment.time() << " " << at( i+1 ).moment.time() << " " << at( i ).name << endl;
                 }
                 
-                ofs << at( size()-1 ).time << " " << maxTime << " " << at( size()-1 ).name << endl;
+                ofs << at( size()-1 ).moment.time() << " " << maxTime << " " << at( size()-1 ).name << endl;
                 
                 break;
                 
@@ -90,16 +90,16 @@ void LabelList::save( string fName, int type, double maxTime ) {
     }
 }
 
-void LabelList::insert( double time, std::string name ) {
+void LabelList::insert( MoMa::Moment mom, std::string nam ) {
 
-    push_back( Label( time, name ) );
+    push_back( Label( mom, nam ) );
 }
 
-void LabelList::remove( double time ) {
+void LabelList::remove( std::string nam ) {
 
     for( int l=0; l<size(); l++ ) {
     
-        if( at(l).time-time < 1.0e-6 ) {
+        if( at(l).name == nam ) {
         
             erase( begin()+l );
         }
@@ -115,6 +115,6 @@ void LabelList::print( void ) {
     
     for( int n=0; n<size(); n++ ) {
         
-        cout << at( n ).time << " " << at( n ).name << endl;
+        cout << at( n ).moment.time() << " " << at( n ).name << endl;
     }
 }

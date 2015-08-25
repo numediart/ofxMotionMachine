@@ -15,6 +15,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "mmMoment.h"
+
 namespace MoMa {
     
     enum SegmentType {
@@ -34,14 +36,15 @@ namespace MoMa {
     
       public:
         
-        Label( double t, std::string n ) {
+        Label( MoMa::Moment mom, std::string nam ) {
             
-            time = t; name = n;
+            moment = mom; name = nam;
             state = UNSELECTED;
         }
         
+        MoMa::Moment moment;
         std::string name;
-        double time;
+        // double time;
         int state;
     };
     
@@ -49,20 +52,22 @@ namespace MoMa {
         
       public:
         
-        LabelList( void ) : std::vector<Label>() {}
-        LabelList( std::string fName ); // Create object from text file
+        LabelList( void ) : std::vector<Label>() {} // For compliance
+        LabelList( std::string fName, double frameRate ); // From text file
         
-        void load( std::string fName ); // Load/save labels from a text file
+        void load( std::string fName, double frameRate ); // Load/save labels
         void save( std::string fName, int type = EVENT, double maxTime = 0.0f );
         
-        void insert( double time, std::string name );
-        void remove( double time ); // Insert & remove
+        void insert( MoMa::Moment mom, std::string nam );
+        void remove( std::string nam ); // Insert/remove
         void remove( int idx ); // here remove @ index
         
         void print( void ); // Print labels
         
-        std::string fileName;
-        std::string name;
+      // protected:
+        
+        std::string _fileName;
+        std::string _name;
     };
 }
 
