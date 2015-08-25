@@ -9,6 +9,8 @@
 #include "mmContainer.h"
 
 namespace MoMa {
+        
+    
     void TimedData::interpIndexFind(const arma::vec pVec, double pValue, unsigned int &index1, double &weight1, unsigned int &index2, double &weight2 ){
         unsigned int lIndex1;
         arma::abs(pVec-pValue).min(lIndex1);
@@ -47,6 +49,7 @@ namespace MoMa {
             return;
         }
     }
+    
     
     bool TimedData::checkTimeVec( arma::vec pTime ) {
         

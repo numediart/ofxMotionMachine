@@ -25,6 +25,22 @@ namespace MoMa {
         // TODO Implement 'QSLERP'
     };
     
+    class interpolAlgo{
+    public:
+        virtual arma::Mat<double> apply(double tCurr,arma::Mat<double> v1,double t1,arma::Mat<double> v2,double t2)=0;
+    };
+    
+    class stepInterpol: public interpolAlgo{
+        arma::Mat<double> apply(double tCurr,arma::Mat<double> v1,double t1,arma::Mat<double> v2,double t2);
+    };
+    
+    class linearInterpol: public interpolAlgo{
+        arma::Mat<double> apply(double tCurr,arma::Mat<double> v1,double t1,arma::Mat<double> v2,double t2);
+    };
+    
+    class qslerp: public interpolAlgo{
+        arma::Mat<double> apply(double tCurr,arma::Mat<double> v1,double t1,arma::Mat<double> v2,double t2);
+    };
     // TODO implement conversion from timestamped mode to fixed
     // framerate with linear arma::interp1 & qslerp interpolation
     
@@ -34,7 +50,7 @@ namespace MoMa {
         
       public:
         
-        TimedData( void ) { mTimed = false; mFrameRate = 1.0f;mInitialTime=0.f; }
+        TimedData( void ) { mTimed = false; mFrameRate = 1.0f;mInitialTime=0.f; mTimeVec=arma::zeros(0,0);}
         
         inline const arma::vec &getTimeVec( void ) const{ return( mTimeVec ); }
         inline arma::vec &getTimeVecRef( void ){ return( mTimeVec ); }
@@ -165,6 +181,7 @@ namespace MoMa {
             unsigned int index1, index2;
             
             interpIndexFind( this->mTimeVec, pTime, index1, weight1, index2, weight2 );
+            
             return( ( weight1*data(index1)+weight2*data(index2))/(weight1+weight2) );
         
         } else {
