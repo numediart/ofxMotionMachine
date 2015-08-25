@@ -454,7 +454,7 @@ void C3dParser::load( string const &fileName, Track *track ) {
     }
 
     if(Scale < 0){
-        vector<vector<vector<float> > > Markers((int)NvideoFrames,vector<vector<float> >((int)Nmarkers,vector<float>(3,powf(10,12))));
+        vector<vector<vector<float> > > Markers((int)NvideoFrames,vector<vector<float> >((int)Nmarkers,vector<float>(3,FLT_MAX)));
         vector<vector<float> > CameraInfo((int)NvideoFrames, vector<float>((int)Nmarkers));
         vector<vector<float> > ResidualError((int)NvideoFrames, vector<float>((int)Nmarkers));
         vector<vector<float> > AnalogSignals((int)NvideoFrames*(int)NanalogFramesPerVideoFrame, vector<float>((int)NanalogChannels));
@@ -509,7 +509,7 @@ void C3dParser::load( string const &fileName, Track *track ) {
     }
 
     else{
-        vector<vector<vector<sint16> > > Markers((int)NvideoFrames,vector<vector<sint16> >((int)Nmarkers,vector<sint16>(3,0xffff)));
+        vector<vector<vector<sint16> > > Markers((int)NvideoFrames,vector<vector<sint16> >((int)Nmarkers,vector<sint16>(3,INT16_MAX)));
         vector<vector<int8> > CameraInfo((int)NvideoFrames, vector<int8>((int)Nmarkers));
         vector<vector<int8> > ResidualError((int)NvideoFrames, vector<int8>((int)Nmarkers));
         vector<vector<int16> > AnalogSignals((int)NvideoFrames*(int)NanalogFramesPerVideoFrame, vector<int16>((int)NanalogChannels));
