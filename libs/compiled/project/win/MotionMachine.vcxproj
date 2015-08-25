@@ -16,6 +16,7 @@
     <ClCompile Include="..\..\..\MoMa\core\mmContainer.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmFrame.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmLabelList.cpp" />
+    <ClCompile Include="..\..\..\MoMa\core\mmMoment.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmNode.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmNodeList.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmQuaternion.cpp" />
@@ -111,6 +112,7 @@
     <ClInclude Include="..\..\..\MoMa\core\mmContainer.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmFrame.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmLabelList.h" />
+    <ClInclude Include="..\..\..\MoMa\core\mmMoment.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmNode.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmNodeList.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmQuaternion.h" />

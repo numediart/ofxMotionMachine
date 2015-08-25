@@ -51,6 +51,8 @@ C3dParser::C3dParser( std::string const &fileName, MoMa::Track *track ) {
 void C3dParser::load( string const &fileName, Track *track ) {
 
     bool printing = debug;
+    size_t fres = 0;
+    int ret = 0;
 
     /// Open file ///
     if( printing ) {
@@ -72,36 +74,36 @@ void C3dParser::load( string const &fileName, Track *track ) {
     track->clear();
     track->nodeList = nodeList;
 
-    fread( &NrecordFirstParameterblock, sizeof(int8), 1, fid ); // Reading record number of parameter section
-    fread( &key, sizeof(int8), 1, fid ); // key = 80
+    fres = fread( &NrecordFirstParameterblock, sizeof(int8), 1, fid ); // Reading record number of parameter section
+    fres = fread( &key, sizeof(int8), 1, fid ); // key = 80
 
     fseek(fid,512*(NrecordFirstParameterblock-1)+3,0); // ump to processortype - field
-    fread(&proctype,sizeof(int8),1,fid);
+    fres = fread(&proctype,sizeof(int8),1,fid);
     proctype=proctype-83;                       // proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)
     
     switch( proctype ) {
             
     case 1 :
         
-            if( printing ) {
+        if( printing ) {
             cout << "Machine format : INTEL-PC" << endl;
-            }
+        }
         reading = fread;
         break;
             
     case 2 :
             
-            if( printing ) {
+        if( printing ) {
             cout << "Machine format : DEC-VAX" << endl;
-            }
+        }
         reading = C3dParser::VAXread;
         break;
             
     case 3 :
             
-            if( printing ) {
+        if( printing ) {
             cout << "Machine format : MIPS-SUN/SGI" << endl;
-            }
+        }
         reading = C3dParser::MIPSread;
         break;
     }
@@ -120,25 +122,25 @@ void C3dParser::load( string const &fileName, Track *track ) {
     }
 
     fseek(fid, 2, SEEK_SET);
-    reading(&Nmarkers,sizeof(int16),1,fid);                         // number of markers
-    reading(&NanalogSamplesPerVideoFrame,sizeof(int16),1,fid);      // number of analog channels x #analog frames per video frame
-    reading(&StartFrame,sizeof(int16),1,fid);                       //# of first video frame
-    reading(&EndFrame,sizeof(int16),1,fid);                             //# of last video frame
-    reading(&MaxInterpolationGap,sizeof(int16),1,fid);              //maximum interpolation gap allowed (in frame)
-    reading(&Scale,sizeof(float),1,fid);                            // floating-point scale factor to convert 3D-integers to ref system units                           
-    reading(&NrecordDataBlock,sizeof(int16),1,fid);                 // starting record number for 3D point and analog data
-    reading(&NanalogFramesPerVideoFrame,sizeof(int16),1,fid);
+    fres = reading(&Nmarkers,sizeof(int16),1,fid);                         // number of markers
+    fres = reading(&NanalogSamplesPerVideoFrame,sizeof(int16),1,fid);      // number of analog channels x #analog frames per video frame
+    fres = reading(&StartFrame,sizeof(int16),1,fid);                       //# of first video frame
+    fres = reading(&EndFrame,sizeof(int16),1,fid);                             //# of last video frame
+    fres = reading(&MaxInterpolationGap,sizeof(int16),1,fid);              //maximum interpolation gap allowed (in frame)
+    fres = reading(&Scale,sizeof(float),1,fid);                            // floating-point scale factor to convert 3D-integers to ref system units                           
+    fres = reading(&NrecordDataBlock,sizeof(int16),1,fid);                 // starting record number for 3D point and analog data
+    fres = reading(&NanalogFramesPerVideoFrame,sizeof(int16),1,fid);
 
     if(NanalogFramesPerVideoFrame > 0)
         NanalogChannels=NanalogSamplesPerVideoFrame/NanalogFramesPerVideoFrame;
     else NanalogChannels=0;
 
-    reading(&VideoFrameRate,sizeof(float),1,fid);
+    fres = reading(&VideoFrameRate,sizeof(float),1,fid);
     track->setFrameRate( (float)VideoFrameRate );
     AnalogFrameRate=VideoFrameRate*NanalogFramesPerVideoFrame;
 
     if(printing){
-        system("pause");
+        ret = system("pause");
         printf("Nmarkers : %d\n", Nmarkers);
         printf("NanalogSamplesPerVideoFrame : %d\n", NanalogSamplesPerVideoFrame);
         printf("StartFrame : %d\n", StartFrame);
@@ -154,13 +156,13 @@ void C3dParser::load( string const &fileName, Track *track ) {
     /// Read Events ///
     if(printing){       
         cout << "\n\n----Reading Events...----\n\n";
-        system("pause");
+        ret = system("pause");
     }
 
     fseek(fid, 298, SEEK_SET);
-    reading(&EventIndicator,sizeof(int16),1,fid);
+    fres = reading(&EventIndicator,sizeof(int16),1,fid);
     if(EventIndicator==12345){
-        reading(&Nevents,sizeof(int16),1,fid);
+        fres = reading(&Nevents,sizeof(int16),1,fid);
         if( printing ) {
         printf("Nevents : %d\n", Nevents);
         }
@@ -168,15 +170,15 @@ void C3dParser::load( string const &fileName, Track *track ) {
         if(Nevents>0){
             for(int i=0;i<Nevents;i++){
                 Event.push_back(*new strucEvent());
-                reading(&(Event[i].time),sizeof(float),1,fid);
+                fres = reading(&(Event[i].time),sizeof(float),1,fid);
             }
             fseek(fid,188*2,SEEK_SET);
             for(int i=0;i<Nevents;i++){
-                fread(&(Event[i].value),sizeof(int8),1,fid);
+                fres = fread(&(Event[i].value),sizeof(int8),1,fid);
             }
             fseek(fid,198*2,SEEK_SET);
             for(int i=0;i<Nevents;i++){
-                fread(Event[i].name,sizeof(char)*4,1,fid);  // not sure if this works, never tried events (ça marche pas, il est défini en local donc il est supprimé après le if. Faut plutôt définir un tableau dynamique avant, et définir sa taille dans le if avec un new)
+                fres = fread(Event[i].name,sizeof(char)*4,1,fid);  // not sure if this works, never tried events (ça marche pas, il est défini en local donc il est supprimé après le if. Faut plutôt définir un tableau dynamique avant, et définir sa taille dans le if avec un new)
             }
         }
         //cout << "Event 0 : time : " << Event[0].time << "\n value : " << Event[0].value << "\n name : " << string(Event[0].name,4) << endl;
@@ -187,50 +189,50 @@ void C3dParser::load( string const &fileName, Track *track ) {
     /// Read 1st parameter block ///
     if(printing){
         cout << "\n\n----Reading Parameters...----\n\n";
-        system("pause");
+        ret = system("pause");
     }
 
     fseek(fid,512*(NrecordFirstParameterblock-1),SEEK_SET);
 
 
-    fread(&dat1,sizeof(int8),1,fid);
-    fread(&key2,sizeof(int8),1,fid);                        // key = 80;
-    fread(&NparameterRecords,sizeof(int8),1,fid);
-    fread(&proctype,sizeof(int8),1,fid);
+    fres = fread(&dat1,sizeof(int8),1,fid);
+    fres = fread(&key2,sizeof(int8),1,fid);                        // key = 80;
+    fres = fread(&NparameterRecords,sizeof(int8),1,fid);
+    fres = fread(&proctype,sizeof(int8),1,fid);
     //proctype=proctype-83;                                   // proctype: 1(INTEL-PC); 2(DEC-VAX); 3(MIPS-SUN/SGI)
 
 
-    fread(&Ncharacters,sizeof(int8),1,fid);                 // characters in group/parameter name
-    fread(&GroupNumber,sizeof(int8),1,fid);                 // id number -ve=group / +ve=parameter
+    fres = fread(&Ncharacters,sizeof(int8),1,fid);                 // characters in group/parameter name
+    fres = fread(&GroupNumber,sizeof(int8),1,fid);                 // id number -ve=group / +ve=parameter
 
     /// Read  allparameter blocks ///
     while(Ncharacters > 0) // The end of the parameter record is indicated by <0 characters for group/parameter name
     {
-        //system("pause");
+        //ret = system("pause");
         if(GroupNumber<0){ /// Group data
 
             if(printing){
                 cout << "\n\n====Group data====\n\n";
-                system("pause");
+                ret = system("pause");
             }
             structParameterGroup p;
             GroupNumber=abs(GroupNumber);
             GroupName = new char[Ncharacters];
-            fread(GroupName,sizeof(int8),Ncharacters,fid);
+            fres = fread(GroupName,sizeof(int8),Ncharacters,fid);
             p.name=string(GroupName,Ncharacters);   //group name
-            reading(&offset,sizeof(int16),1,fid);                           //offset in bytes
-            fread(&deschars,sizeof(int8),1,fid);
+            fres = reading(&offset,sizeof(int16),1,fid);                           //offset in bytes
+            fres = fread(&deschars,sizeof(int8),1,fid);
             GroupDescription = new char[deschars];     //description characters
-            fread(GroupDescription,sizeof(char),deschars,fid);
+            fres = fread(GroupDescription,sizeof(char),deschars,fid);
             p.description=string(GroupDescription,deschars); //group description
             ParameterGroup.push_back(p);
             ParameterNumberIndex.push_back(0);
             fseek(fid,offset-3-deschars,SEEK_CUR);
             if(printing){
-                system("pause");
+                ret = system("pause");
                 printf("Group %d : \n \t- Name : %s\n \t- Ncharacters : %d\n \t- GroupDescription : %s\n ", GroupNumber, GroupName, Ncharacters, GroupDescription);
                 cout << p.name << "\t" << p.description << endl;
-                system("pause");
+                ret = system("pause");
             }
             delete GroupDescription;
             delete GroupName;
@@ -241,7 +243,7 @@ void C3dParser::load( string const &fileName, Track *track ) {
 
             if(printing){
                 printf("\n\n====Parameters data====\n\n");
-                system("pause");
+                ret = system("pause");
             }
             structParameter param;
             ParameterNumberIndex[GroupNumber-1]=ParameterNumberIndex[GroupNumber-1]+1;
@@ -249,26 +251,26 @@ void C3dParser::load( string const &fileName, Track *track ) {
             ParameterName = new char[Ncharacters];
 
             /// read parameter name
-            fread(ParameterName,sizeof(int8),Ncharacters,fid);                  // name of parameter
+            fres = fread(ParameterName,sizeof(int8),Ncharacters,fid);                  // name of parameter
             param.name=string(ParameterName,Ncharacters);   //save parameter name
 
             /// read offset
-            reading(&offset,sizeof(int16),1,fid);                           //offset of parameters in bytes
+            fres = reading(&offset,sizeof(int16),1,fid);                           //offset of parameters in bytes
             filepos=ftell(fid);
             nextrec=filepos+offset-2;                           //position of beginning of next record
 
             /// read type
-            fread(&type,sizeof(int8),1,fid);     // type of data: -1=char/1=byte/2=integer*2/4=real*4
+            fres = fread(&type,sizeof(int8),1,fid);     // type of data: -1=char/1=byte/2=integer*2/4=real*4
 
             /// read number of dimensions
-            fread(&dimnum,sizeof(int8),1,fid);
+            fres = fread(&dimnum,sizeof(int8),1,fid);
             dimension = new uint8[dimnum];
             if(dimnum==0)
                 datalength=abs(type);                               //length of data record
             else{
                 mult=1;
                 for(int j=0;j<dimnum;j++){
-                    fread(&(dimension[j]),sizeof(uint8),1,fid);
+                    fres = fread(&(dimension[j]),sizeof(uint8),1,fid);
                     mult=mult*dimension[j];
                     (param.dim).push_back(dimension[j]);
                 }
@@ -283,14 +285,14 @@ void C3dParser::load( string const &fileName, Track *track ) {
                 data = new char[wordlength];
                 if(dimnum==2 && datalength>0){ //& parameter(idnumber,index,2).dim>0
                     for(int j=0;j<dimension[1];j++){
-                        fread(data,sizeof(char),wordlength,fid);    //character word data record for 2-D array
+                        fres = fread(data,sizeof(char),wordlength,fid);    //character word data record for 2-D array
                         (param.data).push_back(string(data,wordlength));
                         if(ParameterGroup[GroupNumber-1].name=="POINT" && param.name=="LABELS" && dimension[1] == Nmarkers){
                             if(printing){
                                 cout << "param.data[" << j << "] : " << param.data[j] << endl;
-                                system("pause");
+                                ret = system("pause");
                             }
-                            //system("pause");
+                            //ret = system("pause");
 
                             // This bit of code removes the space characters that
                             // sometimes happen after the extracted node names. It's
@@ -320,7 +322,7 @@ void C3dParser::load( string const &fileName, Track *track ) {
                     }
                 }
                 else if(dimnum==1 && datalength>0){
-                    fread(data,sizeof(char),wordlength,fid);        //numerical data record of 1-D array
+                    fres = fread(data,sizeof(char),wordlength,fid);        //numerical data record of 1-D array
                     (param.data).push_back(string(data,wordlength));
                 }
                 delete data;
@@ -332,7 +334,7 @@ void C3dParser::load( string const &fileName, Track *track ) {
                 param.dataType="bool";
                 Nparameters=datalength/abs(type);
                 data=new char[Nparameters];
-                fread(data,sizeof(int8),Nparameters,fid);
+                fres = fread(data,sizeof(int8),Nparameters,fid);
                 (param.data).push_back(string(data,Nparameters));
                 delete data;
 
@@ -343,8 +345,8 @@ void C3dParser::load( string const &fileName, Track *track ) {
                 param.dataType="int";
                 Nparameters=datalength/abs(type);
                 data=new char[2*Nparameters];
-                //fread(data,sizeof(int16),Nparameters,fid); //if it doesn't work, replace with next line (in comment)
-                fread(data,sizeof(int8),2*Nparameters,fid);
+                //fres = fread(data,sizeof(int16),Nparameters,fid); //if it doesn't work, replace with next line (in comment)
+                fres = fread(data,sizeof(int8),2*Nparameters,fid);
                 (param.data).push_back(string(data,2*Nparameters));
                 delete data;
 
@@ -354,8 +356,8 @@ void C3dParser::load( string const &fileName, Track *track ) {
                 param.dataType="float";
                 Nparameters=datalength/abs(type);
                 data=new char[4*Nparameters];
-                //fread(data,sizeof(float),Nparameters,fid); //if it doesn't work, replace with next line (in comment)
-                fread(data,sizeof(int8),4*Nparameters,fid);
+                //fres = fread(data,sizeof(float),Nparameters,fid); //if it doesn't work, replace with next line (in comment)
+                fres = fread(data,sizeof(int8),4*Nparameters,fid);
                 (param.data).push_back(string(data,4*Nparameters));
                 delete data;
 
@@ -367,11 +369,11 @@ void C3dParser::load( string const &fileName, Track *track ) {
 
             }
 
-            fread(&deschars,sizeof(int8),1,fid);                            //description characters
+            fres = fread(&deschars,sizeof(int8),1,fid);                            //description characters
 
             if(deschars>0){
                 description = new char[deschars];
-                fread(description,sizeof(char),deschars,fid);
+                fres = fread(description,sizeof(char),deschars,fid);
                 param.description=string(description,deschars);
                 delete description;
             }
@@ -380,7 +382,7 @@ void C3dParser::load( string const &fileName, Track *track ) {
             ParameterGroup[GroupNumber-1].parameter.push_back(param);
             if(printing){
                 cout << "\nParameter " << ParameterNumber << " of group " << abs(GroupNumber) << ":\n \t- Name : " << param.name << "\n \t- Description : "<< param.description << "\n \t- Type : " << param.dataType << endl<<endl;
-                system("pause");
+                ret = system("pause");
             }
 
             fseek(fid,nextrec,SEEK_SET);
@@ -389,15 +391,15 @@ void C3dParser::load( string const &fileName, Track *track ) {
 
         }
 
-        fread(&Ncharacters,sizeof(int8),1,fid);             // characters in next group/parameter name
-        fread(&GroupNumber,sizeof(int8),1,fid);             // id number -ve=group / +ve=parameter
+        fres = fread(&Ncharacters,sizeof(int8),1,fid);             // characters in next group/parameter name
+        fres = fread(&GroupNumber,sizeof(int8),1,fid);             // id number -ve=group / +ve=parameter
 
     }
 
     /// Summary of parameter blocks///
     if(printing){
-    cout << "Summary of parameters :\n";
-    //system("pause");
+        cout << "Summary of parameters :\n";
+    //ret = system("pause");
     for(int i=0;i<ParameterGroup.size();i++){
         cout << "\n\nGroup " << i+1 << ": \n\tName : " << ParameterGroup[i].name << "\n\tDescription : " << ParameterGroup[i].description << endl;
         structParameter param;
@@ -441,25 +443,25 @@ void C3dParser::load( string const &fileName, Track *track ) {
     /// Read data blocks ///
     if(printing){
         printf("\n\n====Reading data blocks====\n\n");
-        system("pause");
+        ret = system("pause");
     }
 
     fseek(fid,(NrecordDataBlock-1)*512,SEEK_SET);
 
     NvideoFrames = EndFrame - StartFrame + 1;
     if( printing ) {
-    cout << "Sacle : " << Scale << endl;
+        cout << "Scale : " << Scale << endl;
     }
 
     if(Scale < 0){
-        vector<vector<vector<float> > > Markers((int)NvideoFrames,vector<vector<float> >((int)Nmarkers,vector<float>(3,powf(10,12))));
+        vector<vector<vector<float> > > Markers((int)NvideoFrames,vector<vector<float> >((int)Nmarkers,vector<float>(3,FLT_MAX)));
         vector<vector<float> > CameraInfo((int)NvideoFrames, vector<float>((int)Nmarkers));
         vector<vector<float> > ResidualError((int)NvideoFrames, vector<float>((int)Nmarkers));
         vector<vector<float> > AnalogSignals((int)NvideoFrames*(int)NanalogFramesPerVideoFrame, vector<float>((int)NanalogChannels));
         float* analogtmp;
         analogtmp = new float[NanalogChannels];
         if( printing ) {
-        cout << "Markers data format : float\n";
+            cout << "Markers data format : float\n";
         }
 		arma::cube positionData(3,Nmarkers,NvideoFrames);
         for(int i=0;i<NvideoFrames;i++){
@@ -468,13 +470,13 @@ void C3dParser::load( string const &fileName, Track *track ) {
                 //Node tempNode;
                 //tempNode.setPosition( arma::datum::nan, arma::datum::nan, arma::datum::nan );
                 for(int k=0;k<3;k++){
-                    reading(&(Markers[i][j][k]),sizeof(float),1,fid);
+                    fres = reading(&(Markers[i][j][k]),sizeof(float),1,fid);
                     //printf("Marker %d %d %d : %f \t", i,j,k,Markers[i][j][k]);
                 }
                 //cout << endl;
-                //system("pause");
+                //ret = system("pause");
 
-                reading(&b,sizeof(float),1,fid);
+                fres = reading(&b,sizeof(float),1,fid);
                 a=(sint16)b;
                 if(a!=-1){
                     b=fix(b);
@@ -496,7 +498,7 @@ void C3dParser::load( string const &fileName, Track *track ) {
 
             for(int j=0;j<NanalogFramesPerVideoFrame;j++){
 
-                reading(analogtmp,sizeof(float),NanalogChannels,fid );
+                fres = reading(analogtmp,sizeof(float),NanalogChannels,fid );
                 //copy((AnalogSignals[j+NanalogFramesPerVideoFrame*(i-1)]).begin(),(AnalogSignals[j+NanalogFramesPerVideoFrame*(i-1)]).end(),analogtmp);    //TODO correctly!
             }
 
@@ -507,14 +509,15 @@ void C3dParser::load( string const &fileName, Track *track ) {
     }
 
     else{
-        vector<vector<vector<sint16> > > Markers((int)NvideoFrames,vector<vector<sint16> >((int)Nmarkers,vector<sint16>(3,powf(10,12))));
+        vector<vector<vector<sint16> > > Markers((int)NvideoFrames,vector<vector<sint16> >((int)Nmarkers,vector<sint16>(3,INT16_MAX)));
         vector<vector<int8> > CameraInfo((int)NvideoFrames, vector<int8>((int)Nmarkers));
         vector<vector<int8> > ResidualError((int)NvideoFrames, vector<int8>((int)Nmarkers));
         vector<vector<int16> > AnalogSignals((int)NvideoFrames*(int)NanalogFramesPerVideoFrame, vector<int16>((int)NanalogChannels));
         int16* analogtmp;
         analogtmp = new int16[NanalogChannels];
+
         if( printing ) {
-        cout << "Markers data format : int\n";
+            cout << "Markers data format : int\n";
         }
 
         for(int i=0;i<NvideoFrames;i++){
@@ -523,11 +526,11 @@ void C3dParser::load( string const &fileName, Track *track ) {
                 Node tempNode;
                 tempNode.setPosition( arma::datum::nan, arma::datum::nan, arma::datum::nan );
                 for(int k=0;k<3;k++){
-                    reading(&(Markers[i][j][k]),sizeof(int16),1,fid);
+                    fres = reading(&(Markers[i][j][k]),sizeof(int16),1,fid);
                 }
 
-                fread(&(ResidualError[i][j]),sizeof(int8),1,fid);
-                fread(&(CameraInfo[i][j]),sizeof(int8),1,fid);
+                fres = fread(&(ResidualError[i][j]),sizeof(int8),1,fid);
+                fres = fread(&(CameraInfo[i][j]),sizeof(int8),1,fid);
                 if(ResidualError[i][j]<0){
                     //cout << "Invalid 3D Point (the marker is missing).\nPoint : " << Markers[i][j][0] << "," << Markers[i][j][1] << "," << Markers[i][j][2] << endl;
                 }
@@ -542,7 +545,7 @@ void C3dParser::load( string const &fileName, Track *track ) {
             track->push(tempFrame);
             for(int j=0;j<NanalogFramesPerVideoFrame;j++){
 
-                reading(analogtmp,sizeof(int16),NanalogChannels,fid );
+                fres = reading(analogtmp,sizeof(int16),NanalogChannels,fid );
                 //copy((AnalogSignals[j+NanalogFramesPerVideoFrame*(i-1)]).begin(),(AnalogSignals[j+NanalogFramesPerVideoFrame*(i-1)]).end(),analogtmp);    //TODO correctly!
             }
         }
@@ -552,7 +555,7 @@ void C3dParser::load( string const &fileName, Track *track ) {
     fclose(fid);
     
     if( printing ) {
-    cout << "Finished reading\n";
+        cout << "Finished reading\n";
     }
 }
 
@@ -567,8 +570,9 @@ float C3dParser::fix(float value){
 size_t C3dParser::VAXread(void * ptr, size_t size, size_t count, FILE * stream){
 
     size_t ret = fread(ptr,size,count,stream);
+    
     if(size==sizeof(float))
-    decToFloat( (float*)ptr );
+        decToFloat( (float*)ptr );
 
     return ret;
 }
