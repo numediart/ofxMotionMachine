@@ -94,29 +94,29 @@ mat Muller::continuous( Track &track ) {
     
     if( track.nOfFrames() > 0 && track.hasNodeList ) {
         
-        cont.set_size( track.nOfFrames(), nOfMullerFeatures );
-        cont( 0, 0 ) = 0.0f; // Initialise feature matrix
-        
-        int Neck = track.index( "Neck" );
-        int LShoulder = track.index( "LShoulder" );
-        int RShoulder = track.index( "RShoulder" );
-        int LElbow = track.index( "LElbow" );
-        int RElbow = track.index( "RElbow" );
-        int LWrist = track.index( "LWrist" );
-        int RWrist = track.index( "RWrist" );
-        int Thorax = track.index( "Thorax" );
-        int Pelvis = track.index( "Pelvis" );
-        int LHip = track.index( "LHip" );
-        int RHip = track.index( "RHip" );
-        int LKnee = track.index( "LKnee" );
-        int RKnee = track.index( "RKnee" );
-        int LAnkle = track.index( "LAnkle" );
-        int RAnkle = track.index( "RAnkle" );
-        int LFoot = track.index( "LFoot" );
-        int RFoot = track.index( "RFoot" );
+        cont.set_size(track.nOfFrames(), nOfMullerFeatures);
+        cont.zeros();
         
         if( track.nOfFrames() > 1 ) {
             
+            int Neck = track.index( "Neck" );
+            int LShoulder = track.index( "LShoulder" );
+            int RShoulder = track.index( "RShoulder" );
+            int LElbow = track.index( "LElbow" );
+            int RElbow = track.index( "RElbow" );
+            int LWrist = track.index( "LWrist" );
+            int RWrist = track.index( "RWrist" );
+            int Thorax = track.index( "Thorax" );
+            int Pelvis = track.index( "Pelvis" );
+            int LHip = track.index( "LHip" );
+            int RHip = track.index( "RHip" );
+            int LKnee = track.index( "LKnee" );
+            int RKnee = track.index( "RKnee" );
+            int LAnkle = track.index( "LAnkle" );
+            int RAnkle = track.index( "RAnkle" );
+            int LFoot = track.index( "LFoot" );
+            int RFoot = track.index( "RFoot" );
+
             for( int t=1; t<track.nOfFrames(); t++ ) {
                 
                 vec nullVec = zeros( 3, 1 );
@@ -265,12 +265,11 @@ mat Muller::binary( mat &cont, float meanHl, float meanSw, float meanHw ) {
 
     mat bina;
     
-    bina.set_size( cont.n_rows, cont.n_cols );
-    
-    if( bina.n_rows > 0 ) {
+    if( cont.n_rows > 0 && cont.n_cols > 0 ) {
         
-        bina( 0, 0 ) = 0.0f; // Initialise matrix
-        
+        bina.set_size( cont.n_rows, cont.n_cols );
+        bina.zeros();
+
         bina.col( 0 )= Signal::thresh( cont.col( 0 ), 1.8 * meanHl, 1.3 * meanHl, 0, 1 );
         bina.col( 1 ) = Signal::thresh( cont.col( 1 ), 1.8 * meanHl, 1.3 * meanHl, 0, 1 );
         bina.col( 2 ) = Signal::thresh( cont.col( 2 ), 0.2 * meanHl, 0, 0, 1 );
@@ -312,9 +311,7 @@ mat Muller::binary( mat &cont, float meanHl, float meanSw, float meanHw ) {
         bina.col( 38 ) = Signal::thresh( cont.col( 38 ), 2.3 * meanHl, 1.9 * meanHl, 0, 1 );
 
         //Approximate derivative of cont.col(39) to have the rotation around the body spine
-        vec diffCol39;
-        diffCol39.set_size(cont.n_rows);
-        diffCol39.row(0)=0;
+        vec diffCol39 = zeros(cont.n_rows);
         for(int i=1; i<cont.n_rows; i++){
             diffCol39.row(i)=abs(cont.col( 39 ).row(i)-cont.col( 39 ).row(i-1));
         }

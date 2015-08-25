@@ -224,6 +224,8 @@ namespace MoMa {
         void play( void ); // Play the sequence
         void pause( void ); // Pause the sequence
         void stop( void ); // Stop the sequence
+        void previousIndex( void ); // Move backward of one index
+        void nextIndex( void ); // Move Forward of one index
         bool isPlaying( void ); // Is playing?
         
         // - Screencasting-related methods -
@@ -275,6 +277,8 @@ namespace MoMa {
 
         void addMenuView( void ); // Add menu view to the canvas
         void removeMenuView( void ); // Remove menu view to the canvas
+        void addPlayerBar( void ); // Add player view to the canvas (use it only if you remove the menu view)
+        void removePlayerBar( void ); // Remove player view to the canvas
     
       //protected:
         
