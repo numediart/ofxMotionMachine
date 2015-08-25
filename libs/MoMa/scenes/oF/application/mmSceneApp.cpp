@@ -1353,7 +1353,7 @@ void MoMa::SceneApp::stop( void ) {
 
 void MoMa::SceneApp::previousIndex( void ) {
 
-    if( appMoment.index() < lowBound.index() ) appMoment.setIndex( highBound.index()-1, frameRate );
+    if( appMoment.index() <= lowBound.index() ) appMoment.setIndex( highBound.index()-1, frameRate );
     else appMoment.setIndex( appMoment.index()-1, frameRate ); // Decrement and update time
     
     // appAtPos.time = getTimeFromIndex( appAtPos.index );
