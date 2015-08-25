@@ -507,7 +507,7 @@ void C3dParser::load( string const &fileName, Track *track ) {
     }
 
     else{
-        vector<vector<vector<sint16> > > Markers((int)NvideoFrames,vector<vector<sint16> >((int)Nmarkers,vector<sint16>(3,powf(10,12))));
+        vector<vector<vector<sint16> > > Markers((int)NvideoFrames,vector<vector<sint16> >((int)Nmarkers,vector<sint16>(3,0xffff)));
         vector<vector<int8> > CameraInfo((int)NvideoFrames, vector<int8>((int)Nmarkers));
         vector<vector<int8> > ResidualError((int)NvideoFrames, vector<int8>((int)Nmarkers));
         vector<vector<int16> > AnalogSignals((int)NvideoFrames*(int)NanalogFramesPerVideoFrame, vector<int16>((int)NanalogChannels));
