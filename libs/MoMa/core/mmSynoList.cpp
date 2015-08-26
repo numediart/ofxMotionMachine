@@ -22,14 +22,14 @@ SynoList::SynoList( string fileName ) {
     load( fileName );
 }
 
-void SynoList::load( string fileName ) {
+bool SynoList::load( string fileName ) {
     
     ifstream synFile( fileName.c_str() );
     
     if( !synFile.is_open() ) {
         
         cout << "SynoList: File could not be opened!" << endl;
-        return; // We alert in stdout and quit if no/wrong file!
+        return false; // We alert in stdout and quit if no/wrong file!
     }
 
     syno.clear();
@@ -61,6 +61,8 @@ void SynoList::load( string fileName ) {
             }
         }
     }
+
+    return true;
 }
 
 bool SynoList::search( std::string query, std::string &answer ) {
