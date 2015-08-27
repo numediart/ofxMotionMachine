@@ -4,15 +4,15 @@
 #include <cmath>
 #include <armadillo>
 
-#ifndef M_PI
+#ifndef M_PI /* PI as defined in gsl */
 #define M_PI 3.14159265358979323846264338328
-#endif /* PI as defined in gsl */
-#ifndef M_2PI
+#endif
+#ifndef M_2PI /* 2*PI */
 #define M_2PI 6.28318530717958647692528676656
-#endif /* 2*PI */
-#ifndef M_PI_2
+#endif
+#ifndef M_PI_2 /* pi/2 */
 #define M_PI_2 1.57079632679489661923
-#endif /* pi/2 */
+#endif
 
 namespace MoMa {
 namespace Signal {
