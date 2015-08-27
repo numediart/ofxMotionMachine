@@ -22,7 +22,7 @@ namespace MoMa {
         
         SynoList( void ) {} // Constructor
         SynoList( std::string fileName ); // Create object from text file
-        void load( std::string fileName ); // Load synonyms from text file
+        bool load( std::string fileName ); // Load synonyms from text file
         
         bool search( std::string query, std::string &answer ); // Search
         

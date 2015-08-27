@@ -64,16 +64,14 @@ void Track::init( void ) {
     hasOrigNodeRot_as_boneRot=true;
 }
 
-void Track::synolist( string fileName ) {
+bool Track::synolist( string fileName ) {
 
-    if( hasSynoList == true ) {
-
-        delete synoList;
-        hasSynoList = false;
+    if( !hasSynoList ) {
+        this->synoList = new SynoList( );
+        hasSynoList = true;
     }
-
-    synoList = new SynoList( fileName );
-    hasSynoList = true;
+    
+    return this->synoList->load(fileName);
 }
 
 void Track::nodes( string fileName ) {
