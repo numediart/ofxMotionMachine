@@ -126,15 +126,16 @@ int NodeList::index( std::string name ) {
     
     } else {
         
+        string nNameQuery = "nq"; // Synonym of name query
+        synoList.search( name, nNameQuery ); // Search name
+
         // Browse nodeList
         it = this->begin();
         
         while( it != this->end() ) {
             
-            string nNameQuery = "nq"; // Synonym of name query
             string nFromList = "fl"; // Synonym of nth in list
             
-            synoList.search( name, nNameQuery ); // Search name
             synoList.search( it->first, nFromList ); // and list
             
             if( nFromList.compare( nNameQuery ) == 0 ) {
