@@ -141,3 +141,39 @@ vec Signal::peaks( vec feature, float width ) {
     
     return( kk );
 }
+
+arma::vec Signal::hann(size_t s)
+{
+    int k, N, M, half;
+
+    arma::vec win;
+
+    // handle special cases first
+    switch (s) {
+        case 1:
+            win = arma::vec(1,1.0);
+        case 0:
+            return win;
+    }
+
+    win.set_size(s);
+
+    // even-length window should have only one 1.0 value nonetheless
+    if (s % 2 == 0) {
+        N = s;
+    } else {
+        N = s-1;
+    }
+
+    half = (N)/2+1;
+    M = s/2-1;
+
+    for(k = 0; k < half; k++) {
+        win(k) = 0.5 * ( 1 - cos( M_2PI*(k)/(N) ) );
+    }
+    for(k = half; k < s; k++, M--) {
+        win(k) = win(M);
+    }
+
+    return win;
+}
