@@ -1,12 +1,18 @@
 #ifndef __mmSignal__
 #define __mmSignal__
 
+#ifdef _WIN32
+#define _USE_MATH_DEFINES // for Visual Studio users
+#endif
+
 #include <cmath>
 #include <armadillo>
 
+// in case these constants (used by hann()) are not found in cmath
 #ifndef M_PI /* PI as defined in gsl */
 #define M_PI 3.14159265358979323846264338328
 #endif
+// (NB: M_2_PI, with an extra '_', is defined in math.h as 2/pi)
 #ifndef M_2PI /* 2*PI */
 #define M_2PI 6.28318530717958647692528676656
 #endif
