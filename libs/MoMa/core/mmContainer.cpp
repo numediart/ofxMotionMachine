@@ -12,8 +12,7 @@ namespace MoMa {
         
     
     void TimedData::interpIndexFind(const arma::vec pVec, double pValue, unsigned int &index1, double &weight1, unsigned int &index2, double &weight2 ){
-        unsigned int lIndex1;
-        arma::abs(pVec-pValue).min(lIndex1);
+        unsigned int lIndex1 = arma::abs(pVec-pValue).min();
         if (pVec(lIndex1)==pValue){
             index1=lIndex1;
             index2=lIndex1;

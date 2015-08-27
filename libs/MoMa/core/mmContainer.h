@@ -96,8 +96,7 @@ namespace MoMa {
             return lIndex;
         }
         else{
-            unsigned int lIndex;
-            arma::abs(mTimeVec-time).min(lIndex);
+            unsigned int lIndex = arma::abs(mTimeVec-time).min();
             return lIndex;
         }
     }
