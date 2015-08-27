@@ -12,7 +12,6 @@
 
 #include <stdio.h>
 #include <armadillo>
-#include <strstream>
 #include "ofMain.h"
 #include "mmTrack.h"
 
