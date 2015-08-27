@@ -74,6 +74,8 @@ bool Track::synolist( string fileName ) {
     
     return this->synoList->load(fileName);
     */
+
+    return false;
 }
 
 void Track::nodes( string fileName ) {

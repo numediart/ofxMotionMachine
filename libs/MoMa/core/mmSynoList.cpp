@@ -45,7 +45,8 @@ bool SynoList::load( string fileName ) {
             string oneEquiv;
             
             // Get stream head from text line
-            synStrm << synLine; synStrm >> head;
+            synStrm << synLine;
+            synStrm >> head;
            
             // Insert the main keyword as its own synonymous
             syno.insert( pair<string,string>( head, head ) );
@@ -93,6 +94,6 @@ void SynoList::print( void ) {
         cout << it->second << " ";
         cout << endl;
 
-        it++;
+        ++it;
     }
 }
