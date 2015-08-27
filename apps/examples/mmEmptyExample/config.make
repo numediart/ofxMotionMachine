@@ -106,7 +106,7 @@ PROJECT_LDFLAGS = -lmoma
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-PROJECT_CFLAGS = -I/usr/local/include/moma
+PROJECT_CFLAGS = -std=c++11 -I/usr/local/include/moma
 
 ################################################################################
 # PROJECT OPTIMIZATION CFLAGS
