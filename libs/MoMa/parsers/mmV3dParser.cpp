@@ -95,7 +95,7 @@ void V3dParser::load( string const &fileName, Track *track ) {
     for( int r=0, n=0; n<nbOfNodes; r+=dim, n++  ) {
         
         //track->nodeList->at(n) = rawJoint[r];
-        track->nodeList->insert( make_pair( rawJoint[r], r ) );
+        track->nodeList->insert( make_pair( rawJoint[r], n ) );
     }
     
     // And we skip 3 more lines here
