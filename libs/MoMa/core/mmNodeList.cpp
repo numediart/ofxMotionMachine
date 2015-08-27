@@ -101,8 +101,11 @@ std::string NodeList::name( unsigned int idx ) {
     
     while( it != this->end() ) {
         
-        if( it->second == idx ) foundName = it->first;
-        it++; // Check if index exists then increment
+        if( it->second == idx ) {
+            foundName = it->first;
+            break; // once you find it, exit the loop
+        }
+        ++it; // Check if index exists then increment
     }
     
     return( foundName );
@@ -138,9 +141,10 @@ int NodeList::index( std::string name ) {
                 
                 nIdx = it->second;
                 isFound = true;
+                break; // once you find it, exit the loop
             }
             
-            it++;
+            ++it;
         }
         
         if( !isFound ) {
@@ -161,6 +165,6 @@ void NodeList::print( void ) {
         cout << it->first << " -> ";
         cout << it->second << endl;
         
-        it++;
+        ++it;
     }
 }
