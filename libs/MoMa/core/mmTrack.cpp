@@ -45,7 +45,6 @@ void Track::init( void ) {
     // synoList = NULL; // Not allocated
     // hasSynoList = false; // No synonym list
 
-    setFrameRate( 177.0f ); // Qualisys
     hasRotation = false; // No rotation
 
     nodeList = NULL; // Not allocated
@@ -62,6 +61,8 @@ void Track::init( void ) {
     isRing = false; // Not ring buffer
     
     hasOrigNodeRot_as_boneRot=true;
+    
+    setFrameRate( 177.0f ); // Qualisys
 }
 
 bool Track::synolist( string fileName ) {
