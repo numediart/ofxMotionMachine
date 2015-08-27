@@ -9,24 +9,32 @@
 #ifndef __mmNodeList__
 #define __mmNodeList__
 
-#include <vector>
-#include <iostream>
-#include <cstring>
+#include <map>
 #include <string>
 #include <fstream>
+#include <iostream>
+#include <cstring>
+
+#include "mmSynoList.h"
 
 namespace MoMa {
     
-    class NodeList : public std::vector<std::string> {
+    class NodeList : public std::map<std::string, int> {
         
       public:
         
-        NodeList( void ) : std::vector<std::string>() {} // Constructor
-        NodeList( std::string fileName ); // Create object from text file
-        void load( std::string fileName ); // Load names from text file
+        NodeList( void ) : std::map<std::string, int>() { synoList.load( synoList.DefaultPath ); }
+        NodeList( std::string fileName ); // Constructor with path of the *.nodes text file
+        void load( std::string fileName ); // Load names from the *.nodes text file
+        
+        std::string name( unsigned int idx ); // Get name string from index
+        int index( std::string name ); // Get index from name string
+        
         void print( void ); // Print the list of nodes
         
-        // TODO add a push function
+      protected:
+        
+        SynoList synoList;
     };
 }
 

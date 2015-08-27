@@ -1067,7 +1067,7 @@ void MoMa::SceneApp::draw( Frame frame ) {
 
     for( int n=0; n<frame.nOfNodes(); n++ ) {
 
-        string tag  = ""; if( frame.hasNodeList && isNodeNames ) tag = frame.nodeList->at( n );
+        string tag  = ""; if( frame.hasNodeList && isNodeNames ) tag = frame.nodeList->name( n );
         if( frame.hasTime() && isTimeTags && n==0 ) tag += ( "(" + ofToString( frame.time() ) + ")" );
 
         ofPushStyle();

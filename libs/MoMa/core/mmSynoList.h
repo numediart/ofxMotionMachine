@@ -16,11 +16,13 @@
 
 namespace MoMa {
     
+    const std::string NameNotFound = "Name not found";
+    
     class SynoList {
     
       public:
         
-        SynoList( void ) {} // Constructor
+        SynoList( void ) {} // Default constructor: do nothing
         SynoList( std::string fileName ); // Create object from text file
         bool load( std::string fileName ); // Load synonyms from text file
         
@@ -28,7 +30,7 @@ namespace MoMa {
         
         void print( void ); // Print the list of synonyms
 
-        static const std::string DefaultPath;
+        static const std::string DefaultPath; // Path
 
       private:
 

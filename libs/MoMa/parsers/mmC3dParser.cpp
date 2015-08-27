@@ -316,7 +316,8 @@ void C3dParser::load( string const &fileName, Track *track ) {
                                 }
                             }
 
-                            nodeList->push_back(param.data[j]);     
+                            //nodeList->push_back(param.data[j]);
+                            nodeList->insert( make_pair( param.data[j], j ) );
                             track->hasNodeList = true;
                         }
                     }

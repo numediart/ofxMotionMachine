@@ -98,8 +98,11 @@ namespace MoMa {
         }
         track->nodeList=new NodeList;
         track->hasNodeList=true;
-        for (unsigned int i =0;i<nNodes;i++){
-            track->nodeList->push_back(parser.getNodeName(i));
+        
+        for( unsigned int i =0; i<nNodes; i++ ) {
+            
+            // track->nodeList->push_back(parser.getNodeName(i));
+            track->nodeList->insert( make_pair( parser.getNodeName(i), i ) );
         }
         
         track->boneList=new BoneList;

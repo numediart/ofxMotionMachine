@@ -18,7 +18,7 @@ MoMa::Frame::Frame( void ) {
     
     hasNodeList = false; nodeList = NULL;
     hasBoneList = false; boneList = NULL;
-    hasSynoList = false; synoList = NULL;
+    // hasSynoList = false; synoList = NULL;
 }
 
 MoMa::Frame::Frame( arma::mat cartesianData, arma::mat rotationData, arma::mat rotOffset ) {
@@ -28,7 +28,7 @@ MoMa::Frame::Frame( arma::mat cartesianData, arma::mat rotationData, arma::mat r
     
     hasNodeList = false; nodeList = NULL;
     hasBoneList = false; boneList = NULL;
-    hasSynoList = false; synoList = NULL;
+    // hasSynoList = false; synoList = NULL;
     
     position = cartesianData;
     rotation = rotationData;
@@ -42,7 +42,7 @@ MoMa::Frame::Frame( arma::mat cartesianData, arma::mat rotationData ) {
     
     hasNodeList = false; nodeList = NULL;
     hasBoneList = false; boneList = NULL;
-    hasSynoList = false; synoList = NULL;
+    // hasSynoList = false; synoList = NULL;
     
     position = cartesianData;
     rotation = rotationData;
@@ -55,7 +55,7 @@ MoMa::Frame::Frame( arma::mat cartesianData ) {
     
     hasNodeList = false; nodeList = NULL;
     hasBoneList = false; boneList = NULL;
-    hasSynoList = false; synoList = NULL;
+    // hasSynoList = false; synoList = NULL;
     
     position = cartesianData;
 }
@@ -86,8 +86,8 @@ void MoMa::Frame::setBoneList( MoMa::BoneList *bList ) {
 
 void MoMa::Frame::setSynoList( MoMa::SynoList *sList ) {
 
-    hasSynoList = true;
-    synoList = sList;
+    // hasSynoList = true;
+    // synoList = sList;
 }
 
 void MoMa::Frame::setTime( double t ) {
@@ -113,9 +113,23 @@ mat MoMa::Frame::matrix( void ) {
 }
 
 int MoMa::Frame::index( std::string name ) {
-
-    // TODO make more modular
-
+    
+    int nIdx = -1;
+    
+    if( hasNodeList ) {
+        
+        nIdx = nodeList->index( name );
+        
+        if( nIdx <= -1 ) cout << "Frame::index: Node not found" << endl;
+    
+    } else {
+    
+        cout << "Frame::index(): No node name list" << endl;
+    }
+    
+    return( nIdx );
+    
+    /*
     int nIdx = -1; // Initialise
     bool isFound = false; // Flag
 
@@ -124,7 +138,7 @@ int MoMa::Frame::index( std::string name ) {
         for( int n=0; n<nodeList->size(); n++ ) {
 
             // If we find a matching name, we save index
-            if( nodeList->at(n).compare( name ) == 0 ) {
+            if( nodeList->name(n).compare( name ) == 0 ) {
 
                 isFound = true; nIdx = n;
             }
@@ -138,7 +152,7 @@ int MoMa::Frame::index( std::string name ) {
                 string nFromList = "fl"; // Synonym of nth in list
 
                 synoList->search( name, nNameQuery ); // Search name
-                synoList->search( nodeList->at(n), nFromList ); // & list
+                synoList->search( nodeList->name(n), nFromList ); // & list
 
                 if( nFromList.compare( nNameQuery ) == 0 ) {
                     
@@ -157,8 +171,7 @@ int MoMa::Frame::index( std::string name ) {
 
         cout << "Frame::index: No node name list" << endl;
     }
-
-    return( nIdx );
+    */
 }
 
 int MoMa::Frame::nOfNodes( void ) {

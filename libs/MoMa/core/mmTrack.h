@@ -120,8 +120,8 @@ namespace MoMa {
         BoneList *boneList; // List of bone links
         bool hasBoneList; // Has track boneList?
         
-        SynoList *synoList; // List of synonyms?
-        bool hasSynoList; // Has track synoList?
+        // SynoList *synoList; // List of synonyms?
+        // bool hasSynoList; // Has track synoList?
         
         float _frameRate; // Track frame rate
         
@@ -151,8 +151,8 @@ namespace MoMa {
             oneFrame.hasBoneList = hasBoneList;
             oneFrame.boneList = boneList;
             
-            oneFrame.hasSynoList = hasSynoList;
-            oneFrame.synoList = synoList;
+            // oneFrame.hasSynoList = hasSynoList;
+            // oneFrame.synoList = synoList;
         }
         
         return( oneFrame );
@@ -180,8 +180,8 @@ namespace MoMa {
             oneFrame.hasBoneList = hasBoneList;
             oneFrame.boneList = boneList;
             
-            oneFrame.hasSynoList = hasSynoList;
-            oneFrame.synoList = synoList;
+            // oneFrame.hasSynoList = hasSynoList;
+            // oneFrame.synoList = synoList;
         }
         
         return( oneFrame );
@@ -221,6 +221,28 @@ namespace MoMa {
         
         Trace oneTrace;
         int nIdx = -1; // Initialise
+        
+        if( hasNodeList ) {
+        
+            nIdx = nodeList->index( name );
+            
+            if( nIdx > -1 ) {
+                
+                return( this->trace( nIdx ) );
+                
+            } else {
+            
+                std::cout << "Track::trace(): Node not found" << std::endl;
+                return( oneTrace );
+            }
+            
+        } else {
+        
+            std::cout << "Track::trace(): No node name list" << std::endl;
+            return( oneTrace );
+        }
+        
+        /*
         bool isFound = false; // Flag
         
         if( hasNodeList ) {
@@ -228,7 +250,7 @@ namespace MoMa {
             for( int n=0; n<nodeList->size(); n++ ) {
                 
                 // If we find a matching name, we save index
-                if( nodeList->at(n).compare( name ) == 0 ) {
+                if( nodeList->name(n).compare( name ) == 0 ) {
                     
                     isFound = true;
                     nIdx = n;
@@ -243,7 +265,7 @@ namespace MoMa {
                     std::string nFromList = "fl"; // Synonym of nth in list
                     
                     synoList->search( name, nNameQuery ); // Search name
-                    synoList->search( nodeList->at(n), nFromList ); // & list
+                    synoList->search( nodeList->name(n), nFromList ); // & list
                     
                     if( nFromList.compare( nNameQuery ) == 0 ) {
                         
@@ -267,8 +289,9 @@ namespace MoMa {
             
             std::cout << "Frame::node: No node name list" << std::endl;
         }
+        */
         
-        return( oneTrace ); // If not found, return empty trace
+         // If not found, return empty trace
     }
     
     Trace Track::trace( int index ) {
@@ -279,7 +302,7 @@ namespace MoMa {
             
             oneTrace.setTimeFlag( true );
             oneTrace.setRotationFlag( hasRotation );
-            oneTrace.setName( nodeList->at( index ) );
+            oneTrace.setName( nodeList->name( index ) );
             
             if( position.isTimed() ) {
                 

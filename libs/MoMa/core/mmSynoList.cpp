@@ -29,7 +29,7 @@ bool SynoList::load( string fileName ) {
     if( !synFile.is_open() ) {
         
         cout << "SynoList: File could not be opened!" << endl;
-        return false; // We alert in stdout and quit if no/wrong file!
+        return false; // Stdout alert & quit if no/wrong file!
     }
 
     syno.clear();
@@ -37,27 +37,23 @@ bool SynoList::load( string fileName ) {
     for( string synLine; getline(synFile, synLine); ) {
         
         stringstream synStrm;
-       
-        // NB: '\n' should not happen with getline.
         
         if( synLine != "" && synLine != " " &&
         synLine != "\t" && synLine != "\n" ) {
             
             string head;
-            
-            synStrm << synLine;
-            
-            synStrm >> head;
-           
-            // insert the main keyword as its own synonymous in map
-            syno.insert( pair<string,string>(head,head) );
-
             string oneEquiv;
-
+            
+            // Get stream head from text line
+            synStrm << synLine; synStrm >> head;
+           
+            // Insert the main keyword as its own synonymous
+            syno.insert( pair<string,string>( head, head ) );
+            
             while( synStrm >> oneEquiv ) {
                 
-                //insert each synonymous with its main keyword
-                syno.insert( pair<string,string>(oneEquiv, head) );
+                // Insert each synonymous with its main keyword
+                syno.insert( pair<string,string>( oneEquiv, head ) );
             }
         }
     }
@@ -73,14 +69,17 @@ bool SynoList::search( std::string query, std::string &answer ) {
 
     it = syno.find( query );
     
-    if (it != syno.end()) {
+    if( it != syno.end() ) {
         
         answer = it->second;
         isFound = true;
+        
+    } else {
+    
+        answer = NameNotFound;
+        isFound = false;
     }
-    
-    // TODO 'else answer = "";' ???
-    
+        
     return( isFound );
 }
 
@@ -94,6 +93,6 @@ void SynoList::print( void ) {
         cout << it->second << " ";
         cout << endl;
 
-        ++it;
+        it++;
     }
 }

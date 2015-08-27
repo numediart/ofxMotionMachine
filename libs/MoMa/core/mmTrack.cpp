@@ -34,7 +34,7 @@ Track::~Track( void ) {
 
     if( hasNodeList ) delete nodeList; // Deallocation
     if( hasBoneList ) delete boneList; // Deallocation
-    if( hasSynoList ) delete synoList; // Deallocation
+    // if( hasSynoList ) delete synoList; // Deallocation
 }
 
 void Track::init( void ) {
@@ -42,8 +42,8 @@ void Track::init( void ) {
     easyName = ""; // No name
     fileName = ""; // No file name
     
-    synoList = NULL; // Not allocated
-    hasSynoList = false; // No synonym list
+    // synoList = NULL; // Not allocated
+    // hasSynoList = false; // No synonym list
 
     setFrameRate( 177.0f ); // Qualisys
     hasRotation = false; // No rotation
@@ -66,12 +66,14 @@ void Track::init( void ) {
 
 bool Track::synolist( string fileName ) {
 
+    /*
     if( !hasSynoList ) {
         this->synoList = new SynoList( );
         hasSynoList = true;
     }
     
     return this->synoList->load(fileName);
+    */
 }
 
 void Track::nodes( string fileName ) {
@@ -175,12 +177,19 @@ int Track::index( std::string name ) {
     // TODO There is a better way
 
     int nIdx = -1;
+    
+    if( hasNodeList ) {
+    
+        nIdx = nodeList->index( name );
+    }
 
+    /*
     if( nOfFrames() > 0 && hasNodeList ) {
 
         Frame oneFrame = frame( (unsigned int)0 );
         nIdx = oneFrame.index( name );
     }
+    */
 
     return( nIdx );
 }
@@ -223,13 +232,15 @@ void Track::subTrack( Track &subTr, int beg, int end) {
         *(subTr.boneList) = *boneList;
     }
     
-    subTr.hasSynoList = hasSynoList;
+    // subTr.hasSynoList = hasSynoList;
     
+    /*
     if( hasSynoList ) {
         
         subTr.synoList = new SynoList();
         *(subTr.synoList) = *synoList;
     }
+    */
     
     subTr.easyName = easyName;
     subTr.fileName = fileName;
@@ -277,7 +288,7 @@ bool Track::setJointOffsetRotation() {
             return false;
         this->rotationOffset.resize(4,this->rotation.nOfCols());
         bool debug = false;
-        if (!this->boneList || !this->hasNodeList || !this->hasRotation || !this->hasSynoList)
+        if (!this->boneList || !this->hasNodeList || !this->hasRotation /*|| !this->hasSynoList*/ )
             return false;
         
         this->rotationOffset.resize(4,this->nOfNodes());

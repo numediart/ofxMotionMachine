@@ -90,11 +90,12 @@ void V3dParser::load( string const &fileName, Track *track ) {
     
     // We resize and fill the track nodeList
     unsigned int nbOfNodes = rawJoint.size()/dim;
-    track->nodeList->resize( nbOfNodes );
+    //track->nodeList->resize( nbOfNodes );
     
     for( int r=0, n=0; n<nbOfNodes; r+=dim, n++  ) {
         
-        track->nodeList->at(n) = rawJoint[r];
+        //track->nodeList->at(n) = rawJoint[r];
+        track->nodeList->insert( make_pair( rawJoint[r], r ) );
     }
     
     // And we skip 3 more lines here

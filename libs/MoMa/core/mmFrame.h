@@ -85,8 +85,8 @@ namespace MoMa {
         BoneList *boneList; // Bone list
         bool hasBoneList; // Check if set
         
-        SynoList *synoList; // Synonym list
-        bool hasSynoList; // Check if set
+        // SynoList *synoList; // Synonym list
+        // bool hasSynoList; // Check if set
         
     protected:
         arma::mat position;
@@ -104,7 +104,44 @@ namespace MoMa {
     Node Frame::node( std::string name ) {
         
         Node nod;
+        int nIdx = -1;
         
+        if( hasNodeList ) {
+        
+            nIdx = nodeList->index( name );
+            
+            if( nIdx > -1 ) {
+                
+                nod.setPosition( position.col( nIdx ) );
+                nod.setRotationFlag( hasRotation() );
+                
+                if( hasRotation() ) {
+                    
+                    nod.setOffsetRotation( rotationOffset.col( nIdx ) );
+                    nod.setRotation( rotation.col(nIdx) );
+                }
+                
+                if( hasNodeList ) {
+                    
+                    nod.setName( nodeList->name( nIdx ) );
+                }
+                
+                if( hasTime() ) {
+                    
+                    nod.setTime( _time );
+                }
+            
+            } else {
+            
+                std::cout << "Frame::node(): Node not found" << std::endl;
+            }
+            
+        } else {
+            
+            std::cout << "Frame::node(): No node name list" << std::endl;
+        }
+        
+        /*
         // TODO Make this modular
         
         int nIdx = -1; // Initialise
@@ -115,7 +152,7 @@ namespace MoMa {
             for( int n=0; n<nodeList->size(); n++ ) {
                 
                 // If we find a matching name, we save index
-                if( nodeList->at(n).compare( name ) == 0 ) {
+                if( nodeList->name(n).compare( name ) == 0 ) {
                     
                     isFound = true;
                     nIdx = n;
@@ -130,7 +167,7 @@ namespace MoMa {
                     std::string nFromList = "fl"; // Synonym of nth in list
                     
                     synoList->search( name, nNameQuery ); // Search name
-                    synoList->search( nodeList->at(n), nFromList ); // & list
+                    synoList->search( nodeList->name(n), nFromList ); // & list
                     
                     if( nFromList.compare( nNameQuery ) == 0 ) {
                         
@@ -154,7 +191,7 @@ namespace MoMa {
                 
                 if( hasNodeList ) {
                     
-                    nod.setName( nodeList->at( nIdx ) );
+                    nod.setName( nodeList->name( nIdx ) );
                 }
                 
                 if( hasTime() ) {
@@ -171,6 +208,7 @@ namespace MoMa {
             
             std::cout << "Frame::node: No node name list" << std::endl;
         }
+        */
         
         return( nod );
     }
@@ -192,7 +230,7 @@ namespace MoMa {
             
             if( hasNodeList ) {
                 
-                nod.setName( nodeList->at( index ) );
+                nod.setName( nodeList->name( index ) );
             }
             
             if( hasTime() ) {

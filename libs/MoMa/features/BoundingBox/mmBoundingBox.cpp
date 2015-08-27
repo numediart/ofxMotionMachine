@@ -189,7 +189,7 @@ Node BoundingBox::lowest( Frame frame, string name ) {
     for( int n=0; n<frame.nOfNodes(); n++ ) {
         
         if( frame.node( n ).position( Z ) < low.position( Z )
-        && name != frame.nodeList->at( n ) ) {
+        && name != frame.nodeList->name( n ) ) {
             
             low = frame.node( n );
         }
@@ -205,7 +205,7 @@ Node BoundingBox::highest( Frame frame, string name ) {
     for( int n=0; n<frame.nOfNodes(); n++ ) {
         
         if( frame.node( n ).position( Z ) > high.position( Z )
-        && name != frame.nodeList->at( n ) ) {
+        && name != frame.nodeList->name( n ) ) {
             
             high = frame.node( n );
         }
