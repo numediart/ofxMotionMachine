@@ -15,7 +15,7 @@ PlayBar::PlayBar( SceneApp *_app, MoMa::Position position, MoMa::Position alignm
         playRadio = addRadio("Bar",buttons,OFX_UI_ORIENTATION_HORIZONTAL,OFX_UI_FONT_SMALL );*/
 
         
-        txt_index = addTextArea("index", "Index : 0" );
+        //txt_index = addTextArea("index", "Index : 0" );
         setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
         //txt_time = addTextArea("time", "Time : 0", OFX_UI_FONT_SMALL );
         setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
@@ -115,7 +115,7 @@ void PlayBar::update() {
     if( app->playbackMode == MoMa::SCRUB ) bt_scrub->setValue(true);
     else bt_scrub->setValue(false);
     //getCanvasTitle()->setLabel( "Index : " + ofToString(app->getAppIndex()) + "\t - Time : " + ofToString(app->getAppTime()) );
-    getCanvasTitle()->setLabel( "Time : " + ofToString(app->getAppTime()) );
-    txt_index->setTextString("Index : " + ofToString(app->getAppIndex()) );
+    getCanvasTitle()->setLabel( ofToString( app->getAppTime() ) + " s | frame " + ofToString( app->getAppIndex() ) );
+    //txt_index->setTextString("Index : " + ofToString(app->getAppIndex()) );
 
 }

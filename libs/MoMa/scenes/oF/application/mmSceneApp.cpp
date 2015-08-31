@@ -25,10 +25,14 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     show3dScene( true );
     showNodeNames( false );
     showTimeTags( false );
+    showCaptions( true );
     enableShortcuts();
 
     setActiveMode( SCENE2D );
     setPlaybackMode( PLAY );
+    
+    setAutoDrawLabelLists( true );
+    setAutoDrawFeatures( true );
 
     showAnnotation( true );
     showCurtain( false );
@@ -305,12 +309,48 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
 
         _figure[figureIdx].plot.clear();
         _figure[figureIdx].plotId = 0;
+        
+        if( autoDrawFeatures ) {
+        
+            for( int f=0; f<nOfFeatures(); f++ ) {
+                
+                figure( f ); // Pick figure
+                
+                if( feature[ f ].isFeasible ) {
+                    
+                    if( feature[ f ].type == VECTOR ) {
+                        
+                        draw( *(feature[ f ].feature.tvec), feature[ f ].name );
+                        
+                    } else if( feature[ f ].type == MATRIX ) {
+                        
+                        draw( *(feature[ f ].feature.tmat), feature[ f ].name );
+                        
+                    } else if( feature[ f ].type == CUBE ) {
+                        
+                        for( int s=0; s<feature[ f ].feature.tcube->nOfCols(); s++ ) {
+                            
+                            draw( feature[ f ].feature.tcube->col( s ),
+                            feature[ f ].name + " ( "+ofToString( s ) + " )" );
+                        }
+                    }
+                }
+            }
+        }
 
         scene2d(); // 2D figures
         render2d(); // Render
     }
 
     if( isAnnotation ) {
+        
+        if( autoDrawLabelLists ) {
+            
+            for( int l=0; l<nOfLabelLists(); l++ ) {
+            
+                draw( labelList( l ) );
+            }
+        }
 
         annotate(); // Annotations
     }
@@ -786,16 +826,19 @@ void MoMa::SceneApp::render2d( void ) {
 
         // -- Display plot names --
 
-        for( int f=0; f<_figure[fIdx].plot.size(); f++ ) {
+        if( isCaptions ) {
+            
+            for( int f=0; f<_figure[fIdx].plot.size(); f++ ) {
 
-            ofPushStyle();
+                ofPushStyle();
 
-            ofSetColor( _figure[fIdx].plot[f].color ); // Grab name from plot name field
-            ofDrawBitmapString( _figure[fIdx].plot[f].name, 13, _figure[fIdx].yTop+nIndex );
+                ofSetColor( _figure[fIdx].plot[f].color ); // Grab name from plot name field
+                ofDrawBitmapString( _figure[fIdx].plot[f].name, 13, _figure[fIdx].yTop+nIndex );
 
-            ofPopStyle();
+                ofPopStyle();
 
-            nIndex += 14;
+                nIndex += 14;
+            }
         }
 
         // -- Display zero line --
@@ -1125,7 +1168,7 @@ MoMa::Track &MoMa::SceneApp::track( std::string name ) {
 
 MoMa::Track &MoMa::SceneApp::track( int index ) {
 
-    if( index > 0 && index < _track.size() ) return( *(_track[ index ].track) );
+    if( index >= 0 && index < _track.size() ) return( *(_track[ index ].track) );
     else return( *( new Track() ) ); // TODO Very bad way to do this: memory leak!!!
 }
 
@@ -1184,14 +1227,13 @@ MoMa::LabelList &MoMa::SceneApp::labelList( std::string name ) {
     }
 
     // TODO Very bad way to do this: memory leak!!!
-
     if( isFound ) return( *(_labelList[ kFound ].labelList) );
     else return( *( new LabelList() ) ); // Make decision
 }
 
 MoMa::LabelList &MoMa::SceneApp::labelList( int index ) {
-
-    if( index > 0 && index < _labelList.size() ) return( *(_labelList[ index ].labelList) );
+    
+    if( index >= 0 && index < _labelList.size() ) return( *(_labelList[ index ].labelList) );
     else return( *( new LabelList() ) ); // TODO Very bad way to do this:  leak!!!
 }
 
@@ -1217,6 +1259,51 @@ bool MoMa::SceneApp::isLabelListShown( int labelListId ) {
     return( _labelList[ labelListId ].isShown );
 }
 
+void MoMa::SceneApp::addNewFeature( MoMa::TimedVec
+&feat, string name, string osc, bool isSent ) {
+    
+    _Feature _feat;
+    
+    _feat.type = VECTOR;
+    _feat.feature.tvec = &feat;
+    _feat.isFeasible = true;
+    _feat.isSent = isSent;
+    _feat.oscHeader = osc;
+    _feat.name = name;
+    
+    feature.push_back( _feat );
+}
+
+void MoMa::SceneApp::addNewFeature( MoMa::TimedMat
+&feat, string name, string osc, bool isSent ) {
+    
+    _Feature _feat;
+    
+    _feat.type = MATRIX;
+    _feat.feature.tmat = &feat;
+    _feat.isFeasible = true;
+    _feat.isSent = isSent;
+    _feat.oscHeader = osc;
+    _feat.name = name;
+    
+    feature.push_back( _feat );
+}
+
+void MoMa::SceneApp::addNewFeature( MoMa::TimedCube
+&feat, string name, string osc, bool isSent ) {
+    
+    _Feature _feat;
+    
+    _feat.type = CUBE;
+    _feat.feature.tcube = &feat;
+    _feat.isFeasible = true;
+    _feat.isSent = isSent;
+    _feat.oscHeader = osc;
+    _feat.name = name;
+    
+    feature.push_back( _feat );
+}
+
 void MoMa::SceneApp::setNumOfFigures( int nOfFigures ) {
 
     _figure.clear(); // New vector
@@ -1232,8 +1319,11 @@ void MoMa::SceneApp::setNumOfFigures( int nOfFigures ) {
 }
 
 void MoMa::SceneApp::figure( int figId ) {
-
+    
     figureIdx = figId;
+    
+    if( figureIdx < 0 ) figureIdx = 0; // Bound the figure idx query
+    else if( figureIdx > nOfFigures()-1 ) figureIdx = nOfFigures()-1;
 
     _figure[figureIdx].yMin = -1.0f;
     _figure[figureIdx].yMax = 1.0f;
@@ -1461,6 +1551,11 @@ void MoMa::SceneApp::showNodeNames( bool names ) {
 void MoMa::SceneApp::showTimeTags( bool times ) {
 
     isTimeTags = times;
+}
+
+void MoMa::SceneApp::showCaptions( bool caps ) {
+    
+    isCaptions = caps;
 }
 
 void MoMa::SceneApp::showAnnotation( bool annot ) {

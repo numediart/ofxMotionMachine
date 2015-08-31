@@ -24,7 +24,8 @@ namespace MoMa {
     
     const string PositionHeader = "/position";
     const string RotationHeader = "/rotation";
-
+    const string NoFeature = "No feature";
+    
     class MenuView;
     class PlayBar;
     
@@ -107,6 +108,31 @@ namespace MoMa {
         
         LabelList *labelList; // Pointer to dynamically-created label list
         bool isShown; // Is that label list shown in annotation scene?
+    };
+    
+    enum FeatureDim {
+    
+        VECTOR,
+        MATRIX,
+        CUBE
+    };
+    
+    union TimedUnion {
+    
+        TimedVec *tvec;
+        TimedMat *tmat;
+        TimedCube *tcube;
+    };
+    
+    struct _Feature {
+        
+        FeatureDim type;
+        TimedUnion feature;
+        std::string oscHeader;
+        std::string name;
+        std::string desc;
+        bool isFeasible;
+        bool isSent;
     };
     
     // -- Shortcuts to SceneApp skeleton colors --
@@ -195,6 +221,21 @@ namespace MoMa {
         bool isLabelListShown( int labelListId ); // Check if label list shown
         void registerMouseEvent( LabelList &labList ); // Register mouse event
         void registerDragEvent( LabelList &labList ); // Register drag event
+        void setAutoDrawLabelLists( bool ad ) { autoDrawLabelLists = ad; }
+        
+        // - Built-in feature related methods -
+        
+        int nOfFeatures( void ) { return( feature.size() ); } // # feat
+        void setAutoDrawFeatures( bool ad ) { autoDrawFeatures = ad; }
+        void addNewFeature( MoMa::TimedVec &feature, std::string name="",
+        std::string osc="/feat", bool isSent=true );
+        void addNewFeature( MoMa::TimedMat &feature, std::string name="",
+        std::string osc="/feat", bool isSent=true );
+        void addNewFeature( MoMa::TimedCube &feature, std::string name="",
+        std::string osc="/feat", bool isSent=true );
+        
+        // TODO Access feature for drawing, for sending OSC
+        // and for checking compatibility with input data.
         
         // - Figure-related methods -
         
@@ -251,6 +292,7 @@ namespace MoMa {
         void showGround( bool ground ); // Show ground grid
         void showNodeNames( bool names ); // Show node names
         void showTimeTags( bool times ); // Show time tags
+        void showCaptions( bool caps ); // Show time tags
         
         void showAnnotation( bool annot ); // Show annotations
         void showCurtain( bool curtain ); // Show 3D curtain
@@ -271,7 +313,7 @@ namespace MoMa {
 
         void addMenuView( void ); // Add menu view to the canvas
         void removeMenuView( void ); // Remove menu view to the canvas
-        void addPlayerBar( void ); // Add player view to the canvas (use it only if you remove the menu view)
+        void addPlayerBar( void ); // Add player view to the canvas
         void removePlayerBar( void ); // Remove player view to the canvas
     
       //protected:
@@ -308,6 +350,7 @@ namespace MoMa {
         bool isGround; // Do we draw ground?
         bool isNodeNames; // Show node names
         bool isTimeTags; // Show time stamps
+        bool isCaptions; // Show captions
         
         bool isAnnotation; // Show annotations
         bool isCurtain; // Show 3D curtain
@@ -367,12 +410,18 @@ namespace MoMa {
         LabelList *dragEventRegLabelList; // Registered label list
         bool hasMouseEventRegLabelList; // Has mouse-event registered?
         LabelList *mouseEventRegLabelList; // Registered label list
+        bool autoDrawLabelLists; // Auto-draw label lists
         
         bool insertNewLabel; // Are we inserting a new label?
         bool isLabelSelected; // Is a label currently selected?
         int selectedLabelIdx; // If yes, this is its index
         bool isEditing; // Are we editing (typing text)
         int tolerance; // Tolerence for seletion
+        
+        // - Feature types -
+        
+        vector<_Feature> feature; // List of features
+        bool autoDrawFeatures; // Auto-draw features
 
         // - Shortcuts control -
         

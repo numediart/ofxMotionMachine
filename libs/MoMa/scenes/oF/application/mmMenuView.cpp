@@ -23,7 +23,7 @@ MenuView::MenuView( SceneApp *_app, MoMa::Position position, MoMa::Position alig
         addSpacer();
         //playRadio = addRadio( "ActivePlayMode", playNames, OFX_UI_ORIENTATION_VERTICAL );
         //addSpacer();
-        addToggle("Player",true);
+        addToggle("SHOW/HIDE TRANSPORT",true);
         initCanvas();
 }
 
@@ -41,7 +41,7 @@ void MenuView::canvasEvent( ofxUIEventArgs &e ) {
     else if( app->activeMode == MoMa::SCENE2D ) app->showFigures( true );
     else if( app->activeMode == MoMa::ANNOTATE ) app->showAnnotation( true );
 
-    if(name == "Player") {
+    if(name == "SHOW/HIDE TRANSPORT") {
 
         if(((ofxUIToggle*)(e.widget))->getValue()) openChildren(0);
         else closeChildren();
