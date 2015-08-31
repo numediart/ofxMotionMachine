@@ -39,6 +39,8 @@ libs/oF/libs/*
 # Exclude nibs/swap files
 *~.nib
 *.swp
+*.swo
+.ycm*
 
 #Exclude Matlab files
 *.m~
