@@ -149,8 +149,8 @@ void Track::push( Frame _frame ) {
     
     if( isRing ) {
         
-        if( position.nOfFrames() > ringSize ) position.pop(); // Ring buffer behavior
-        if( _frame.hasRotation() && (rotation.nOfFrames() > ringSize )) rotation.pop();
+		if( position.nOfFrames() > ringSize ){}// position.pop(); // Ring buffer behavior
+		if( _frame.hasRotation() && (rotation.nOfFrames() > ringSize )){}// rotation.pop();
     }
 }
 

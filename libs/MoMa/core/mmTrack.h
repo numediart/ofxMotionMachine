@@ -80,10 +80,10 @@ namespace MoMa {
         bool setJointOffsetRotation();
         
         void pushPosition( arma::mat frame ); // Add frame + checking if ringbuffer
-        void popPosition( void ) { position.pop(); } // Remove frame
+     //   void popPosition( void ) { position.pop(); } // Remove frame
 
         void pushRotation( arma::mat frame ); // Add frame + checking if ringbuffer
-        void popRotation( void ) { position.pop(); } // Remove frame
+      //  void popRotation( void ) { position.pop(); } // Remove frame
 
         void push( Frame _frame ); // Push new frame into the track (at the end)
         
