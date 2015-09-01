@@ -16,9 +16,6 @@
     <Filter Include="MoMa\features\Geometry">
       <UniqueIdentifier>{fb2f1248-b6da-4c34-98b0-462f9415d838}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MoMa\features\Muller">
-      <UniqueIdentifier>{b6f80b9c-676f-47d3-b423-9cf9e834d373}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MoMa\scenes">
       <UniqueIdentifier>{ed4f18fb-5797-41b8-a591-3b4d00d5fe7d}</UniqueIdentifier>
     </Filter>
@@ -119,9 +116,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\MoMa\features\Geometry\mmGeometry.cpp">
       <Filter>MoMa\features\Geometry</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\MoMa\features\Muller\mmMuller.cpp">
-      <Filter>MoMa\features\Muller</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmSceneApp.cpp">
       <Filter>MoMa\scenes\oF\application</Filter>
@@ -421,9 +415,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\MoMa\features\Geometry\mmGeometry.h">
       <Filter>MoMa\features\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\MoMa\features\Muller\mmMuller.h">
-      <Filter>MoMa\features\Muller</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmSceneApp.h">
       <Filter>MoMa\scenes\oF\application</Filter>

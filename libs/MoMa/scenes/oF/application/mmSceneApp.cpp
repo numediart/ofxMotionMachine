@@ -311,18 +311,27 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
                     
                     if( feature[ f ].type == VECTOR ) {
                         
-                        draw( *(feature[ f ].feature.tvec), feature[ f ].name );
+                        string name = feature[ f ].name;
+                        if( feature[ f ].isSent ) name += " [OSC]";
+                        
+                        draw( *(feature[ f ].feature.tvec), name );
                         
                     } else if( feature[ f ].type == MATRIX ) {
                         
-                        draw( *(feature[ f ].feature.tmat), feature[ f ].name );
+                        string name = feature[ f ].name;
+                        if( feature[ f ].isSent ) name += " [OSC]";
+                        
+                        draw( *(feature[ f ].feature.tmat), name );
                         
                     } else if( feature[ f ].type == CUBE ) {
+                        
+                        string name = feature[ f ].name;
+                        if( feature[ f ].isSent ) name += " [OSC]";
                         
                         for( int s=0; s<feature[ f ].feature.tcube->nOfCols(); s++ ) {
                             
                             draw( feature[ f ].feature.tcube->col( s ),
-                            feature[ f ].name + " ( "+ofToString( s ) + " )" );
+                            name + " ( "+ofToString( s ) + " )" );
                         }
                     }
                 }
