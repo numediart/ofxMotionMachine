@@ -66,9 +66,9 @@ namespace MoMa {
         }
         return true;
     }
-	unsigned int TimedData::checkLastId(arma::vec pTime){
+	unsigned int TimedData::checkLastId(const arma::vec &pTime){
 		unsigned int lLastId=0;
-        arma::vec::iterator it1;
+        arma::vec::const_iterator it1;
         it1=pTime.begin();
 		while ((it1+1)!=pTime.end()&&(*(it1+1)>*it1)){
 			it1++;
@@ -77,6 +77,34 @@ namespace MoMa {
 		return lLastId;
 	}
 // == TIMED VEC ==
+	bool TimedVec::SetValidParam(){
+		if (mTimed){
+			if (mTimeVec.n_elem>0)
+				if (mTimeVec.n_elem!=mData.n_elem)
+					return false;}
+		else
+			if (mFrameRate<=0.0)
+				return false;
+		if (!mIsRealTime){
+			if (mData.n_elem>0){
+				mBufferSize=mData.n_elem;
+				mIsFilled=true;
+				mLastId=mBufferSize-1;
+			}
+		}
+		else{
+			if (mData.n_elem>0){
+				mBufferSize=mData.n_elem;
+				mIsFilled=true;
+				if (mTimed)
+					mLastId=checkLastId(this->mTimeVec);
+				else
+					mLastId=mBufferSize-1;
+			}
+		}
+		return true;
+	};
+
     
     bool TimedVec::setData( double pFrameRate, const arma::vec &pData ) {
         
@@ -190,7 +218,33 @@ namespace MoMa {
 		return true;
 	}
 // == TIMED MAT ==
-    
+    bool TimedMat::SetValidParam(){
+		if (mTimed){
+			if (mTimeVec.n_elem>0)
+				if (mTimeVec.n_elem!=mData.n_cols)
+					return false;}
+		else
+			if (mFrameRate<=0.0)
+				return false;
+		if (!mIsRealTime){
+			if (mData.n_cols>0){
+				mBufferSize=mData.n_cols;
+				mIsFilled=true;
+				mLastId=mBufferSize-1;
+			}
+		}
+		else{
+			if (mData.n_cols>0){
+				mBufferSize=mData.n_cols;
+				mIsFilled=true;
+				if (mTimed)
+					mLastId=checkLastId(this->mTimeVec);
+				else
+					mLastId=mBufferSize-1;
+			}
+		}
+		return true;
+	};
     bool TimedMat::setInterpAlgo( InterpTypes interpAlgo ) {
         
         this->interpolAlgo = interpAlgo;
@@ -360,7 +414,32 @@ namespace MoMa {
     }
     
 // == TIMED CUBE ==
-    
+    bool TimedCube::SetValidParam(){
+		if (mTimed){
+			if (mTimeVec.n_elem>0)
+				if (mTimeVec.n_elem!=mData.n_slices)
+					return false;}
+		else
+			if (mFrameRate<=0.0)
+				return false;
+		if (!mIsRealTime){
+			if (mData.n_slices>0){
+				mBufferSize=mData.n_slices;
+				mIsFilled=true;
+				mLastId=mBufferSize-1;
+			}
+		}
+		else{
+			if (mData.n_slices>0){
+				mBufferSize=mData.n_slices;
+				mIsFilled=true;
+				if (mTimed)
+					mLastId=checkLastId(this->mTimeVec);
+				else
+					mLastId=mBufferSize-1;
+			}
+		}
+	};
     bool TimedCube::setInterpAlgo( InterpTypes interpAlgo ) {
         
         this->interpolAlgo = interpAlgo;

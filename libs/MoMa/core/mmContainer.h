@@ -50,7 +50,7 @@ namespace MoMa {
         
       protected:
         
-        TimedData() { mTimed = false; mFrameRate = 1.0f;mInitialTime=0.f; mTimeVec=arma::zeros(0,0);
+        TimedData() { mTimed = false; mFrameRate = -1.0f;mInitialTime=0.f; mTimeVec=arma::zeros(0,0);
 		mBufferSize=0;mLastId=0;mIsRealTime=false;mBufferSize=0;mLastId=0;mIsFilled=true;}
 	public:
         inline const arma::vec &getTimeVec( void ) const{ return( mTimeVec ); }
@@ -80,10 +80,11 @@ namespace MoMa {
 		void setLastId(unsigned int lId){
 			mLastId=lId;
 		}
+		virtual bool SetValidParam()=0;//Check if size and flag is ok and make change if necessary
       protected:
         
         bool checkTimeVec( arma::vec pTime ); // Check time stamp vector
-        unsigned int checkLastId(arma::vec pTime);
+        unsigned int checkLastId(const arma::vec &pTime);
         void interpIndexFind( const arma::vec pVec, double pValue, unsigned int &index1,
         double &weight1, unsigned int &index2, double &weight2 ); // Interpolation data
         
@@ -201,6 +202,7 @@ namespace MoMa {
 		unsigned int nOfFrames( void ) { return( mIsFilled?mData.n_elem:(mLastId+1)*(mLastId<mBufferSize) ); }
         unsigned int nOfElems( void ) { return( 1 ); }
         void clear( void ) { mData.clear(); }
+		bool SetValidParam();
       protected:
         
         arma::vec mData;
@@ -208,6 +210,7 @@ namespace MoMa {
     
     // - Inlined functions -
     
+	
     double TimedVec::get( unsigned int pIndex ) {
         
         return mData( memIndex(pIndex) );
@@ -388,6 +391,7 @@ namespace MoMa {
         unsigned int nOfFrames( void ) { return( mIsFilled?mData.n_cols:((mLastId+1)*(mLastId<mBufferSize))); }
         unsigned int nOfElems( void ) { return( mData.n_rows ); }
         void clear( void ) { mData.clear(); }
+		bool SetValidParam();
     
       protected:
         
@@ -584,7 +588,8 @@ namespace MoMa {
         unsigned int nOfRows( void ) { return( mData.n_rows ); } // # of rows
         unsigned int nOfCols( void ) { return( mData.n_cols ); } // # of cols
         void clear( void ) { mData.clear(); } // Clear
-        
+ 		bool SetValidParam();
+       
       protected:
         
         bool checkInput( const arma::mat &pData );

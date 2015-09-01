@@ -111,9 +111,16 @@ void Track::load( string const &fileName ) {
     Parser parser( fileName, this );
 }
 
-void Track::setRingBufferSize( int size ) {
+void Track::setRingBufferSize( int size ,bool pHasRotation) {
+	position.setRealTimeMode(size,3u,nodeList->size());
+	if (pHasRotation){
+		rotation.setRealTimeMode(size,4u,nodeList->size());
+		hasRotation=true;
+		this->hasOrigNodeRot_as_boneRot=false;
+		this->setJointOffsetRotation();
 
-    ringSize = size;
+	};
+	ringSize = size;
     isRing = true;
 }
 
@@ -387,8 +394,6 @@ bool Track::setJointOffsetRotation() {
             this->rotationOffset.col(dest)=lquat;
             
         }
-        
-        
     }
     
     return true;

@@ -55,6 +55,9 @@ Parser::Parser( string const &fName, Track *tr ) {
                 delete track->boneList;
             }
         }
+		 tr->position.SetValidParam();
+		 if (tr->hasRotation)
+			 tr->rotation.SetValidParam();
     }
 
     else if( extension == "v3d" ) {
@@ -73,6 +76,9 @@ Parser::Parser( string const &fName, Track *tr ) {
                 delete track->boneList;
         }
         tr->setJointOffsetRotation();
+		 tr->position.SetValidParam();
+		 if (tr->hasRotation)
+			 tr->rotation.SetValidParam();
     }
 
     else if( extension == "c3d" ) {
@@ -90,6 +96,9 @@ Parser::Parser( string const &fName, Track *tr ) {
                 track->hasBoneList = false;
                 delete track->boneList;
         }
+		 tr->position.SetValidParam();
+		 if (tr->hasRotation)
+			 tr->rotation.SetValidParam();
     }
     
     else if( extension == "bvh" ) {
@@ -108,6 +117,9 @@ Parser::Parser( string const &fName, Track *tr ) {
             delete track->boneList;
         }
         tr->setJointOffsetRotation();
+		 tr->position.SetValidParam();
+		 if (tr->hasRotation)
+			 tr->rotation.SetValidParam();
     }
     else if( extension == "cmp" ) {
         
@@ -126,6 +138,10 @@ Parser::Parser( string const &fName, Track *tr ) {
             delete track->boneList;
         }
 //        tr->setJointOffsetRotation(true);
+		
+		 tr->position.SetValidParam();
+		 if (tr->hasRotation)
+			 tr->rotation.SetValidParam();
     }
     else if( extension == "kin" ) {
         
@@ -152,6 +168,9 @@ Parser::Parser( string const &fName, Track *tr ) {
             }
         }
          tr->setJointOffsetRotation();
+		 tr->position.SetValidParam();
+		 if (tr->hasRotation)
+			 tr->rotation.SetValidParam();
 
     }
 

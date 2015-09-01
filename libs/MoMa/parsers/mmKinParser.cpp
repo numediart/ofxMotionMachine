@@ -18,6 +18,45 @@ void KinParser::load( string const &fileName, Track *track ) {
     }
     
     track->clear();
+	
+	unsigned int nbFrames=0;
+	unsigned int nbNodes=0;
+
+    while ( datFile.good() ) {
+		string name;
+        string curLine;
+        stringstream curStrm;
+        vector<string> rawData;
+        std::getline( datFile, curLine );
+		
+		unsigned int lNbNodes=0;
+        if( curLine != "" && curLine != " "
+			&& curLine != "\t" && curLine != "\n" ) {
+				curStrm.clear();
+				curStrm << curLine;
+				nbFrames++;
+				while( curStrm.good() ) {
+					string value[7];
+					curStrm >> value[0];
+					if (value[0]==std::string(""))
+						continue;
+					curStrm >> value[1];
+					curStrm >> value[2];
+					curStrm >> value[3];
+					curStrm >> value[4];
+					curStrm >> value[5];
+					curStrm >> value[6];
+					lNbNodes++;
+
+				}	
+		}
+		nbNodes=nbNodes>lNbNodes?nbNodes:lNbNodes;
+	}
+    datFile.clear() ;
+	datFile.seekg(0, ios::beg) ;
+	arma::cube pos(3,nbNodes,nbFrames);
+	arma::cube rot(4,nbNodes,nbFrames);
+	unsigned int frameId=0;
     while ( datFile.good() ) {
 		string name;
         string curLine;
@@ -29,14 +68,14 @@ void KinParser::load( string const &fileName, Track *track ) {
         if( curLine != "" && curLine != " "
         && curLine != "\t" && curLine != "\n" ) {
             
-            Frame oneFrame;
+            //Frame oneFrame;
             
             curStrm.clear();
             curStrm << curLine;
-            
+            unsigned int nodeId=0;
             while( curStrm.good() ) {
                 
-                Node oneNode;
+                //Node oneNode;
                 string value[7];
 				curStrm >> value[0];
                 if (value[0]==std::string(""))
@@ -56,15 +95,17 @@ void KinParser::load( string const &fileName, Track *track ) {
                     // Data are ignored and the oneNode stays with ARMA NaNs
                     
                 } else {
-                       
-                    oneNode.position(X) = atof( value[0].c_str() );
-                    oneNode.position(Y) = atof( value[1].c_str() );
-                    oneNode.position(Z) = atof( value[2].c_str() );
-                    double qx=atof( value[3].c_str() );
-                    double qy=atof( value[4].c_str() );
-                    double qz=atof( value[5].c_str() );
-                    double qw=atof( value[6].c_str() );
-                    if (qw==1||(qx==0&&qy==0&&qz==0)){
+                    
+
+                    pos(X,nodeId,frameId) = atof( value[0].c_str() );
+                    pos(Y,nodeId,frameId) = atof( value[1].c_str() );
+                    pos(Z,nodeId,frameId) = atof( value[2].c_str() );
+                    rot(qX,nodeId,frameId) =atof( value[3].c_str() );
+                    rot(qY,nodeId,frameId)=atof( value[4].c_str() );
+                    rot(qZ,nodeId,frameId)=atof( value[5].c_str() );
+                    rot(qW,nodeId,frameId)=atof( value[6].c_str() );
+                    /*
+					if (qw==1||(qx==0&&qy==0&&qz==0)){
                         oneNode.setRotation( arma::datum::nan,arma::datum::nan,arma::datum::nan,arma::datum::nan);
                     }
                     else
@@ -73,22 +114,23 @@ void KinParser::load( string const &fileName, Track *track ) {
 					//oneNode.rotation(qY) = atof( value[4].c_str() );
 					//oneNode.rotation(qZ) = atof( value[5].c_str() );
 					//oneNode.rotation(qW) = atof( value[6].c_str() );
-                }
+					*/
 
-                oneFrame.push( oneNode );
+                }
+				nodeId++;
+                //oneFrame.push( oneNode );
 				
             }
 			//oneFrame.setRotationFlag( track->hasRotation );
-            oneFrame.hasNodeList = track->hasNodeList;
-            oneFrame.nodeList = track->nodeList;
-            
-            oneFrame.hasBoneList = track->hasBoneList;
-            oneFrame.boneList = track->boneList;
-            
-            track->push( oneFrame );
-        }
-        track->hasOrigNodeRot_as_boneRot=false;
-    }
+			frameId++;
+		}
+	}
+	
+	track->position.setData(30,pos);
+	track->rotation.setData(30,rot);
+	track->hasRotation=true;
+	
+	track->hasOrigNodeRot_as_boneRot=false;
     datFile.close();
    
 }

@@ -74,7 +74,7 @@ namespace MoMa {
         
         // - Ringbuffer-related methods -
         
-        void setRingBufferSize( int size ); // Set as ring buffer + max size
+        void setRingBufferSize( int size ,bool pHasRotation=false); // Set as ring buffer + max size
         void subTrack( Track &subTr, int beg, int end ); // Extract a subtrack
         
         bool setJointOffsetRotation();
@@ -164,7 +164,9 @@ namespace MoMa {
         
         double maxTime = (double)nOfFrames() / (double)frameRate();
         
-        if( time >= 0.0f && time < maxTime ) {
+        //if( time >= 0.0f && time < maxTime ) 
+		if (nOfFrames()>0)
+		{
             
             oneFrame.setRotationFlag( hasRotation );
             oneFrame.setPositionData( position.get( time ) );

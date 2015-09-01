@@ -179,68 +179,59 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
 
         for( int l=0; l<listener.size(); l++ ) {
 
-            Frame oscFrame;
             bool hasReceivedFrame = false;
 
             if( message.getAddress() == listener[l].header+PositionHeader ) {
 
-                oscFrame.setRotationFlag( false );
                 listener[l].track->hasRotation = false;
-
                 if( listener[l].mode == ROTATIONS ) {
-
                     listener[l].mode = POSITIONS;
-                    listener[l].track->clear();
+                    //listener[l].track->clear();
                 }
-
                 int nOfNodes = message.getNumArgs()/3;
-
+				arma::mat lPos(3,nOfNodes);
+				
                 for( int n=0; n<nOfNodes; n++ ) {
-
-                    float x = message.getArgAsFloat( 3*n );
-                    float y = message.getArgAsFloat( 3*n+1 );
-                    float z = message.getArgAsFloat( 3*n+2 );
-
-                    Node nod( x, y, z );
-                    oscFrame.push( nod );
+                   lPos(X,n) = message.getArgAsFloat( 3*n );
+				   lPos(X,n) = message.getArgAsFloat( 3*n+1 );
+				   lPos(Y,n) = message.getArgAsFloat( 3*n+2 );
                 }
 
                 hasReceivedFrame = true;
+				listener[l].track->rotation.push( lPos );
             }
 
             if( message.getAddress() == listener[l].header+RotationHeader ) {
 
-                oscFrame.setRotationFlag( true );
                 listener[l].track->hasRotation = true;
 
                 if( listener[l].mode == POSITIONS ) {
 
                     listener[l].mode = ROTATIONS;
-                    listener[l].track->clear();
+                    //listener[l].track->clear();
                 }
 
                 int nOfNodes = message.getNumArgs()/7;
-
+				arma::mat lPos(3,nOfNodes);
+				arma::mat lRot(4,nOfNodes);
                 for( int n=0; n<nOfNodes; n++ ) {
 
-                    float x = message.getArgAsFloat( 7*n );
-                    float y = message.getArgAsFloat( 7*n+1 );
-                    float z = message.getArgAsFloat( 7*n+2 );
-                    float rx = message.getArgAsFloat( 7*n+3 );
-                    float ry = message.getArgAsFloat( 7*n+4 );
-                    float rz = message.getArgAsFloat( 7*n+5 );
-                    float rw = message.getArgAsFloat( 7*n+6 );
+                    lPos(X,n) = message.getArgAsFloat( 7*n );
+					lPos(Y,n) = message.getArgAsFloat( 7*n+1 );
+                    lPos(Z,n) = message.getArgAsFloat( 7*n+2 );
+                    lRot(qX,n) = message.getArgAsFloat( 7*n+3 );
+                    lRot(qY,n) = message.getArgAsFloat( 7*n+4 );
+                    lRot(qZ,n) = message.getArgAsFloat( 7*n+5 );
+                    lRot(qW,n) = message.getArgAsFloat( 7*n+6 );
 
-                    Node nod( x, y, z, rx, ry, rz, rw );
-                    oscFrame.push( nod );
                 }
-
+				listener[l].track->rotation.push( lRot ,ofGetElapsedTimeMillis());
+				listener[l].track->position.push( lPos ,ofGetElapsedTimeMillis());
                 hasReceivedFrame = true;
             }
 
             if( hasReceivedFrame ) {
-
-                listener[l].track->push( oscFrame );
+           //     listener[l].track->push( oscFrame );
                 setPlayerSize( listener[l].track->nOfFrames() );
                 onOscReceived(); // Trigger custom code here
             }
