@@ -31,7 +31,7 @@ namespace MoMa {
         HOVERED,
         SELECTED
     };
-
+    
     class Label {
     
       public:

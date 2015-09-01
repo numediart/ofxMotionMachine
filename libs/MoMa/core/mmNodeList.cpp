@@ -64,8 +64,8 @@ using namespace MoMa;
 
 NodeList::NodeList( string fileName ) {
     
-    synoList.load( synoList.DefaultPath );
-    load( fileName ); // Load SynoList
+    load( fileName ); // load NodeList file content
+    synolist( synoList.DefaultPath ); // load SynoList
 }
 
 void NodeList::load( string fileName ) {
@@ -91,6 +91,11 @@ void NodeList::load( string fileName ) {
             idx++; // Insert new pair and increment idx
         }
     }
+}
+
+bool NodeList::synolist( string fileName ) {
+
+    return this->synoList.load(fileName);
 }
 
 std::string NodeList::name( unsigned int idx ) {
