@@ -26,8 +26,6 @@
 		9F00DC791A9C8A580022A309 /* mmBoundingBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F00DC6E1A9C8A580022A309 /* mmBoundingBox.h */; };
 		9F00DC7A1A9C8A580022A309 /* mmGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F00DC701A9C8A580022A309 /* mmGeometry.cpp */; };
 		9F00DC7B1A9C8A580022A309 /* mmGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F00DC711A9C8A580022A309 /* mmGeometry.h */; };
-		9F00DC7C1A9C8A580022A309 /* mmMuller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F00DC731A9C8A580022A309 /* mmMuller.cpp */; };
-		9F00DC7D1A9C8A580022A309 /* mmMuller.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F00DC741A9C8A580022A309 /* mmMuller.h */; };
 		9F00DC7E1A9C8A580022A309 /* mmSignal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F00DC761A9C8A580022A309 /* mmSignal.cpp */; };
 		9F00DC7F1A9C8A580022A309 /* mmSignal.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F00DC771A9C8A580022A309 /* mmSignal.h */; };
 		9F2E1C0D1B76645000DB082C /* mmCam.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F2E1BFD1B76645000DB082C /* mmCam.cpp */; };
@@ -230,8 +228,6 @@
 		9F00DC6E1A9C8A580022A309 /* mmBoundingBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mmBoundingBox.h; sourceTree = "<group>"; };
 		9F00DC701A9C8A580022A309 /* mmGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mmGeometry.cpp; sourceTree = "<group>"; };
 		9F00DC711A9C8A580022A309 /* mmGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mmGeometry.h; sourceTree = "<group>"; };
-		9F00DC731A9C8A580022A309 /* mmMuller.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mmMuller.cpp; sourceTree = "<group>"; };
-		9F00DC741A9C8A580022A309 /* mmMuller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mmMuller.h; sourceTree = "<group>"; };
 		9F00DC761A9C8A580022A309 /* mmSignal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mmSignal.cpp; sourceTree = "<group>"; };
 		9F00DC771A9C8A580022A309 /* mmSignal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mmSignal.h; sourceTree = "<group>"; };
 		9F1C077E1A9CBD240067F3B4 /* MotionMachine.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = MotionMachine.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -474,7 +470,6 @@
 			children = (
 				9F00DC6C1A9C8A580022A309 /* BoundingBox */,
 				9F00DC6F1A9C8A580022A309 /* Geometry */,
-				9F00DC721A9C8A580022A309 /* Muller */,
 				9F00DC751A9C8A580022A309 /* Signal */,
 			);
 			name = Features;
@@ -498,16 +493,6 @@
 			);
 			name = Geometry;
 			path = ../../../MoMa/features/Geometry;
-			sourceTree = "<group>";
-		};
-		9F00DC721A9C8A580022A309 /* Muller */ = {
-			isa = PBXGroup;
-			children = (
-				9F00DC731A9C8A580022A309 /* mmMuller.cpp */,
-				9F00DC741A9C8A580022A309 /* mmMuller.h */,
-			);
-			name = Muller;
-			path = ../../../MoMa/features/Muller;
 			sourceTree = "<group>";
 		};
 		9F00DC751A9C8A580022A309 /* Signal */ = {
@@ -893,7 +878,6 @@
 				9F2E1FDE1B7664B800DB082C /* ofxUIWidgets.h in Headers */,
 				9F2E1FAF1B7664B800DB082C /* ofxUIMinimalSlider.h in Headers */,
 				9F2E1FCE1B7664B800DB082C /* ofxUITabBar.h in Headers */,
-				9F00DC7D1A9C8A580022A309 /* mmMuller.h in Headers */,
 				9F2E1F8E1B7664B800DB082C /* ofxUIButton.h in Headers */,
 				9F2E1C101B76645000DB082C /* mmCanvas.h in Headers */,
 				E8C8EFF51B418CCF00AD198F /* mmContainer.h in Headers */,
@@ -1060,7 +1044,6 @@
 				9F00DC661A9C8A1F0022A309 /* mmTrace.cpp in Sources */,
 				9F2E1FCB1B7664B800DB082C /* ofxUISuperCanvas.cpp in Sources */,
 				9F2E1F981B7664B800DB082C /* ofxUIEventArgs.cpp in Sources */,
-				9F00DC7C1A9C8A580022A309 /* mmMuller.cpp in Sources */,
 				9F2E1F741B7664B800DB082C /* OscReceivedElements.cpp in Sources */,
 				9F2E1C131B76645000DB082C /* mmOfUtils.cpp in Sources */,
 				9F2E1F6B1B7664B800DB082C /* UdpSocketWin.cpp in Sources */,
