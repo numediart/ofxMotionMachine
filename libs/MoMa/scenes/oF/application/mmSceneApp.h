@@ -228,11 +228,11 @@ namespace MoMa {
         int nOfFeatures( void ) { return( feature.size() ); } // # feat
         void setAutoDrawFeatures( bool ad ) { autoDrawFeatures = ad; }
         void addNewFeature( MoMa::TimedVec &feature, std::string name="",
-        std::string osc="/feat", bool isSent=true );
+        std::string osc="/feat", bool isSent=false ); // Add Vector feature
         void addNewFeature( MoMa::TimedMat &feature, std::string name="",
-        std::string osc="/feat", bool isSent=true );
+        std::string osc="/feat", bool isSent=false ); // Add Matrix feature
         void addNewFeature( MoMa::TimedCube &feature, std::string name="",
-        std::string osc="/feat", bool isSent=true );
+        std::string osc="/feat", bool isSent=false ); // Add Cube feature
         
         // TODO Access feature for drawing, for sending OSC
         // and for checking compatibility with input data.
