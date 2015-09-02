@@ -58,6 +58,8 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     _figure.resize( 1 ); // full-screen
     _figure[figureIdx].yTop = 0; // figure
     _figure[figureIdx].yBot = ofGetHeight();
+    hasDrawnInFig = false;
+    
     menuView = NULL;
     playBar = NULL;
     addMenuView();
@@ -303,7 +305,6 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
     }
 
     if( isFigure ) {
-
         _figure[figureIdx].yMin = 1.0E12;
         _figure[figureIdx].yMax = -1.0E12;
 
@@ -311,12 +312,29 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
         _figure[figureIdx].plotId = 0;
         
         if( autoDrawFeatures ) {
+            
+            int shownFeatureId = 0;
+            int nOfShownFeatures = 0;
+            
+            for( int f=0; f<nOfFeatures(); f++ ) {
+            
+                if( feature[f].isFeasible
+                && feature[f].isShown ) {
+                
+                    nOfShownFeatures++;
+                }
+            }
+            
+            if( nOfShownFeatures < 1 ) nOfShownFeatures=1;
+            
+            setNumOfFigures( nOfShownFeatures );
         
             for( int f=0; f<nOfFeatures(); f++ ) {
                 
-                figure( f ); // Pick figure
-                
-                if( feature[ f ].isFeasible ) {
+                if( feature[ f ].isFeasible
+                && feature[ f ].isShown ) {
+                    
+                    figure( shownFeatureId );
                     
                     if( feature[ f ].type == VECTOR ) {
                         
@@ -343,10 +361,12 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
                             name + " ( "+ofToString( s ) + " )" );
                         }
                     }
+                    
+                    shownFeatureId++;
                 }
             }
         }
-
+        
         scene2d(); // 2D figures
         render2d(); // Render
     }
@@ -963,6 +983,8 @@ void MoMa::SceneApp::draw(const TimedVec &tvec, int hue, std::string name ) {
             _figure[figureIdx].plot.push_back( plot );
             _figure[figureIdx].plotId++;
         }
+        
+        hasDrawnInFig = true;
     }
 }
 
@@ -1267,47 +1289,57 @@ bool MoMa::SceneApp::isLabelListShown( int labelListId ) {
     return( _labelList[ labelListId ].isShown );
 }
 
-void MoMa::SceneApp::addNewFeature( MoMa::TimedVec
-&feat, string name, string osc, bool isSent ) {
+void MoMa::SceneApp::addNewFeature( MoMa::TimedVec &feat,
+string name, string osc, bool isShown, bool isSent ) {
     
     _Feature _feat;
     
     _feat.type = VECTOR;
     _feat.feature.tvec = &feat;
-    _feat.isFeasible = true;
-    _feat.isSent = isSent;
-    _feat.oscHeader = osc;
+    
     _feat.name = name;
+    _feat.oscHeader = osc;
+    
+    _feat.isFeasible = true;
+    _feat.isShown = isShown;
+    _feat.isSent = isSent;
+    
     
     feature.push_back( _feat );
 }
 
-void MoMa::SceneApp::addNewFeature( MoMa::TimedMat
-&feat, string name, string osc, bool isSent ) {
+void MoMa::SceneApp::addNewFeature( MoMa::TimedMat &feat,
+string name, string osc, bool isShown, bool isSent ) {
     
     _Feature _feat;
     
     _feat.type = MATRIX;
     _feat.feature.tmat = &feat;
-    _feat.isFeasible = true;
-    _feat.isSent = isSent;
-    _feat.oscHeader = osc;
+    
     _feat.name = name;
+    _feat.oscHeader = osc;
+    
+    _feat.isFeasible = true;
+    _feat.isShown = isShown;
+    _feat.isSent = isSent;
     
     feature.push_back( _feat );
 }
 
-void MoMa::SceneApp::addNewFeature( MoMa::TimedCube
-&feat, string name, string osc, bool isSent ) {
+void MoMa::SceneApp::addNewFeature( MoMa::TimedCube &feat,
+string name, string osc, bool isShown, bool isSent ) {
     
     _Feature _feat;
     
     _feat.type = CUBE;
     _feat.feature.tcube = &feat;
-    _feat.isFeasible = true;
-    _feat.isSent = isSent;
-    _feat.oscHeader = osc;
+    
     _feat.name = name;
+    _feat.oscHeader = osc;
+    
+    _feat.isFeasible = true;
+    _feat.isShown = isShown;
+    _feat.isSent = isSent;
     
     feature.push_back( _feat );
 }

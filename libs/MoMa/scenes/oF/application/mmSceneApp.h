@@ -128,11 +128,15 @@ namespace MoMa {
         
         FeatureDim type;
         TimedUnion feature;
+        
         std::string oscHeader;
         std::string name;
         std::string desc;
+        
         bool isFeasible;
+        bool isShown;
         bool isSent;
+        bool isWek;
     };
     
     // -- Shortcuts to SceneApp skeleton colors --
@@ -228,14 +232,11 @@ namespace MoMa {
         int nOfFeatures( void ) { return( feature.size() ); } // # feat
         void setAutoDrawFeatures( bool ad ) { autoDrawFeatures = ad; }
         void addNewFeature( MoMa::TimedVec &feature, std::string name="",
-        std::string osc="/feat", bool isSent=false ); // Add Vector feature
+        std::string osc="/feat", bool isShown=false, bool isSent=false );
         void addNewFeature( MoMa::TimedMat &feature, std::string name="",
-        std::string osc="/feat", bool isSent=false ); // Add Matrix feature
+        std::string osc="/feat", bool isShown=false, bool isSent=false );
         void addNewFeature( MoMa::TimedCube &feature, std::string name="",
-        std::string osc="/feat", bool isSent=false ); // Add Cube feature
-        
-        // TODO Access feature for drawing, for sending OSC
-        // and for checking compatibility with input data.
+        std::string osc="/feat", bool isShown=false, bool isSent=false );
         
         // - Figure-related methods -
         
@@ -378,6 +379,7 @@ namespace MoMa {
         vector<Figure> _figure; // List of figures
         int figureIdx; // Figure to be drawn in
         int plotResolution; // Plot resolution
+        bool hasDrawnInFig; // Drawn in fig?
         
         // - X axis mapping -
         
