@@ -58,6 +58,8 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     _figure.resize( 1 ); // full-screen
     _figure[figureIdx].yTop = 0; // figure
     _figure[figureIdx].yBot = ofGetHeight();
+    hasDrawnInFig = false;
+    
     menuView = NULL;
     playBar = NULL;
     addMenuView();
@@ -294,7 +296,7 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
     }
 
     if( isFigure ) {
-
+        
         _figure[figureIdx].yMin = -1.0f;
         _figure[figureIdx].yMax = 1.0f;
 
@@ -303,8 +305,8 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
         
         if( autoDrawFeatures ) {
             
-            int nOfShownFeatures = 0;
             int shownFeatureId = 0;
+            int nOfShownFeatures = 0;
             
             for( int f=0; f<nOfFeatures(); f++ ) {
             
@@ -314,6 +316,8 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
                     nOfShownFeatures++;
                 }
             }
+            
+            if( nOfShownFeatures < 1 ) nOfShownFeatures=1;
             
             setNumOfFigures( nOfShownFeatures );
         
@@ -354,7 +358,7 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
                 }
             }
         }
-
+        
         scene2d(); // 2D figures
         render2d(); // Render
     }
@@ -972,6 +976,8 @@ void MoMa::SceneApp::draw( TimedVec tvec, int hue, std::string name ) {
             _figure[figureIdx].plot.push_back( plot );
             _figure[figureIdx].plotId++;
         }
+        
+        hasDrawnInFig = true;
     }
 }
 
