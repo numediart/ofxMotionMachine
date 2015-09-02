@@ -133,6 +133,7 @@ namespace MoMa {
         std::string desc;
         bool isFeasible;
         bool isSent;
+        bool isWek;
     };
     
     // -- Shortcuts to SceneApp skeleton colors --
