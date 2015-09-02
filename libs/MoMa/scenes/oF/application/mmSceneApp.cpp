@@ -225,14 +225,23 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
                     lRot(qW,n) = message.getArgAsFloat( 7*n+6 );
 
                 }
-				listener[l].track->rotation.push( lRot ,ofGetElapsedTimeMillis());
-				listener[l].track->position.push( lPos ,ofGetElapsedTimeMillis());
+				if (listener[l].track->rotation.isTimed())
+					listener[l].track->rotation.push( lRot ,(double)ofGetElapsedTimeMillis()/1000.0);
+				else
+					listener[l].track->rotation.push( lRot );
+				if (listener[l].track->position.isTimed())
+					listener[l].track->position.push( lPos ,(double)ofGetElapsedTimeMillis()/1000.0);
+				else
+					listener[l].track->position.push( lPos );
                 hasReceivedFrame = true;
             }
 
             if( hasReceivedFrame ) {
            //     listener[l].track->push( oscFrame );
-                setPlayerSize( listener[l].track->nOfFrames() );
+                //setPlayerSize( listener[l].track->nOfFrames() );
+				
+				appMoment.setTime( (double)ofGetElapsedTimeMillis()/1000.0);
+				setPlayerSize( listener[l].track->minTime(),listener[l].track->maxTime() );
                 onOscReceived(); // Trigger custom code here
             }
         }
@@ -295,8 +304,8 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
 
     if( isFigure ) {
 
-        _figure[figureIdx].yMin = -1.0f;
-        _figure[figureIdx].yMax = 1.0f;
+        _figure[figureIdx].yMin = 1.0E12;
+        _figure[figureIdx].yMax = -1.0E12;
 
         _figure[figureIdx].plot.clear();
         _figure[figureIdx].plotId = 0;
@@ -908,7 +917,7 @@ void MoMa::SceneApp::render2d( void ) {
     }
 }
 
-void MoMa::SceneApp::draw( Node node ) {
+void MoMa::SceneApp::draw( const Node &node ) {
 
     if( node.hasRotation() ) {
 
@@ -938,7 +947,7 @@ void MoMa::SceneApp::draw( Node node ) {
     ofPopStyle();
 }
 
-void MoMa::SceneApp::draw( TimedVec tvec, int hue, std::string name ) {
+void MoMa::SceneApp::draw(const TimedVec &tvec, int hue, std::string name ) {
 
     if( is2D ) {
 
@@ -948,8 +957,7 @@ void MoMa::SceneApp::draw( TimedVec tvec, int hue, std::string name ) {
         plot.color.setHsb( hue, 255, 255, 128 );
 
         if( tvec.nOfFrames() > 1 ) {
-
-            if( _figure[figureIdx].yMin > (float)tvec.getData().min() ) _figure[figureIdx].yMin = (float)tvec.getData().min();
+			if( _figure[figureIdx].yMin > (float)tvec.getData().min() ) _figure[figureIdx].yMin = (float)tvec.getData().min();
             if( _figure[figureIdx].yMax < (float)tvec.getData().max() ) _figure[figureIdx].yMax = (float)tvec.getData().max();
 
             _figure[figureIdx].plot.push_back( plot );
@@ -958,7 +966,7 @@ void MoMa::SceneApp::draw( TimedVec tvec, int hue, std::string name ) {
     }
 }
 
-void MoMa::SceneApp::draw( TimedVec tvec, std::string name ) {
+void MoMa::SceneApp::draw(const TimedVec& tvec, std::string name ) {
 
     if( is2D ) {
 
@@ -967,7 +975,7 @@ void MoMa::SceneApp::draw( TimedVec tvec, std::string name ) {
     }
 }
 
-void MoMa::SceneApp::draw( TimedMat tmat, string name ) {
+void MoMa::SceneApp::draw( const TimedMat& tmat, string name ) {
 
     if( is2D ) {
 
@@ -979,7 +987,7 @@ void MoMa::SceneApp::draw( TimedMat tmat, string name ) {
     }
 }
 
-void MoMa::SceneApp::draw( Trace trace, string name ) {
+void MoMa::SceneApp::draw( const Trace &trace, string name ) {
 
     if( is2D ) {
 
@@ -992,7 +1000,7 @@ void MoMa::SceneApp::draw( Trace trace, string name ) {
     }
 }
 
-void MoMa::SceneApp::draw( vec data, int hue, string name ) {
+void MoMa::SceneApp::draw(const vec &data, int hue, string name ) {
 
     TimedVec tvec;
 
@@ -1000,7 +1008,7 @@ void MoMa::SceneApp::draw( vec data, int hue, string name ) {
     draw( tvec, hue, name );
 }
 
-void MoMa::SceneApp::draw( vec data, string name ) {
+void MoMa::SceneApp::draw(const vec &data, string name ) {
 
     TimedVec tvec;
 
@@ -1008,7 +1016,7 @@ void MoMa::SceneApp::draw( vec data, string name ) {
     draw( tvec, name );
 }
 
-void MoMa::SceneApp::draw( mat data, string name ) {
+void MoMa::SceneApp::draw(const mat &data, string name ) {
 
     TimedMat tmat;
 
@@ -1048,7 +1056,7 @@ void MoMa::SceneApp::draw( LabelList labelList ) {
     }
 }
 
-void MoMa::SceneApp::draw( Frame frame ) {
+void MoMa::SceneApp::draw(const Frame &frame ) {
 
     if( frame.hasBoneList ) {
 
@@ -1396,9 +1404,10 @@ void MoMa::SceneApp::setPlayerSize( unsigned int nOfFrames ) {
     // appAtPos.time = getTimeFromIndex( appAtPos.index ); // Check app time
 }
 
-void MoMa::SceneApp::setPlayerSize( double time ) {
-    
-    maxBound.setTime( time, frameRate );
+void MoMa::SceneApp::setPlayerSize( double minTime,double maxTime ) {
+    minBound.setTime( minTime, frameRate );
+    maxBound.setTime( maxTime, frameRate );
+    lowBound.setTime( minBound.time(), frameRate );
     highBound.setTime( maxBound.time(), frameRate );
     
     if( highBound.index() < 1 ) highBound.setIndex( 1, frameRate ); // Reajust current moments

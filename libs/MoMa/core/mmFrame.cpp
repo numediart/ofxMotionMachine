@@ -174,7 +174,7 @@ int MoMa::Frame::index( std::string name ) {
     */
 }
 
-int MoMa::Frame::nOfNodes( void ) {
+int MoMa::Frame::nOfNodes( void ) const {
 
     return( (int)std::max( (float)(position.n_cols), (float)(rotation.n_cols) ) );
 }

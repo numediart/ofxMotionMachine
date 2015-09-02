@@ -74,7 +74,7 @@ namespace MoMa {
         
         // - Ringbuffer-related methods -
         
-        void setRingBufferSize( int size ,bool pHasRotation=false); // Set as ring buffer + max size
+        void setRingBufferSize( int size ,bool pHasRotation=false,bool pTimed=false); // Set as ring buffer + max size
         void subTrack( Track &subTr, int beg, int end ); // Extract a subtrack
         
         bool setJointOffsetRotation();
@@ -97,6 +97,7 @@ namespace MoMa {
         inline float frameRate( void ) { return _frameRate; }
         
         inline double maxTime( void ); // Get the max time
+        inline double minTime( void ); // Get the max time
         inline unsigned int nOfFrames( void ); // Get # frames
         inline unsigned int nOfNodes( void ); // Get # nodes
         void clear( void ); // Clear the track
@@ -307,11 +308,14 @@ namespace MoMa {
             oneTrace.setName( nodeList->name( index ) );
             
             if( position.isTimed() ) {
-                
+				if (position.isRealTime())
+					oneTrace.position.setRealTimeMode(position.getBufferSize(),3);
                 oneTrace.setPosition( position.getData().tube( 0, index, 2 , index ), position.getTimeVec() );
                 
             } else {
                 
+				if (position.isRealTime())
+					oneTrace.position.setRealTimeMode(position.getBufferSize(), position.frameRate(),3);
                 oneTrace.setPosition( position.getData().tube( 0, index, 2, index ), position.frameRate() );
             }
             
@@ -319,12 +323,16 @@ namespace MoMa {
                 
                 if( rotation.isTimed() ) {
                     
+					if (rotation.isRealTime())
+						oneTrace.rotation.setRealTimeMode(rotation.getBufferSize(),3);
                     oneTrace.setRotation( rotation.getData().tube( 0,index, 2, index ), position.getTimeVec() );
                     oneTrace.setRotationOffset( rotationOffset.col( index ) );
                     
                 } else {
                     
-                    oneTrace.setRotation( rotation.getData().tube( 0, index, 2, index ), position.frameRate() );
+					if (rotation.isRealTime())
+						oneTrace.rotation.setRealTimeMode(rotation.getBufferSize(), rotation.frameRate(),3);
+                    oneTrace.setRotation( rotation.getData().tube( 0, index, 2, index ), rotation.frameRate() );
                     oneTrace.setRotationOffset( rotationOffset.col( index ) );
                 }
             }
@@ -357,6 +365,11 @@ namespace MoMa {
         
         if( hasRotation ) return( std::max( position.maxTime(), rotation.maxTime() ) );
         else return( position.maxTime() ); // Make a robust version of this return
+    }
+    double Track::minTime( void ) {
+        
+        if( hasRotation ) return( std::min( position.minTime(), rotation.minTime() ) );
+        else return( position.minTime() ); // Make a robust version of this return
     }
     
     unsigned int Track::nOfFrames( void ) {

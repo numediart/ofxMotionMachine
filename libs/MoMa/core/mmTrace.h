@@ -30,13 +30,13 @@ namespace MoMa {
         
         Trace( void ); // Default constructor
         
-        std::string name( void ) { return( _name ); } // Get name
+        std::string name( void ) const{ return( _name ); } // Get name
         inline void setName( std::string n ) { _name = n; } // Set name
         
         bool hasTime( void ) { return( position.isTimed() &&(hasRotation()?rotation.isTimed():1)); } // Flag
         inline void setTimeFlag( bool tim ) { _hasTime = tim; } // Force it//TODO verify if it is necessary, a trace has necessarely a time, but not a timedstamp time scale.
         
-        bool hasRotation( void ) { return( _hasRotation ); } // Use rotation?
+        bool hasRotation( void ) const{ return( _hasRotation ); } // Use rotation?
         inline void setRotationFlag( bool rot ) { _hasRotation = rot; } // Force it
         arma::mat matrix( void ) ;
         Node nodeFrame( double time );

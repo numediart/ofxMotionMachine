@@ -47,17 +47,17 @@ namespace MoMa {
         void setRotation( arma::vec rot); // Set rotation
         void setOffsetRotation( arma::vec off); // Set offset
         
-        inline bool hasRotation( void ) { return( _hasRotation ); } // Use rotation?
+        inline bool hasRotation( void ) const { return( _hasRotation ); } // Use rotation?
         inline void setRotationFlag( bool rot ) { _hasRotation = rot; } // Force it
         
-        double time( void ) { return( _time ); } // Get time
-        bool hasTime( void ) { return( _hasTime ); } // Flag
+        double time( void )const { return( _time ); } // Get time
+        bool hasTime( void )const { return( _hasTime ); } // Flag
         inline void setTime( double t ); // Set time tag
         
-        std::string name( void ) { return( _name ); } // Get name
+        std::string name( void ) const{ return( _name ); } // Get name
         inline void setName( std::string n ) { _name = n; } // Set name
         
-        int state( void ) { return( _state ); }
+        int state( void ) const { return( _state ); }
         void setState( int st ) { _state = st; }
         
         arma::vec position; // 3D position of the node

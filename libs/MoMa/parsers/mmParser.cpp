@@ -35,6 +35,9 @@ Parser::Parser( string const &fName, Track *tr ) {
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
 
         FlatParser flatParser( fileName,track );
+		 tr->position.SetValidParam();
+		 if (tr->hasRotation)
+			 tr->rotation.SetValidParam();
 
         // Check validity of lists of bones and nodes
         if( track->nOfNodes() != previousSize && previousSize != 0 ) {
@@ -55,9 +58,6 @@ Parser::Parser( string const &fName, Track *tr ) {
                 delete track->boneList;
             }
         }
-		 tr->position.SetValidParam();
-		 if (tr->hasRotation)
-			 tr->rotation.SetValidParam();
     }
 
     else if( extension == "v3d" ) {
@@ -65,6 +65,9 @@ Parser::Parser( string const &fName, Track *tr ) {
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
 
         V3dParser v3dParser( fileName, track );
+		 tr->position.SetValidParam();
+		 if (tr->hasRotation)
+			 tr->rotation.SetValidParam();
 
         // Check validity of list of bones
         if( track->nOfNodes() != previousSize &&
@@ -76,9 +79,6 @@ Parser::Parser( string const &fName, Track *tr ) {
                 delete track->boneList;
         }
         tr->setJointOffsetRotation();
-		 tr->position.SetValidParam();
-		 if (tr->hasRotation)
-			 tr->rotation.SetValidParam();
     }
 
     else if( extension == "c3d" ) {
@@ -86,6 +86,9 @@ Parser::Parser( string const &fName, Track *tr ) {
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
 
         C3dParser c3dParser( fileName, track );
+		 tr->position.SetValidParam();
+		 if (tr->hasRotation)
+			 tr->rotation.SetValidParam();
 
         // Check validity of list of bones
         if( track->nOfNodes() != previousSize &&
@@ -96,9 +99,6 @@ Parser::Parser( string const &fName, Track *tr ) {
                 track->hasBoneList = false;
                 delete track->boneList;
         }
-		 tr->position.SetValidParam();
-		 if (tr->hasRotation)
-			 tr->rotation.SetValidParam();
     }
     
     else if( extension == "bvh" ) {
@@ -106,7 +106,9 @@ Parser::Parser( string const &fName, Track *tr ) {
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
         
         BvhParser::load( fileName, track );
-        
+		 tr->position.SetValidParam();
+		 if (tr->hasRotation)
+			 tr->rotation.SetValidParam();
         // Check validity of list of bones
         if( track->nOfNodes() != previousSize &&
            previousSize !=0 && track->hasBoneList == true ) {
@@ -117,9 +119,6 @@ Parser::Parser( string const &fName, Track *tr ) {
             delete track->boneList;
         }
         tr->setJointOffsetRotation();
-		 tr->position.SetValidParam();
-		 if (tr->hasRotation)
-			 tr->rotation.SetValidParam();
     }
     else if( extension == "cmp" ) {
         
@@ -127,7 +126,9 @@ Parser::Parser( string const &fName, Track *tr ) {
         
         CmpParser Parser;
         Parser.load( fileName, track );
-        
+		 tr->position.SetValidParam();
+		 if (tr->hasRotation)
+			 tr->rotation.SetValidParam();
         // Check validity of list of bones
         if( track->nOfNodes() != previousSize &&
            previousSize !=0 && track->hasBoneList == true ) {
@@ -139,16 +140,15 @@ Parser::Parser( string const &fName, Track *tr ) {
         }
 //        tr->setJointOffsetRotation(true);
 		
-		 tr->position.SetValidParam();
-		 if (tr->hasRotation)
-			 tr->rotation.SetValidParam();
     }
     else if( extension == "kin" ) {
         
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
         KinParser kinParser( fileName, track );
         // Check validity of lists of bones and nodes
-        
+		 tr->position.SetValidParam();
+		 if (tr->hasRotation)
+			 tr->rotation.SetValidParam();
         if( track->nOfNodes() != previousSize && previousSize != 0 ) {
             
             // different number of
@@ -168,10 +168,6 @@ Parser::Parser( string const &fName, Track *tr ) {
             }
         }
          tr->setJointOffsetRotation();
-		 tr->position.SetValidParam();
-		 if (tr->hasRotation)
-			 tr->rotation.SetValidParam();
-
     }
 
     else if( extension == "bones" ) {

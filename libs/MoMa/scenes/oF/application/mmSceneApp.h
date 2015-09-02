@@ -184,18 +184,18 @@ namespace MoMa {
         
         // - Drawing methods for the 3D & 2D -
         
-        void draw( Node node ); // Draw a node
-        void draw( Frame frame ); // Draw a frame
+        void draw( const Node &node ); // Draw a node
+        void draw( const Frame &frame ); // Draw a frame
         
-        void draw( TimedVec tvec, int hue, std::string name="" ); // TimedVec
-        void draw( TimedVec tvec, std::string name="" ); // TimedVec (no hue)
-        void draw( TimedMat trace, std::string name="" ); // TimedMat
+        void draw( const TimedVec &tvec, int hue, std::string name="" ); // TimedVec
+        void draw( const TimedVec &tvec, std::string name="" ); // TimedVec (no hue)
+        void draw( const TimedMat &trace, std::string name="" ); // TimedMat
         
-        void draw( Trace trace, std::string name="" ); // Trace
+        void draw(const Trace &trace, std::string name="" ); // Trace
         
-        void draw( arma::vec data, int hue, std::string name="" );
-        void draw( arma::vec data, std::string name="" ); // Vec
-        void draw( arma::mat data, string name="" ); // and Mat
+        void draw( const arma::vec &data, int hue, std::string name="" );
+        void draw( const arma::vec &data, std::string name="" ); // Vec
+        void draw( const arma::mat &data, string name="" ); // and Mat
         
         void draw( LabelList labelList ); // Label list
         
@@ -249,7 +249,7 @@ namespace MoMa {
         void setFrameRate( float rate ); // Set playback rate
         
         void setPlayerSize( unsigned int nOfFrames ); // Define size
-        void setPlayerSize( double time ); // Define size in sec
+        void setPlayerSize( double minTime,double maxTime); // Define size in sec
         unsigned int getAppIndex( void ); // Query app index
         double getAppTime( void ); // Query app time
         
@@ -381,7 +381,7 @@ namespace MoMa {
         
         // - X axis mapping -
         
-        MoMa::Moment lowBound, highBound, maxBound;
+        MoMa::Moment lowBound, highBound, maxBound,minBound;
         int zoomLowBound, zoomHighBound; // Zoom
         
         // - Playback types -

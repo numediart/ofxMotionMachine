@@ -59,10 +59,10 @@ namespace MoMa {
         
         inline double time( unsigned int index ) const;
         inline unsigned int nearestIndex( double time ) const;
-        inline double maxTime( void ) ; // Time getters
-        inline double minTime( void ) ; // Time getters
+        inline double maxTime( void ) const; // Time getters
+        inline double minTime( void ) const; // Time getters
         
-        virtual unsigned int nOfFrames( void ) { return( 0 ); }
+        virtual unsigned int nOfFrames( void ) const { return( 0 ); }
         inline bool setFrameRate( double pFrameRate );
         inline bool setInitialTime( double pInitialTime );
         inline double frameRate( void ) const; // Frame
@@ -120,7 +120,7 @@ namespace MoMa {
         
         // Return/compute time at current index
 		if( mTimed ) return( mTimeVec[ memIndex(index) ] );
-        else return( mInitialTime+( (double)memIndex(index)  ) / mFrameRate );
+        else return( mInitialTime+( (double)index  ) / mFrameRate );
     }
     
     unsigned int TimedData::nearestIndex( double time ) const{
@@ -136,17 +136,16 @@ namespace MoMa {
             return usedIndex(lIndex);
         }
     }
-    double TimedData::maxTime( void ) {
+    double TimedData::maxTime( void ) const {
         
         // Return/compute time at the last index of time
         if( mTimed ) return( mTimeVec.max() );
 		else return ( mIsFilled? (mInitialTime+(double)( mBufferSize-1 )  / mFrameRate ):(mInitialTime+(double)(mLastId%mBufferSize)  / mFrameRate));
 	}
-    double TimedData::minTime( void ) {
+    double TimedData::minTime( void ) const{
         // Return/compute time at the last index of time
-        if( mTimed ) return( mTimeVec.min() );
-        else if( nOfFrames() > 0 ) return(  mInitialTime);
-        else return( 0.0f ); // We make sure that an empty container is maxTime = 0
+		if( mTimed ) return (mIsFilled?mTimeVec.min(): mTimeVec.at(0) );
+        else return(  mInitialTime);
     }
     
     bool TimedData::setFrameRate( double pFrameRate ) {
@@ -200,8 +199,8 @@ namespace MoMa {
         inline const arma::vec &getData( void ) const { return mData; }
         inline arma::vec &getRefData( void ) { return mData; }
         
-		unsigned int nOfFrames( void ) { return( mIsFilled?mData.n_elem:(mLastId+1)*(mLastId<mBufferSize) ); }
-        unsigned int nOfElems( void ) { return( 1 ); }
+		unsigned int nOfFrames( void ) const { return( mIsFilled?mData.n_elem:(mLastId+1)*(mLastId<mBufferSize) ); }
+        unsigned int nOfElems( void ) const { return( 1 ); }
         void clear( void ) { mData.clear(); }
 		bool SetValidParam();
       protected:
@@ -322,7 +321,7 @@ namespace MoMa {
     
     bool TimedVec::push( double pData, double pTime ) {
 		if (!mTimed||!mIsRealTime) return false;
-		if( pTime < this->maxTime()) return false;
+		if( pTime <= this->maxTime()) return false;
 		mLastId++;
 		if (mLastId>=mBufferSize)
 			mLastId=0;
@@ -375,7 +374,7 @@ namespace MoMa {
         
         TimedMat sub( int pBegIndex, int pEndIndex ) const; // Chop by index
         TimedMat getOfflineData( ) const;
-        TimedVec elem( unsigned int pIndex ); // Elem getter by index
+        TimedVec elem( unsigned int pIndex ) const; // Elem getter by index
         
         bool setRealTimeMode(unsigned int bufferSize,arma::vec initData);
 		bool setRealTimeMode(unsigned int bufferSize,double pFrameRate,arma::vec initData);
@@ -390,8 +389,8 @@ namespace MoMa {
         inline arma::mat &getRefData( void ) { return mData; } // Get mData ref
         
         bool setInterpAlgo( InterpTypes interpAlgo );
-        unsigned int nOfFrames( void ) { return( mIsFilled?mData.n_cols:((mLastId+1)*(mLastId<mBufferSize))); }
-        unsigned int nOfElems( void ) { return( mData.n_rows ); }
+        unsigned int nOfFrames( void ) const { return( mIsFilled?mData.n_cols:((mLastId+1)*(mLastId<mBufferSize))); }
+        unsigned int nOfElems( void ) const { return( mData.n_rows ); }
         void clear( void ) { mData.clear(); }
 		bool SetValidParam();
     
@@ -522,7 +521,7 @@ namespace MoMa {
    
     bool TimedMat::push(const arma::vec &pData, double pTime ) {
 		if (!mTimed||!mIsRealTime) return false;
-		if( pTime < this->maxTime()) return false;
+		if( pTime <= this->maxTime()) return false;
 
 		mLastId++;
 		if (mLastId>=mBufferSize)
@@ -587,9 +586,9 @@ namespace MoMa {
         inline arma::cube &getRefData( void ) { return mData; } // Get mData ref
         
         bool setInterpAlgo( InterpTypes interpAlgo ); // Set interp algo
-        unsigned int nOfFrames( void ) { return( mIsFilled?mData.n_slices:((mLastId+1)*(mLastId<mBufferSize)) ); } // # of frames
-        unsigned int nOfRows( void ) { return( mData.n_rows ); } // # of rows
-        unsigned int nOfCols( void ) { return( mData.n_cols ); } // # of cols
+        unsigned int nOfFrames( void ) const { return( mIsFilled?mData.n_slices:((mLastId+1)*(mLastId<mBufferSize)) ); } // # of frames
+        unsigned int nOfRows( void ) const { return( mData.n_rows ); } // # of rows
+        unsigned int nOfCols( void ) const { return( mData.n_cols ); } // # of cols
         void clear( void ) { mData.clear(); } // Clear
  		bool SetValidParam();
        
@@ -605,7 +604,7 @@ namespace MoMa {
     
     const arma::mat &TimedCube::get( unsigned int pIndex ) {
         
-        return mData.slice( pIndex );
+		return mData.slice( memIndex( pIndex) );
     }
     
     arma::mat TimedCube::get( double pTime ) {
@@ -730,7 +729,7 @@ namespace MoMa {
     
     bool TimedCube::push(const arma::mat &pData, double pTime ) {
 		if (!mTimed||!mIsRealTime) return false;
-		if( pTime < this->maxTime()) return false;
+		if( pTime <= this->maxTime()) return false;
 		mLastId++;
 		if (mLastId>=mBufferSize)
 			mLastId=0;

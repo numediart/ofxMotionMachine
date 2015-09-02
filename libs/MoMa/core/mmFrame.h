@@ -35,17 +35,17 @@ namespace MoMa {
         void setBoneList( BoneList *bList ); // Set bone list
         void setSynoList( SynoList *sList ); // Set syno list
         
-        double time( void ) { return( _time ); } // Get time
-        bool hasTime( void ) { return( _hasTime ); } // Flag
+        double time( void ) const { return( _time ); } // Get time
+        bool hasTime( void ) const { return( _hasTime ); } // Flag
         void setTime( double t ); // Set time ( with flag )
         
         inline Node node( std::string name ); // Query node by name ( from string )
-        inline Node node( int index ); // Query node by index ( from int )
+        inline Node node( int index ) const; // Query node by index ( from int )
         
         inline Node operator()( std::string name ); // Short version of node()
         inline Node operator()( int index ); // Short version of node()
         
-        bool hasRotation( void ) { return( _hasRotation ); } // Use rotation?
+        bool hasRotation( void )const { return( _hasRotation ); } // Use rotation?
         inline void setRotationFlag( bool rot ) { _hasRotation = rot; } // Force it
         
         inline void push( Node node ) {
@@ -68,7 +68,7 @@ namespace MoMa {
         inline arma::mat getRotation(){return rotation;};
         inline arma::mat getRotationOffset(){return rotationOffset;};
         
-        int nOfNodes( void ); // Get number of nodes in the frame
+        int nOfNodes( void ) const; // Get number of nodes in the frame
         void print( void ); // Print the content of the frame
         
         void clear( void ) {
@@ -213,7 +213,7 @@ namespace MoMa {
         return( nod );
     }
     
-    Node Frame::node( int index ) {
+    Node Frame::node( int index ) const {
         
         Node nod;
         

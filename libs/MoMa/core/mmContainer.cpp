@@ -202,7 +202,7 @@ namespace MoMa {
 	TimedVec TimedVec::getOfflineData( ) const{
 		TimedVec oneVec;
 		unsigned int pBegIndex=memIndex(0);
-		unsigned int pEndIndex=mLastId;
+		unsigned int pEndIndex=mLastId%mBufferSize;
         if( isTimed() )
 			if (pEndIndex>=pBegIndex)
 				oneVec.setData(this->getTimeVec().subvec( pBegIndex, pEndIndex ),this->mData.subvec( pBegIndex, pEndIndex ));
@@ -426,7 +426,7 @@ namespace MoMa {
     
 	TimedMat TimedMat::getOfflineData( ) const{
 		unsigned int pBegIndex=memIndex(0);
-		unsigned int pEndIndex=mLastId;
+		unsigned int pEndIndex=mLastId%mBufferSize;
         TimedMat oneMat;
        if( isTimed() )
 			if (pEndIndex>=pBegIndex)
@@ -455,23 +455,28 @@ namespace MoMa {
 		return oneMat;
         
 	}
-    TimedVec TimedMat::elem( unsigned int pIndex ) {
+    TimedVec TimedMat::elem( unsigned int pIndex ) const {
     
         TimedVec elem;
         arma::vec elemVec;
 
         
         elemVec = mData.row( pIndex ).t();
-		if( mTimed ){ 
-			elem.setRealTimeMode(mBufferSize,0);
+		if( mTimed ){
+			
+			if (mIsRealTime) 
+				elem.setRealTimeMode(mBufferSize,0);
 			elem.setData( mTimeVec, elemVec );
 		}
         else {
-			elem.setRealTimeMode(mBufferSize,mFrameRate,0);
+			if (mIsRealTime) 
+				elem.setRealTimeMode(mBufferSize,mFrameRate,0);
             elem.setData( mFrameRate, elemVec );
-			elem.setLastId(mLastId);
             elem.setInitialTime(this->mInitialTime);
         }
+		
+		if (mIsRealTime)
+			elem.setLastId(mLastId);
 		elem.setIsFilled(mIsFilled);
         return( elem );
     }
@@ -664,7 +669,7 @@ namespace MoMa {
 	TimedCube TimedCube::getOfflineData( ) const{
 		
 		unsigned int pBegIndex=memIndex(0);
-		unsigned int pEndIndex=mLastId;
+		unsigned int pEndIndex=mLastId%mBufferSize;
 		TimedCube oneCube;
         if( isTimed() )
 			if (pEndIndex>=pBegIndex)
@@ -701,15 +706,19 @@ namespace MoMa {
         traceMtx = mData.tube( pIndex, 0, pIndex, mData.n_cols-1 );
         
 		if( mTimed ){ 
-			trace.setRealTimeMode(mBufferSize,traceMtx.n_rows);
+			if (mIsRealTime) 
+				trace.setRealTimeMode(mBufferSize,traceMtx.n_rows);
 			trace.setData( mTimeVec, traceMtx );
 		}
         else {
-			trace.setRealTimeMode(mBufferSize,mFrameRate,traceMtx.n_rows);
+			if (mIsRealTime) 
+				trace.setRealTimeMode(mBufferSize,mFrameRate,traceMtx.n_rows);
             trace.setData( mFrameRate, traceMtx );
 			trace.setLastId(mLastId);
             trace.setInitialTime(this->mInitialTime);
         }
+		if (mIsRealTime)
+			trace.setLastId(mLastId);
 		trace.setIsFilled(mIsFilled);
         return( trace );
     }
@@ -721,16 +730,20 @@ namespace MoMa {
         
         traceMtx = mData.tube( 0, pIndex, mData.n_rows-1, pIndex );
         
-        if( mTimed ){ 
-			trace.setRealTimeMode(mBufferSize,traceMtx.n_rows);
+        if( mTimed ){
+			if (mIsRealTime)  
+				trace.setRealTimeMode(mBufferSize,traceMtx.n_rows);
 			trace.setData( mTimeVec, traceMtx );
 		}
         else {
-			trace.setRealTimeMode(mBufferSize,mFrameRate,traceMtx.n_rows);
+			if (mIsRealTime)  
+				trace.setRealTimeMode(mBufferSize,mFrameRate,traceMtx.n_rows);
             trace.setData( mFrameRate, traceMtx );
-			trace.setLastId(mLastId);
             trace.setInitialTime(this->mInitialTime);
         }
+		
+		if (mIsRealTime)
+			trace.setLastId(mLastId);
 		trace.setIsFilled(mIsFilled);
         
         return( trace );
