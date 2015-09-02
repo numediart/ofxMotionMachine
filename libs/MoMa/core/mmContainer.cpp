@@ -166,14 +166,14 @@ namespace MoMa {
         return true;
     }
 	
-    TimedVec TimedVec::sub( int pBegIndex, int pEndIndex ) {
+    TimedVec TimedVec::sub( int pBegIndex, int pEndIndex ) const{
     
         TimedVec oneVec;
 		pBegIndex=memIndex(pBegIndex);
 		pEndIndex=memIndex(pEndIndex);
         if( isTimed() )
 			if (pEndIndex>=pBegIndex)
-				oneVec.setData(this->getTimeVecRef().subvec( pBegIndex, pEndIndex ),this->mData.subvec( pBegIndex, pEndIndex ));
+				oneVec.setData(this->getTimeVec().subvec( pBegIndex, pEndIndex ),this->mData.subvec( pBegIndex, pEndIndex ));
 			else{
 				arma::vec lData(pEndIndex-pBegIndex+1+mBufferSize);
 				lData.subvec(0,mBufferSize-1-pBegIndex)=this->mData.subvec( pBegIndex,mBufferSize-1);
@@ -194,11 +194,43 @@ namespace MoMa {
 				lData.subvec(mBufferSize-pBegIndex,mBufferSize+pEndIndex-pBegIndex)=this->mData.subvec( 0,pEndIndex);
 				oneVec.swapData(mFrameRate,lData);
 			}
-			oneVec.setInitialTime(this->mInitialTime+pBegIndex*mFrameRate);
+			oneVec.setInitialTime(this->mInitialTime+usedIndex(pBegIndex)*mFrameRate);
         }
         
         return( oneVec );
     }
+	TimedVec TimedVec::getOfflineData( ) const{
+		TimedVec oneVec;
+		unsigned int pBegIndex=memIndex(0);
+		unsigned int pEndIndex=mLastId;
+        if( isTimed() )
+			if (pEndIndex>=pBegIndex)
+				oneVec.setData(this->getTimeVec().subvec( pBegIndex, pEndIndex ),this->mData.subvec( pBegIndex, pEndIndex ));
+			else{
+				arma::vec lData(pEndIndex-pBegIndex+1+mBufferSize);
+				lData.subvec(0,mBufferSize-1-pBegIndex)=this->mData.subvec( pBegIndex,mBufferSize-1);
+				lData.subvec(mBufferSize-pBegIndex,pEndIndex-pBegIndex+mBufferSize)=this->mData.subvec( 0,pEndIndex);
+				arma::vec lTime(pEndIndex-pBegIndex+1+mBufferSize);
+				lTime.subvec(0,mBufferSize-1-pBegIndex)=this->mTimeVec.subvec( pBegIndex,mBufferSize-1);
+				lTime.subvec(mBufferSize-pBegIndex,pEndIndex-pBegIndex+mBufferSize)=this->mTimeVec.subvec( 0,pEndIndex);
+				oneVec.swapData(lTime,lData);
+			}
+
+        else
+        {
+			if (pEndIndex>=pBegIndex)
+				oneVec.setData(mFrameRate,this->mData.subvec( pBegIndex, pEndIndex ));
+			else{
+				arma::vec lData(mBufferSize+pEndIndex-pBegIndex+1);
+				lData.subvec(0,mBufferSize-1-pBegIndex)=this->mData.subvec( pBegIndex,mBufferSize-1);
+				lData.subvec(mBufferSize-pBegIndex,mBufferSize+pEndIndex-pBegIndex)=this->mData.subvec( 0,pEndIndex);
+				oneVec.swapData(mFrameRate,lData);
+			}
+			oneVec.setInitialTime(this->mInitialTime);
+        }
+        
+        return( oneVec );
+	}
 	bool TimedVec::setRealTimeMode(unsigned int bufferSize,double initData){
 		this->initRealTime(bufferSize);
 		mData.clear();
@@ -359,14 +391,14 @@ namespace MoMa {
 		return true;
 	}
 	
-    TimedMat TimedMat::sub( int pBegIndex, int pEndIndex ) {
+    TimedMat TimedMat::sub( int pBegIndex, int pEndIndex ) const {
         
         TimedMat oneMat;
 		 pBegIndex=memIndex(pBegIndex);
 		 pEndIndex=memIndex(pEndIndex);
         if( isTimed() )
 			if (pEndIndex>=pBegIndex)
-				oneMat.setData(this->getTimeVecRef().subvec( pBegIndex, pEndIndex ),this->mData.cols( pBegIndex, pEndIndex ));
+				oneMat.setData(this->getTimeVec().subvec( pBegIndex, pEndIndex ),this->mData.cols( pBegIndex, pEndIndex ));
 			else{
 				arma::mat lData(mData.n_rows,mBufferSize+pEndIndex-pBegIndex+1);
 				lData.cols(0,mBufferSize-1-pBegIndex)=this->mData.cols( pBegIndex,mBufferSize-1);
@@ -386,12 +418,43 @@ namespace MoMa {
 				lData.cols(mBufferSize-pBegIndex,pEndIndex-pBegIndex+mBufferSize)=this->mData.cols( 0,pEndIndex);
 				oneMat.swapData(mFrameRate,lData);
 			}
-			oneMat.setInitialTime(this->mInitialTime+pBegIndex*mFrameRate);
+			oneMat.setInitialTime(this->mInitialTime+usedIndex(pBegIndex)*mFrameRate);;
         }
 		return oneMat;
         
     }
     
+	TimedMat TimedMat::getOfflineData( ) const{
+		unsigned int pBegIndex=memIndex(0);
+		unsigned int pEndIndex=mLastId;
+        TimedMat oneMat;
+       if( isTimed() )
+			if (pEndIndex>=pBegIndex)
+				oneMat.setData(this->getTimeVec().subvec( pBegIndex, pEndIndex ),this->mData.cols( pBegIndex, pEndIndex ));
+			else{
+				arma::mat lData(mData.n_rows,mBufferSize+pEndIndex-pBegIndex+1);
+				lData.cols(0,mBufferSize-1-pBegIndex)=this->mData.cols( pBegIndex,mBufferSize-1);
+				lData.cols(mBufferSize-pBegIndex,mBufferSize+pEndIndex-pBegIndex)=this->mData.cols( 0,pEndIndex);
+				arma::vec lTime(mBufferSize+pEndIndex-pBegIndex+1);
+				lTime.subvec(0,mBufferSize-1-pBegIndex)=this->mTimeVec.subvec( pBegIndex,mBufferSize-1);
+				lTime.subvec(mBufferSize-pBegIndex,mBufferSize+pEndIndex-pBegIndex)=this->mTimeVec.subvec( 0,pEndIndex);
+				oneMat.swapData(lTime,lData);
+			}
+        else
+        {
+			if (pEndIndex>=pBegIndex)
+            oneMat.setData(mFrameRate,this->mData.cols( pBegIndex, pEndIndex ));
+			else{
+				arma::mat lData(mData.n_rows,pEndIndex-pBegIndex+1+mBufferSize);
+				lData.cols(0,mBufferSize-1-pBegIndex)=this->mData.cols( pBegIndex,mBufferSize-1);
+				lData.cols(mBufferSize-pBegIndex,pEndIndex-pBegIndex+mBufferSize)=this->mData.cols( 0,pEndIndex);
+				oneMat.swapData(mFrameRate,lData);
+			}
+			oneMat.setInitialTime(this->mInitialTime);
+        }
+		return oneMat;
+        
+	}
     TimedVec TimedMat::elem( unsigned int pIndex ) {
     
         TimedVec elem;
@@ -565,14 +628,14 @@ namespace MoMa {
 		return true;
 	}
 	
-    TimedCube TimedCube::sub( int pBegIndex, int pEndIndex ) {
+    TimedCube TimedCube::sub( int pBegIndex, int pEndIndex ) const {
         
         TimedCube oneCube;
 		 pBegIndex=memIndex(pBegIndex);
 		 pEndIndex=memIndex(pEndIndex);
         if( isTimed() )
 			if (pEndIndex>=pBegIndex)
-				oneCube.setData(this->getTimeVecRef().subvec( pBegIndex, pEndIndex ),this->mData.slices( pBegIndex, pEndIndex ));
+				oneCube.setData(this->getTimeVec().subvec( pBegIndex, pEndIndex ),this->mData.slices( pBegIndex, pEndIndex ));
 			else{
 				arma::cube lData(mData.n_rows,mData.n_cols,pEndIndex-pBegIndex+1+mBufferSize);
 				lData.slices(0,mBufferSize-1-pBegIndex)=this->mData.slices( pBegIndex,mBufferSize-1);
@@ -592,12 +655,44 @@ namespace MoMa {
 				lData.slices(mBufferSize-pBegIndex,mBufferSize+pEndIndex-pBegIndex)=this->mData.slices( 0,pEndIndex);
 				oneCube.swapData(mFrameRate,lData);
 			}
-			oneCube.setInitialTime(this->mInitialTime+pBegIndex*mFrameRate);
+			oneCube.setInitialTime(this->mInitialTime+usedIndex(pBegIndex)*mFrameRate);;
         }
         
         return( oneCube );
     }
     
+	TimedCube TimedCube::getOfflineData( ) const{
+		
+		unsigned int pBegIndex=memIndex(0);
+		unsigned int pEndIndex=mLastId;
+		TimedCube oneCube;
+        if( isTimed() )
+			if (pEndIndex>=pBegIndex)
+				oneCube.setData(this->getTimeVec().subvec( pBegIndex, pEndIndex ),this->mData.slices( pBegIndex, pEndIndex ));
+			else{
+				arma::cube lData(mData.n_rows,mData.n_cols,pEndIndex-pBegIndex+1+mBufferSize);
+				lData.slices(0,mBufferSize-1-pBegIndex)=this->mData.slices( pBegIndex,mBufferSize-1);
+				lData.slices(mBufferSize-pBegIndex,pEndIndex-pBegIndex+mBufferSize)=this->mData.slices( 0,pEndIndex);
+				arma::vec lTime(pEndIndex-pBegIndex+1+mBufferSize);
+				lTime.subvec(0,mBufferSize-1-pBegIndex)=this->mTimeVec.subvec( pBegIndex,mBufferSize-1);
+				lTime.subvec(mBufferSize-pBegIndex,pEndIndex-pBegIndex+mBufferSize)=this->mTimeVec.subvec( 0,pEndIndex);
+				oneCube.swapData(lTime,lData);
+			}
+        else
+        {
+			if (pEndIndex>=pBegIndex)
+            oneCube.setData(mFrameRate,this->mData.slices( pBegIndex, pEndIndex ));
+			else{
+				arma::cube lData(mData.n_rows,mData.n_cols,(int)mBufferSize+pEndIndex-pBegIndex+1);
+				lData.slices(0,mBufferSize-1-pBegIndex)=this->mData.slices( pBegIndex,mBufferSize-1);
+				lData.slices(mBufferSize-pBegIndex,mBufferSize+pEndIndex-pBegIndex)=this->mData.slices( 0,pEndIndex);
+				oneCube.swapData(mFrameRate,lData);
+			}
+			oneCube.setInitialTime(this->mInitialTime);
+        }
+        
+        return( oneCube );
+    }
     TimedMat TimedCube::row( unsigned int pIndex ) {
         
         TimedMat trace;

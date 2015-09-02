@@ -69,7 +69,7 @@ namespace MoMa {
         inline double initialTime( void ) const; // Frame
         
 		//RealTime methods
-		inline bool isRealTime(){return mIsRealTime;};
+		inline bool isRealTime() const{return mIsRealTime;} ;
 		inline unsigned int getBufferSize(){return mBufferSize;};
 		inline unsigned int setBufferSize(unsigned int pBufferSize){mBufferSize=pBufferSize;};
 		inline unsigned int memIndex(unsigned int index) const;//transform the index relative to mLastId in the index in memory
@@ -187,7 +187,8 @@ namespace MoMa {
         inline bool push( double pData, double pTime );
         inline bool push( double pData );
         
-        TimedVec sub( int pBegIndex, int pEndIndex );
+        TimedVec sub( int pBegIndex, int pEndIndex ) const;
+        TimedVec getOfflineData( ) const;
         
         bool setRealTimeMode(unsigned int bufferSize,double initData);
 		bool setRealTimeMode(unsigned int bufferSize,double pFrameRate,double initData);
@@ -372,7 +373,8 @@ namespace MoMa {
         inline bool push( const arma::vec &pData, double pTime ); // Push timed
         inline bool push( const arma::vec &pData ); // Push at the end of mData
         
-        TimedMat sub( int pBegIndex, int pEndIndex ); // Chop by index
+        TimedMat sub( int pBegIndex, int pEndIndex ) const; // Chop by index
+        TimedMat getOfflineData( ) const;
         TimedVec elem( unsigned int pIndex ); // Elem getter by index
         
         bool setRealTimeMode(unsigned int bufferSize,arma::vec initData);
@@ -566,7 +568,8 @@ namespace MoMa {
         inline bool push( const arma::mat &pData, double pTime ); // Push timed
         inline bool push( const arma::mat &pData ); // Push at the end of mData
         
-        TimedCube sub( int pBegIndex, int pEndIndex ); // Chop by index
+        TimedCube sub( int pBegIndex, int pEndIndex ) const; // Chop by index
+        TimedCube getOfflineData( ) const;
         TimedMat row( unsigned int pIndex ); // Row getter by index
         TimedMat col( unsigned int pIndex ); // Col getter by index
         
