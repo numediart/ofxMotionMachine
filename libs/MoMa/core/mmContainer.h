@@ -131,8 +131,10 @@ namespace MoMa {
             return usedIndex(lIndex);
         }
         else{
-            unsigned int lIndex;
-			lIndex = arma::abs(mTimeVec-time).min();
+			unsigned int lIndex;
+			arma::uword ltemp;
+			arma::abs(mTimeVec-time).min(ltemp);
+			lIndex=(unsigned int)ltemp;
             return usedIndex(lIndex);
         }
     }
@@ -287,8 +289,10 @@ namespace MoMa {
                 
                 return true;
             }*/
-            unsigned int index;
-			index = arma::abs(this->mTimeVec - pTime).min();
+			unsigned int index;
+			arma::uword ltemp;
+			arma::abs(this->mTimeVec - pTime).min(ltemp);
+			index=(unsigned int)ltemp;
 			if ( std::abs(this->mTimeVec(index)-pTime ) <= 1E-6 ){
 				mData(index)=pData;
 				return true;
@@ -485,8 +489,11 @@ namespace MoMa {
                 
                 return true;
             }*/
-            unsigned int index;
-			index = arma::abs(this->mTimeVec - pTime).min();
+			
+			unsigned int index;
+			arma::uword ltemp;
+			arma::abs(this->mTimeVec - pTime).min(ltemp);
+			index=(unsigned int)ltemp;
 			if ( std::abs(this->mTimeVec(index)-pTime ) <= 1E-6 ){
 				mData.col(index)=pData;
 				return true;
@@ -695,7 +702,9 @@ namespace MoMa {
             }*/
             
 			unsigned int index;
-			index = arma::abs(this->mTimeVec - pTime).min();
+			arma::uword ltemp;
+			arma::abs(this->mTimeVec - pTime).min(ltemp);
+			index=(unsigned int)ltemp;
 			if ( std::abs(this->mTimeVec(index)-pTime ) <= 1E-6 ){
 				mData.slice(index)=pData;
 				return true;
