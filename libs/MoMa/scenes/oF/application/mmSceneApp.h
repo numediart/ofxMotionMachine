@@ -128,10 +128,13 @@ namespace MoMa {
         
         FeatureDim type;
         TimedUnion feature;
+        
         std::string oscHeader;
         std::string name;
         std::string desc;
+        
         bool isFeasible;
+        bool isShown;
         bool isSent;
         bool isWek;
     };
@@ -229,14 +232,11 @@ namespace MoMa {
         int nOfFeatures( void ) { return( feature.size() ); } // # feat
         void setAutoDrawFeatures( bool ad ) { autoDrawFeatures = ad; }
         void addNewFeature( MoMa::TimedVec &feature, std::string name="",
-        std::string osc="/feat", bool isSent=false ); // Add Vector feature
+        std::string osc="/feat", bool isShown=true, bool isSent=true );
         void addNewFeature( MoMa::TimedMat &feature, std::string name="",
-        std::string osc="/feat", bool isSent=false ); // Add Matrix feature
+        std::string osc="/feat", bool isShown=true, bool isSent=true );
         void addNewFeature( MoMa::TimedCube &feature, std::string name="",
-        std::string osc="/feat", bool isSent=false ); // Add Cube feature
-        
-        // TODO Access feature for drawing, for sending OSC
-        // and for checking compatibility with input data.
+        std::string osc="/feat", bool isShown=true, bool isSent=true );
         
         // - Figure-related methods -
         
