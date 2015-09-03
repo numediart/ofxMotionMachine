@@ -38,9 +38,9 @@ void MenuView::canvasEvent( ofxUIEventArgs &e ) {
     //else if( name == "SCRUB MODE") app->setPlaybackMode( MoMa::SCRUB );
     //else if( name == "PLAY MODE") app->setPlaybackMode( MoMa::PLAY );
 
-    if( app->activeMode == MoMa::SCENE3D ) app->show3dScene( true );
+    /*if( app->activeMode == MoMa::SCENE3D ) app->show3dScene( true );
     else if( app->activeMode == MoMa::SCENE2D ) app->showFigures( true );
-    else if( app->activeMode == MoMa::ANNOTATE ) app->showAnnotation( true );
+    else if( app->activeMode == MoMa::ANNOTATE ) app->showAnnotation( true );*/
 
     if(name == "Player Bar") {
 
