@@ -278,6 +278,8 @@ namespace MoMa {
         
         void addOscListener( std::string header, Track &track );
         void setOscListenerPort( int listenerPort );
+        void setOscSenderPort( int senderPort );
+        void sendFeaturesAsOsc( bool send );
         
         // - Viewing preferences methods -
         
@@ -379,7 +381,6 @@ namespace MoMa {
         vector<Figure> _figure; // List of figures
         int figureIdx; // Figure to be drawn in
         int plotResolution; // Plot resolution
-        bool hasDrawnInFig; // Drawn in fig?
         
         // - X axis mapping -
         
@@ -402,8 +403,11 @@ namespace MoMa {
         // - OSC communication -
         
         vector<Listener> listener; // Registered pairs
-        ofxOscReceiver receiver; // OSC listener
+        ofxOscReceiver _receiver; // OSC listener
         int oscRcvPort; // Listening port
+        
+        ofxOscSender _sender; // OSC sender
+        int oscSndPort; // Sender port
         
         // - Annotation types -
         
@@ -424,6 +428,7 @@ namespace MoMa {
         
         vector<_Feature> feature; // List of features
         bool autoDrawFeatures; // Auto-draw features
+        bool sendOscFeatures; // Send features @ OSC
 
         // - Shortcuts control -
         

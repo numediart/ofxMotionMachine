@@ -32,7 +32,7 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     setPlaybackMode( PLAY );
     
     setAutoDrawLabelLists( true );
-    setAutoDrawFeatures( true );
+    setAutoDrawFeatures( false );
 
     showAnnotation( true );
     showCurtain( false );
@@ -58,7 +58,6 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     _figure.resize( 1 ); // full-screen
     _figure[figureIdx].yTop = 0; // figure
     _figure[figureIdx].yBot = ofGetHeight();
-    hasDrawnInFig = false;
     
     menuView = NULL;
     playBar = NULL;
@@ -66,8 +65,14 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
 
     hasDragEventRegTrack = false;
     hasMouseEventRegLabelList = false;  
-    oscRcvPort = 7000;  setup();
-    receiver.setup( oscRcvPort );
+    
+    oscRcvPort = 7000;
+    oscSndPort = 8000;
+    
+    setup();
+    
+    _sender.setup( "127.0.0.1", oscSndPort );
+    _receiver.setup( oscRcvPort );
 
     insertNewLabel = false;
     isLabelSelected = false;
@@ -174,10 +179,10 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
 
     // ---
 
-    while( receiver.hasWaitingMessages() ) {
+    while( _receiver.hasWaitingMessages() ) {
 
         ofxOscMessage message;
-        receiver.getNextMessage( &message );
+        _receiver.getNextMessage( &message );
 
         for( int l=0; l<listener.size(); l++ ) {
 
@@ -250,6 +255,42 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
     }
 
     update();
+    
+    if( sendOscFeatures ) {
+    
+        for( int f=0; f<feature.size(); f++ ) {
+            
+            if( feature[f].isFeasible && feature[f].isSent ) {
+                
+                ofxOscMessage msg;
+                msg.setAddress( feature[f].oscHeader );
+                
+                if( feature[f].type == VECTOR ) {
+                    
+                    msg.addFloatArg( feature[f].feature.tvec->get( getAppTime() ) );
+                    
+                } else if( feature[f].type == MATRIX ) {
+                    
+                    for( int e=0; e<feature[f].feature.tmat->nOfElems(); e++ ) {
+                        
+                        msg.addFloatArg( feature[f].feature.tmat->elem( e ).get( getAppTime() ) );
+                    }
+                    
+                } else if( feature[f].type == CUBE ) {
+                    
+                    for( int c=0; c<feature[f].feature.tcube->nOfCols(); c++ ) {
+                        
+                        for( int r=0; r<feature[f].feature.tcube->nOfRows(); r++ ) {
+                            
+                            msg.addFloatArg( feature[f].feature.tcube->col( c ).elem( r ).get( getAppTime() ) );
+                        }
+                    }
+                }
+                
+                _sender.sendMessage( msg );
+            }
+        }
+    }
 }
 
 void MoMa::SceneApp::draw( ofEventArgs &args ) {
@@ -305,9 +346,10 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
     }
 
     if( isFigure ) {
+        
         _figure[figureIdx].yMin = 1.0E12;
         _figure[figureIdx].yMax = -1.0E12;
-
+        
         _figure[figureIdx].plot.clear();
         _figure[figureIdx].plotId = 0;
         
@@ -325,7 +367,7 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
                 }
             }
             
-            if( nOfShownFeatures < 1 ) nOfShownFeatures=1;
+            // if( nOfShownFeatures < 1 ) nOfShownFeatures = 1;
             
             setNumOfFigures( nOfShownFeatures );
         
@@ -339,21 +381,24 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
                     if( feature[ f ].type == VECTOR ) {
                         
                         string name = feature[ f ].name;
-                        if( feature[ f ].isSent ) name += " [OSC]";
+                        if( feature[ f ].isSent ) name = "~ " + name;
+                        if( feature[ f ].isWek ) name = "> " + name;
                         
                         draw( *(feature[ f ].feature.tvec), name );
                         
                     } else if( feature[ f ].type == MATRIX ) {
                         
                         string name = feature[ f ].name;
-                        if( feature[ f ].isSent ) name += " [OSC]";
+                        if( feature[ f ].isSent ) name = "~ " + name;
+                        if( feature[ f ].isWek ) name = "> " + name;
                         
                         draw( *(feature[ f ].feature.tmat), name );
                         
                     } else if( feature[ f ].type == CUBE ) {
                         
                         string name = feature[ f ].name;
-                        if( feature[ f ].isSent ) name += " [OSC]";
+                        if( feature[ f ].isSent ) name = "~ " + name;
+                        if( feature[ f ].isWek ) name = "> " + name;
                         
                         for( int s=0; s<feature[ f ].feature.tcube->nOfCols(); s++ ) {
                             
@@ -365,10 +410,16 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
                     shownFeatureId++;
                 }
             }
+            
+        } else {
+            
+            // Scene2D is now only active if autoDrawFeatures
+            // is not, until we find a better way to handle it.
+        
+            scene2d(); // 2D figures
         }
         
-        scene2d(); // 2D figures
-        render2d(); // Render
+        render2d(); // 2D render
     }
 
     if( isAnnotation ) {
@@ -977,14 +1028,13 @@ void MoMa::SceneApp::draw(const TimedVec &tvec, int hue, std::string name ) {
         plot.color.setHsb( hue, 255, 255, 128 );
 
         if( tvec.nOfFrames() > 1 ) {
+            
 			if( _figure[figureIdx].yMin > (float)tvec.getData().min() ) _figure[figureIdx].yMin = (float)tvec.getData().min();
             if( _figure[figureIdx].yMax < (float)tvec.getData().max() ) _figure[figureIdx].yMax = (float)tvec.getData().max();
 
             _figure[figureIdx].plot.push_back( plot );
             _figure[figureIdx].plotId++;
         }
-        
-        hasDrawnInFig = true;
     }
 }
 
@@ -1544,6 +1594,16 @@ void MoMa::SceneApp::addOscListener( std::string header, MoMa::Track &track ) {
 void MoMa::SceneApp::setOscListenerPort( int listenerPort ) {
 
     oscRcvPort = listenerPort;
+}
+
+void MoMa::SceneApp::setOscSenderPort( int senderPort ) {
+    
+    oscSndPort = senderPort;
+}
+
+void MoMa::SceneApp::sendFeaturesAsOsc( bool send ) {
+
+    sendOscFeatures = send;
 }
 
 void MoMa::SceneApp::setNodeSize( float size ) {
