@@ -189,6 +189,8 @@
 		9F4FB7D51AC76502003C2C5A /* mmBvhParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F4FB7D01AC76502003C2C5A /* mmBvhParser.h */; };
 		9F6202171AA5B75200041A3E /* mmSynoList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F6202151AA5B75200041A3E /* mmSynoList.cpp */; };
 		9F6202181AA5B75200041A3E /* mmSynoList.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F6202161AA5B75200041A3E /* mmSynoList.h */; };
+		9FA83F171B9888D0004221CE /* mmOptionsView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FA83F151B9888D0004221CE /* mmOptionsView.cpp */; };
+		9FA83F181B9888D0004221CE /* mmOptionsView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9FA83F161B9888D0004221CE /* mmOptionsView.h */; };
 		9FEF33F11B8C559E00C40B2A /* mmMoment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FEF33EF1B8C559E00C40B2A /* mmMoment.cpp */; };
 		9FEF33F21B8C559E00C40B2A /* mmMoment.h in Headers */ = {isa = PBXBuildFile; fileRef = 9FEF33F01B8C559E00C40B2A /* mmMoment.h */; };
 		E877132C1B8B192F003C2FEF /* mmPlayBar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E877132A1B8B192F003C2FEF /* mmPlayBar.cpp */; };
@@ -392,6 +394,8 @@
 		9F4FB7D01AC76502003C2C5A /* mmBvhParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmBvhParser.h; path = ../../../MoMa/parsers/mmBvhParser.h; sourceTree = "<group>"; };
 		9F6202151AA5B75200041A3E /* mmSynoList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmSynoList.cpp; path = ../../../MoMa/core/mmSynoList.cpp; sourceTree = "<group>"; };
 		9F6202161AA5B75200041A3E /* mmSynoList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmSynoList.h; path = ../../../MoMa/core/mmSynoList.h; sourceTree = "<group>"; };
+		9FA83F151B9888D0004221CE /* mmOptionsView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mmOptionsView.cpp; sourceTree = "<group>"; };
+		9FA83F161B9888D0004221CE /* mmOptionsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mmOptionsView.h; sourceTree = "<group>"; };
 		9FEF33EF1B8C559E00C40B2A /* mmMoment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmMoment.cpp; path = ../../../MoMa/core/mmMoment.cpp; sourceTree = "<group>"; };
 		9FEF33F01B8C559E00C40B2A /* mmMoment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmMoment.h; path = ../../../MoMa/core/mmMoment.h; sourceTree = "<group>"; };
 		E877132A1B8B192F003C2FEF /* mmPlayBar.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mmPlayBar.cpp; sourceTree = "<group>"; };
@@ -551,6 +555,8 @@
 				9F2E1C091B76645000DB082C /* MoMaUI.h */,
 				9F2E1C051B76645000DB082C /* mmSceneApp.cpp */,
 				9F2E1C061B76645000DB082C /* mmSceneApp.h */,
+				9FA83F151B9888D0004221CE /* mmOptionsView.cpp */,
+				9FA83F161B9888D0004221CE /* mmOptionsView.h */,
 				E877132E1B8B1943003C2FEF /* mmMenuView.cpp */,
 				E877132F1B8B1943003C2FEF /* mmMenuView.h */,
 				E877132A1B8B192F003C2FEF /* mmPlayBar.cpp */,
@@ -906,6 +912,7 @@
 				9F4FB7D51AC76502003C2C5A /* mmBvhParser.h in Headers */,
 				9F2E1FAB1B7664B800DB082C /* ofxUILabelButton.h in Headers */,
 				9F2E1FE71B7664B800DB082C /* ofxXmlSettings.h in Headers */,
+				9FA83F181B9888D0004221CE /* mmOptionsView.h in Headers */,
 				9F2E1FAD1B7664B800DB082C /* ofxUILabelToggle.h in Headers */,
 				9F2E1C1B1B76645000DB082C /* mmBoundingBoxUI.h in Headers */,
 				9F2E1F971B7664B800DB082C /* ofxUIDropDownList.h in Headers */,
@@ -1054,6 +1061,7 @@
 				9F2E1F9C1B7664B800DB082C /* ofxUIFPSSlider.cpp in Sources */,
 				9F2E1F7C1B7664B800DB082C /* ofxOscMessage.cpp in Sources */,
 				9F00DC7A1A9C8A580022A309 /* mmGeometry.cpp in Sources */,
+				9FA83F171B9888D0004221CE /* mmOptionsView.cpp in Sources */,
 				9F2E1FD81B7664B800DB082C /* ofxUIValuePlotter.cpp in Sources */,
 				9F2E1FE41B7664B800DB082C /* tinyxmlerror.cpp in Sources */,
 				9F2E1F671B7664B800DB082C /* UdpSocket.cpp in Sources */,
