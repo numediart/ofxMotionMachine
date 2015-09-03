@@ -14,6 +14,7 @@ Options::Options( SceneApp *_app, MoMa::Position position, MoMa::Position alignm
         addLabelToggle( "SHOW CAPTIONS", app->isCaptions );
         addLabelToggle( "SHOW TIMELINE", app->isTimeline );*/
 
+        addSpacer();
         addToggle( "Show 3D Scene", app->is3dScene );
         addToggle( "Show 3D Ground", app->isGround );
         addToggle( "Show Node Names", app->isNodeNames );
