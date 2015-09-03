@@ -50,7 +50,22 @@ namespace MoMa {
 		return;
 	}
     
-
+	
+    bool TimedData::checkTimeVec( arma::vec pTime,unsigned int pLastId ) {
+        
+        if (pTime.n_elem==0)
+            return false;
+        arma::vec::iterator it1,it2;
+        it1=pTime.begin();
+        it2=it1+1;
+        while (it2!=pTime.end()){//verify if pTIme is monotonic increasing vector
+			if ((*it1>*it2)&&it1!=pTime.begin()+pLastId)
+                return false;
+            it1++;
+            it2++;
+        }
+        return true;
+    }
     
     
     bool TimedData::checkTimeVec( arma::vec pTime ) {

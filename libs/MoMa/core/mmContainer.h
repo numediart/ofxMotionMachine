@@ -84,6 +84,7 @@ namespace MoMa {
       protected:
         
         bool checkTimeVec( arma::vec pTime ); // Check time stamp vector
+        bool checkTimeVec( arma::vec pTime ,unsigned int pLastId); // Check time stamp vector
         unsigned int checkLastId(const arma::vec &pTime);
         void interpIndexFind( const arma::vec pVec, double pValue, unsigned int &index1,
         double &weight1, unsigned int &index2, double &weight2 ); // Interpolation data
@@ -181,13 +182,19 @@ namespace MoMa {
       public:
         inline double get( unsigned int pIndex );
         inline double get( double pTime );
-        
+		
+		inline double getLast( double &pTime );
+		inline double getLast( );
+
         inline bool set( double pData, unsigned int pIndex );
         inline bool set( double pData, double pTime );
         
         inline bool push( double pData, double pTime );
         inline bool push( double pData );
-        
+
+		inline bool push(const arma::vec &pData,const arma::vec &pTime);
+		inline bool push(const arma::vec &pData);
+
         TimedVec sub( int pBegIndex, int pEndIndex ) const;
         TimedVec getOfflineData( ) const;
         
@@ -205,6 +212,7 @@ namespace MoMa {
         unsigned int nOfElems( void ) const { return( 1 ); }
         void clear( void ) { mData.clear(); }
 		bool SetValidParam();
+	
       protected:
         
         arma::vec mData;
@@ -235,6 +243,30 @@ namespace MoMa {
         
         return( 0.0 );
     }
+		
+	double TimedVec::getLast( double &pTime ){
+		if (mLastId>=mBufferSize){
+			pTime=-1.0;
+			return 0.0;
+		}
+		else{
+			if (mTimed)
+				pTime=mTimeVec(mLastId);
+			else
+				pTime=mInitialTime+mLastId/mFrameRate;
+			return 
+				mData(mLastId);
+		}
+	};
+
+	double TimedVec::getLast( ){
+		if (mLastId>=mBufferSize)
+			return 0.0;
+		else{
+			return 
+				mData(mLastId);
+		}
+	};
     
     bool TimedVec::set( double pData, unsigned int pIndex ) {
         if( mTimed ) return false;
@@ -349,7 +381,57 @@ namespace MoMa {
 			mIsFilled=true;
         return true;
     };
-
+	
+		
+	bool TimedVec::push(const arma::vec &pData,const arma::vec &pTime){
+		if (!mIsRealTime||!mTimed)
+			return false;
+		if (pData.n_elem!=pTime.n_elem)
+			return false;
+		if ((!checkTimeVec(pTime,pTime.n_elem))||(pTime(0)<=mTimeVec(mLastId)))
+			return false;
+		if (pData.n_elem>=mBufferSize){
+			mData=pData.subvec(pData.n_elem-mBufferSize, pData.n_elem-1);
+			mTimeVec=pTime.subvec(pTime.n_elem-mBufferSize, pTime.n_elem-1);
+			mLastId=mBufferSize-1;
+		}
+		else{
+			unsigned int begInd=(mLastId+1)*((mLastId+1)<mBufferSize);
+			unsigned int endInd=((mLastId+1)*((mLastId+1)<mBufferSize)+(mData.n_elem-1))%mBufferSize;
+			if (begInd<endInd){
+				mData.subvec(begInd,endInd)=pData;
+				mTimeVec.subvec(begInd,endInd)=pTime;
+			}
+			else{
+				mData.subvec(begInd,mBufferSize-1)=pData.subvec(0,mBufferSize-begInd-1);
+				mData.subvec(0,endInd)=pData.subvec(mBufferSize-begInd,pData.n_elem-1);
+				mTimeVec.subvec(begInd,mBufferSize-1)=pTime.subvec(0,mBufferSize-begInd-1);
+				mTimeVec.subvec(0,endInd)=pTime.subvec(mBufferSize-begInd,pTime.n_elem-1);
+			}
+			mLastId=endInd;
+		}
+	};
+	
+	bool TimedVec::push(const arma::vec &pData){
+		if (!mIsRealTime||mTimed)
+			return false;
+		if (pData.n_elem>=mBufferSize){
+			mData=pData.subvec(pData.n_elem-mBufferSize, pData.n_elem-1);
+			mLastId=mBufferSize-1;
+		}
+		else{
+			unsigned int begInd=(mLastId+1)*((mLastId+1)<mBufferSize);
+			unsigned int endInd=((mLastId+1)*((mLastId+1)<mBufferSize)+(mData.n_elem-1))%mBufferSize;
+			if (begInd<endInd){
+				mData.subvec(begInd,endInd)=pData;
+			}
+			else{
+				mData.subvec(begInd,mBufferSize-1)=pData.subvec(0,mBufferSize-begInd-1);
+				mData.subvec(0,endInd)=pData.subvec(mBufferSize-begInd,pData.n_elem-1);
+			}
+			mLastId=endInd;
+		}
+	};
     
    // void TimedVec::pop( void ) {
         
@@ -370,12 +452,17 @@ namespace MoMa {
         inline arma::vec get( unsigned int pIndex ); // Frame getter
         inline arma::vec get( double pTime ); // by index and time
         
+		inline arma::vec getLast( double &pTime );
+		inline arma::vec getLast( ); 
         inline bool set( const arma::vec &pData, unsigned int pIndex ); // Frame setter
         inline bool set( const arma::vec &pData, double pTime ); // by index and time
         
         inline bool push( const arma::vec &pData, double pTime ); // Push timed
         inline bool push( const arma::vec &pData ); // Push at the end of mData
         
+		inline bool push(const arma::mat &pData,const arma::vec &pTime);
+		inline bool push(const arma::mat &pData);
+
         TimedMat sub( int pBegIndex, int pEndIndex ) const; // Chop by index
         TimedMat getOfflineData( ) const;
         TimedVec elem( unsigned int pIndex ) const; // Elem getter by index
@@ -429,7 +516,30 @@ namespace MoMa {
 			return ( this->mData.col(memIndex( this->nearestIndex(pTime)) ));
         
     }
-    
+    	
+	arma::vec TimedMat::getLast( double &pTime ){
+		if (mLastId>=mBufferSize){
+			pTime=-1.0;
+			return arma::zeros(mData.n_cols,1);
+		}
+		else{
+			if (mTimed)
+				pTime=mTimeVec(mLastId);
+			else
+				pTime=mInitialTime+mLastId/mFrameRate;
+			return 
+				mData.col(mLastId);
+		}
+	};
+
+	arma::vec TimedMat::getLast( ){
+		if (mLastId>=mBufferSize)
+			return arma::zeros(mData.n_cols,1);
+		else{
+			return 
+				mData.col(mLastId);
+		}
+	};
     bool TimedMat::set( const arma::vec &pData, unsigned int pIndex ) {
         
 		if (mIsRealTime)
@@ -554,7 +664,55 @@ namespace MoMa {
 			mIsFilled=true;
         return true;
     };
-    
+    bool TimedMat::push(const arma::mat &pData,const arma::vec &pTime){
+		if (!mIsRealTime||!mTimed)
+			return false;
+		if (pData.n_elem!=pTime.n_elem)
+			return false;
+		if ((!checkTimeVec(pTime,pTime.n_elem))||(pTime(0)<=mTimeVec(mLastId)))
+			return false;
+		if (pData.n_elem>=mBufferSize){
+			mData=pData.cols(pData.n_elem-mBufferSize, pData.n_elem-1);
+			mTimeVec=pTime.subvec(pTime.n_elem-mBufferSize, pTime.n_elem-1);
+			mLastId=mBufferSize-1;
+		}
+		else{
+			unsigned int begInd=(mLastId+1)*((mLastId+1)<mBufferSize);
+			unsigned int endInd=((mLastId+1)*((mLastId+1)<mBufferSize)+(mData.n_elem-1))%mBufferSize;
+			if (begInd<endInd){
+				mData.cols(begInd,endInd)=pData;
+				mTimeVec.subvec(begInd,endInd)=pTime;
+			}
+			else{
+				mData.cols(begInd,mBufferSize-1)=pData.cols(0,mBufferSize-begInd-1);
+				mData.cols(0,endInd)=pData.cols(mBufferSize-begInd,pData.n_elem-1);
+				mTimeVec.subvec(begInd,mBufferSize-1)=pTime.subvec(0,mBufferSize-begInd-1);
+				mTimeVec.subvec(0,endInd)=pTime.subvec(mBufferSize-begInd,pTime.n_elem-1);
+			}
+			mLastId=endInd;
+		}
+	};
+	
+	bool TimedMat::push(const arma::mat &pData){
+		if (!mIsRealTime||mTimed)
+			return false;
+		if (pData.n_elem>=mBufferSize){
+			mData=pData.cols(pData.n_elem-mBufferSize, pData.n_elem-1);
+			mLastId=mBufferSize-1;
+		}
+		else{
+			unsigned int begInd=(mLastId+1)*((mLastId+1)<mBufferSize);
+			unsigned int endInd=((mLastId+1)*((mLastId+1)<mBufferSize)+(mData.n_elem-1))%mBufferSize;
+			if (begInd<endInd){
+				mData.cols(begInd,endInd)=pData;
+			}
+			else{
+				mData.cols(begInd,mBufferSize-1)=pData.cols(0,mBufferSize-begInd-1);
+				mData.cols(0,endInd)=pData.cols(mBufferSize-begInd,pData.n_elem-1);
+			}
+			mLastId=endInd;
+		}
+	};
     
     
     // == TIMED CUBE ==
@@ -568,12 +726,18 @@ namespace MoMa {
         inline const arma::mat &get( unsigned int pIndex ); // Frame getter
         inline arma::mat get( double pTime ); // by index and time
         
+		inline arma::mat getLast( double &pTime );
+		inline arma::mat getLast( ); 
+
         inline bool set( const arma::mat &pData, unsigned int pIndex ); // Frame setter
         inline bool set( const arma::mat &pData, double pTime ); // by index and time
         
         inline bool push( const arma::mat &pData, double pTime ); // Push timed
         inline bool push( const arma::mat &pData ); // Push at the end of mData
         
+		inline bool push(const arma::cube &pData,const arma::vec &pTime);
+		inline bool push(const arma::cube &pData);
+
         TimedCube sub( int pBegIndex, int pEndIndex ) const; // Chop by index
         TimedCube getOfflineData( ) const;
         TimedMat row( unsigned int pIndex ); // Row getter by index
@@ -645,6 +809,29 @@ namespace MoMa {
         return arma::zeros( 1, 1 );
     }
     
+	arma::mat TimedCube::getLast( double &pTime ){
+		if (mLastId>=mBufferSize){
+			pTime=-1.0;
+			return arma::zeros(mData.n_cols,mData.n_rows);
+		}
+		else{
+			if (mTimed)
+				pTime=mTimeVec(mLastId);
+			else
+				pTime=mInitialTime+mLastId/mFrameRate;
+			return 
+				mData.slice(mLastId);
+		}
+	};
+
+	arma::mat TimedCube::getLast( ){
+		if (mLastId>=mBufferSize)
+			return arma::zeros(mData.n_cols,mData.n_rows);
+		else{
+			return 
+				mData.slice(mLastId);
+		}
+	};
     bool TimedCube::set( const arma::mat &pData, unsigned int pIndex ) {
 		if (mIsRealTime)
 			return false;
@@ -763,6 +950,57 @@ namespace MoMa {
         return true;
     };
 	
+    bool TimedCube::push(const arma::cube &pData,const arma::vec &pTime){
+		if (!mIsRealTime||!mTimed)
+			return false;
+		if (pData.n_elem!=pTime.n_elem)
+			return false;
+		if ((!checkTimeVec(pTime,pTime.n_elem))||(pTime(0)<=mTimeVec(mLastId)))
+			return false;
+		if (pData.n_elem>=mBufferSize){
+			mData=pData.slices(pData.n_elem-mBufferSize, pData.n_elem-1);
+			mTimeVec=pTime.subvec(pTime.n_elem-mBufferSize, pTime.n_elem-1);
+			mLastId=mBufferSize-1;
+		}
+		else{
+			unsigned int begInd=(mLastId+1)*((mLastId+1)<mBufferSize);
+			unsigned int endInd=((mLastId+1)*((mLastId+1)<mBufferSize)+(mData.n_elem-1))%mBufferSize;
+			if (begInd<endInd){
+				mData.slices(begInd,endInd)=pData;
+				mTimeVec.subvec(begInd,endInd)=pTime;
+			}
+			else{
+				mData.slices(begInd,mBufferSize-1)=pData.slices(0,mBufferSize-begInd-1);
+				mData.slices(0,endInd)=pData.slices(mBufferSize-begInd,pData.n_elem-1);
+				mTimeVec.subvec(begInd,mBufferSize-1)=pTime.subvec(0,mBufferSize-begInd-1);
+				mTimeVec.subvec(0,endInd)=pTime.subvec(mBufferSize-begInd,pTime.n_elem-1);
+			}
+			mLastId=endInd;
+		}
+	};
+	
+	bool TimedCube::push(const arma::cube &pData){
+		if (!mIsRealTime||mTimed)
+			return false;
+		if (pData.n_elem>=mBufferSize){
+			mData=pData.slices(pData.n_elem-mBufferSize, pData.n_elem-1);
+			mLastId=mBufferSize-1;
+		}
+		else{
+			unsigned int begInd=(mLastId+1)*((mLastId+1)<mBufferSize);
+			unsigned int endInd=((mLastId+1)*((mLastId+1)<mBufferSize)+(mData.n_elem-1))%mBufferSize;
+			if (begInd<endInd){
+				mData.slices(begInd,endInd)=pData;
+			}
+			else{
+				mData.slices(begInd,mBufferSize-1)=pData.slices(0,mBufferSize-begInd-1);
+				mData.slices(0,endInd)=pData.slices(mBufferSize-begInd,pData.n_elem-1);
+			}
+			mLastId=endInd;
+		}
+	};
+	
 };
+
 
 #endif
