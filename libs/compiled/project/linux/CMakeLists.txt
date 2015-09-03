@@ -9,7 +9,10 @@
 
 PROJECT(MOMA_PROJECT)
 
-CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
+# cmake > 3.1.0 is necessary for the 
+# "SET_PROPERTY(TARGET ${TARGET_NAME} PROPERTY CXX_STANDARD 11)"
+# which forces the C++ compiler to use c++11
+CMAKE_MINIMUM_REQUIRED (VERSION 3.1)
 
 OPTION(BUILD_SHARED_LIBS "Build Shared libraries" ON)
 
