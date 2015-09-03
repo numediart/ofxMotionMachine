@@ -1124,7 +1124,11 @@ void MoMa::SceneApp::draw( LabelList labelList ) {
         
         float labPos = ofMap( labelList[l].moment.time(), lowBound.time(), highBound.time(), 0, ofGetWidth() );
         ofLine( labPos, 0, labPos, ofGetHeight() ); // We draw labels line and label names
-        ofDrawBitmapString( labelList[l].name, labPos+6, 14 );
+        ofPushMatrix();  
+        ofRotateZ(90);
+        ofSetDrawBitmapMode(OF_BITMAPMODE_MODEL);
+        ofDrawBitmapString( labelList[l].name, 14, -(labPos+6) );  
+        ofPopMatrix();
         
         ofPopStyle();
     }
