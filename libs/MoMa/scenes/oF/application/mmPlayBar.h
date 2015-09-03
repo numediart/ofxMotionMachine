@@ -1,17 +1,17 @@
-/** FiguresView class
+/** PlayBar class
 *
-* Created by Mickaël Tits on 28/07/2015
+* Created by Mickaël Tits on 20/08/2015
 *
 */
 
 #ifndef __mmPlayBar__
 #define __mmPlayBar__
 
-namespace MoMa { 
+/*namespace MoMa { 
 
     class PlayBar;
     //class Canvas;
-}
+}*/
 
 #include "mmCanvas.h"
 
@@ -24,7 +24,7 @@ namespace MoMa {
 
     public:
 
-        PlayBar( SceneApp *app, MoMa::Position position = DEFAULT, MoMa::Position alignment = MoMa::DEFAULT, MoMa::Canvas *parentUI = NULL, bool minified = false );
+        PlayBar( SceneApp *app, MoMa::Position position = DEFAULT, MoMa::Position alignment = MoMa::DEFAULT, MoMa::Canvas *parentUI = NULL, int group = 1, bool minified = false );
 
 
         void update();

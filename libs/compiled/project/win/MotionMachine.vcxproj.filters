@@ -387,6 +387,9 @@
     <ClCompile Include="..\..\..\MoMa\core\mmMoment.cpp">
       <Filter>MoMa\core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOptionsView.cpp">
+      <Filter>MoMa\scenes\oF\application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\MoMa\core\mmBoneList.h">
@@ -724,6 +727,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\MoMa\core\mmMoment.h">
       <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOptionsView.h">
+      <Filter>MoMa\scenes\oF\application</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

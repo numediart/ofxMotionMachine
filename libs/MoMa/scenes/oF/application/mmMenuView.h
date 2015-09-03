@@ -7,11 +7,11 @@
 #ifndef __mmMenuView__
 #define __mmMenuView__
 
-namespace MoMa { 
+/*namespace MoMa { 
 
     class MenuView;
     //class Canvas;
-}
+}*/
 
 #include "mmCanvas.h"
 

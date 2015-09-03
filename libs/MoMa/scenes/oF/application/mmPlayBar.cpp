@@ -2,9 +2,9 @@
 
 using namespace MoMa;
 
-PlayBar::PlayBar( SceneApp *_app, MoMa::Position position, MoMa::Position alignment, MoMa::Canvas *parentUI, bool minified ) : 
+PlayBar::PlayBar( SceneApp *_app, MoMa::Position position, MoMa::Position alignment, MoMa::Canvas *parentUI, int group, bool minified ) : 
     app(_app),
-    Canvas( _app, "Play Bar", position, alignment, NULL, parentUI, NULL, minified ) {
+    Canvas( _app, "Player Bar", position, alignment, NULL, parentUI, group, minified ) {
 
         /*vector<string> buttons;
         //buttons.push_back( "PREV.");
@@ -31,9 +31,9 @@ PlayBar::PlayBar( SceneApp *_app, MoMa::Position position, MoMa::Position alignm
         bt_prevFrame = addImageButton("prev", ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_previousframe.png", false);
         bt_nextFrame = addImageButton("next", ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_nextframe.png", false);
 
-        playingState = false;        
+        playingState = false;
+        setVisible(true);
         initCanvas();
-
 }
 
 void PlayBar::initCanvas() {
@@ -41,8 +41,7 @@ void PlayBar::initCanvas() {
     //getCanvasTitle()->setVisible(false);
     autoSizeToFitWidgets();
     setMinified(false);
-    setPosition( round( ofGetWidth()/2 - getRect()->getHalfWidth() ), round( ofGetHeight() - 20 - getRect()->getHeight() ) );
-    setVisible(true);
+    setPosition( round( ofGetWidth()/2 - getRect()->getHalfWidth() ), round( ofGetHeight() - 20 - getRect()->getHeight() ) );    
 }
 
 void PlayBar::canvasEvent( ofxUIEventArgs &e ) {

@@ -1,6 +1,7 @@
 #include "mmSceneApp.h"
 #include "mmMenuView.h"
 #include "mmPlayBar.h"
+#include "mmOptionsView.h"
 
 using namespace std;
 using namespace arma;
@@ -61,6 +62,7 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     
     menuView = NULL;
     playBar = NULL;
+    optionsView = NULL;
     addMenuView();
 
     hasDragEventRegTrack = false;
@@ -1712,8 +1714,10 @@ void MoMa::SceneApp::addMenuView( void ) {
     if(!menuView) {
 
         menuView = new MenuView(this);
-        if(playBar) playBar->remove();            
-        playBar = new PlayBar(this, DEFAULT, DEFAULT, menuView);
+        if(playBar) playBar->remove();
+        playBar = new PlayBar(this, DEFAULT, DEFAULT, menuView,1);
+        if(optionsView) optionsView->remove();
+        optionsView = new Options(this, RIGHTSIDE, BOTTOM, menuView,2);
     }
 }
 
