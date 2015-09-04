@@ -249,8 +249,12 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
                 //     listener[l].track->push( oscFrame );
                 //setPlayerSize( listener[l].track->nOfFrames() );
 
+
                 appMoment.setTime( (double)ofGetElapsedTimeMillis()/1000.0);
-                setPlayerSize( listener[l].track->minTime(),listener[l].track->maxTime() );
+                if (listener[l].track->position.isTimed())
+                    setPlayerSize( listener[l].track->minTime(),listener[l].track->maxTime() );
+                else
+                    setPlayerSize( listener[l].track->nOfFrames());
                 onOscReceived(); // Trigger custom code here
             }
         }

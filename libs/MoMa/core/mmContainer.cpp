@@ -266,6 +266,186 @@ namespace MoMa {
 		mInitialTime=0.0;
 		return true;
 	}
+	
+    bool TimedVec::set( double pData, unsigned int pIndex ) {
+        if( mTimed ) return false;
+        if (mIsRealTime)
+			return false;
+        
+		pIndex=memIndex(pIndex);
+        
+        if( pIndex < mData.n_elem ) {
+            
+            mData(pIndex) = pData;
+            return true;
+        
+        } else {
+            
+            if( pIndex == mData.n_elem ) {
+                
+                mData.insert_rows( mData.n_elem, 1 );
+                mData( mData.n_elem-1 ) = pData;
+                return true;
+            }
+            
+            else return false;
+        }
+        
+        return true;
+    }
+    
+    bool TimedVec::set( double pData, double pTime ) {
+		if (mIsRealTime)
+			return false;
+        if( mTimed ) {
+            
+            if( mTimeVec.n_elem == 0 ) return false;
+            
+          /*  if( mTimeVec(0) > pTime ) {
+                
+                mData.insert_rows( 0, 1 );
+                mData(0) = pData;
+                mTimeVec.insert_rows( 0, 1 );
+                mTimeVec(0) = pTime;
+                
+                return true;
+            }
+            
+            if( mTimeVec( mTimeVec.n_elem-1 ) < pTime ) {
+                
+                mData.insert_rows( mData.n_elem, 1 );
+                mData( mData.n_elem-1 ) = pData;
+                mTimeVec.insert_rows( mTimeVec.n_elem, 1 );
+                mTimeVec( mTimeVec.n_elem-1 ) = pTime;
+                
+                return true;
+            }*/
+			unsigned int index;
+			arma::uword ltemp;
+			arma::abs(this->mTimeVec - pTime).min(ltemp);
+			index=(unsigned int)ltemp;
+			if ( std::abs(this->mTimeVec(index)-pTime ) <= 1E-6 ){
+				mData(index)=pData;
+				return true;
+			}
+			if (this->mTimeVec(index)<pTime)
+				index++;
+	        mData.insert_rows( index, 1 );
+            mData( index  )= pData;
+            mTimeVec.insert_rows( index, 1 );
+            mTimeVec( index ) = pTime;
+            return true;
+		} 
+		else {
+            double lTime=pTime-mInitialTime;
+            if (lTime<0.0)
+                return false;
+            if( std::abs( (lTime-mFrameRate*round(lTime/mFrameRate)) ) <= 1E-6 ) {
+                
+                if( (int)round(lTime/mFrameRate) < mData.n_elem ) {
+                    
+                    mData( ((int)round(lTime/mFrameRate))) = pData;
+                    
+                    return true;
+                
+                } else return false;
+            
+            } else return false;
+        }
+    }
+    
+    bool TimedVec::push( double pData, double pTime ) {
+		if (!mTimed||!mIsRealTime) return false;
+		if( pTime <= this->maxTime()) return false;
+		mLastId++;
+		if (mLastId>=mBufferSize)
+			mLastId=0;
+		mData(mLastId)=pData;
+		mTimeVec(mLastId)=pTime;
+		if (mLastId==mBufferSize-1)
+			mIsFilled=true;
+        return true;
+    }
+    
+    bool TimedVec::push( double pData ) {
+        
+		if (mTimed||!mIsRealTime) return false;
+		mLastId++;
+		if (mLastId>=mBufferSize)
+			mLastId=0;
+		mData(mLastId)=pData;
+		if (mIsFilled)
+			mInitialTime+=1.0/mFrameRate;
+		if (mLastId==mBufferSize-1)
+			mIsFilled=true;
+        return true;
+    };
+	
+		
+	bool TimedVec::push(const arma::vec &pData,const arma::vec &pTime){
+		if (!mIsRealTime||!mTimed)
+			return false;
+		if (pData.n_elem!=pTime.n_elem)
+			return false;
+		if ((!checkTimeVec(pTime,pTime.n_elem))||(pTime(0)<=(mLastId==mBufferSize?0.0:mTimeVec(mLastId))))
+			return false;
+		if (pData.n_elem>=mBufferSize){
+			mData=pData.subvec(pData.n_elem-mBufferSize, pData.n_elem-1);
+			mTimeVec=pTime.subvec(pTime.n_elem-mBufferSize, pTime.n_elem-1);
+			mLastId=mBufferSize-1;
+			
+					mIsFilled=true;
+		}
+		else{
+			unsigned int begInd=(mLastId+1)*((mLastId+1)<mBufferSize);
+			unsigned int endInd=((mLastId+1)*((mLastId+1)<mBufferSize)+(mData.n_elem-1))%mBufferSize;
+			if (begInd<=endInd){
+				mData.subvec(begInd,endInd)=pData;
+				mTimeVec.subvec(begInd,endInd)=pTime;
+								
+				if (endInd==(mBufferSize-1))
+					mIsFilled=true;
+			}
+			else{
+				mData.subvec(begInd,mBufferSize-1)=pData.subvec(0,mBufferSize-begInd-1);
+				mData.subvec(0,endInd)=pData.subvec(mBufferSize-begInd,pData.n_elem-1);
+				mTimeVec.subvec(begInd,mBufferSize-1)=pTime.subvec(0,mBufferSize-begInd-1);
+				mTimeVec.subvec(0,endInd)=pTime.subvec(mBufferSize-begInd,pTime.n_elem-1);
+				
+					mIsFilled=true;
+			}
+			mLastId=endInd;
+		}
+	};
+	
+	bool TimedVec::push(const arma::vec &pData){
+		if (!mIsRealTime||mTimed)
+			return false;
+		if (pData.n_elem>=mBufferSize){
+			mData=pData.subvec(pData.n_elem-mBufferSize, pData.n_elem-1);
+			mLastId=mBufferSize-1;
+			
+					mIsFilled=true;
+		}
+		else{
+			unsigned int begInd=(mLastId+1)*((mLastId+1)<mBufferSize);
+			unsigned int endInd=((mLastId+1)*((mLastId+1)<mBufferSize)+(mData.n_elem-1))%mBufferSize;
+			if (begInd<=endInd){
+				mData.subvec(begInd,endInd)=pData;
+				
+				
+				if (endInd==(mBufferSize-1))
+					mIsFilled=true;
+			}
+			else{
+				mData.subvec(begInd,mBufferSize-1)=pData.subvec(0,mBufferSize-begInd-1);
+				mData.subvec(0,endInd)=pData.subvec(mBufferSize-begInd,pData.n_elem-1);
+				
+					mIsFilled=true;
+			}
+			mLastId=endInd;
+		}
+	};
 // == TIMED MAT ==
     bool TimedMat::SetValidParam(){
 		if (mTimed){
@@ -392,7 +572,7 @@ namespace MoMa {
 		mData.clear();
 		mTimed=true;
 		mData.clear();
-		mData.resize(pDim,bufferSize);
+		mData.zeros(pDim,bufferSize);
 		mTimeVec.zeros(bufferSize,1);
 		return true;
 	}
@@ -497,6 +677,187 @@ namespace MoMa {
 		elem.setIsFilled(mIsFilled);
         return( elem );
     }
+    bool TimedMat::set( const arma::vec &pData, unsigned int pIndex ) {
+        
+		if (mIsRealTime)
+			return false;
+        if( mTimed ) return false;
+        if( !checkInput(pData) ) return false;
+        
+		pIndex=memIndex(pIndex);
+        
+        if( pIndex<mData.n_cols ) {
+            
+            mData.col( pIndex ) = pData;
+            
+            return true;
+        
+        } else {
+            
+            if( pIndex == mData.n_cols ) {
+                
+                mData.insert_cols( mData.n_cols, 1 );
+                mData.col( mData.n_cols-1 ) = pData;
+                
+                return true;
+            
+            } else return false;
+        }
+        
+        return true;
+    }
+    
+    bool TimedMat::set( const arma::vec &pData, double pTime ) {
+		if (mIsRealTime)
+			return false;
+        
+        if( !checkInput(pData) ) return( false );
+        
+        if( mTimed ) {
+            
+            if( mTimeVec.n_elem == 0 ) return false;
+            
+          /*  if( mTimeVec(0) > pTime ) {
+                
+                mData.insert_cols( 0, 1 );
+                mData.col(0) = pData;
+                mTimeVec.insert_rows( 0, 1 );
+                mTimeVec(0) = pTime;
+                
+                return true;
+            }
+            
+            if( mTimeVec( mTimeVec.n_elem-1 ) < pTime ) {
+                
+                mData.insert_cols( mData.n_elem, 1 );
+                mData.col( mData.n_elem-1 ) = pData;
+                mTimeVec.insert_rows( mTimeVec.n_elem, 1 );
+                mTimeVec( mTimeVec.n_elem-1 ) = pTime;
+                
+                return true;
+            }*/
+			
+			unsigned int index;
+			arma::uword ltemp;
+			arma::abs(this->mTimeVec - pTime).min(ltemp);
+			index=(unsigned int)ltemp;
+			if ( std::abs(this->mTimeVec(index)-pTime ) <= 1E-6 ){
+				mData.col(index)=pData;
+				return true;
+			}
+			if (this->mTimeVec(index)<pTime)
+				index++;
+	        mData.insert_cols( index, 1 );
+            mData.col( index  )= pData;
+            mTimeVec.insert_rows( index, 1 );
+            mTimeVec( index ) = pTime;
+            return true;
+        
+        } else {
+            
+            double lTime=pTime-mInitialTime;
+            if (lTime<0.0)
+                return false;
+            if( std::abs( lTime-mFrameRate*round(lTime/mFrameRate) ) <= 1E-6 ) {
+                
+                if( (int)round(lTime/mFrameRate) < mData.n_cols ) {
+                    
+                    mData.col( (int)round(lTime/mFrameRate) ) = pData;
+                    
+                    return true;
+                
+                } else return false;
+            
+            } else return false;
+        }
+    }
+    
+   
+    bool TimedMat::push(const arma::vec &pData, double pTime ) {
+		if (!mTimed||!mIsRealTime) return false;
+		if( pTime <= this->maxTime()) return false;
+
+		mLastId++;
+		if (mLastId>=mBufferSize)
+			mLastId=0;
+		mData.col(mLastId)=pData;
+		mTimeVec(mLastId)=pTime;
+		if (mLastId==mBufferSize-1)
+			mIsFilled=true;
+        return true;
+    }
+    
+    bool TimedMat::push(const arma::vec & pData ) {
+        
+		if (mTimed||!mIsRealTime) return false;
+		
+		mLastId++;
+		if (mLastId>=mBufferSize)
+			mLastId=0;;
+		mData.col(mLastId)=pData;
+		if (mIsFilled)
+			mInitialTime+=1.0/mFrameRate;
+		if (mLastId==mBufferSize-1)
+			mIsFilled=true;
+        return true;
+    };
+    bool TimedMat::push(const arma::mat &pData,const arma::vec &pTime){
+		if (!mIsRealTime||!mTimed)
+			return false;
+		if (pData.n_cols!=pTime.n_elem)
+			return false;
+		if ((!checkTimeVec(pTime,pTime.n_elem))||(pTime(0)<=(mLastId==mBufferSize?0.0:mTimeVec(mLastId))))
+			return false;
+		if (pData.n_cols>=mBufferSize){
+			mData=pData.cols(pData.n_cols-mBufferSize, pData.n_cols-1);
+			mTimeVec=pTime.subvec(pTime.n_elem-mBufferSize, pTime.n_elem-1);
+			mLastId=mBufferSize-1;
+			mIsFilled=true;
+		}
+		else{
+			unsigned int begInd=(mLastId+1)*((mLastId+1)<mBufferSize);
+			unsigned int endInd=((mLastId+1)*((mLastId+1)<mBufferSize)+(pData.n_cols-1))%mBufferSize;
+			if (begInd<=endInd){
+				mData.cols(begInd,endInd)=pData;
+				mTimeVec.subvec(begInd,endInd)=pTime;
+				if (endInd==(mBufferSize-1))
+					mIsFilled=true;
+			}
+			else{
+				mData.cols(begInd,mBufferSize-1)=pData.cols(0,mBufferSize-begInd-1);
+				mData.cols(0,endInd)=pData.cols(mBufferSize-begInd,pData.n_cols-1);
+				mTimeVec.subvec(begInd,mBufferSize-1)=pTime.subvec(0,mBufferSize-begInd-1);
+				mTimeVec.subvec(0,endInd)=pTime.subvec(mBufferSize-begInd,pTime.n_elem-1);
+				mIsFilled=true;
+			}
+			mLastId=endInd;
+		}
+	};
+	
+	bool TimedMat::push(const arma::mat &pData){
+		if (!mIsRealTime||mTimed)
+			return false;
+		if (pData.n_cols>=mBufferSize){
+			mData=pData.cols(pData.n_cols-mBufferSize, pData.n_cols-1);
+			mLastId=mBufferSize-1;
+			mIsFilled=true;
+		}
+		else{
+			unsigned int begInd=(mLastId+1)*((mLastId+1)<mBufferSize);
+			unsigned int endInd=((mLastId+1)*((mLastId+1)<mBufferSize)+(pData.n_cols-1))%mBufferSize;
+			if (begInd<=endInd){
+				mData.cols(begInd,endInd)=pData;
+				if (endInd==(mBufferSize-1))
+					mIsFilled=true;
+			}
+			else{
+				mData.cols(begInd,mBufferSize-1)=pData.cols(0,mBufferSize-begInd-1);
+				mData.cols(0,endInd)=pData.cols(mBufferSize-begInd,pData.n_cols-1);
+				mIsFilled=true;
+			}
+			mLastId=endInd;
+		}
+	};
     
 // == TIMED CUBE ==
     bool TimedCube::SetValidParam(){
@@ -765,4 +1126,185 @@ namespace MoMa {
         
         return( trace );
     }
+	  bool TimedCube::set( const arma::mat &pData, unsigned int pIndex ) {
+		if (mIsRealTime)
+			return false;
+        if( mTimed ) return false;
+        if( !checkInput( pData ) ) return false;
+        // -> No go check: not timed or bad format
+        
+        pIndex=memIndex(pIndex);
+        
+        if( pIndex < mData.n_slices ) {
+            
+            // Insert mData into cube
+            mData.slice( pIndex ) = pData;
+            return true;
+            
+        } else {
+            
+            if( pIndex == mData.n_slices ) {
+                
+                // Insert mData at the end of cube
+                mData.insert_slices( mData.n_slices, 1 );
+                mData.slice( mData.n_slices-1 ) = pData;
+                return true;
+                
+            } else
+                
+                // Don't insert
+                return false;
+        }
+    }
+    
+    bool TimedCube::set( const arma::mat &pData, const double pTime ) {
+		if (mIsRealTime)
+			return false;
+        
+        if( !checkInput( pData ) ) return( false );
+    
+        if( mTimed ) {
+            if( mTimeVec.n_elem == 0 ) return false;
+ 
+	/*		if( mTimeVec(0) > pTime ) {
+                mData.insert_slices( 0, 1 );
+                mData.slice(0) = pData;
+                mTimeVec.insert_rows( 0, 1 );
+                mTimeVec(0) = pTime;
+                return true;
+            }
+            
+            if( mTimeVec( mTimeVec.n_elem-1 ) < pTime ) {
+                mData.insert_slices( mData.n_elem, 1 );
+                mData.slice( mData.n_elem-1 ) = pData;
+                mTimeVec.insert_rows( mTimeVec.n_elem, 1 );
+                mTimeVec( mTimeVec.n_elem-1 ) = pTime;
+            	return true;
+            }*/
+            
+			unsigned int index;
+			arma::uword ltemp;
+			arma::abs(this->mTimeVec - pTime).min(ltemp);
+			index=(unsigned int)ltemp;
+			if ( std::abs(this->mTimeVec(index)-pTime ) <= 1E-6 ){
+				mData.slice(index)=pData;
+				return true;
+			}
+			if (this->mTimeVec(index)<pTime)
+				index++;
+	        mData.insert_slices( index, 1 );
+            mData.slice( index  )= pData;
+            mTimeVec.insert_rows( index, 1 );
+            mTimeVec( index ) = pTime;
+            return true;
+        
+        } else {
+            
+            double lTime=pTime-mInitialTime;
+            if (lTime<0.0)
+                return false;
+            if( std::abs( lTime-this->mFrameRate*round( lTime/mFrameRate ) ) <= 1E-6 ) {
+                
+                if( (int)round( lTime/mFrameRate ) < mData.n_slices ) {
+                    
+                    mData.slice( (int)round( lTime/mFrameRate ) ) = pData;
+                    
+                    return true;
+                
+                } else return false;
+            
+            } else return false;
+        }
+    }
+    
+    bool TimedCube::push(const arma::mat &pData, double pTime ) {
+		if (!mTimed||!mIsRealTime) return false;
+		if( pTime <= this->maxTime()) return false;
+		mLastId++;
+		if (mLastId>=mBufferSize)
+			mLastId=0;
+		mData.slice(mLastId)=pData;
+		mTimeVec(mLastId)=pTime;
+		if (mLastId==mBufferSize-1)
+			mIsFilled=true;
+        return true;
+    }
+    
+    bool TimedCube::push(const arma::mat & pData ) {
+        
+		if (mTimed||!mIsRealTime) return false;
+		mLastId++;
+		if (mLastId>=mBufferSize)
+			mLastId=0;
+		mData.slice(mLastId)=pData;
+		if (mIsFilled)
+			mInitialTime+=1.0/mFrameRate;
+		if (mLastId==mBufferSize-1)
+			mIsFilled=true;
+        return true;
+    };
+	
+    bool TimedCube::push(const arma::cube &pData,const arma::vec &pTime){
+		if (!mIsRealTime||!mTimed)
+			return false;
+		if (pData.n_slices!=pTime.n_elem)
+			return false;
+		if ((!checkTimeVec(pTime,pTime.n_elem))||(pTime(0)<=(mLastId==mBufferSize?0.0:mTimeVec(mLastId))))
+			return false;
+		if (pData.n_slices>=mBufferSize){
+			mData=pData.slices(pData.n_slices-mBufferSize, pData.n_slices-1);
+			mTimeVec=pTime.subvec(pTime.n_elem-mBufferSize, pTime.n_elem-1);
+			mLastId=mBufferSize-1;
+			
+					mIsFilled=true;
+		}
+		else{
+			unsigned int begInd=(mLastId+1)*((mLastId+1)<mBufferSize);
+			unsigned int endInd=((mLastId+1)*((mLastId+1)<mBufferSize)+(pData.n_slices-1))%mBufferSize;
+			if (begInd<=endInd){
+				mData.slices(begInd,endInd)=pData;
+				mTimeVec.subvec(begInd,endInd)=pTime;
+				
+				if (endInd==(mBufferSize-1))
+					mIsFilled=true;
+			}
+			else{
+				mData.slices(begInd,mBufferSize-1)=pData.slices(0,mBufferSize-begInd-1);
+				mData.slices(0,endInd)=pData.slices(mBufferSize-begInd,pData.n_slices-1);
+				mTimeVec.subvec(begInd,mBufferSize-1)=pTime.subvec(0,mBufferSize-begInd-1);
+				mTimeVec.subvec(0,endInd)=pTime.subvec(mBufferSize-begInd,pTime.n_elem-1);
+				
+					mIsFilled=true;
+			}
+			mLastId=endInd;
+		}
+	};
+	
+	bool TimedCube::push(const arma::cube &pData){
+		if (!mIsRealTime||mTimed)
+			return false;
+		if (pData.n_slices>=mBufferSize){
+			mData=pData.slices(pData.n_slices-mBufferSize, pData.n_slices-1);
+			mLastId=mBufferSize-1;
+			
+					mIsFilled=true;
+		}
+		else{
+			unsigned int begInd=(mLastId+1)*((mLastId+1)<mBufferSize);
+			unsigned int endInd=((mLastId+1)*((mLastId+1)<mBufferSize)+(pData.n_slices-1))%mBufferSize;
+			if (begInd<=endInd){
+				mData.slices(begInd,endInd)=pData;
+				
+				if (endInd==(mBufferSize-1))
+					mIsFilled=true;
+			}
+			else{
+				mData.slices(begInd,mBufferSize-1)=pData.slices(0,mBufferSize-begInd-1);
+				mData.slices(0,endInd)=pData.slices(mBufferSize-begInd,pData.n_slices-1);
+				
+					mIsFilled=true;
+			}
+			mLastId=endInd;
+		}
+	};
 };
