@@ -31,7 +31,7 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
 
     setActiveMode( SCENE2D );
     setPlaybackMode( PLAY );
-    
+
     setAutoDrawLabelLists( true );
     setAutoDrawFeatures( false );
 
@@ -48,7 +48,7 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     highBound.setIndex( 1, frameRate );
     maxBound.setIndex( 1, frameRate );
     appMoment.setIndex( 0, frameRate );
-    
+
     zoomLowBound = -1;
     zoomHighBound = -1;
     isZoom = false;
@@ -59,7 +59,7 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     _figure.resize( 1 ); // full-screen
     _figure[figureIdx].yTop = 0; // figure
     _figure[figureIdx].yBot = ofGetHeight();
-    
+
     menuView = NULL;
     playBar = NULL;
     optionsView = NULL;
@@ -67,12 +67,12 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
 
     hasDragEventRegTrack = false;
     hasMouseEventRegLabelList = false;  
-    
+
     oscRcvPort = 7000;
     oscSndPort = 8000;
-    
+
     setup();
-    
+
     _sender.setup( "127.0.0.1", oscSndPort );
     _receiver.setup( oscRcvPort );
 
@@ -116,9 +116,9 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
     case SCRUB: {
 
         if( activeMode == SCENE2D || activeMode == ANNOTATE ) {
-            
+
             appMoment.setTime( ofMap( ofGetMouseX(), 0, ofGetWidth(),
-            lowBound.time(), highBound.time(), true ), frameRate );
+                lowBound.time(), highBound.time(), true ), frameRate );
 
             // appAtPos.index = ofMap( ofGetMouseX(), 0, ofGetWidth(), lowBound.index, highBound.index, true );
             // appAtPos.time = ofMap( ofGetMouseX(), 0, ofGetWidth(), lowBound.time, highBound.time, true );
@@ -131,7 +131,7 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
 
         // appAtPos.index = highBound.index;
         // appAtPos.time = highBound.time;
-        
+
         appMoment.setTime( highBound.time(), frameRate );
 
         break;
@@ -147,7 +147,7 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
 
                 // appAtPos.time = appAtPos.time + timeStep;
                 // appAtPos.index = getIndexFromTime( appAtPos.time );
-                
+
                 appMoment.setTime( appMoment.time() + timeStep, frameRate );
 
                 if( isBegin ) {
@@ -160,14 +160,14 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
 
                     // appAtPos.time = highBound.time; // Set to max first
                     // appAtPos.index = getIndexFromTime( appAtPos.time );
-                    
+
                     appMoment.setTime( highBound.time(), frameRate );
 
                     onReachEnd();
 
                     // appAtPos.time = lowBound.time; // Then set to min
                     // appAtPos.index = getIndexFromTime( appAtPos.time );
-                    
+
                     appMoment.setTime( lowBound.time(), frameRate );
 
                     isBegin = true;
@@ -198,16 +198,16 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
                     //listener[l].track->clear();
                 }
                 int nOfNodes = message.getNumArgs()/3;
-				arma::mat lPos(3,nOfNodes);
-				
+                arma::mat lPos(3,nOfNodes);
+
                 for( int n=0; n<nOfNodes; n++ ) {
-                   lPos(X,n) = message.getArgAsFloat( 3*n );
-				   lPos(X,n) = message.getArgAsFloat( 3*n+1 );
-				   lPos(Y,n) = message.getArgAsFloat( 3*n+2 );
+                    lPos(X,n) = message.getArgAsFloat( 3*n );
+                    lPos(X,n) = message.getArgAsFloat( 3*n+1 );
+                    lPos(Y,n) = message.getArgAsFloat( 3*n+2 );
                 }
 
                 hasReceivedFrame = true;
-				listener[l].track->rotation.push( lPos );
+                listener[l].track->rotation.push( lPos );
             }
 
             if( message.getAddress() == listener[l].header+RotationHeader ) {
@@ -221,12 +221,12 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
                 }
 
                 int nOfNodes = message.getNumArgs()/7;
-				arma::mat lPos(3,nOfNodes);
-				arma::mat lRot(4,nOfNodes);
+                arma::mat lPos(3,nOfNodes);
+                arma::mat lRot(4,nOfNodes);
                 for( int n=0; n<nOfNodes; n++ ) {
 
                     lPos(X,n) = message.getArgAsFloat( 7*n );
-					lPos(Y,n) = message.getArgAsFloat( 7*n+1 );
+                    lPos(Y,n) = message.getArgAsFloat( 7*n+1 );
                     lPos(Z,n) = message.getArgAsFloat( 7*n+2 );
                     lRot(qX,n) = message.getArgAsFloat( 7*n+3 );
                     lRot(qY,n) = message.getArgAsFloat( 7*n+4 );
@@ -234,61 +234,61 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
                     lRot(qW,n) = message.getArgAsFloat( 7*n+6 );
 
                 }
-				if (listener[l].track->rotation.isTimed())
-					listener[l].track->rotation.push( lRot ,(double)ofGetElapsedTimeMillis()/1000.0);
-				else
-					listener[l].track->rotation.push( lRot );
-				if (listener[l].track->position.isTimed())
-					listener[l].track->position.push( lPos ,(double)ofGetElapsedTimeMillis()/1000.0);
-				else
-					listener[l].track->position.push( lPos );
+                if (listener[l].track->rotation.isTimed())
+                    listener[l].track->rotation.push( lRot ,(double)ofGetElapsedTimeMillis()/1000.0);
+                else
+                    listener[l].track->rotation.push( lRot );
+                if (listener[l].track->position.isTimed())
+                    listener[l].track->position.push( lPos ,(double)ofGetElapsedTimeMillis()/1000.0);
+                else
+                    listener[l].track->position.push( lPos );
                 hasReceivedFrame = true;
             }
 
             if( hasReceivedFrame ) {
-           //     listener[l].track->push( oscFrame );
+                //     listener[l].track->push( oscFrame );
                 //setPlayerSize( listener[l].track->nOfFrames() );
-				
-				appMoment.setTime( (double)ofGetElapsedTimeMillis()/1000.0);
-				setPlayerSize( listener[l].track->minTime(),listener[l].track->maxTime() );
+
+                appMoment.setTime( (double)ofGetElapsedTimeMillis()/1000.0);
+                setPlayerSize( listener[l].track->minTime(),listener[l].track->maxTime() );
                 onOscReceived(); // Trigger custom code here
             }
         }
     }
 
     update();
-    
+
     if( sendOscFeatures ) {
-    
+
         for( int f=0; f<feature.size(); f++ ) {
-            
+
             if( feature[f].isFeasible && feature[f].isSent ) {
-                
+
                 ofxOscMessage msg;
                 msg.setAddress( feature[f].oscHeader );
-                
+
                 if( feature[f].type == VECTOR ) {
-                    
+
                     msg.addFloatArg( feature[f].feature.tvec->get( getAppTime() ) );
-                    
+
                 } else if( feature[f].type == MATRIX ) {
-                    
+
                     for( int e=0; e<feature[f].feature.tmat->nOfElems(); e++ ) {
-                        
+
                         msg.addFloatArg( feature[f].feature.tmat->elem( e ).get( getAppTime() ) );
                     }
-                    
+
                 } else if( feature[f].type == CUBE ) {
-                    
+
                     for( int c=0; c<feature[f].feature.tcube->nOfCols(); c++ ) {
-                        
+
                         for( int r=0; r<feature[f].feature.tcube->nOfRows(); r++ ) {
-                            
+
                             msg.addFloatArg( feature[f].feature.tcube->col( c ).elem( r ).get( getAppTime() ) );
                         }
                     }
                 }
-                
+
                 _sender.sendMessage( msg );
             }
         }
@@ -348,88 +348,91 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
     }
 
     if( isFigure ) {
-        
-        _figure[figureIdx].yMin = 1.0E12;
-        _figure[figureIdx].yMax = -1.0E12;
-        
-        _figure[figureIdx].plot.clear();
-        _figure[figureIdx].plotId = 0;
-        
+
+        if( _figure.size() > 0 ) {
+
+            _figure[figureIdx].yMin = 1.0E12;
+            _figure[figureIdx].yMax = -1.0E12;
+
+            _figure[figureIdx].plot.clear();
+            _figure[figureIdx].plotId = 0;
+        }
+
         if( autoDrawFeatures ) {
-            
+
             int shownFeatureId = 0;
             int nOfShownFeatures = 0;
-            
+
             for( int f=0; f<nOfFeatures(); f++ ) {
-            
+
                 if( feature[f].isFeasible
-                && feature[f].isShown ) {
-                
-                    nOfShownFeatures++;
+                    && feature[f].isShown ) {
+
+                        nOfShownFeatures++;
                 }
             }
-            
+
             // if( nOfShownFeatures < 1 ) nOfShownFeatures = 1;
-            
+
             setNumOfFigures( nOfShownFeatures );
-        
+
             for( int f=0; f<nOfFeatures(); f++ ) {
-                
+
                 if( feature[ f ].isFeasible
-                && feature[ f ].isShown ) {
-                    
-                    figure( shownFeatureId );
-                    
-                    if( feature[ f ].type == VECTOR ) {
-                        
-                        string name = feature[ f ].name;
-                        if( feature[ f ].isSent ) name = "~ " + name;
-                        if( feature[ f ].isWek ) name = "> " + name;
-                        
-                        draw( *(feature[ f ].feature.tvec), name );
-                        
-                    } else if( feature[ f ].type == MATRIX ) {
-                        
-                        string name = feature[ f ].name;
-                        if( feature[ f ].isSent ) name = "~ " + name;
-                        if( feature[ f ].isWek ) name = "> " + name;
-                        
-                        draw( *(feature[ f ].feature.tmat), name );
-                        
-                    } else if( feature[ f ].type == CUBE ) {
-                        
-                        string name = feature[ f ].name;
-                        if( feature[ f ].isSent ) name = "~ " + name;
-                        if( feature[ f ].isWek ) name = "> " + name;
-                        
-                        for( int s=0; s<feature[ f ].feature.tcube->nOfCols(); s++ ) {
-                            
-                            draw( feature[ f ].feature.tcube->col( s ),
-                            name + " ( "+ofToString( s ) + " )" );
+                    && feature[ f ].isShown ) {
+
+                        figure( shownFeatureId );
+
+                        if( feature[ f ].type == VECTOR ) {
+
+                            string name = feature[ f ].name;
+                            if( feature[ f ].isSent ) name = "~ " + name;
+                            if( feature[ f ].isWek ) name = "> " + name;
+
+                            draw( *(feature[ f ].feature.tvec), name );
+
+                        } else if( feature[ f ].type == MATRIX ) {
+
+                            string name = feature[ f ].name;
+                            if( feature[ f ].isSent ) name = "~ " + name;
+                            if( feature[ f ].isWek ) name = "> " + name;
+
+                            draw( *(feature[ f ].feature.tmat), name );
+
+                        } else if( feature[ f ].type == CUBE ) {
+
+                            string name = feature[ f ].name;
+                            if( feature[ f ].isSent ) name = "~ " + name;
+                            if( feature[ f ].isWek ) name = "> " + name;
+
+                            for( int s=0; s<feature[ f ].feature.tcube->nOfCols(); s++ ) {
+
+                                draw( feature[ f ].feature.tcube->col( s ),
+                                    name + " ( "+ofToString( s ) + " )" );
+                            }
                         }
-                    }
-                    
-                    shownFeatureId++;
+
+                        shownFeatureId++;
                 }
             }
-            
+
         } else {
-            
+
             // Scene2D is now only active if autoDrawFeatures
             // is not, until we find a better way to handle it.
-        
+
             scene2d(); // 2D figures
         }
-        
+
         render2d(); // 2D render
     }
 
     if( isAnnotation ) {
-        
+
         if( autoDrawLabelLists ) {
-            
+
             for( int l=0; l<nOfLabelLists(); l++ ) {
-            
+
                 draw( labelList( l ) );
             }
         }
@@ -460,15 +463,15 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
 
         ofSetColor( Turquoise, 40 ); ofFill();
         ofRect( selLowBound, ofGetHeight()-82,
-        selHighBound-selLowBound, 74 );
+            selHighBound-selLowBound, 74 );
 
         ofSetColor( Turquoise, 128 ); ofNoFill();
         ofRect( selLowBound, ofGetHeight()-82,
-        selHighBound-selLowBound, 74 );
+            selHighBound-selLowBound, 74 );
 
         ofSetColor( Turquoise, 200 );
         ofLine( absPlaybackPos, ofGetHeight()-82,
-        absPlaybackPos, ofGetHeight()-8 );
+            absPlaybackPos, ofGetHeight()-8 );
 
         ofPopStyle();
     }
@@ -549,7 +552,7 @@ void MoMa::SceneApp::keyPressed( ofKeyEventArgs &key ) {
                         if( (*mouseEventRegLabelList)[selectedLabelIdx].name.size() > 0 ) {
 
                             (*mouseEventRegLabelList)[selectedLabelIdx].name.resize(
-                            (*mouseEventRegLabelList)[selectedLabelIdx].name.size()-1 );
+                                (*mouseEventRegLabelList)[selectedLabelIdx].name.size()-1 );
                         }
 
                     } else {
@@ -571,7 +574,7 @@ void MoMa::SceneApp::keyPressed( ofKeyEventArgs &key ) {
                         // TODO Rewire the logic to take system text box into account
 
                         (*mouseEventRegLabelList)[selectedLabelIdx].name
-                        = ofSystemTextBoxDialog( "Enter label name:" );
+                            = ofSystemTextBoxDialog( "Enter label name:" );
                         // isEditing = true;
                     }
 
@@ -707,10 +710,10 @@ void MoMa::SceneApp::mousePressed( ofMouseEventArgs &mouse ){
             }
 
             if( insertNewLabel == true && newLabel == true ) {
-                
+
                 ( *mouseEventRegLabelList ).push_back( Label( Moment( ofMap( mouse.x, 0,
-                ofGetWidth(), lowBound.time(), highBound.time() ), frameRate ), "new" ) );
-                
+                    ofGetWidth(), lowBound.time(), highBound.time() ), frameRate ), "new" ) );
+
                 selectedLabelIdx = ( *mouseEventRegLabelList ).size()-1;
                 ( *mouseEventRegLabelList ).back().state = SELECTED;
                 isLabelSelected = true;
@@ -792,9 +795,9 @@ void MoMa::SceneApp::mouseDragged( ofMouseEventArgs &mouse ) {
         }
 
         if( hasMouseEventRegLabelList && isLabelSelected ) {
-            
+
             ( *mouseEventRegLabelList )[ selectedLabelIdx ].moment.setTime( ofMap(
-            mouse.x, 0, ofGetWidth(), lowBound.time(), highBound.time() ), frameRate );
+                mouse.x, 0, ofGetWidth(), lowBound.time(), highBound.time() ), frameRate );
         }
 
         break;
@@ -823,14 +826,14 @@ void MoMa::SceneApp::mouseMoved( ofMouseEventArgs &mouse ) {
             for( int l=0; l<(*mouseEventRegLabelList).size(); l++ ) {
 
                 int pixLabel = ofMap( ( *mouseEventRegLabelList )[l].moment.time(),
-                lowBound.time(), highBound.time(), 0, ofGetWidth() ); // Get pixels
+                    lowBound.time(), highBound.time(), 0, ofGetWidth() ); // Get pixels
 
                 if( (*mouseEventRegLabelList)[l].state != SELECTED ) {
 
                     if( mouse.x > pixLabel-tolerance
-                    && mouse.x < pixLabel+tolerance ) {
-                        
-                        ( *mouseEventRegLabelList )[l].state = HOVERED;
+                        && mouse.x < pixLabel+tolerance ) {
+
+                            ( *mouseEventRegLabelList )[l].state = HOVERED;
 
                     } else {
 
@@ -909,7 +912,7 @@ void MoMa::SceneApp::render2d( void ) {
         // -- Display plot names --
 
         if( isCaptions ) {
-            
+
             for( int f=0; f<_figure[fIdx].plot.size(); f++ ) {
 
                 ofPushStyle();
@@ -1012,7 +1015,7 @@ void MoMa::SceneApp::draw( const Node &node ) {
     string tag = "";
     if( isNodeNames ) tag  = node.name();
     if( node.hasTime() && isTimeTags ) tag
-    += ( "(" + ofToString( node.time() ) + ")" );
+        += ( "(" + ofToString( node.time() ) + ")" );
 
     ofPushStyle();
     ofSetColor( ofGetStyle().color, 120 ); // Keep color but add alpha
@@ -1030,8 +1033,8 @@ void MoMa::SceneApp::draw(const TimedVec &tvec, int hue, std::string name ) {
         plot.color.setHsb( hue, 255, 255, 128 );
 
         if( tvec.nOfFrames() > 1 ) {
-            
-			if( _figure[figureIdx].yMin > (float)tvec.getData().min() ) _figure[figureIdx].yMin = (float)tvec.getData().min();
+
+            if( _figure[figureIdx].yMin > (float)tvec.getData().min() ) _figure[figureIdx].yMin = (float)tvec.getData().min();
             if( _figure[figureIdx].yMax < (float)tvec.getData().max() ) _figure[figureIdx].yMax = (float)tvec.getData().max();
 
             _figure[figureIdx].plot.push_back( plot );
@@ -1099,29 +1102,29 @@ void MoMa::SceneApp::draw(const mat &data, string name ) {
 }
 
 void MoMa::SceneApp::draw( LabelList labelList ) {
-    
+
     for( int l=0; l<labelList.size(); l++ ) {
-        
+
         ofPushStyle();
-        
+
         float labelHue = ofGetStyle().color.getHue();
-        
+
         if( labelList[l].state == UNSELECTED ) {
-            
+
             ofColor unselected; unselected.setHsb( labelHue, 128, 255 );
             ofSetColor( unselected, 180 ); ofSetLineWidth( 1.2 );
-            
+
         } else if ( labelList[l].state == HOVERED ) {
-            
+
             ofColor hovered; hovered.setHsb( labelHue, 180, 255 );
             ofSetColor( hovered, 180 ); ofSetLineWidth( 3 );
-            
+
         } else if (labelList[l].state == SELECTED) {
-            
+
             ofColor selected; selected.setHsb( labelHue, 240, 255 );
             ofSetColor( selected, 200 ); ofSetLineWidth( 3 );
         }
-        
+
         float labPos = ofMap( labelList[l].moment.time(), lowBound.time(), highBound.time(), 0, ofGetWidth() );
         ofLine( labPos, 0, labPos, ofGetHeight() ); // We draw labels line and label names
         ofPushMatrix();  
@@ -1129,7 +1132,7 @@ void MoMa::SceneApp::draw( LabelList labelList ) {
         ofSetDrawBitmapMode(OF_BITMAPMODE_MODEL);
         ofDrawBitmapString( labelList[l].name, 14, -(labPos+6) );  
         ofPopMatrix();
-        
+
         ofPopStyle();
     }
 }
@@ -1318,7 +1321,7 @@ MoMa::LabelList &MoMa::SceneApp::labelList( std::string name ) {
 }
 
 MoMa::LabelList &MoMa::SceneApp::labelList( int index ) {
-    
+
     if( index >= 0 && index < _labelList.size() ) return( *(_labelList[ index ].labelList) );
     else return( *( new LabelList() ) ); // TODO Very bad way to do this:  leak!!!
 }
@@ -1346,58 +1349,58 @@ bool MoMa::SceneApp::isLabelListShown( int labelListId ) {
 }
 
 void MoMa::SceneApp::addNewFeature( MoMa::TimedVec &feat,
-string name, string osc, bool isShown, bool isSent ) {
-    
-    _Feature _feat;
-    
-    _feat.type = VECTOR;
-    _feat.feature.tvec = &feat;
-    
-    _feat.name = name;
-    _feat.oscHeader = osc;
-    
-    _feat.isFeasible = true;
-    _feat.isShown = isShown;
-    _feat.isSent = isSent;
-    
-    
-    feature.push_back( _feat );
+                                   string name, string osc, bool isShown, bool isSent ) {
+
+                                       _Feature _feat;
+
+                                       _feat.type = VECTOR;
+                                       _feat.feature.tvec = &feat;
+
+                                       _feat.name = name;
+                                       _feat.oscHeader = osc;
+
+                                       _feat.isFeasible = true;
+                                       _feat.isShown = isShown;
+                                       _feat.isSent = isSent;
+
+
+                                       feature.push_back( _feat );
 }
 
 void MoMa::SceneApp::addNewFeature( MoMa::TimedMat &feat,
-string name, string osc, bool isShown, bool isSent ) {
-    
-    _Feature _feat;
-    
-    _feat.type = MATRIX;
-    _feat.feature.tmat = &feat;
-    
-    _feat.name = name;
-    _feat.oscHeader = osc;
-    
-    _feat.isFeasible = true;
-    _feat.isShown = isShown;
-    _feat.isSent = isSent;
-    
-    feature.push_back( _feat );
+                                   string name, string osc, bool isShown, bool isSent ) {
+
+                                       _Feature _feat;
+
+                                       _feat.type = MATRIX;
+                                       _feat.feature.tmat = &feat;
+
+                                       _feat.name = name;
+                                       _feat.oscHeader = osc;
+
+                                       _feat.isFeasible = true;
+                                       _feat.isShown = isShown;
+                                       _feat.isSent = isSent;
+
+                                       feature.push_back( _feat );
 }
 
 void MoMa::SceneApp::addNewFeature( MoMa::TimedCube &feat,
-string name, string osc, bool isShown, bool isSent ) {
-    
-    _Feature _feat;
-    
-    _feat.type = CUBE;
-    _feat.feature.tcube = &feat;
-    
-    _feat.name = name;
-    _feat.oscHeader = osc;
-    
-    _feat.isFeasible = true;
-    _feat.isShown = isShown;
-    _feat.isSent = isSent;
-    
-    feature.push_back( _feat );
+                                   string name, string osc, bool isShown, bool isSent ) {
+
+                                       _Feature _feat;
+
+                                       _feat.type = CUBE;
+                                       _feat.feature.tcube = &feat;
+
+                                       _feat.name = name;
+                                       _feat.oscHeader = osc;
+
+                                       _feat.isFeasible = true;
+                                       _feat.isShown = isShown;
+                                       _feat.isSent = isSent;
+
+                                       feature.push_back( _feat );
 }
 
 void MoMa::SceneApp::setNumOfFigures( int nOfFigures ) {
@@ -1415,9 +1418,9 @@ void MoMa::SceneApp::setNumOfFigures( int nOfFigures ) {
 }
 
 void MoMa::SceneApp::figure( int figId ) {
-    
+
     figureIdx = figId;
-    
+
     if( figureIdx < 0 ) figureIdx = 0; // Bound the figure idx query
     else if( figureIdx > nOfFigures()-1 ) figureIdx = nOfFigures()-1;
 
@@ -1463,21 +1466,21 @@ return( recorder.isRecording() );
 void MoMa::SceneApp::setFrameRate( float rate ) {
 
     frameRate = rate;
-    
+
     lowBound.setFrameRate( frameRate );
     highBound.setFrameRate( frameRate );
     maxBound.setFrameRate( frameRate );
     appMoment.setFrameRate( frameRate );
-    
+
     // highBound.time = getTimeFromIndex( highBound.index );
     // appAtPos.time = getTimeFromIndex( appAtPos.index ); // Check app time
 }
 
 void MoMa::SceneApp::setPlayerSize( unsigned int nOfFrames ) {
-    
+
     maxBound.setIndex( nOfFrames-1, frameRate );
     highBound.setIndex( maxBound.index(), frameRate );
-    
+
     if( highBound.index() < 1 ) highBound.setIndex( 1, frameRate ); // Reajust current moments
     if( appMoment.index() > highBound.index() ) appMoment.setIndex( highBound.index(), frameRate );
 
@@ -1485,7 +1488,7 @@ void MoMa::SceneApp::setPlayerSize( unsigned int nOfFrames ) {
     // highBound.index = nOfFrames-1;
 
     // if( highBound.index < 1 ) highBound.index = 1;
-    
+
     // highBound.time = getTimeFromIndex( highBound.index );
 
     // if( appAtPos.index > highBound.index ) appAtPos.index = highBound.index;
@@ -1497,7 +1500,7 @@ void MoMa::SceneApp::setPlayerSize( double minTime,double maxTime ) {
     maxBound.setTime( maxTime, frameRate );
     lowBound.setTime( minBound.time(), frameRate );
     highBound.setTime( maxBound.time(), frameRate );
-    
+
     if( highBound.index() < 1 ) highBound.setIndex( 1, frameRate ); // Reajust current moments
     if( appMoment.index() > highBound.index() ) appMoment.setIndex( highBound.index(), frameRate );
 
@@ -1530,7 +1533,7 @@ void MoMa::SceneApp::stop( void ) {
 
     // appAtPos.index = lowBound.index;
     // appAtPos.time = getTimeFromIndex( appAtPos.index );
-    
+
     appMoment.setTime( lowBound.time(), frameRate );
 
     isPlayback = false;
@@ -1542,7 +1545,7 @@ void MoMa::SceneApp::previousIndex( void ) {
 
     if( appMoment.index() <= lowBound.index() ) appMoment.setIndex( highBound.index()-1, frameRate );
     else appMoment.setIndex( appMoment.index()-1, frameRate ); // Decrement and update time
-    
+
     // appAtPos.time = getTimeFromIndex( appAtPos.index );
 }
 
@@ -1550,7 +1553,7 @@ void MoMa::SceneApp::nextIndex( void ) {
 
     if( appMoment.index() == highBound.index()-1 ) appMoment.setIndex( lowBound.index(), frameRate );
     else appMoment.setIndex( appMoment.index()+1, frameRate ); // Increment and update time
-    
+
     // appAtPos.time = getTimeFromIndex( appAtPos.index );
 }
 
@@ -1569,7 +1572,7 @@ void MoMa::SceneApp::zoom( double tMin, double tMax ) {
 
     // lowBound.time = getTimeFromIndex( lowBound.index );
     // highBound.time = getTimeFromIndex( highBound.index );
-    
+
     appMoment.setTime( lowBound.time(), frameRate );
 
     // appAtPos.index = lowBound.index;
@@ -1577,7 +1580,7 @@ void MoMa::SceneApp::zoom( double tMin, double tMax ) {
 }
 
 void MoMa::SceneApp::showAll( void ) {
-    
+
     lowBound.setTime( 0.0f, frameRate );
     highBound.setTime( maxBound.time(), frameRate );
 
@@ -1603,7 +1606,7 @@ void MoMa::SceneApp::setOscListenerPort( int listenerPort ) {
 }
 
 void MoMa::SceneApp::setOscSenderPort( int senderPort ) {
-    
+
     oscSndPort = senderPort;
 }
 
@@ -1661,7 +1664,7 @@ void MoMa::SceneApp::showTimeTags( bool times ) {
 }
 
 void MoMa::SceneApp::showCaptions( bool caps ) {
-    
+
     isCaptions = caps;
 }
 
