@@ -437,6 +437,7 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
 
             for( int l=0; l<nOfLabelLists(); l++ ) {
 
+                ofSetColor( Turquoise );
                 draw( labelList( l ) );
             }
         }
