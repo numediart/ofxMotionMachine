@@ -1741,6 +1741,7 @@ void MoMa::SceneApp::removeMenuView( void ) {
     }
     menuView = NULL;
     playBar = NULL;
+    optionsView = NULL;
 }
 
 void MoMa::SceneApp::addPlayerBar( void ) {
