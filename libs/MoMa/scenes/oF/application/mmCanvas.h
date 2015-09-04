@@ -26,7 +26,10 @@
 #ifndef __mmCanvas__
 #define __mmCanvas__
 
-namespace MoMa { class Canvas;}
+/*namespace MoMa { 
+
+    class Canvas;
+}*/
 
 #include "mmSceneApp.h"
 #include "ofMain.h"
@@ -102,6 +105,7 @@ namespace MoMa {
         void openChildren(int group = 0);
         void openChild(int index, int group = 0);
         void closeChildren( void );
+        void closeChildren(int groupe);
         bool childrenOpened(int group = 0);    
 
         /** close all canvas exept main canvas */

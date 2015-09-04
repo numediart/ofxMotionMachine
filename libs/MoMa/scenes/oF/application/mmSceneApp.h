@@ -28,6 +28,7 @@ namespace MoMa {
     
     class MenuView;
     class PlayBar;
+    class Options;
     
     // -- Data structres used in SceneApp --
     
@@ -438,6 +439,7 @@ namespace MoMa {
         
         MoMa::MenuView *menuView;
         MoMa::PlayBar *playBar;
+        MoMa::Options *optionsView;
     };
 }
 

@@ -1,6 +1,7 @@
 #include "mmSceneApp.h"
 #include "mmMenuView.h"
 #include "mmPlayBar.h"
+#include "mmOptionsView.h"
 
 using namespace std;
 using namespace arma;
@@ -61,6 +62,7 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
     
     menuView = NULL;
     playBar = NULL;
+    optionsView = NULL;
     addMenuView();
 
     hasDragEventRegTrack = false;
@@ -1127,7 +1129,11 @@ void MoMa::SceneApp::draw( LabelList labelList ) {
         
         float labPos = ofMap( labelList[l].moment.time(), lowBound.time(), highBound.time(), 0, ofGetWidth() );
         ofLine( labPos, 0, labPos, ofGetHeight() ); // We draw labels line and label names
-        ofDrawBitmapString( labelList[l].name, labPos+6, 14 );
+        ofPushMatrix();  
+        ofRotateZ(90);
+        ofSetDrawBitmapMode(OF_BITMAPMODE_MODEL);
+        ofDrawBitmapString( labelList[l].name, 14, -(labPos+6) );  
+        ofPopMatrix();
         
         ofPopStyle();
     }
@@ -1717,8 +1723,10 @@ void MoMa::SceneApp::addMenuView( void ) {
     if(!menuView) {
 
         menuView = new MenuView(this);
-        if(playBar) playBar->remove();            
-        playBar = new PlayBar(this, DEFAULT, DEFAULT, menuView);
+        if(playBar) playBar->remove();
+        playBar = new PlayBar(this, DEFAULT, DEFAULT, menuView,1);
+        if(optionsView) optionsView->remove();
+        optionsView = new Options(this, RIGHTSIDE, BOTTOM, menuView,2);
     }
 }
 
