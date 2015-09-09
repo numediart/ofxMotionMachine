@@ -129,7 +129,7 @@ namespace MoMa {
             int lIndex=(int)(0.5+(time-mInitialTime)*mFrameRate);
 			if (lIndex<0) lIndex=0;
 			if (lIndex>=mBufferSize) lIndex=mBufferSize-1;
-            return usedIndex(lIndex);
+            return (lIndex);
         }
         else{
 			unsigned int lIndex;

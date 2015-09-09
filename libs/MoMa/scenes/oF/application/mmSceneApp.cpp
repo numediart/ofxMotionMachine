@@ -250,10 +250,10 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
                 //setPlayerSize( listener[l].track->nOfFrames() );
 				
 				appMoment.setTime( (double)ofGetElapsedTimeMillis()/1000.0);
-				if (listener[l].track->position.isTimed())
+				//if (listener[l].track->position.isTimed())
 					setPlayerSize( listener[l].track->minTime(),listener[l].track->maxTime() );
-				else
-					setPlayerSize( listener[l].track->nOfFrames());
+				//else
+				//	setPlayerSize( listener[l].track->nOfFrames());
 
 
                 onOscReceived(); // Trigger custom code here

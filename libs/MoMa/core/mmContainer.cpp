@@ -211,7 +211,7 @@ namespace MoMa {
 				lData.subvec(mBufferSize-pBegIndex,mBufferSize+pEndIndex-pBegIndex)=this->mData.subvec( 0,pEndIndex);
 				oneVec.swapData(mFrameRate,lData);
 			}
-			oneVec.setInitialTime(this->mInitialTime+usedIndex(pBegIndex)*mFrameRate);
+			oneVec.setInitialTime(this->mInitialTime+(double)usedIndex(pBegIndex)/mFrameRate);
         }
         
         return( oneVec );
@@ -421,6 +421,11 @@ namespace MoMa {
 	bool TimedVec::push(const arma::vec &pData){
 		if (!mIsRealTime||mTimed)
 			return false;
+		if (mIsFilled)
+			mInitialTime+=(double)pData.n_cols/mFrameRate;
+		else
+			if (mLastId*(mLastId!=mBufferSize)+pData.n_cols>=mBufferSize)
+				mInitialTime+=(double)(pData.n_cols+(1+mLastId)*(mLastId!=mBufferSize)-mBufferSize)/mFrameRate;
 		if (pData.n_elem>=mBufferSize){
 			mData=pData.subvec(pData.n_elem-mBufferSize, pData.n_elem-1);
 			mLastId=mBufferSize-1;
@@ -615,7 +620,7 @@ namespace MoMa {
 				lData.cols(mBufferSize-pBegIndex,pEndIndex-pBegIndex+mBufferSize)=this->mData.cols( 0,pEndIndex);
 				oneMat.swapData(mFrameRate,lData);
 			}
-			oneMat.setInitialTime(this->mInitialTime+usedIndex(pBegIndex)*mFrameRate);;
+			oneMat.setInitialTime(this->mInitialTime+(double)usedIndex(pBegIndex)/mFrameRate);;
         }
 		return oneMat;
         
@@ -837,6 +842,11 @@ namespace MoMa {
 	bool TimedMat::push(const arma::mat &pData){
 		if (!mIsRealTime||mTimed)
 			return false;
+		if (mIsFilled)
+			mInitialTime+=(double)pData.n_cols/mFrameRate;
+		else
+			if (mLastId*(mLastId!=mBufferSize)+pData.n_cols>=mBufferSize)
+				mInitialTime+=(double)(pData.n_cols+(1+mLastId)*(mLastId!=mBufferSize)-mBufferSize)/mFrameRate;
 		if (pData.n_cols>=mBufferSize){
 			mData=pData.cols(pData.n_cols-mBufferSize, pData.n_cols-1);
 			mLastId=mBufferSize-1;
@@ -1038,7 +1048,7 @@ namespace MoMa {
 				lData.slices(mBufferSize-pBegIndex,mBufferSize+pEndIndex-pBegIndex)=this->mData.slices( 0,pEndIndex);
 				oneCube.swapData(mFrameRate,lData);
 			}
-			oneCube.setInitialTime(this->mInitialTime+usedIndex(pBegIndex)*mFrameRate);;
+			oneCube.setInitialTime(this->mInitialTime+(double)usedIndex(pBegIndex)/mFrameRate);;
         }
         
         return( oneCube );
@@ -1283,6 +1293,11 @@ namespace MoMa {
 	bool TimedCube::push(const arma::cube &pData){
 		if (!mIsRealTime||mTimed)
 			return false;
+		if (mIsFilled)
+			mInitialTime+=(double)pData.n_cols/mFrameRate;
+		else
+			if (mLastId*(mLastId!=mBufferSize)+pData.n_cols>=mBufferSize)
+				mInitialTime+=(double)(pData.n_cols+(1+mLastId)*(mLastId!=mBufferSize)-mBufferSize)/mFrameRate;
 		if (pData.n_slices>=mBufferSize){
 			mData=pData.slices(pData.n_slices-mBufferSize, pData.n_slices-1);
 			mLastId=mBufferSize-1;
