@@ -64,9 +64,9 @@ namespace MoMa {
         arma::mat m( void ) { return( matrix() ); } // same thing shorter
         
         int index( std::string name ); // Get index from name
-        inline arma::mat getPosition(){return position;};
-        inline arma::mat getRotation(){return rotation;};
-        inline arma::mat getRotationOffset(){return rotationOffset;};
+        inline const arma::mat &getPosition()const {return position;};
+        inline const arma::mat &getRotation()const {return rotation;};
+        inline const arma::mat &getRotationOffset()const {return rotationOffset;};
         
         int nOfNodes( void ) const; // Get number of nodes in the frame
         void print( void ); // Print the content of the frame

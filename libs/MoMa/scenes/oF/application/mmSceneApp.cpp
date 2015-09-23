@@ -886,7 +886,7 @@ void MoMa::SceneApp::dragged( ofDragInfo &drag ) {
         }
 
         setFrameRate( dragEventRegTrack->frameRate() );
-        setPlayerSize( dragEventRegTrack->maxTime() );
+        setPlayerSize(dragEventRegTrack->minTime() , dragEventRegTrack->maxTime() );
     }
 
     if( hasDragEventRegLabelList ) {
@@ -1151,8 +1151,10 @@ void MoMa::SceneApp::draw(const Frame &frame ) {
 
         for( int b=0; b<frame.boneList->size(); b++ ) {
 
-            ofVec3f beg = toVec3f( frame.node( frame.boneList->at( b ).first ).position );
-            ofVec3f end = toVec3f( frame.node( frame.boneList->at( b ).second ).position );
+//            ofVec3f beg = toVec3f( frame.node( frame.boneList->at( b ).first ).position );
+//            ofVec3f end = toVec3f( frame.node( frame.boneList->at( b ).second ).position );
+			ofVec3f beg = toVec3f( frame.getPosition().col( frame.boneList->at( b ).first ) );
+            ofVec3f end = toVec3f( frame.getPosition().col( frame.boneList->at( b ).second ) );
 
             ofSetLineWidth( 2 );
             ofLine( beg, end );

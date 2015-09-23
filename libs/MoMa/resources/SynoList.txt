@@ -1,8 +1,8 @@
 Head RHE
 Neck RTA
 Thorax RPVP Spine
-LShoulder LeftShoulder ShoulderLeft ShoulderL LAR
-RShoulder RightShoulder ShoulderRight ShoulderR RAR
+LShoulder LeftShoulder ShoulderLeft ShoulderL LAR L_Clavicle
+RShoulder RightShoulder ShoulderRight ShoulderR RAR R_Clavicle
 LElbow LeftElbow ElbowLeft ElbowL LFA LeftForeArm
 RElbow RightElbow ElbowRight ElbowR RFA RightForeArm
 LWrist LeftWrist WristLeft WristL LHAP
