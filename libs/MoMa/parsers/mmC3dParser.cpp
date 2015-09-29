@@ -464,7 +464,7 @@ void C3dParser::load( string const &fileName, Track *track ) {
         if( printing ) {
             cout << "Markers data format : float\n";
         }
-		arma::cube positionData(3,Nmarkers,NvideoFrames);
+		arma::cube positionData = arma::ones(3,Nmarkers,NvideoFrames)*arma::datum::nan;
         for(int i=0;i<NvideoFrames;i++){
             //Frame tempFrame;
             for(int j=0;j<Nmarkers;j++){
