@@ -15,6 +15,7 @@ using namespace MoMa;
 /** Static vectors storing addresses of the canvas*/
 vector<Canvas*> Canvas::mainCanvas;
 vector<Canvas*> Canvas::allCanvas;
+vector<Canvas*> Canvas::closedCanvas;
 
 int Canvas::_limit(0);
 
@@ -296,13 +297,12 @@ bool Canvas::childrenOpened(int group) {
 
 bool Canvas::canvasOpened() {
 
-    bool opened = false;
     for(int i=0;i<allCanvas.size();i++) {
 
-        opened = opened || allCanvas[i]->isVisible();
+        if( allCanvas[i]->isVisible() ) return true;
     }    
 
-    return opened;
+    return false;
 }
 
 void Canvas::closeChildren() {
@@ -334,6 +334,7 @@ void Canvas::openMainCanvas() {
         mainCanvas[i]->initCanvas();
         mainCanvas[i]->setVisible(true);
     }
+    closedCanvas.clear();
 }
 
 void Canvas::closeMainCanvas() {
@@ -346,10 +347,24 @@ void Canvas::closeMainCanvas() {
 
 void Canvas::closeAllCanvas() {
 
+    closedCanvas.clear();
     for(int i=0;i<allCanvas.size();i++) {
 
-        allCanvas[i]->setVisible(false);
+        if(allCanvas[i]->isVisible() ) {
+
+            allCanvas[i]->setVisible(false);
+            closedCanvas.push_back(allCanvas[i]);
+        }
     }
+}
+
+void Canvas::reopenCanvas() {
+
+    for(int i=0;i<closedCanvas.size();i++) {
+
+        closedCanvas[i]->setVisible(true);
+    }
+    closedCanvas.clear();
 }
 
 void Canvas::mainView() {
@@ -360,7 +375,7 @@ void Canvas::mainView() {
 
 void Canvas::windowResized(int w, int h) {
 
-    resetPositions();
+    //resetPositions();
 }
 
 void Canvas::onMousePressed( ofMouseEventArgs &data ) {

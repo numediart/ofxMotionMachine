@@ -15,13 +15,13 @@ Options::Options( SceneApp *_app, MoMa::Position position, MoMa::Position alignm
         addLabelToggle( "SHOW TIMELINE", app->isTimeline );*/
 
         addSpacer();
-        addToggle( "Show 3D Scene", app->is3dScene );
-        addToggle( "Show 3D Ground", app->isGround );
-        addToggle( "Show Node Names", app->isNodeNames );
-        addToggle( "Show Annotations", app->isAnnotation );
-        addToggle( "Show 2D Figures", app->isFigure );
-        addToggle( "Show Captions", app->isCaptions );
-        addToggle( "Show Timeline", app->isTimeline );
+        toggle3DScene = addToggle( "Show 3D Scene", app->is3dScene );
+        toggleGround = addToggle( "Show 3D Ground", app->isGround );
+        toggleNodeNames = addToggle( "Show Node Names", app->isNodeNames );
+        toggleAnnotations = addToggle( "Show Annotations", app->isAnnotation );
+        toggleFigure = addToggle( "Show 2D Figures", app->isFigure );
+        toggleCaption = addToggle( "Show Captions", app->isCaptions );
+        toggleTimeline = addToggle( "Show Timeline", app->isTimeline );
 
         //addLabelButton( "RESET OSC", false);
 
@@ -34,15 +34,15 @@ void Options::canvasEvent( ofxUIEventArgs &e ) {
     string name = e.widget->getName(); // We grab the name and test it
     /*if( e.widget->getKind() == OFX_UI_WIDGET_LABELTOGGLE ) {
 
-        ofxUILabelToggle *toggle = (ofxUILabelToggle *) e.widget; // Toggle
+    ofxUILabelToggle *toggle = (ofxUILabelToggle *) e.widget; // Toggle
 
-        if( name == "SHOW 3D SCENE" ) app->show3dScene( toggle->getValue() );
-        else if( name == "SHOW 3D GROUND" ) app->showGround( toggle->getValue() );
-        else if( name == "SHOW NODE NAMES" ) app->showNodeNames( toggle->getValue() );
-        else if( name == "SHOW ANNOTATIONS" ) app->showAnnotation( toggle->getValue() );
-        else if( name == "SHOW 2D FIGURES" ) app->showFigures( toggle->getValue() );
-        else if( name == "SHOW CAPTIONS" ) app->showCaptions( toggle->getValue() );
-        else if( name == "SHOW TIMELINE" ) app->showTimeline( toggle->getValue() );
+    if( name == "SHOW 3D SCENE" ) app->show3dScene( toggle->getValue() );
+    else if( name == "SHOW 3D GROUND" ) app->showGround( toggle->getValue() );
+    else if( name == "SHOW NODE NAMES" ) app->showNodeNames( toggle->getValue() );
+    else if( name == "SHOW ANNOTATIONS" ) app->showAnnotation( toggle->getValue() );
+    else if( name == "SHOW 2D FIGURES" ) app->showFigures( toggle->getValue() );
+    else if( name == "SHOW CAPTIONS" ) app->showCaptions( toggle->getValue() );
+    else if( name == "SHOW TIMELINE" ) app->showTimeline( toggle->getValue() );
     }*/
 
     if( e.widget->getKind() == OFX_UI_WIDGET_TOGGLE ) {
@@ -58,17 +58,24 @@ void Options::canvasEvent( ofxUIEventArgs &e ) {
         else if( name == "Show Timeline" ) app->showTimeline( toggle->getValue() );
     }
 
+
     /*else if(e.widget->getKind() == OFX_UI_WIDGET_LABELBUTTON ) {
 
-        if( name == "RESET OSC" ) {
+    if( name == "RESET OSC" ) {
 
 
-        }
+    }
     }*/
 }
 
 
 void Options::update() {
 
-
+    toggle3DScene->setValue(app->is3dScene );
+    toggleGround->setValue(app->isGround );
+    toggleNodeNames->setValue(app->isNodeNames );
+    toggleAnnotations->setValue(app->isAnnotation );
+    toggleFigure->setValue(app->isFigure );
+    toggleCaption->setValue(app->isCaptions );
+    toggleTimeline->setValue(app->isTimeline );
 }

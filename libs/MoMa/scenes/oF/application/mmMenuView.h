@@ -33,6 +33,7 @@ namespace MoMa {
         
         SceneApp *app;
         ofxUIRadio *modeRadio;//, *playRadio;
+        ofxUIToggle *playBar, *viewOptions;
     };
 }
 

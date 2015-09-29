@@ -23,8 +23,8 @@ MenuView::MenuView( SceneApp *_app, MoMa::Position position, MoMa::Position alig
         addSpacer();
         //playRadio = addRadio( "ActivePlayMode", playNames, OFX_UI_ORIENTATION_VERTICAL );
         //addSpacer();
-        addToggle("Player Bar",true);
-        addToggle("View Options",false);
+        playBar = addToggle("Player Bar",true);
+        viewOptions = addToggle("View Options",false);
         initCanvas();
 }
 
@@ -68,7 +68,9 @@ void MenuView::update() {
     if( app->activeMode == MoMa::SCENE3D ) modeRadio->activateToggle( "Focus on 3D Scene" );
     else if( app->activeMode == MoMa::SCENE2D ) modeRadio->activateToggle( "Focus on 2D Figures" );
     else if( app->activeMode == MoMa::ANNOTATE ) modeRadio->activateToggle( "Focus on Annotation" );
-
+    
+    playBar->setValue( childrenOpened(0) );
+    viewOptions->setValue( childrenOpened(1) );
     //if( app->playbackMode == MoMa::SCRUB ) playRadio->activateToggle( "SCRUB MODE" );
     //else if( app->playbackMode == MoMa::PLAY ) playRadio->activateToggle( "PLAY MODE" );
 }

@@ -167,6 +167,7 @@ namespace MoMa {
         virtual void mouseReleased( int x, int y, int button ) {}
         virtual void mouseDragged( int x, int y, int button ) {}
         virtual void mouseMoved( int x, int y, int button ) {}
+        virtual void windowResized(int w, int h){}
         
         virtual void dragEvent( ofDragInfo dragInfo) {}
         
@@ -338,6 +339,8 @@ namespace MoMa {
         virtual void mouseReleased( ofMouseEventArgs &mouse );
         virtual void mouseDragged( ofMouseEventArgs &mouse );
         virtual void mouseMoved( ofMouseEventArgs &mouse );
+
+        virtual void windowResized(ofResizeEventArgs &resize);
         
         virtual void dragged( ofDragInfo &drag );
         

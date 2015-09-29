@@ -34,6 +34,7 @@ namespace MoMa {
     protected:
 
         SceneApp *app;
+        ofxUIToggle *toggle3DScene, *toggleGround, *toggleNodeNames, *toggleAnnotations, *toggleFigure, *toggleCaption, *toggleTimeline;
     };
 }
 

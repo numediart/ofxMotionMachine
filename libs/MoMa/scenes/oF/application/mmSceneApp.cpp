@@ -249,13 +249,13 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
                 //     listener[l].track->push( oscFrame );
                 //setPlayerSize( listener[l].track->nOfFrames() );
 
-				
-				appMoment.setTime( (double)ofGetElapsedTimeMillis()/1000.0);
-				//if (listener[l].track->position.isTimed())
 
-				setPlayerSize( listener[l].track->minTime(),listener[l].track->maxTime() );
-				//else
-				//	setPlayerSize( listener[l].track->nOfFrames());
+                appMoment.setTime( (double)ofGetElapsedTimeMillis()/1000.0);
+                //if (listener[l].track->position.isTimed())
+
+                setPlayerSize( listener[l].track->minTime(),listener[l].track->maxTime() );
+                //else
+                //	setPlayerSize( listener[l].track->nOfFrames());
 
 
                 onOscReceived(); // Trigger custom code here
@@ -520,7 +520,7 @@ void MoMa::SceneApp::keyPressed( ofKeyEventArgs &key ) {
                 // but get us back to the main view, i.e. new children.
 
                 if( Canvas::canvasOpened() ) Canvas::closeAllCanvas();
-                else Canvas::openMainCanvas(); // Show/hide the canvas
+                else Canvas::reopenCanvas(); // Show/hide the canvas
             }
 
             if( key.key == '3' ) setActiveMode( SCENE3D ); // '3' like '3D scene'
@@ -1151,9 +1151,9 @@ void MoMa::SceneApp::draw(const Frame &frame ) {
 
         for( int b=0; b<frame.boneList->size(); b++ ) {
 
-//            ofVec3f beg = toVec3f( frame.node( frame.boneList->at( b ).first ).position );
-//            ofVec3f end = toVec3f( frame.node( frame.boneList->at( b ).second ).position );
-			ofVec3f beg = toVec3f( frame.getPosition().col( frame.boneList->at( b ).first ) );
+            //            ofVec3f beg = toVec3f( frame.node( frame.boneList->at( b ).first ).position );
+            //            ofVec3f end = toVec3f( frame.node( frame.boneList->at( b ).second ).position );
+            ofVec3f beg = toVec3f( frame.getPosition().col( frame.boneList->at( b ).first ) );
             ofVec3f end = toVec3f( frame.getPosition().col( frame.boneList->at( b ).second ) );
 
             ofSetLineWidth( 2 );
@@ -1759,4 +1759,10 @@ void MoMa::SceneApp::removePlayerBar( void ) {
 
     if(playBar) playBar->remove();
     playBar = NULL;
+}
+
+void MoMa::SceneApp::windowResized(ofResizeEventArgs &resize){
+
+    Canvas::resetPositions();
+    windowResized(resize.width,resize.height);
 }

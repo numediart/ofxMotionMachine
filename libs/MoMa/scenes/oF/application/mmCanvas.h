@@ -73,6 +73,7 @@ namespace MoMa {
         static bool canvasOpened();
         static void closeMainCanvas();
         static void closeAllCanvas();
+        static void reopenCanvas();
 
 
     protected : 
@@ -128,6 +129,7 @@ namespace MoMa {
         bool _isInitialized, _isCanvasHit, _isShortCutDisabled;
         static int _limit;
         int savedMode;
+        static std::vector<MoMa::Canvas*> closedCanvas;
     };
 }
 
