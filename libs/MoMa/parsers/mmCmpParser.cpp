@@ -72,8 +72,8 @@ namespace MoMa {
         if (code==0){
             float *p=new float;
             for (int i=0;i<dim;i++){
-                if (file.read((char*)p,sizeof(float))==0)
-                return false;
+                file.read((char*)p,sizeof(float));
+                //return false;
                 SwapInt32((int*)p);
                 data[i]=*p;
             }

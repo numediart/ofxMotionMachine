@@ -191,23 +191,36 @@ void MoMa::SceneApp::update( ofEventArgs &args ) {
             bool hasReceivedFrame = false;
 
             if( message.getAddress() == listener[l].header+PositionHeader ) {
-
+                
                 listener[l].track->hasRotation = false;
+                
                 if( listener[l].mode == ROTATIONS ) {
+                    
                     listener[l].mode = POSITIONS;
                     //listener[l].track->clear();
                 }
+                
                 int nOfNodes = message.getNumArgs()/3;
-                arma::mat lPos(3,nOfNodes);
+                arma::mat lPos( 3, nOfNodes );
 
                 for( int n=0; n<nOfNodes; n++ ) {
+                    
                     lPos(X,n) = message.getArgAsFloat( 3*n );
-                    lPos(X,n) = message.getArgAsFloat( 3*n+1 );
-                    lPos(Y,n) = message.getArgAsFloat( 3*n+2 );
+                    lPos(Y,n) = message.getArgAsFloat( 3*n+1 );
+                    lPos(Z,n) = message.getArgAsFloat( 3*n+2 );
                 }
-
+                
+                if( listener[l].track->position.isTimed() ) {
+                    
+                    listener[l].track->position.push( lPos,
+                    (double)ofGetElapsedTimeMillis()/1000.0 );
+                    
+                } else {
+                    
+                    listener[l].track->position.push( lPos );
+                }
+                
                 hasReceivedFrame = true;
-                listener[l].track->rotation.push( lPos );
             }
 
             if( message.getAddress() == listener[l].header+RotationHeader ) {
@@ -315,7 +328,7 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
         ofSetLineWidth( 1 );
         ofSetColor( 210, 210, 210 );
         ofPushMatrix(); ofRotate(90, 0, 1, 0);
-        ofDrawGridPlane( 4000.0f, gridSize );
+        ofDrawGridPlane( gridSize, 30 );
         ofPopMatrix();
         ofPopStyle();
     }
@@ -1359,58 +1372,61 @@ bool MoMa::SceneApp::isLabelListShown( int labelListId ) {
 }
 
 void MoMa::SceneApp::addNewFeature( MoMa::TimedVec &feat,
-                                   string name, string osc, bool isShown, bool isSent ) {
-
-                                       _Feature _feat;
-
-                                       _feat.type = VECTOR;
-                                       _feat.feature.tvec = &feat;
-
-                                       _feat.name = name;
-                                       _feat.oscHeader = osc;
-
-                                       _feat.isFeasible = true;
-                                       _feat.isShown = isShown;
-                                       _feat.isSent = isSent;
-
-
-                                       feature.push_back( _feat );
+string name, string osc, bool isShown, bool isSent ) {
+    
+    _Feature _feat;
+    
+    _feat.type = VECTOR;
+    _feat.feature.tvec = &feat;
+    
+    _feat.name = name;
+    _feat.oscHeader = osc;
+    
+    _feat.isFeasible = true;
+    _feat.isShown = isShown;
+    _feat.isSent = isSent;
+    _feat.isWek = false;
+    
+    
+    feature.push_back( _feat );
 }
 
 void MoMa::SceneApp::addNewFeature( MoMa::TimedMat &feat,
-                                   string name, string osc, bool isShown, bool isSent ) {
-
-                                       _Feature _feat;
-
-                                       _feat.type = MATRIX;
-                                       _feat.feature.tmat = &feat;
-
-                                       _feat.name = name;
-                                       _feat.oscHeader = osc;
-
-                                       _feat.isFeasible = true;
-                                       _feat.isShown = isShown;
-                                       _feat.isSent = isSent;
-
-                                       feature.push_back( _feat );
+string name, string osc, bool isShown, bool isSent ) {
+    
+    _Feature _feat;
+    
+    _feat.type = MATRIX;
+    _feat.feature.tmat = &feat;
+    
+    _feat.name = name;
+    _feat.oscHeader = osc;
+    
+    _feat.isFeasible = true;
+    _feat.isShown = isShown;
+    _feat.isSent = isSent;
+    _feat.isWek = false;
+    
+    feature.push_back( _feat );
 }
 
 void MoMa::SceneApp::addNewFeature( MoMa::TimedCube &feat,
-                                   string name, string osc, bool isShown, bool isSent ) {
-
-                                       _Feature _feat;
-
-                                       _feat.type = CUBE;
-                                       _feat.feature.tcube = &feat;
-
-                                       _feat.name = name;
-                                       _feat.oscHeader = osc;
-
-                                       _feat.isFeasible = true;
-                                       _feat.isShown = isShown;
-                                       _feat.isSent = isSent;
-
-                                       feature.push_back( _feat );
+string name, string osc, bool isShown, bool isSent ) {
+    
+    _Feature _feat;
+    
+    _feat.type = CUBE;
+    _feat.feature.tcube = &feat;
+    
+    _feat.name = name;
+    _feat.oscHeader = osc;
+    
+    _feat.isFeasible = true;
+    _feat.isShown = isShown;
+    _feat.isSent = isSent;
+    _feat.isWek = false;
+    
+    feature.push_back( _feat );
 }
 
 void MoMa::SceneApp::setNumOfFigures( int nOfFigures ) {

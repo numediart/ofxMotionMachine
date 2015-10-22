@@ -18,7 +18,7 @@ namespace MoMa {class SceneApp;}
 namespace MoMa {
     
     const int DefaultNodeSize = 40;
-    const int DefaultGridSize = 40;
+    const int DefaultGridSize = 200;
     const int DefaultViewDist = 1000;
     const int DefaultPlotRes = 1000;
     
