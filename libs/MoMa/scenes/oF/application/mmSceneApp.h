@@ -135,7 +135,7 @@ namespace MoMa {
         std::string desc;
         
         bool isFeasible;
-        bool isShown;
+        bool isSelected;
         bool isSent;
         bool isWek;
     };

@@ -389,7 +389,7 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
             for( int f=0; f<nOfFeatures(); f++ ) {
 
                 if( feature[f].isFeasible
-                    && feature[f].isShown ) {
+                    && feature[f].isSelected ) {
 
                         nOfShownFeatures++;
                 }
@@ -402,7 +402,7 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
             for( int f=0; f<nOfFeatures(); f++ ) {
 
                 if( feature[ f ].isFeasible
-                    && feature[ f ].isShown ) {
+                    && feature[ f ].isSelected ) {
 
                         figure( shownFeatureId );
 
@@ -1386,7 +1386,7 @@ string name, string osc, bool isShown, bool isSent ) {
     _feat.oscHeader = osc;
     
     _feat.isFeasible = true;
-    _feat.isShown = isShown;
+    _feat.isSelected = isShown;
     _feat.isSent = isSent;
     _feat.isWek = false;
     
@@ -1406,7 +1406,7 @@ string name, string osc, bool isShown, bool isSent ) {
     _feat.oscHeader = osc;
     
     _feat.isFeasible = true;
-    _feat.isShown = isShown;
+    _feat.isSelected = isShown;
     _feat.isSent = isSent;
     _feat.isWek = false;
     
@@ -1425,7 +1425,7 @@ string name, string osc, bool isShown, bool isSent ) {
     _feat.oscHeader = osc;
     
     _feat.isFeasible = true;
-    _feat.isShown = isShown;
+    _feat.isSelected = isShown;
     _feat.isSent = isSent;
     _feat.isWek = false;
     
