@@ -328,7 +328,10 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
         ofSetLineWidth( 1 );
         ofSetColor( 210, 210, 210 );
         ofPushMatrix(); ofRotate(90, 0, 1, 0);
-        ofDrawGridPlane( gridSize, 30 );
+        
+        if( OF_VERSION_MINOR == 9 ) ofDrawGridPlane( gridSize, 30 );
+        else ofDrawGridPlane( 4000, 40 ); // They changed it in 0.9
+        
         ofPopMatrix();
         ofPopStyle();
     }

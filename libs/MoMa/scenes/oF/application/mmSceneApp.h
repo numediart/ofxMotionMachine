@@ -21,7 +21,7 @@ namespace MoMa {
     const int DefaultGridSize = 200;
     const int DefaultViewDist = 1000;
     const int DefaultPlotRes = 1000;
-    
+        
     const string PositionHeader = "/position";
     const string RotationHeader = "/rotation";
     const string NoFeature = "No feature";
