@@ -20,16 +20,16 @@ PlayBar::PlayBar( SceneApp *_app, MoMa::Position position, MoMa::Position alignm
         //txt_time = addTextArea("time", "Time : 0", OFX_UI_FONT_SMALL );
         setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
         setGlobalButtonDimension(42);        
-        bt_play = addImageButton("play", ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_play.png", false); //path is relative to the data path of the application!
+        bt_play = addImageButton("play", getResPath() + "GUI/bt_play.png", false); //path is relative to the data path of the application!
         setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
-        //bt_pause = addImageToggle("pause", ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_pause.png", false);
-        bt_stop = addImageButton("stop", ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_stop.png", false);
-        //bt_loop = addImageToggle("loop", ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_loop.png", false);
-        bt_scrub = addImageToggle("scrub", ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_scrub.png", false);
-        //bt_recordVideo = addImageToggle("record", ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_recordvideo.png", false);
-        //bt_snapshot = addImageButton("snap", ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_snapshot.png", false);
-        bt_prevFrame = addImageButton("prev", ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_previousframe.png", false);
-        bt_nextFrame = addImageButton("next", ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_nextframe.png", false);
+        //bt_pause = addImageToggle("pause", ofFilePath::getCurrentExeDir() + app->getAppPath() + "data/resources/GUI/bt_pause.png", false);
+        bt_stop = addImageButton("stop", getResPath() + "GUI/bt_stop.png", false);
+        //bt_loop = addImageToggle("loop", ofFilePath::getCurrentExeDir() + app->getAppPath() + "data/resources/GUI/bt_loop.png", false);
+        bt_scrub = addImageToggle("scrub", getResPath() + "GUI/bt_scrub.png", false);
+        //bt_recordVideo = addImageToggle("record", ofFilePath::getCurrentExeDir() + app->getAppPath() + "data/resources/GUI/bt_recordvideo.png", false);
+        //bt_snapshot = addImageButton("snap", ofFilePath::getCurrentExeDir() + app->getAppPath() + "data/resources/GUI/bt_snapshot.png", false);
+        bt_prevFrame = addImageButton("prev", getResPath() + "GUI/bt_previousframe.png", false);
+        bt_nextFrame = addImageButton("next", getResPath() + "GUI/bt_nextframe.png", false);
 
         playingState = false;
         setVisible(true);
@@ -57,14 +57,14 @@ void PlayBar::canvasEvent( ofxUIEventArgs &e ) {
         app->setPlaybackMode( MoMa::PLAY );
         playingState = true;
         app->play();
-        bt_play->getImage()->loadImage(ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_pause.png");
+        bt_play->getImage()->loadImage(getResPath() + "GUI/bt_pause.png");
     }
     else if( name == "play" && playingState == true && ((ofxUIButton*)(e.widget))->getValue() ) { //PAUSE!
 
         app->setPlaybackMode( MoMa::PLAY );
         playingState = false;
         app->pause();
-        bt_play->getImage()->loadImage(ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_play.png");
+        bt_play->getImage()->loadImage(getResPath() + "GUI/bt_play.png");
     }
 
     else if( name == "stop" ) { //STOP!
@@ -72,7 +72,7 @@ void PlayBar::canvasEvent( ofxUIEventArgs &e ) {
         app->setPlaybackMode( MoMa::PLAY );
         playingState = false;
         app->stop();
-        bt_play->getImage()->loadImage(ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_play.png");
+        bt_play->getImage()->loadImage(getResPath() + "GUI/bt_play.png");
     }
 
     else if( name == "scrub" && ((ofxUIToggle*)(e.widget))->getValue() ) { //SCRUB MODE
@@ -107,8 +107,8 @@ void PlayBar::update() {
     if( playingState != app->isPlaying() ) {
 
         playingState=app->isPlaying();
-        if( playingState ) bt_play->getImage()->loadImage(ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_pause.png");
-        else bt_play->getImage()->loadImage(ofFilePath::getCurrentExeDir() + app->getLibPath() + "resources/GUI/bt_play.png");
+        if( playingState ) bt_play->getImage()->loadImage(getResPath() + "GUI/bt_pause.png");
+        else bt_play->getImage()->loadImage(getResPath() + "GUI/bt_play.png");
     }
 
     if( app->playbackMode == MoMa::SCRUB ) bt_scrub->setValue(true);

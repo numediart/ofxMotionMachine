@@ -311,8 +311,8 @@ namespace MoMa {
         
         // - Misc methods -
         
-        std::string getAppPath( void ); // App path
-        std::string getLibPath( void ); // Lib path
+        //std::string getAppPath( void ); // App path
+        //std::string getLibPath( void ); // Lib path
 
         // - Built-in canvas methods -
 
