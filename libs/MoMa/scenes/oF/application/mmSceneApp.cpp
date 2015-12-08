@@ -499,6 +499,8 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
 
         ofPopStyle();
     }
+    
+    legacy();
 }
 
 void MoMa::SceneApp::exit( ofEventArgs &args ) {
