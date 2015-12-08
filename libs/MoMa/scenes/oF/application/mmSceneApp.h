@@ -157,7 +157,7 @@ namespace MoMa {
         
         virtual void setup( void ) {}
         virtual void update( void ) {}
-        virtual void draw( void ) {}
+        virtual void legacy( void ) {}
         virtual void exit( void ) {}
         
         virtual void keyPressed( int key ) {}
