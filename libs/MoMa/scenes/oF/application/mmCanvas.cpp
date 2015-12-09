@@ -233,17 +233,37 @@ void Canvas::remove() {
         }
     }
 
-    //erase from canvas groups
+    //erase from canvas groups, and update indexes of all other canvas
     if(_parent == NULL) {
 
         mainCanvas.erase(mainCanvas.begin()+_index);
+        for(int i = _index;i<mainCanvas.size();i++) {
+
+            mainCanvas[i]->_index--;
+        }
     }
     else {  
 
         _parent->childrenCanvas[_group].erase(_parent->childrenCanvas[_group].begin()+_index);
+
+        for(int i = _index;i<childrenCanvas[_group].size();i++) {
+
+            childrenCanvas[_group][i]->_index--;
+        }
         if( _parent->childrenCanvas[_group].size() == 0 ) _parent->childrenCanvas.erase( _parent->childrenCanvas.begin()+_group );
+        for(int i = _group;i<childrenCanvas.size();i++) {
+
+            for(int j = 0;  j<childrenCanvas[i].size(); j++) {
+
+                childrenCanvas[i][j]->_group--;
+            }
+        }
     }
     allCanvas.erase(allCanvas.begin()+_allIndex);
+    for(int i = _allIndex;i<allCanvas.size();i++) {
+
+            allCanvas[i]->_allIndex--;
+        }
     delete this;
 }
 
