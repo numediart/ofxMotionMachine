@@ -231,6 +231,37 @@ void Track::clear( void ) {
     hasRotation = false;
 }
 
+void Track::cut( int beg, int end) {
+
+    if( hasRotation ) {
+        
+        if( rotation.isTimed() ) {
+            
+            // TODO
+            
+            
+            rotation.setData( rotation.getTimeVec().subvec( beg, end ), rotation.getData().slices( beg, end ) );
+            
+        } else {
+            
+            /*rotation.getRefData().shed_slices(end+1, rotation.nOfFrames());
+            rotation.getRefData().shed_slices(0,beg-1);*/
+            rotation.setData( rotation.frameRate(), rotation.getData().slices( beg, end ) );
+        }
+    }
+    
+    if( position.isTimed() ) {
+        
+        // TODO
+        
+        position.setData( position.getTimeVec().subvec( beg, end ),position.getData().slices( beg, end ) );
+        
+    } else {
+        
+        position.setData( position.frameRate(), position.getData().slices( beg, end ) );
+    }
+}
+
 void Track::subTrack( Track &subTr, int beg, int end) {
         
     subTr.hasNodeList = hasNodeList;

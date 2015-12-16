@@ -75,8 +75,9 @@ namespace MoMa {
         // - Ringbuffer-related methods -
         
         void setRingBufferSize( int size ,bool pHasRotation=false,bool pTimed=false); // Set as ring buffer + max size
-        void subTrack( Track &subTr, int beg, int end ); // Extract a subtrack
-        
+        void subTrack( Track &subTr, int beg, int end ); // Extract a subtrack (into another track)
+        void cut( int beg, int end); // Cut track's data from beg to end
+
         bool setJointOffsetRotation();
         
         void pushPosition( arma::mat frame ); // Add frame + checking if ringbuffer
