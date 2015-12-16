@@ -28,6 +28,8 @@ namespace MoMa {
     std::string getLibPath( void ); //get the path to the MoMa libraries
     std::string getDataPath( void ); //get the data path
     std::string getResPath( void ); // get resources path
+
+    std::string checkFileName( std::string const &fName ); // manage special characters bugs (extended ASCII characters)
 }
 
 #endif

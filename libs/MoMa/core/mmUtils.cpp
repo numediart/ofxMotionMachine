@@ -56,6 +56,10 @@ string MoMa::getAppPath( void ) {
     wstring ws(cwd);
     string str(ws.begin(), ws.end());
     str = str + "/";
+
+    //Uncomment this if you have bugs with special characters
+    //str = checkFileName(str);
+
     return str;
 #else
     char* cwd;
@@ -108,4 +112,32 @@ string MoMa::getResPath( void ) {
     string libDir = getLibPath();
     return( libDir + "resources/" );
 #endif
+}
+
+string MoMa::checkFileName( string const &fName ) {
+
+    string tmp;
+
+    // Added to manage special characters (accents
+    // for example) in file path (extended ASCII table)
+
+    for( int i=0; i<fName.size(); ++i ) {
+
+        if( fName[i] != -61 ) {
+
+            // Basic ASCII table
+            tmp.push_back( fName[i] );
+
+        } else {
+
+            // Manage buggy special characters (extended ASCII character) the
+            // special character is divided in two characters : -61 and X (between
+            // -1 and -127); to get a valid character the conversion is c = X+64
+
+            ++i; // tmp[i] was -61
+            tmp.push_back( fName[i]+64 );
+        }
+    }
+
+    return tmp;
 }
