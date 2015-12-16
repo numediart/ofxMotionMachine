@@ -325,6 +325,16 @@ bool Canvas::canvasOpened() {
     return false;
 }
 
+vector<Canvas*>& Canvas::getAllCanvas() {
+
+    return allCanvas;
+}
+
+vector< vector<Canvas*> >& Canvas::getChildren() {
+
+    return childrenCanvas;
+}
+
 void Canvas::closeChildren() {
 
     for(int g=0;g<childrenCanvas.size();g++) {
