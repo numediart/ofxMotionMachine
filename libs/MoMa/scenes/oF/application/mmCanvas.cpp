@@ -246,24 +246,24 @@ void Canvas::remove() {
 
         _parent->childrenCanvas[_group].erase(_parent->childrenCanvas[_group].begin()+_index);
 
-        for(int i = _index;i<childrenCanvas[_group].size();i++) {
+        for(int i = _index;i<_parent->childrenCanvas[_group].size();i++) {
 
-            childrenCanvas[_group][i]->_index--;
+            _parent->childrenCanvas[_group][i]->_index--;
         }
         if( _parent->childrenCanvas[_group].size() == 0 ) _parent->childrenCanvas.erase( _parent->childrenCanvas.begin()+_group );
-        for(int i = _group;i<childrenCanvas.size();i++) {
+        for(int i = _group;i<_parent->childrenCanvas.size();i++) {
 
-            for(int j = 0;  j<childrenCanvas[i].size(); j++) {
+            for(int j = 0;  j<_parent->childrenCanvas[i].size(); j++) {
 
-                childrenCanvas[i][j]->_group--;
+                _parent->childrenCanvas[i][j]->_group--;
             }
         }
     }
     allCanvas.erase(allCanvas.begin()+_allIndex);
     for(int i = _allIndex;i<allCanvas.size();i++) {
 
-            allCanvas[i]->_allIndex--;
-        }
+        allCanvas[i]->_allIndex--;
+    }
     delete this;
 }
 
