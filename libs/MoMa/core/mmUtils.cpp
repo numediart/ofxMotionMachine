@@ -46,7 +46,7 @@ using namespace std;
 //    return "";*/
 //}
 
-string MoMa::getAppPath( void ) {
+string MoMa::getAbsoluteAppPath( void ) {
 
 #ifdef _WIN32
     wchar_t* cwd;
@@ -54,11 +54,16 @@ string MoMa::getAppPath( void ) {
 
     cwd = _wgetcwd( buff, MAX_PATH + 1 );
     wstring ws(cwd);
+    //wcout << "wide string : " << ws << endl;
     string str(ws.begin(), ws.end());
+    //cout << "string : " << str << endl;
     str = str + "/";
 
-    //Uncomment this if you have bugs with special characters
-    //str = checkFileName(str);
+    //cout << "appPath : " << str << endl;
+    //Uncomment if you have bugs with special ASCII characters
+    //checkFilePath(str);
+
+    //cout << "Corrected appPath : " << str << endl;
 
     return str;
 #else
@@ -72,11 +77,6 @@ string MoMa::getAppPath( void ) {
     return cwd;
 #endif
 
-    /*#ifdef _WIN32
-    return "";
-    #else
-    return"../../../";
-    #endif*/
 
     /*string filePath = getExeFilePath();
     size_t sep = filePath.find_last_of("\\/");
@@ -84,11 +84,33 @@ string MoMa::getAppPath( void ) {
     return appDir;*/
 }
 
+string MoMa::getAppPath( void ) {
+
+#ifdef _WIN32
+    return "";
+#else
+    return"../../../";
+#endif
+}
+
 string MoMa::getLibPath( void ) {
 
     string appDir = getAppPath();
 #ifdef NDEBUG
-    cout << "Warning : you should not use getLibPath in Release mode. If the bin folder is moved, the relative path to the libs will be incorrect." << endl;
+    cout << "Warning : you should not use getLibPath nor getAbsoluteLibPath in Release mode. If the bin folder is moved, the relative path to the libs will be incorrect." << endl;
+#endif
+#ifdef _WIN32
+    return( appDir + "../../../../libs/MoMa/" );
+#else
+    return( appDir +  "../../../../../../../libs/MoMa/" );
+#endif
+}
+
+string MoMa::getAbsoluteLibPath( void ) {
+
+    string appDir = getAbsoluteAppPath();
+#ifdef NDEBUG
+    cout << "Warning : you should not use getLibPath nor getAbsoluteLibPath in Release mode. If the bin folder is moved, the relative path to the libs will be incorrect." << endl;
 #endif
 #ifdef _WIN32
     return( appDir + "../../../../libs/MoMa/" );
@@ -103,7 +125,14 @@ string MoMa::getDataPath( void ) {
     return( appDir + "data/" );
 }
 
-string MoMa::getResPath( void ) {
+string MoMa::getAbsoluteDataPath( void ) {
+
+    string appDir = getAbsoluteAppPath();
+    return( appDir + "data/" );
+}
+
+//unsafe to use
+/*string MoMa::getResPath( void ) {
 
 #ifdef NDEBUG
     string appDir = getAppPath();
@@ -112,32 +141,86 @@ string MoMa::getResPath( void ) {
     string libDir = getLibPath();
     return( libDir + "resources/" );
 #endif
+}*/
+
+string MoMa::getAbsoluteResPath( void ) {
+
+#ifdef NDEBUG
+    string appDir = getAbsoluteAppPath();
+    return( appDir + "data/resources/" );
+#else
+    string libDir = getAbsoluteLibPath();
+    return( libDir + "resources/" );
+#endif
 }
 
-string MoMa::checkFileName( string const &fName ) {
+void MoMa::correctPath( string &path, bool invert ) {
 
     string tmp;
 
-    // Added to manage special characters (accents
+    // Manage special characters (accents
     // for example) in file path (extended ASCII table)
+    if(!invert) {
 
-    for( int i=0; i<fName.size(); ++i ) {
+        for( int i=0; i<path.size(); ++i ) {
 
-        if( fName[i] != -61 ) {
+            if( path[i] != -61 ) {
 
-            // Basic ASCII table
-            tmp.push_back( fName[i] );
+                // Basic ASCII table
+                tmp.push_back( path[i] );
 
-        } else {
+            } else {
 
-            // Manage buggy special characters (extended ASCII character) the
-            // special character is divided in two characters : -61 and X (between
-            // -1 and -127); to get a valid character the conversion is c = X+64
+                // Manage buggy special characters (extended ASCII character) the
+                // special character is divided in two characters : -61 and X (between
+                // -1 and -127); to get a valid character the conversion is c = X+64
 
-            ++i; // tmp[i] was -61
-            tmp.push_back( fName[i]+64 );
+                ++i; // tmp[i] was -61
+                tmp.push_back( path[i]+64 );
+            }
+        }
+    }
+    else {
+
+        for( int i=0; i<path.size(); ++i ) {
+
+            if( path[i] >= 0 ) {
+
+                // Basic ASCII table
+                tmp.push_back( path[i] );
+
+            } else {
+
+                // Negative ASCII character
+
+                tmp.push_back(-61);
+                tmp.push_back( path[i]-64 );
+            }
         }
     }
 
-    return tmp;
+    path.clear();
+    path = tmp;
+}
+
+void MoMa::checkFilePath( string &path ) {
+
+    ifstream fPath( path.c_str() );
+
+    if(!fPath) {
+
+        correctPath( path );
+        fPath = ifstream( path.c_str() );
+
+        if(!fPath) {
+
+            correctPath( path, true );
+            fPath = ifstream( path.c_str() );
+
+            if(!fPath) {
+
+                cout << "The following path does not exists or is not accessible : " << path << endl;
+            }
+        }
+    }
 }

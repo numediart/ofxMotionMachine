@@ -11,7 +11,7 @@
 using namespace std;
 using namespace MoMa;
 
-const std::string SynoList::DefaultPath = getResPath() + "SynoList.txt";
+const std::string SynoList::DefaultPath = getAbsoluteResPath() + "SynoList.txt";
 
 
 SynoList::SynoList( string fileName ) {

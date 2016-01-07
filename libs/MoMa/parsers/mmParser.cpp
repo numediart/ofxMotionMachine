@@ -9,9 +9,11 @@ Parser::Parser( string const &fName, Track *tr ) {
     track = tr;
     fileName = fName;
 
-#ifdef _WIN32
+/*#ifdef _WIN32
     fileName = checkFileName( fileName );
-#endif
+#endif*/
+
+    checkFilePath( fileName );
 
     //set trackName
     /*string shortFName;
@@ -24,7 +26,7 @@ Parser::Parser( string const &fName, Track *tr ) {
     track->setTrackName(shortFName);*/
 
     size_t sep = fileName.find_last_of("\\/");
-    size_t dot = fileName.find_last_of(".");    
+    size_t dot = fileName.find_last_of(".");
 
     int previousSize = track->nOfNodes();
     extension = fileName.substr( dot + 1) ;
@@ -178,34 +180,6 @@ Parser::Parser( string const &fName, Track *tr ) {
     else if( extension == "nodes" ) track->nodes( fileName );
 
     else cout << "Invalid file format" << endl;
-}
-
-string Parser::checkFileName( string const &fName ) {
-
-    string tmp;
-
-    // Added to manage special characters (accents
-    // for example) in file path (extended ASCII table)
-
-    for( int i=0; i<fName.size(); ++i ) {
-
-        if( fName[i] != -61 ) {
-
-            // Basic ASCII table
-            tmp.push_back( fName[i] );
-
-        } else {
-
-            // Manage buggy special characters (extended ASCII character) the
-            // special character is divided in two characters : -61 and X (between
-            // -1 and -127); to get a valid character the conversion is c = X+64
-
-            ++i; // tmp[i] was -61
-            tmp.push_back( fName[i]+64 );
-        }
-    }
-
-    return tmp;
 }
 
 
