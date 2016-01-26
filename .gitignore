@@ -68,6 +68,7 @@ xcuserdata
 *.bsc
 *.pdb
 *.cache
+*.user
 obj
 
 # Avoid excluding Armadillo lib files
