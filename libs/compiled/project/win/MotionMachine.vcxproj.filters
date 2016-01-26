@@ -132,18 +132,6 @@
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmCam.cpp">
       <Filter>MoMa\scenes\oF\application</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\posix\NetworkingUtils.cpp">
-      <Filter>oF\addons\ofxOsc\libs\oscpack\src\ip\posix</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\posix\UdpSocket.cpp">
-      <Filter>oF\addons\ofxOsc\libs\oscpack\src\ip\posix</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtilsWin.cpp">
-      <Filter>oF\addons\ofxOsc\libs\oscpack\src\ip\win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocketWin.cpp">
-      <Filter>oF\addons\ofxOsc\libs\oscpack\src\ip\win32</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.cpp">
       <Filter>oF\addons\ofxOsc\libs\oscpack\src\osc</Filter>
     </ClCompile>
@@ -389,6 +377,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOptionsView.cpp">
       <Filter>MoMa\scenes\oF\application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocket.cpp">
+      <Filter>oF\addons\ofxOsc\libs\oscpack\src\ip\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtils.cpp">
+      <Filter>oF\addons\ofxOsc\libs\oscpack\src\ip\win32</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
