@@ -262,6 +262,25 @@ void Track::cut( int beg, int end) {
     }
 }
 
+void Track::copy(Track &tr) {
+
+    if (tr.nodeList) delete tr.nodeList;
+    if (tr.boneList) delete tr.boneList;
+
+    tr = *this;
+    //create independant nodelist and bonelist (to avoid conflicts when modifying/deleting tracks)
+    if (hasNodeList) {
+
+        tr.nodeList = new NodeList();
+        *(tr.nodeList) = *nodeList;
+    }
+    if (hasBoneList) {
+
+        tr.boneList = new BoneList();
+        *(tr.boneList) = *boneList;
+    }
+}
+
 void Track::subTrack( Track &subTr, int beg, int end) {
         
     subTr.hasNodeList = hasNodeList;

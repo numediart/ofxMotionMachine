@@ -78,6 +78,8 @@ namespace MoMa {
         void subTrack( Track &subTr, int beg, int end ); // Extract a subtrack (into another track)
         void cut( int beg, int end); // Cut track's data from beg to end
 
+        void copy(Track & tr);
+
         bool setJointOffsetRotation();
         
         void pushPosition( arma::mat frame ); // Add frame + checking if ringbuffer
