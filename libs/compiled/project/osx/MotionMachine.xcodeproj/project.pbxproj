@@ -49,8 +49,6 @@
 		9F2E1F671B7664B800DB082C /* UdpSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F2E1ED91B7664B800DB082C /* UdpSocket.cpp */; };
 		9F2E1F681B7664B800DB082C /* TimerListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F2E1EDA1B7664B800DB082C /* TimerListener.h */; };
 		9F2E1F691B7664B800DB082C /* UdpSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F2E1EDB1B7664B800DB082C /* UdpSocket.h */; };
-		9F2E1F6A1B7664B800DB082C /* NetworkingUtilsWin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F2E1EDD1B7664B800DB082C /* NetworkingUtilsWin.cpp */; };
-		9F2E1F6B1B7664B800DB082C /* UdpSocketWin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F2E1EDE1B7664B800DB082C /* UdpSocketWin.cpp */; };
 		9F2E1F6C1B7664B800DB082C /* MessageMappingOscPacketListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F2E1EE01B7664B800DB082C /* MessageMappingOscPacketListener.h */; };
 		9F2E1F6D1B7664B800DB082C /* OscException.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F2E1EE11B7664B800DB082C /* OscException.h */; };
 		9F2E1F6E1B7664B800DB082C /* OscHostEndianness.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F2E1EE21B7664B800DB082C /* OscHostEndianness.h */; };
@@ -254,8 +252,6 @@
 		9F2E1ED91B7664B800DB082C /* UdpSocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UdpSocket.cpp; sourceTree = "<group>"; };
 		9F2E1EDA1B7664B800DB082C /* TimerListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimerListener.h; sourceTree = "<group>"; };
 		9F2E1EDB1B7664B800DB082C /* UdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UdpSocket.h; sourceTree = "<group>"; };
-		9F2E1EDD1B7664B800DB082C /* NetworkingUtilsWin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkingUtilsWin.cpp; sourceTree = "<group>"; };
-		9F2E1EDE1B7664B800DB082C /* UdpSocketWin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UdpSocketWin.cpp; sourceTree = "<group>"; };
 		9F2E1EE01B7664B800DB082C /* MessageMappingOscPacketListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageMappingOscPacketListener.h; sourceTree = "<group>"; };
 		9F2E1EE11B7664B800DB082C /* OscException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscException.h; sourceTree = "<group>"; };
 		9F2E1EE21B7664B800DB082C /* OscHostEndianness.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscHostEndianness.h; sourceTree = "<group>"; };
@@ -639,7 +635,6 @@
 				9F2E1ED71B7664B800DB082C /* posix */,
 				9F2E1EDA1B7664B800DB082C /* TimerListener.h */,
 				9F2E1EDB1B7664B800DB082C /* UdpSocket.h */,
-				9F2E1EDC1B7664B800DB082C /* win32 */,
 			);
 			path = ip;
 			sourceTree = "<group>";
@@ -651,15 +646,6 @@
 				9F2E1ED91B7664B800DB082C /* UdpSocket.cpp */,
 			);
 			path = posix;
-			sourceTree = "<group>";
-		};
-		9F2E1EDC1B7664B800DB082C /* win32 */ = {
-			isa = PBXGroup;
-			children = (
-				9F2E1EDD1B7664B800DB082C /* NetworkingUtilsWin.cpp */,
-				9F2E1EDE1B7664B800DB082C /* UdpSocketWin.cpp */,
-			);
-			path = win32;
 			sourceTree = "<group>";
 		};
 		9F2E1EDF1B7664B800DB082C /* osc */ = {
@@ -1053,7 +1039,6 @@
 				9F2E1F981B7664B800DB082C /* ofxUIEventArgs.cpp in Sources */,
 				9F2E1F741B7664B800DB082C /* OscReceivedElements.cpp in Sources */,
 				9F2E1C131B76645000DB082C /* mmOfUtils.cpp in Sources */,
-				9F2E1F6B1B7664B800DB082C /* UdpSocketWin.cpp in Sources */,
 				9F2E1FDF1B7664B800DB082C /* ofxUIWidgetWithLabel.cpp in Sources */,
 				9F2E1F821B7664B800DB082C /* ofxOscSender.cpp in Sources */,
 				9F2E1FB01B7664B800DB082C /* ofxUIMovingGraph.cpp in Sources */,
@@ -1076,7 +1061,6 @@
 				9F2E1F911B7664B800DB082C /* ofxUICircleSlider.cpp in Sources */,
 				9F2E1F801B7664B800DB082C /* ofxOscReceiver.cpp in Sources */,
 				9F2E1FA41B7664B800DB082C /* ofxUIImageSlider.cpp in Sources */,
-				9F2E1F6A1B7664B800DB082C /* NetworkingUtilsWin.cpp in Sources */,
 				E8E2E9C91AFCBE4900D690BE /* mmArmaUtils.cpp in Sources */,
 				9F2E1FB91B7664B800DB082C /* ofxUIRadio.cpp in Sources */,
 				9F4FB7D41AC76502003C2C5A /* mmBvhParser.cpp in Sources */,
@@ -1190,13 +1174,16 @@
 			baseConfigurationReference = E8F00C201ADBFEB6006A7A56 /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../../lib/osx";
 				DEAD_CODE_STRIPPING = YES;
 				DEPLOYMENT_LOCATION = NO;
 				DSTROOT = "/tmp/$(PROJECT_NAME).dst";
 				EXECUTABLE_PREFIX = "";
+				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_OPTIMIZATION_LEVEL = s;
 				GCC_UNROLL_LOOPS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
@@ -1224,13 +1211,16 @@
 			baseConfigurationReference = E8F00C211ADBFEB6006A7A56 /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../../lib/osx";
 				DEAD_CODE_STRIPPING = YES;
 				DEPLOYMENT_LOCATION = NO;
 				DSTROOT = "/tmp/$(PROJECT_NAME).dst";
 				EXECUTABLE_PREFIX = "";
+				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_UNROLL_LOOPS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
