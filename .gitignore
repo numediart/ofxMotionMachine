@@ -1,36 +1,46 @@
 # Compiled Object files
+
+*.obj
 *.slo
 *.lo
 *.o
-*.obj
 
 # Fortran module files
+
 *.mod
 
 # Compiled Static libraries
+
+*.lib
 *.lai
 *.la
 *.a
-*.lib
 
 # Compiled Dynamic libraries
-*.so
+
 *.dylib
 *.dll
+*.so
 
 # Executables
+
+**.app/*
 *.exe
 *.out
-**.app/*
 
-# Exclude build/ folder
+# Exclude build folders
+
+libs/compiled/lib/osx/*.build/*
+**.build/*
 */build/*
 
 # Exclude any app but examples
+
 apps/*
 !apps/examples/*
 
 # Exclude openFrameworks bits
+
 apps/examples/*/bin/*
 !apps/examples/*/bin/data/*
 libs/oF/export/*
@@ -39,18 +49,22 @@ libs/oF/export
 libs/oF/libs
 
 # Exclude nibs/swap files
+
 *~.nib
 *.swp
 *.swo
 .ycm*
 
 #Exclude Matlab files
+
 *.m~
  
 # Exclude OS X folder bits
+
 .DS_Store
  
 # Exclude XCode 3 and 4 bits
+
 *.mode1
 *.mode1v3
 *.mode2v3
@@ -58,9 +72,11 @@ libs/oF/libs
 *.perspectivev3
 *.pbxuser
 *.xcworkspace
+**/xcuserdata/*
 xcuserdata
 
 # Exclude Visual Studio 2012 bits
+
 *.sdf
 *.suo
 *.exp
@@ -72,6 +88,7 @@ xcuserdata
 obj
 
 # Avoid excluding Armadillo lib files
+
 !libs/armadillo/lib/win32/blas_win32_MT.dll
 !libs/armadillo/lib/win32/blas_win32_MT.lib
 !libs/armadillo/lib/win32/lapack_win32_MT.dll
@@ -81,5 +98,6 @@ obj
 !libs/armadillo/lib/osx/libarmadillo.dylib
 
 # Exclude videos
+
 *.mp4
 *.mov
