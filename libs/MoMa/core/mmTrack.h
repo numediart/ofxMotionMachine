@@ -306,11 +306,13 @@ namespace MoMa {
             oneTrace.setTimeFlag( true );
             oneTrace.setRotationFlag( hasRotation );
             oneTrace.setName( nodeList->name( index ) );
-            
+            oneTrace.position.setInitialTime(position.initialTime());
+
             if( position.isTimed() ) {
 				if (position.isRealTime())
 					oneTrace.position.setRealTimeMode(position.getBufferSize(),3);
                 oneTrace.setPosition( position.getData().tube( 0, index, 2 , index ), position.getTimeVec() );
+                
                 
             } else {
                 
