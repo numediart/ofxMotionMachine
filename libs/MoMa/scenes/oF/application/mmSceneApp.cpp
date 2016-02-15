@@ -873,7 +873,7 @@ void MoMa::SceneApp::mouseMoved( ofMouseEventArgs &mouse ) {
     }
 
     mouseX = mouse.x; mouseY = mouse.y;
-    mouseMoved( mouse.x, mouse.y, mouse.button );
+    mouseMoved( mouse.x, mouse.y );
 }
 
 void MoMa::SceneApp::dragged( ofDragInfo &drag ) {
