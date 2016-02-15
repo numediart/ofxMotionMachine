@@ -71,10 +71,21 @@ string MoMa::getAbsoluteAppPath( void ) {
     char buff[PATH_MAX + 1];
 
     cwd = getcwd( buff, PATH_MAX + 1 );
+    
     if( cwd != NULL ) {
-        printf( "My working directory is %s.\n", cwd );
+        
+        // printf( "My working directory is %s.\n", cwd );
+        
+        string str( cwd );
+        str = str + "/../../../";
+        
+        return str;
+        
+    } else {
+    
+        string str = "";
+        return str;
     }
-    return cwd;
 #endif
 
 
@@ -115,7 +126,7 @@ string MoMa::getAbsoluteLibPath( void ) {
 #ifdef _WIN32
     return( appDir + "../../../../libs/MoMa/" );
 #else
-    return( appDir +  "../../../../../../../libs/MoMa/" );
+    return( appDir +  "../../../../libs/MoMa/" );
 #endif
 }
 
