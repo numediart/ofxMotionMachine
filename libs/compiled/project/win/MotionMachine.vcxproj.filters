@@ -380,10 +380,11 @@
     </ClCompile>
     <ClCompile Include="..\..\..\MoMa\core\mmUtils.cpp">
       <Filter>MoMa\core</Filter>
-    <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocket.cpp">
-      <Filter>oF\addons\ofxOsc\libs\oscpack\src\ip\win32</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtils.cpp">
+      <Filter>oF\addons\ofxOsc\libs\oscpack\src\ip\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocket.cpp">
       <Filter>oF\addons\ofxOsc\libs\oscpack\src\ip\win32</Filter>
     </ClCompile>
   </ItemGroup>
