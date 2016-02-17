@@ -241,6 +241,7 @@ void Track::cut(int beg, int end) {
 
 
             rotation.setData(rotation.getTimeVec().subvec(beg, end), rotation.getData().slices(beg, end));
+            rotation.setInitialTime((double)(beg / _frameRate));
 
         }
         else {
@@ -248,6 +249,7 @@ void Track::cut(int beg, int end) {
             /*rotation.getRefData().shed_slices(end+1, rotation.nOfFrames());
             rotation.getRefData().shed_slices(0,beg-1);*/
             rotation.setData(rotation.frameRate(), rotation.getData().slices(beg, end));
+            rotation.setInitialTime((double)(beg / _frameRate));
         }
     }
 
@@ -256,11 +258,13 @@ void Track::cut(int beg, int end) {
         // TODO
 
         position.setData(position.getTimeVec().subvec(beg, end), position.getData().slices(beg, end));
+        position.setInitialTime((double)(beg / _frameRate));
 
     }
     else {
 
         position.setData(position.frameRate(), position.getData().slices(beg, end));
+        position.setInitialTime((double)(beg / _frameRate));
     }
 }
 
@@ -327,11 +331,13 @@ void Track::subTrack( Track &subTr, int beg, int end) {
             
             subTr.rotation.setData( rotation.getTimeVec().subvec( beg, end ), rotation.getData().slices( beg, end ) );
             subTr.rotationOffset = rotationOffset;
+            subTr.rotation.setInitialTime((double)(beg / _frameRate));
             
         } else {
             
             subTr.rotation.setData( rotation.frameRate(), rotation.getData().slices( beg, end ) );
             subTr.rotationOffset = rotationOffset;
+            subTr.rotation.setInitialTime((double)(beg / _frameRate));
         }
     }
     
@@ -340,10 +346,11 @@ void Track::subTrack( Track &subTr, int beg, int end) {
         // TODO
         
         subTr.position.setData( position.getTimeVec().subvec( beg, end ),position.getData().slices( beg, end ) );
-        
+        subTr.position.setInitialTime((double)(beg / _frameRate));
     } else {
         
         subTr.position.setData( position.frameRate(), position.getData().slices( beg, end ) );
+        subTr.position.setInitialTime((double)(beg / _frameRate));
     }
 }
 

@@ -28,12 +28,14 @@ namespace MoMa {
 
         void update();
         void canvasEvent( ofxUIEventArgs &e );
-
+        void reopenOtherCanvas();
+        void closeOtherCanvas();
     protected:
         
         SceneApp *app;
         ofxUIRadio *modeRadio;//, *playRadio;
-        ofxUIToggle *playBar, *viewOptions;
+        ofxUIToggle *playBar, *viewOptions, *hideAll;
+        std::vector<MoMa::Canvas*> closedCanvas;
     };
 }
 

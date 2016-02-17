@@ -25,6 +25,7 @@ MenuView::MenuView( SceneApp *_app, MoMa::Position position, MoMa::Position alig
         //addSpacer();
         playBar = addToggle("Player Bar",true);
         viewOptions = addToggle("View Options",false);
+        hideAll = addToggle("View Other Canvas",true);
         initCanvas();
 }
 
@@ -42,16 +43,26 @@ void MenuView::canvasEvent( ofxUIEventArgs &e ) {
     else if( app->activeMode == MoMa::SCENE2D ) app->showFigures( true );
     else if( app->activeMode == MoMa::ANNOTATE ) app->showAnnotation( true );*/
 
-    if(name == "Player Bar") {
+    else if(name == "Player Bar") {
 
         if(((ofxUIToggle*)(e.widget))->getValue()) openChildren(0);
         else closeChildren(0);
     }
 
-    if(name == "View Options") {
+    else if(name == "View Options") {
 
         if(((ofxUIToggle*)(e.widget))->getValue()) openChildren(1);
         else closeChildren(1);
+    }
+
+    else if(name == "View Other Canvas") {
+
+        if(!((ofxUIToggle*)(e.widget))->getValue()) {
+
+            closeOtherCanvas();
+        }
+
+        else reopenOtherCanvas(); // Show/hide the canvas
     }
 
     /*if(name == "Options group 2") {
@@ -73,4 +84,27 @@ void MenuView::update() {
     viewOptions->setValue( childrenOpened(1) );
     //if( app->playbackMode == MoMa::SCRUB ) playRadio->activateToggle( "SCRUB MODE" );
     //else if( app->playbackMode == MoMa::PLAY ) playRadio->activateToggle( "PLAY MODE" );
+}
+
+void MenuView::closeOtherCanvas() {
+
+    vector<Canvas*> tmp = getAllCanvas();
+    closedCanvas.clear();
+    for(int i=0;i<tmp.size();i++) {
+
+        if(tmp[i]->isVisible() && tmp[i]!= this && tmp[i]!=getChildren()[0][0] && tmp[i]!=getChildren()[1][0]  ) {
+
+            tmp[i]->setVisible(false);
+            closedCanvas.push_back(tmp[i]);
+        }
+    }
+}
+
+void MenuView::reopenOtherCanvas() {
+
+    for(int i=0;i<closedCanvas.size();i++) {
+
+        closedCanvas[i]->setVisible(true);
+    }
+    closedCanvas.clear();
 }

@@ -13,6 +13,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include "mmUtils.h"
 
 namespace MoMa {
     

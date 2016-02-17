@@ -1719,23 +1719,7 @@ void MoMa::SceneApp::showTimeline( bool time ) {
     isTimeline = time;
 }
 
-string MoMa::SceneApp::getAppPath( void ) {
 
-#ifdef _WIN32
-    return( "" );
-#else
-    return( "../../../" );
-#endif
-}
-
-string MoMa::SceneApp::getLibPath( void ) {
-
-#ifdef _WIN32
-    return( "../../../../libs/MoMa/" );
-#else
-    return( "../../../../../../../libs/MoMa/" );
-#endif
-}
 
 void MoMa::SceneApp::enableShortcuts( void ) {
 

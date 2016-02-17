@@ -13,6 +13,7 @@
 #include "mmBvhParser.h"
 #include "mmCmpParser.h"
 #include "mmKinParser.h"
+#include "mmUtils.h"
 
 namespace MoMa {
 
@@ -23,8 +24,6 @@ namespace MoMa {
         Parser( std::string const &fileName, Track *tr );
         
       private:
-
-        std::string checkFileName( std::string const &fileName );
         
        // bool setJointOffsetRotation(Track *tr);
         std::string extension;

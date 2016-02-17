@@ -201,13 +201,13 @@ void V3dParser::load( string const &fileName, Track *track ) {
                     
                     } else {
                         
-                        posMat( axisIndex[k], nodeCpt ) = atof( value[0].c_str() );
-                        posMat( axisIndex[k+1], nodeCpt ) = atof( value[1].c_str() );
-                        posMat( axisIndex[k+2], nodeCpt ) = atof( value[2].c_str() );
+                        posMat( axisIndex[k], nodeCpt ) = atof( value[0].c_str() )*1000;
+                        posMat( axisIndex[k+1], nodeCpt ) = atof( value[1].c_str() )*1000;
+                        posMat( axisIndex[k+2], nodeCpt ) = atof( value[2].c_str() )*1000;
                         
-                        posMat( axisIndex[k], nodeCpt ) *= 1000;
+                        /*posMat( axisIndex[k], nodeCpt ) *= 1000;
                         posMat( axisIndex[k+1], nodeCpt ) *= 1000;
-                        posMat( axisIndex[k+2], nodeCpt ) *= 1000;
+                        posMat( axisIndex[k+2], nodeCpt ) *= 1000;*/
                         
                         if( dim == 6 ) {
                             

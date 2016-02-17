@@ -216,9 +216,23 @@ void Canvas::resetPositions() {
     mainCanvas[i]->initUI();
     mainCanvas[i]->closeChildren();
     }*/
-    for(int i=0;i<allCanvas.size();i++) {
+    if (closedCanvas.size() > 0) { //reopen canvas before re-initialization!
+
+        for (int i = 0; i < closedCanvas.size(); i++) {
+
+            closedCanvas[i]->setVisible(true);
+        }
+    }
+    for (int i = 0; i < allCanvas.size(); i++) {
 
         allCanvas[i]->initCanvas();
+    }
+    if (closedCanvas.size() > 0) {
+
+        for (int i = 0; i < closedCanvas.size(); i++) {
+
+            closedCanvas[i]->setVisible(false);
+        }
     }
 }
 
@@ -233,17 +247,37 @@ void Canvas::remove() {
         }
     }
 
-    //erase from canvas groups
-    if(_parent == NULL) {
+    //erase from canvas groups, and update indexes of all other canvas
+    if (_parent == NULL) {
 
-        mainCanvas.erase(mainCanvas.begin()+_index);
-    }
-    else {  
+        mainCanvas.erase(mainCanvas.begin() + _index);
+        for (int i = _index; i < mainCanvas.size(); i++) {
 
-        _parent->childrenCanvas[_group].erase(_parent->childrenCanvas[_group].begin()+_index);
-        if( _parent->childrenCanvas[_group].size() == 0 ) _parent->childrenCanvas.erase( _parent->childrenCanvas.begin()+_group );
+            mainCanvas[i]->_index--;
+        }
     }
-    allCanvas.erase(allCanvas.begin()+_allIndex);
+    else {
+
+        _parent->childrenCanvas[_group].erase(_parent->childrenCanvas[_group].begin() + _index);
+
+        for (int i = _index; i < _parent->childrenCanvas[_group].size(); i++) {
+
+            _parent->childrenCanvas[_group][i]->_index--;
+        }
+        if (_parent->childrenCanvas[_group].size() == 0) _parent->childrenCanvas.erase(_parent->childrenCanvas.begin() + _group);
+        for (int i = _group; i < _parent->childrenCanvas.size(); i++) {
+
+            for (int j = 0; j < _parent->childrenCanvas[i].size(); j++) {
+
+                _parent->childrenCanvas[i][j]->_group--;
+            }
+        }
+    }
+    allCanvas.erase(allCanvas.begin() + _allIndex);
+    for (int i = _allIndex; i < allCanvas.size(); i++) {
+
+        allCanvas[i]->_allIndex--;
+    }
     delete this;
 }
 
@@ -303,6 +337,16 @@ bool Canvas::canvasOpened() {
     }    
 
     return false;
+}
+
+vector<Canvas*>& Canvas::getAllCanvas() {
+
+    return allCanvas;
+}
+
+vector< vector<Canvas*> >& Canvas::getChildren() {
+
+    return childrenCanvas;
 }
 
 void Canvas::closeChildren() {

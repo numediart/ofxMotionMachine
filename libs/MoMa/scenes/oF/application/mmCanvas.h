@@ -71,6 +71,8 @@ namespace MoMa {
 
         static void openMainCanvas();
         static bool canvasOpened();
+        std::vector<Canvas*>& getAllCanvas();
+        std::vector< std::vector<Canvas*> >& getChildren();
         static void closeMainCanvas();
         static void closeAllCanvas();
         static void reopenCanvas();
