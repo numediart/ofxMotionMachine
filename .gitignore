@@ -41,6 +41,7 @@ libs/oF/libs/*
 *.swp
 *.swo
 .ycm*
+*.bak
 
 #Exclude Matlab files
 *.m~

@@ -26,7 +26,7 @@ Parser::Parser( string const &fName, Track *tr ) {
     track->setTrackName(shortFName);*/
 
     size_t sep = fileName.find_last_of("\\/");
-    size_t dot = fileName.find_last_of(".");
+    size_t dot = fileName.find_last_of(".");    
 
     int previousSize = track->nOfNodes();
     extension = fileName.substr( dot + 1) ;
