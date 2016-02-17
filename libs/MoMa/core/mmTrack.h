@@ -309,7 +309,6 @@ namespace MoMa {
             oneTrace.setTimeFlag( true );
             oneTrace.setRotationFlag( hasRotation );
             oneTrace.setName( nodeList->name( index ) );
-            oneTrace.position.setInitialTime(position.initialTime());
 
             if( position.isTimed() ) {
 				if (position.isRealTime())
@@ -321,7 +320,7 @@ namespace MoMa {
                 
 				if (position.isRealTime())
 					oneTrace.position.setRealTimeMode(position.getBufferSize(), position.frameRate(),3);
-                oneTrace.setPosition( position.getData().tube( 0, index, 2, index ), position.frameRate() );
+                oneTrace.setPosition( position.getData().tube( 0, index, 2, index ), position.frameRate(), position.initialTime() );
             }
             
             if( hasRotation ) {
@@ -337,10 +336,10 @@ namespace MoMa {
                     
 					if (rotation.isRealTime())
 						oneTrace.rotation.setRealTimeMode(rotation.getBufferSize(), rotation.frameRate(),3);
-                    oneTrace.setRotation( rotation.getData().tube( 0, index, 2, index ), rotation.frameRate() );
+                    oneTrace.setRotation( rotation.getData().tube( 0, index, 2, index ), rotation.frameRate(), position.initialTime());
                     oneTrace.setRotationOffset( rotationOffset.col( index ) );
                 }
-            }
+            }          
         }
         
         return( oneTrace );

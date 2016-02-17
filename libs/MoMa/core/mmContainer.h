@@ -200,7 +200,7 @@ namespace MoMa {
         
         bool setRealTimeMode(unsigned int bufferSize,double initData);
 		bool setRealTimeMode(unsigned int bufferSize,double pFrameRate,double initData);
-		bool setData( double pFrameRate, const arma::vec &pData );
+		bool setData( double pFrameRate, const arma::vec &pData, float initTime = 0.0f );
         bool setData( arma::vec const &pTime, const arma::vec &pData );
         bool swapData( double pFrameRate,  arma::vec &pData );
         bool swapData( arma::vec  &pTime,  arma::vec &pData );
@@ -307,7 +307,7 @@ namespace MoMa {
 		bool setRealTimeMode(unsigned int bufferSize,double pFrameRate,arma::vec initData);
         bool setRealTimeMode(unsigned int bufferSize,unsigned int pDim);
 		bool setRealTimeMode(unsigned int bufferSize,double pFrameRate,unsigned int pDim);
-        bool setData( double pFrameRate, const arma::mat &pData );
+        bool setData( double pFrameRate, const arma::mat &pData, float initTime = 0.0f);
         bool setData(const arma::vec  &pTime, const arma::mat &pData );
         bool swapData( double pFrameRate,  arma::mat &pData ); // Set indexed
         bool swapData(  arma::vec &pTime,  arma::mat &pData ); // Set timed
@@ -411,7 +411,7 @@ namespace MoMa {
         bool setRealTimeMode(unsigned int bufferSize,unsigned int pDim0,unsigned int pDim1);
 		bool setRealTimeMode(unsigned int bufferSize,double pFrameRate,unsigned int pDim0,unsigned int pDim1);
 
-        bool setData( double pFrameRate, const arma::cube &pData ); // Set indexed
+        bool setData( double pFrameRate, const arma::cube &pData, float initTime = 0.0f); // Set indexed
         bool setData( const arma::vec &pTime, const arma::cube &pData ); // Set timed
         bool swapData( double pFrameRate,  arma::cube &pData ); // Set indexed
         bool swapData(  arma::vec &pTime,  arma::cube &pData ); // Set timed

@@ -46,8 +46,8 @@ namespace MoMa {
         arma::vec getFramerotation( double time ){ return( rotation.get(time) ); }; // Query node by time in the trace
         inline arma::vec  nodeRotationOffset( ) { return( rotationOffset ); } // By index
         
-        inline void setPosition(const arma::mat &data,float fr){position.setData(fr, data);};
-        inline void setRotation(const arma::mat &data,float fr){rotation.setData(fr, data);};
+        inline void setPosition(const arma::mat &data,float fr, float initT = 0.0f){position.setData(fr, data, initT);};
+        inline void setRotation(const arma::mat &data,float fr, float initT = 0.0f){rotation.setData(fr, data, initT);};
         inline void setRotationOffset(const arma::vec &data){rotationOffset = data;};
         inline void setPosition(const arma::mat &data,const arma::vec &time){position.setData(time, data);};
         inline void setRotation(const arma::mat &data,const arma::vec &time ){rotation.setData(time, data);};

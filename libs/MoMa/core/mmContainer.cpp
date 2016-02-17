@@ -123,7 +123,7 @@ namespace MoMa {
 	};
 
     
-    bool TimedVec::setData( double pFrameRate, const arma::vec &pData ) {
+    bool TimedVec::setData( double pFrameRate, const arma::vec &pData, float initTime) {
         
         if( pFrameRate <= 0.0 ) return false;
         
@@ -133,6 +133,8 @@ namespace MoMa {
 		mLastId=mData.n_elem-1;
 		mBufferSize=mData.n_elem;
 		mIsFilled=true;
+
+        mInitialTime = initTime;
         
         return true;
     }
@@ -261,7 +263,7 @@ namespace MoMa {
 		this->initRealTime(bufferSize);
 		mData.clear();
 		mTimed=false;
-		mData=initData*arma::ones(bufferSize,1);;
+		mData=initData*arma::ones(bufferSize,1);
 		mFrameRate=pFrameRate;
 		mInitialTime=0.0;
 		return true;
@@ -416,6 +418,8 @@ namespace MoMa {
 			}
 			mLastId=endInd;
 		}
+
+        return true;
 	};
 	
 	bool TimedVec::push(const arma::vec &pData){
@@ -450,6 +454,8 @@ namespace MoMa {
 			}
 			mLastId=endInd;
 		}
+
+        return true;
 	};
 // == TIMED MAT ==
     bool TimedMat::SetValidParam(){
@@ -492,7 +498,7 @@ namespace MoMa {
         else return true;
     }
     
-    bool TimedMat::setData(  double pFrameRate, const arma::mat &pData ) {
+    bool TimedMat::setData(  double pFrameRate, const arma::mat &pData, float initTime) {
         
         if( pFrameRate<=0.0 ) return false;
         
@@ -503,6 +509,8 @@ namespace MoMa {
 		mBufferSize=mData.n_cols;
 		mIsFilled=true;
         
+        mInitialTime = initTime;
+
         return true;
     }
     
@@ -620,7 +628,7 @@ namespace MoMa {
 				lData.cols(mBufferSize-pBegIndex,pEndIndex-pBegIndex+mBufferSize)=this->mData.cols( 0,pEndIndex);
 				oneMat.swapData(mFrameRate,lData);
 			}
-			oneMat.setInitialTime(this->mInitialTime+(double)usedIndex(pBegIndex)/mFrameRate);;
+			oneMat.setInitialTime(this->mInitialTime+(double)usedIndex(pBegIndex)/mFrameRate);
         }
 		return oneMat;
         
@@ -798,7 +806,7 @@ namespace MoMa {
 		
 		mLastId++;
 		if (mLastId>=mBufferSize)
-			mLastId=0;;
+			mLastId=0;
 		mData.col(mLastId)=pData;
 		if (mIsFilled)
 			mInitialTime+=1.0/mFrameRate;
@@ -910,7 +918,7 @@ namespace MoMa {
         else return( true );
     }
     
-    bool TimedCube::setData( double pFrameRate, const arma::cube &pData ) {
+    bool TimedCube::setData( double pFrameRate, const arma::cube &pData, float initTime) {
         
         if( pFrameRate <= 0.0 ) return false;
         
@@ -920,6 +928,7 @@ namespace MoMa {
 		mLastId=mData.n_slices-1;
 		mBufferSize=mData.n_slices;
 		mIsFilled=true;
+        mInitialTime = initTime;
         
         return( true );
     }
@@ -1048,7 +1057,7 @@ namespace MoMa {
 				lData.slices(mBufferSize-pBegIndex,mBufferSize+pEndIndex-pBegIndex)=this->mData.slices( 0,pEndIndex);
 				oneCube.swapData(mFrameRate,lData);
 			}
-			oneCube.setInitialTime(this->mInitialTime+(double)usedIndex(pBegIndex)/mFrameRate);;
+			oneCube.setInitialTime(this->mInitialTime+(double)usedIndex(pBegIndex)/mFrameRate);
         }
         
         return( oneCube );

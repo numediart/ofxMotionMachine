@@ -233,23 +233,26 @@ void Track::clear( void ) {
 
 void Track::cut(int beg, int end) {
 
+    position = position.sub(beg, end);
+
     if (hasRotation) {
+
+        rotation = rotation.sub(beg, end);
+    }
+
+    /*if (hasRotation) {
 
         if (rotation.isTimed()) {
 
             // TODO
-
-
             rotation.setData(rotation.getTimeVec().subvec(beg, end), rotation.getData().slices(beg, end));
-            rotation.setInitialTime((double)(beg / _frameRate));
-
         }
         else {
 
-            /*rotation.getRefData().shed_slices(end+1, rotation.nOfFrames());
-            rotation.getRefData().shed_slices(0,beg-1);*/
-            rotation.setData(rotation.frameRate(), rotation.getData().slices(beg, end));
-            rotation.setInitialTime((double)(beg / _frameRate));
+            
+            //rotation.getRefData().shed_slices(end+1, rotation.nOfFrames());
+            //rotation.getRefData().shed_slices(0,beg-1);
+            //rotation.setData(rotation.frameRate(), rotation.getData().slices(beg, end), (double)(beg / _frameRate));
         }
     }
 
@@ -265,7 +268,7 @@ void Track::cut(int beg, int end) {
 
         position.setData(position.frameRate(), position.getData().slices(beg, end));
         position.setInitialTime((double)(beg / _frameRate));
-    }
+    }*/
 }
 
 void Track::copy(Track &tr) {
