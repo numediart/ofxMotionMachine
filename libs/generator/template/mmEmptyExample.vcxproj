@@ -165,6 +165,7 @@ if errorlevel 1 exit 0 else exit %errorlevel%</Command>
 		<PostBuildEvent>
       <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"
 	  robocopy "$(ProjectDir)../../../libs/oF/export/vs/$(Platform_Actual)/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
+	  xcopy /e /i /y "$(ProjectDir)..\..\..\libs\MoMa\resources" "$(ProjectDir)bin\data\resources"
 if errorlevel 1 exit 0 else exit %errorlevel%</Command>
     </PostBuildEvent>
 	</ItemDefinitionGroup>
@@ -191,6 +192,7 @@ if errorlevel 1 exit 0 else exit %errorlevel%</Command>
 		<PostBuildEvent>
       <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"
 	  robocopy "$(ProjectDir)../../../libs/oF/export/vs/$(Platform_Actual)/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
+	  xcopy /e /i /y "$(ProjectDir)..\..\..\libs\MoMa\resources" "$(ProjectDir)bin\data\resources"
 if errorlevel 1 exit 0 else exit %errorlevel%</Command>
     </PostBuildEvent>
 	</ItemDefinitionGroup>

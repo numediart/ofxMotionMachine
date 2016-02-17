@@ -1,0 +1,4 @@
+ofxOsc
+ofxUI
+ofxXmlSettings
+ofxMoMa

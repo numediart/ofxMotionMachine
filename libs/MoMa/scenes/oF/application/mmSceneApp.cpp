@@ -537,8 +537,16 @@ void MoMa::SceneApp::keyPressed( ofKeyEventArgs &key ) {
                 // TODO In this case, it doesn't restore the previous view
                 // but get us back to the main view, i.e. new children.
 
-                if( Canvas::canvasOpened() ) Canvas::closeAllCanvas();
-                else Canvas::reopenCanvas(); // Show/hide the canvas
+                if( Canvas::canvasOpened() ) {
+
+                    //menuView->hideAll->setValue(true);
+                    Canvas::closeAllCanvas();
+                }
+                else {
+
+                    //menuView->hideAll->setValue(true);
+                    Canvas::reopenCanvas(); // Show/hide the canvas
+                }
             }
 
             if( key.key == '3' ) setActiveMode( SCENE3D ); // '3' like '3D scene'

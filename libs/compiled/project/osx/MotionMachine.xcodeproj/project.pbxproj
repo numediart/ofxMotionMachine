@@ -187,6 +187,8 @@
 		9F4FB7D51AC76502003C2C5A /* mmBvhParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F4FB7D01AC76502003C2C5A /* mmBvhParser.h */; };
 		9F6202171AA5B75200041A3E /* mmSynoList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F6202151AA5B75200041A3E /* mmSynoList.cpp */; };
 		9F6202181AA5B75200041A3E /* mmSynoList.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F6202161AA5B75200041A3E /* mmSynoList.h */; };
+		9F7CE7E61C7252A600568462 /* mmUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F7CE7E41C7252A600568462 /* mmUtils.cpp */; };
+		9F7CE7E71C7252A600568462 /* mmUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F7CE7E51C7252A600568462 /* mmUtils.h */; };
 		9FA83F171B9888D0004221CE /* mmOptionsView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FA83F151B9888D0004221CE /* mmOptionsView.cpp */; };
 		9FA83F181B9888D0004221CE /* mmOptionsView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9FA83F161B9888D0004221CE /* mmOptionsView.h */; };
 		9FEF33F11B8C559E00C40B2A /* mmMoment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FEF33EF1B8C559E00C40B2A /* mmMoment.cpp */; };
@@ -390,6 +392,8 @@
 		9F4FB7D01AC76502003C2C5A /* mmBvhParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmBvhParser.h; path = ../../../MoMa/parsers/mmBvhParser.h; sourceTree = "<group>"; };
 		9F6202151AA5B75200041A3E /* mmSynoList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmSynoList.cpp; path = ../../../MoMa/core/mmSynoList.cpp; sourceTree = "<group>"; };
 		9F6202161AA5B75200041A3E /* mmSynoList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmSynoList.h; path = ../../../MoMa/core/mmSynoList.h; sourceTree = "<group>"; };
+		9F7CE7E41C7252A600568462 /* mmUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmUtils.cpp; path = ../../../MoMa/core/mmUtils.cpp; sourceTree = "<group>"; };
+		9F7CE7E51C7252A600568462 /* mmUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmUtils.h; path = ../../../MoMa/core/mmUtils.h; sourceTree = "<group>"; };
 		9FA83F151B9888D0004221CE /* mmOptionsView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mmOptionsView.cpp; sourceTree = "<group>"; };
 		9FA83F161B9888D0004221CE /* mmOptionsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mmOptionsView.h; sourceTree = "<group>"; };
 		9FEF33EF1B8C559E00C40B2A /* mmMoment.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmMoment.cpp; path = ../../../MoMa/core/mmMoment.cpp; sourceTree = "<group>"; };
@@ -437,6 +441,8 @@
 			isa = PBXGroup;
 			children = (
 				9F00DC5B1A9C8A1F0022A309 /* MoMa.h */,
+				9F7CE7E41C7252A600568462 /* mmUtils.cpp */,
+				9F7CE7E51C7252A600568462 /* mmUtils.h */,
 				9FEF33EF1B8C559E00C40B2A /* mmMoment.cpp */,
 				9FEF33F01B8C559E00C40B2A /* mmMoment.h */,
 				E8E2E9C71AFCBE4900D690BE /* mmArmaUtils.cpp */,
@@ -897,6 +903,7 @@
 				9F2E1FA51B7664B800DB082C /* ofxUIImageSlider.h in Headers */,
 				9F4FB7D51AC76502003C2C5A /* mmBvhParser.h in Headers */,
 				9F2E1FAB1B7664B800DB082C /* ofxUILabelButton.h in Headers */,
+				9F7CE7E71C7252A600568462 /* mmUtils.h in Headers */,
 				9F2E1FE71B7664B800DB082C /* ofxXmlSettings.h in Headers */,
 				9FA83F181B9888D0004221CE /* mmOptionsView.h in Headers */,
 				9F2E1FAD1B7664B800DB082C /* ofxUILabelToggle.h in Headers */,
@@ -1055,6 +1062,7 @@
 				9F2E1F8B1B7664B800DB082C /* ofxUIBiLabelSlider.cpp in Sources */,
 				9F2E1FB41B7664B800DB082C /* ofxUIMultiImageToggle.cpp in Sources */,
 				9F497BE61AC752E700F4DE3D /* mmC3dParser.cpp in Sources */,
+				9F7CE7E61C7252A600568462 /* mmUtils.cpp in Sources */,
 				9F2E1F9A1B7664B800DB082C /* ofxUIFPS.cpp in Sources */,
 				9F2E1FAA1B7664B800DB082C /* ofxUILabelButton.cpp in Sources */,
 				9F2E1F9E1B7664B800DB082C /* ofxUIImage.cpp in Sources */,
@@ -1222,6 +1230,7 @@
 				EXECUTABLE_PREFIX = "";
 				GCC_C_LANGUAGE_STANDARD = c11;
 				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = "NDEBUG=1";
 				GCC_UNROLL_LOOPS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = NO;

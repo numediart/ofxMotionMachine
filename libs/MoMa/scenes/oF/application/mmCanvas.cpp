@@ -248,11 +248,19 @@ void Canvas::remove() {
     }
 
     //erase from canvas groups, and update indexes of all other canvas
+<<<<<<< HEAD
     if (_parent == NULL) {
 
         mainCanvas.erase(mainCanvas.begin() + _index);
         for (int i = _index; i < mainCanvas.size(); i++) {
 
+=======
+    if(_parent == NULL) {
+
+        mainCanvas.erase(mainCanvas.begin()+_index);
+        for(int i = _index;i<mainCanvas.size();i++) {
+
+>>>>>>> path_handle
             mainCanvas[i]->_index--;
         }
     }
@@ -262,22 +270,44 @@ void Canvas::remove() {
 
         for (int i = _index; i < _parent->childrenCanvas[_group].size(); i++) {
 
+<<<<<<< HEAD
             _parent->childrenCanvas[_group][i]->_index--;
         }
         if (_parent->childrenCanvas[_group].size() == 0) _parent->childrenCanvas.erase(_parent->childrenCanvas.begin() + _group);
         for (int i = _group; i < _parent->childrenCanvas.size(); i++) {
 
             for (int j = 0; j < _parent->childrenCanvas[i].size(); j++) {
+=======
+        _parent->childrenCanvas[_group].erase(_parent->childrenCanvas[_group].begin()+_index);
+
+        for(int i = _index;i<_parent->childrenCanvas[_group].size();i++) {
+
+            _parent->childrenCanvas[_group][i]->_index--;
+        }
+        if( _parent->childrenCanvas[_group].size() == 0 ) _parent->childrenCanvas.erase( _parent->childrenCanvas.begin()+_group );
+        for(int i = _group;i<_parent->childrenCanvas.size();i++) {
+
+            for(int j = 0;  j<_parent->childrenCanvas[i].size(); j++) {
+>>>>>>> path_handle
 
                 _parent->childrenCanvas[i][j]->_group--;
             }
         }
+<<<<<<< HEAD
     }
     allCanvas.erase(allCanvas.begin() + _allIndex);
     for (int i = _allIndex; i < allCanvas.size(); i++) {
 
         allCanvas[i]->_allIndex--;
     }
+=======
+    }
+    allCanvas.erase(allCanvas.begin()+_allIndex);
+    for(int i = _allIndex;i<allCanvas.size();i++) {
+
+        allCanvas[i]->_allIndex--;
+    }
+>>>>>>> path_handle
     delete this;
 }
 

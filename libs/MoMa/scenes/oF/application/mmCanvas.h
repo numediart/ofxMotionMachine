@@ -59,6 +59,8 @@ namespace MoMa {
         Canvas( SceneApp *app, std::string title, Position position = DEFAULT, Position alignment = DEFAULT, Canvas *relative = NULL, Canvas *parent = NULL, int group = 1,  bool minified = false );  
         Canvas( SceneApp *app, std::string title, Canvas *parent, int group = 1,  bool minified = false );
 
+        //~Canvas();
+
         /** setPos : set position of the canvas relative to another */
         void setPos(Position position, Position alignment, Canvas* relative = NULL);
         void remove();

@@ -13,7 +13,6 @@ PlayBar::PlayBar( SceneApp *_app, MoMa::Position position, MoMa::Position alignm
         buttons.push_back("STOP");
         //buttons.push_back("NEXT");
         playRadio = addRadio("Bar",buttons,OFX_UI_ORIENTATION_HORIZONTAL,OFX_UI_FONT_SMALL );*/
-
         
         //txt_index = addTextArea("index", "Index : 0" );
         setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
