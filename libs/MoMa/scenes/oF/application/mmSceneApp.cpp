@@ -775,6 +775,12 @@ void MoMa::SceneApp::mouseReleased( ofMouseEventArgs &mouse ) {
 
             zoomHighBound = mouse.x;
 
+            if (zoomLowBound >= zoomHighBound) {
+
+                zoomHighBound = zoomLowBound;
+                zoomLowBound = mouse.x;
+            }
+
             double newMin = ofMap( zoomLowBound, 0, ofGetWidth(), lowBound.time(), highBound.time() );
             double newMax = ofMap( zoomHighBound, 0, ofGetWidth(), lowBound.time(), highBound.time() );
 
@@ -789,6 +795,12 @@ void MoMa::SceneApp::mouseReleased( ofMouseEventArgs &mouse ) {
         if( isZoom ) {
 
             zoomHighBound = mouse.x;
+
+            if (zoomLowBound >= zoomHighBound) {
+
+                zoomHighBound = zoomLowBound;
+                zoomLowBound = mouse.x;
+            }
 
             double newMin = ofMap( zoomLowBound, 0, ofGetWidth(), lowBound.time(), highBound.time() );
             double newMax = ofMap( zoomHighBound, 0, ofGetWidth(), lowBound.time(), highBound.time() );
@@ -1620,7 +1632,7 @@ void MoMa::SceneApp::zoom( double tMin, double tMax ) {
 
 void MoMa::SceneApp::showAll( void ) {
 
-    lowBound.setTime( 0.0f, frameRate );
+    lowBound.setTime(minBound.time(), frameRate );
     highBound.setTime( maxBound.time(), frameRate );
 
     // highBound.index = maxBound.index-1;
