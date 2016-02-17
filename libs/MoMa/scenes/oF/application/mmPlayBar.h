@@ -40,6 +40,7 @@ namespace MoMa {
         ofxUIImageButton *bt_play, *bt_stop, *bt_nextFrame, *bt_prevFrame;
         bool playingState;
         ofxUITextArea *txt_index, *txt_time;
+        string libPath;
     };
 }
 
