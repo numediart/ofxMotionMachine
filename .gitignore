@@ -102,3 +102,10 @@ obj
 
 *.mp4
 *.mov
+
+#Exclude sandbox/personal files and folders
+*sandbox*
+*sandBox*
+*SandBox*
+*Sandbox*
+*SANDBOX*
