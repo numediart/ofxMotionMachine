@@ -146,6 +146,7 @@ namespace MoMa {
     static const ofColor DarkTurquoise = ofColor( 50, 120, 200 );    
     static const ofColor Green = ofColor( 0, 255, 0 );
     static const ofColor Red = ofColor( 255, 0, 0 );
+    static const ofColor Blue = ofColor(0, 0, 255);
     
     // -- SceneApp --
     

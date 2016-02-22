@@ -1201,6 +1201,8 @@ void MoMa::SceneApp::draw(const Frame &frame ) {
 
     if( frame.hasRotation() ) {
 
+        ofPushStyle();
+        ofSetColor(DarkTurquoise);
         vector<ofBoxPrimitive> box;
         box.resize( frame.nOfNodes() );
 
@@ -1208,11 +1210,14 @@ void MoMa::SceneApp::draw(const Frame &frame ) {
 
             box[b].setPosition( toVec3f( frame.node(b).position ) );
             box[b].setOrientation( toQuaternion( frame.node(b).rotation ) );
-            box[b].set( nodeSize ); // Set position, rotation and radius
-
+            box[b].set( nodeSize ); // Set position, rotation and radius            
             box[b].draw();
         }
+
+        ofPopStyle();
+
         if( frame.hasBoneList ){
+
             vector<ofBone> bones;
             bones.resize( frame.boneList->size() );
 
@@ -1233,6 +1238,8 @@ void MoMa::SceneApp::draw(const Frame &frame ) {
 
     } else {
 
+        ofPushStyle();
+        ofSetColor(DarkTurquoise);
         vector<ofSpherePrimitive> sphere;
         sphere.resize( frame.nOfNodes() );
 
@@ -1243,18 +1250,21 @@ void MoMa::SceneApp::draw(const Frame &frame ) {
 
             sphere[s].draw();
         }
+
+        ofPopStyle();
     }
+
+    ofPushStyle();
+    ofSetColor(ofGetStyle().color, 120); // We keep the color but make it transparent
 
     for( int n=0; n<frame.nOfNodes(); n++ ) {
 
         string tag  = ""; if( frame.hasNodeList && isNodeNames ) tag = frame.nodeList->name( n );
-        if( frame.hasTime() && isTimeTags && n==0 ) tag += ( "(" + ofToString( frame.time() ) + ")" );
-
-        ofPushStyle();
-        ofSetColor( ofGetStyle().color, 120 ); // We keep the color but make it transparent
-        ofDrawBitmapString( tag, toVec3f( frame.node(n).position ) + nodeSize/1.5f );
-        ofPopStyle();
+        if( frame.hasTime() && isTimeTags && n==0 ) tag += ( "(" + ofToString( frame.time() ) + ")" );        
+        ofDrawBitmapString( tag, toVec3f( frame.node(n).position ) + nodeSize/1.5f );        
     }
+
+    ofPopStyle();
 }
 
 void MoMa::SceneApp::setNumOfTracks( int nOfTracks ) {
