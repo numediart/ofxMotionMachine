@@ -74,6 +74,24 @@ void Canvas::setupCanvas() {
     _isShortCutDisabled = false;
 }
 
+void MoMa::Canvas::closeDropDownLists() {
+
+    for (vector<ofxUIWidget *>::iterator it = widgets.begin(); it != widgets.end(); ++it)
+    {
+        ofxUIWidget *w = (*it);
+        if (w != NULL)
+        {
+            if (w->getKind() == OFX_UI_WIDGET_DROPDOWNLIST) {
+
+                ofxUIDropDownList* list = (ofxUIDropDownList*)w;
+                list->close();
+                if(!isMinified())
+                list->setVisible(true);
+            }
+        }
+    }
+}
+
 void Canvas::initCanvas() {        
 
     autoSizeToFitWidgets(); //fit to widgets of the herited class
@@ -424,6 +442,9 @@ void Canvas::mainView() {
 void Canvas::windowResized(int w, int h) {
 
     //resetPositions();
+    //Close dropdownlists!
+    closeDropDownLists();
+    autoSizeToFitWidgets();
 }
 
 void Canvas::onMousePressed( ofMouseEventArgs &data ) {

@@ -102,6 +102,7 @@ namespace MoMa {
 
         /** setupCanvas : setup the canvas */
         void setupCanvas();
+        void closeDropDownLists();
 
         /** initCanvas : initialize the canvas (size, position and minified) */
         virtual void initCanvas();

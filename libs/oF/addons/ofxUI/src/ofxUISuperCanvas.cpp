@@ -342,7 +342,22 @@ void ofxUISuperCanvas::maximize()
         ofxUIWidget *w = (*it);
         if(w != NULL)
         {
-            w->setVisible(true);
+            //Check for dropdown list!
+            if (w->getParent() && w->getParent()->getKind() == OFX_UI_WIDGET_DROPDOWNLIST) {
+
+                w->setVisible(false);
+            }
+            else if (w->getKind() == OFX_UI_WIDGET_DROPDOWNLIST) {
+
+                w->setVisible(true);
+                ofxUIDropDownList* list = (ofxUIDropDownList*)w;
+                list->close();
+                
+            }
+            else {
+
+                w->setVisible(true);
+            }
         }
     }
     autoSizeToFitWidgets();

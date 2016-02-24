@@ -335,6 +335,11 @@ void ofxUIDropDownList::mouseReleased(int x, int y, int button)
     hit = false;
 }
 
+void ofxUIDropDownList::windowResized(int w, int h) {
+
+    close();
+}
+
 void ofxUIDropDownList::setAutoClose(bool _autoClose)
 {
     autoClose = _autoClose;

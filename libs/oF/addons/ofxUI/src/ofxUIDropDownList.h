@@ -51,6 +51,7 @@ public:
     void setLabelText(string labeltext);
     void setParent(ofxUIWidget *_parent);
     void mouseReleased(int x, int y, int button);
+    void windowResized(int w, int h);
     void setAutoClose(bool _autoClose);
     void open();
     void close();
