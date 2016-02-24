@@ -35,6 +35,7 @@
     <ClCompile Include="..\..\..\MoMa\parsers\mmKinParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmV3dParser.cpp" />
+    <ClCompile Include="..\..\..\MoMa\parsers\mmXmlParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmMenuView.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOptionsView.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmPlayBar.cpp" />
@@ -131,6 +132,7 @@
     <ClInclude Include="..\..\..\MoMa\parsers\mmKinParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmV3dParser.h" />
+    <ClInclude Include="..\..\..\MoMa\parsers\mmXmlParser.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmMenuView.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOptionsView.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmPlayBar.h" />

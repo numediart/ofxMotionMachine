@@ -172,6 +172,35 @@ Parser::Parser( string const &fName, Track *tr ) {
          tr->setJointOffsetRotation();
     }
 
+	else if( extension == "xml" ) {        
+
+        track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
+
+        XmlParser xmlParser( fileName,track );
+		 tr->position.SetValidParam();
+		 if ( tr->hasRotation )
+			 tr->rotation.SetValidParam();
+
+        // Check validity of lists of bones and nodes
+        if( track->nOfNodes() != previousSize && previousSize != 0 ) {
+
+            // different number of
+            // markers => different labels
+            if( track->hasNodeList == true ) {
+
+                track->hasNodeList = false;
+                delete track->nodeList;
+            }
+
+            //different number of
+            // markers => different skeleton
+            if( track->hasBoneList == true ) {
+
+                track->hasBoneList = false;
+                delete track->boneList;
+            }
+        }
+    }
     else if( extension == "bones" ) {
         track->bones( fileName );
         tr->setJointOffsetRotation();

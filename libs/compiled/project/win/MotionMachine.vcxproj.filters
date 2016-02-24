@@ -387,6 +387,9 @@
     <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocket.cpp">
       <Filter>oF\addons\ofxOsc\libs\oscpack\src\ip\win32</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\parsers\mmXmlParser.cpp">
+      <Filter>MoMa\parsers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\MoMa\core\mmBoneList.h">
@@ -730,6 +733,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\MoMa\core\mmUtils.h">
       <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\parsers\mmXmlParser.h">
+      <Filter>MoMa\parsers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

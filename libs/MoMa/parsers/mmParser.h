@@ -13,6 +13,7 @@
 #include "mmBvhParser.h"
 #include "mmCmpParser.h"
 #include "mmKinParser.h"
+#include "mmXmlParser.h"
 #include "mmUtils.h"
 
 namespace MoMa {
