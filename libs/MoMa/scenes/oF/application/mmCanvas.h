@@ -78,11 +78,16 @@ namespace MoMa {
         static void closeMainCanvas();
         static void closeAllCanvas();
         static void reopenCanvas();
+        static void disableAllCanvas();
+        static void enableAllCanvas();
+        void disableCanvas();
+        void enableCanvas();
 
 
     protected : 
 
         /** virtual methods of ofxUISuperCanvas, overriden for MoMa views management (3D view, 2D view and Canvas view) */
+        virtual void onMouseMoved(ofMouseEventArgs &mouse);
         virtual void onMousePressed(ofMouseEventArgs &mouse);
         virtual void onMouseReleased(ofMouseEventArgs &mouse);
 
@@ -135,6 +140,7 @@ namespace MoMa {
         static int _limit;
         int savedMode;
         static std::vector<MoMa::Canvas*> closedCanvas;
+        bool _isControlEnabled;
     };
 }
 
