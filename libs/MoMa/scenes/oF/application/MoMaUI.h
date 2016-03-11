@@ -3,5 +3,6 @@
 
 #include "mmSceneApp.h"
 #include "mmCanvas.h"
+#include "mmFloatingObject.h"
 
 #endif

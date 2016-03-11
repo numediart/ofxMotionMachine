@@ -390,6 +390,9 @@
     <ClCompile Include="..\..\..\MoMa\parsers\mmXmlParser.cpp">
       <Filter>MoMa\parsers</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmFloatingObject.cpp">
+      <Filter>MoMa\scenes\oF\application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\MoMa\core\mmBoneList.h">
@@ -736,6 +739,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\MoMa\parsers\mmXmlParser.h">
       <Filter>MoMa\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmFloatingObject.h">
+      <Filter>MoMa\scenes\oF\application</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
