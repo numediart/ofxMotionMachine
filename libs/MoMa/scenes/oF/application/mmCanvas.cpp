@@ -442,7 +442,7 @@ void Canvas::disableCanvas() {
         //allCanvas[i]->disableKeyEventCallbacks();  
 }
 
-void MoMa::Canvas::enableCanvas() {
+void Canvas::enableCanvas() {
 
 
         _isControlEnabled = true;
@@ -454,15 +454,16 @@ void Canvas::disableAllCanvas() {
 
     for (int i = 0; i < allCanvas.size(); i++) {
 
-        allCanvas[i]->disableCanvas();
+        if (allCanvas[i] != NULL) allCanvas[i]->disableCanvas();
     }
 }
 
 void Canvas::enableAllCanvas() {
 
+    
     for (int i = 0; i < allCanvas.size(); i++) {
 
-        allCanvas[i]->enableCanvas();
+        if (allCanvas[i] != NULL) allCanvas[i]->enableCanvas();
     }
 }
 
@@ -486,8 +487,9 @@ void Canvas::onMousePressed(ofMouseEventArgs &data) {
         if (isHit(data.x, data.y) && !_isCanvasHit) {
 
             _isCanvasHit = true;
-            savedMode = _app->activeMode; // save mode previous to click
-            _app->setActiveMode(CANVAS); // switch to Canvas
+            //savedMode = _app->activeMode; // save mode previous to click
+            //_app->setActiveMode(CANVAS); // switch to Canvas
+            _app->disableControl();
         }
 
         ofxUISuperCanvas::onMousePressed(data);
@@ -507,8 +509,9 @@ void Canvas::onMouseReleased(ofMouseEventArgs &data) {
     if (_isControlEnabled) {
         if (_isCanvasHit) {
 
-            _app->setActiveMode(savedMode); // restore previous mode
+            //_app->setActiveMode(savedMode); // restore previous mode
             _isCanvasHit = false;
+            _app->enableControl();
         }
 
         ofxUISuperCanvas::onMouseReleased(data);

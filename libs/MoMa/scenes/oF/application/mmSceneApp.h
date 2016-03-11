@@ -42,8 +42,8 @@ namespace MoMa {
         
         SCENE3D,
         SCENE2D,
-        ANNOTATE,
-        CANVAS
+        ANNOTATE//,
+        //CANVAS
     };
     
     enum PlaybackMode {
@@ -321,6 +321,16 @@ namespace MoMa {
         void removeMenuView( void ); // Remove menu view to the canvas
         void addPlayerBar( void ); // Add player view to the canvas
         void removePlayerBar( void ); // Remove player view to the canvas
+
+        //Disable events callbacks
+        void enableControl();				// enable all event callbacks
+        void disableControl();			// disable all event callbacks
+        void enableMouseControl();			// call this if object should receive mouse events (default)
+        void disableMouseControl();			// call this if object doesn't need to receive mouse events
+        void enableKeyControl();				// call this if object should receive key events (default)
+        void disableKeyControl();			// call this if object doesn't need to receive key events
+        void enableResizeControl();				// call this if object should receive resize events (default)
+        void disableResizeControl();			// call this if object doesn't need to receive resize events
     
       //protected:
         
@@ -439,6 +449,15 @@ namespace MoMa {
         
         bool isShortcut; // Shortcuts enabled?
         
+        bool isExit;
+
+        // - Callbacks control -
+
+        bool keyEnabled;
+        bool mouseEnabled;
+        bool resizeEnabled;
+        bool verbose;
+
         // - Built-in canvas -        
         
         MoMa::MenuView *menuView;

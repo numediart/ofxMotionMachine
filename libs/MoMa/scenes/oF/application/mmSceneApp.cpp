@@ -8,6 +8,11 @@ using namespace arma;
 
 void MoMa::SceneApp::setup( ofEventArgs &args ) {
 
+    verbose = false;
+    keyEnabled = true;
+    mouseEnabled = true;
+    resizeEnabled = true;
+    isExit = false;
     ofSetFrameRate( 30 );
     ofSetVerticalSync( false );
     ofBackground( 255, 255, 255 );
@@ -84,31 +89,34 @@ void MoMa::SceneApp::setup( ofEventArgs &args ) {
 
 void MoMa::SceneApp::update( ofEventArgs &args ) {
 
-    switch( activeMode ) {
+    if (mouseEnabled) {
 
-    case SCENE3D:
+        switch (activeMode) {
 
-        camera.enableMouseInput();
+        case SCENE3D:
 
-        break;
+            camera.enableMouseInput();
 
-    case SCENE2D:
+            break;
 
-        camera.disableMouseInput();
+        case SCENE2D:
 
-        break;
+            camera.disableMouseInput();
 
-    case ANNOTATE:
+            break;
 
-        camera.disableMouseInput();
+        case ANNOTATE:
 
-        break;
+            camera.disableMouseInput();
 
-    case CANVAS:
+            break;
 
-        camera.disableMouseInput();
+        /*case CANVAS: //deprecated
 
-        break;
+            camera.disableMouseInput();
+
+            break;*/
+        }
     }
 
     switch( playbackMode ) {
@@ -505,6 +513,8 @@ void MoMa::SceneApp::draw( ofEventArgs &args ) {
 
 void MoMa::SceneApp::exit( ofEventArgs &args ) {
 
+    isExit = true;
+
     for( int k=0; k<_track.size(); k++ ) {
 
         delete _track[k].track;
@@ -516,6 +526,8 @@ void MoMa::SceneApp::exit( ofEventArgs &args ) {
 }
 
 void MoMa::SceneApp::keyPressed( ofKeyEventArgs &key ) {
+
+    if (!keyEnabled) return;
 
     if( isShortcut ) { 
 
@@ -658,6 +670,8 @@ void MoMa::SceneApp::keyPressed( ofKeyEventArgs &key ) {
 
 void MoMa::SceneApp::keyReleased( ofKeyEventArgs &key ) {
 
+    if (!keyEnabled) return;
+
     if( isShortcut ) {
 
         if( !isEditing ) {
@@ -697,6 +711,8 @@ void MoMa::SceneApp::keyReleased( ofKeyEventArgs &key ) {
 }
 
 void MoMa::SceneApp::mousePressed( ofMouseEventArgs &mouse ){
+
+    if (!mouseEnabled) return;
 
     switch( activeMode ) {
 
@@ -763,6 +779,8 @@ void MoMa::SceneApp::mousePressed( ofMouseEventArgs &mouse ){
 
 void MoMa::SceneApp::mouseReleased( ofMouseEventArgs &mouse ) {
 
+    if (!mouseEnabled) return;
+
     switch( activeMode ) {
 
     case SCENE3D:
@@ -817,6 +835,8 @@ void MoMa::SceneApp::mouseReleased( ofMouseEventArgs &mouse ) {
 }
 
 void MoMa::SceneApp::mouseDragged( ofMouseEventArgs &mouse ) {
+    
+    if (!mouseEnabled) return;
 
     switch( activeMode ) {
 
@@ -854,6 +874,8 @@ void MoMa::SceneApp::mouseDragged( ofMouseEventArgs &mouse ) {
 }
 
 void MoMa::SceneApp::mouseMoved( ofMouseEventArgs &mouse ) {
+
+    if (!mouseEnabled) return;
 
     switch( activeMode ) {
 
@@ -894,6 +916,14 @@ void MoMa::SceneApp::mouseMoved( ofMouseEventArgs &mouse ) {
 
     mouseX = mouse.x; mouseY = mouse.y;
     mouseMoved( mouse.x, mouse.y );
+}
+
+void MoMa::SceneApp::windowResized(ofResizeEventArgs &resize) {
+
+    if (!resizeEnabled) return;
+
+    Canvas::resetPositions();
+    windowResized(resize.width, resize.height);
 }
 
 void MoMa::SceneApp::dragged( ofDragInfo &drag ) {
@@ -1749,8 +1779,6 @@ void MoMa::SceneApp::showTimeline( bool time ) {
     isTimeline = time;
 }
 
-
-
 void MoMa::SceneApp::enableShortcuts( void ) {
 
     isShortcut = true;
@@ -1796,8 +1824,50 @@ void MoMa::SceneApp::removePlayerBar( void ) {
     playBar = NULL;
 }
 
-void MoMa::SceneApp::windowResized(ofResizeEventArgs &resize){
+void MoMa::SceneApp::enableControl() {
 
-    Canvas::resetPositions();
-    windowResized(resize.width,resize.height);
+    if (verbose) cout << "sceneApp control enabled" << endl;
+    enableMouseControl();
+    enableKeyControl();
+    //enableResizeControl();
+}
+//--------------------------------------------------------------
+void MoMa::SceneApp::disableControl() {
+
+    if (verbose) cout << "sceneApp control disabled" << endl;
+    disableMouseControl();
+    disableKeyControl();
+    //disableResizeControl();
+}
+//--------------------------------------------------------------
+void MoMa::SceneApp::enableMouseControl() {
+
+        mouseEnabled = true;
+        camera.enableMouseInput();
+}
+//--------------------------------------------------------------
+void MoMa::SceneApp::disableMouseControl() {
+
+        mouseEnabled = false;
+        camera.disableMouseInput();
+}
+//--------------------------------------------------------------
+void MoMa::SceneApp::enableKeyControl() {
+
+        keyEnabled = true;
+}
+//--------------------------------------------------------------
+void MoMa::SceneApp::disableResizeControl() {
+    
+        resizeEnabled = false;
+}
+//--------------------------------------------------------------
+void MoMa::SceneApp::enableResizeControl() {
+        
+        resizeEnabled = true;
+}
+//--------------------------------------------------------------
+void MoMa::SceneApp::disableKeyControl() {
+        
+        keyEnabled = false;
 }
