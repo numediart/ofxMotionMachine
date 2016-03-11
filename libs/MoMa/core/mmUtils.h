@@ -18,6 +18,11 @@
 #ifndef MAX_PATH
 #define MAX_PATH 260
 #endif
+
+#ifdef _WIN32
+ typedef unsigned int uint;
+#endif
+
 /*#ifdef _WIN32
 #include <windows.h>
 #endif*/
