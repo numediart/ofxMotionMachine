@@ -173,6 +173,10 @@
 		9F2E1FE51B7664B800DB082C /* tinyxmlparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F2E1F5E1B7664B800DB082C /* tinyxmlparser.cpp */; };
 		9F2E1FE61B7664B800DB082C /* ofxXmlSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F2E1F601B7664B800DB082C /* ofxXmlSettings.cpp */; };
 		9F2E1FE71B7664B800DB082C /* ofxXmlSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F2E1F611B7664B800DB082C /* ofxXmlSettings.h */; };
+		9F317A3D1CA2912900AF3A1F /* mmFloatingObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F317A3B1CA2912900AF3A1F /* mmFloatingObject.cpp */; };
+		9F317A3E1CA2912900AF3A1F /* mmFloatingObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F317A3C1CA2912900AF3A1F /* mmFloatingObject.h */; };
+		9F317A4A1CA2921400AF3A1F /* mmXmlParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F317A481CA2921400AF3A1F /* mmXmlParser.cpp */; };
+		9F317A4B1CA2921400AF3A1F /* mmXmlParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F317A491CA2921400AF3A1F /* mmXmlParser.h */; };
 		9F497BDE1AC751FB00F4DE3D /* mmParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F497BDC1AC751FB00F4DE3D /* mmParser.cpp */; };
 		9F497BDF1AC751FB00F4DE3D /* mmParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F497BDD1AC751FB00F4DE3D /* mmParser.h */; };
 		9F497BE61AC752E700F4DE3D /* mmC3dParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F497BE01AC752E700F4DE3D /* mmC3dParser.cpp */; };
@@ -378,6 +382,10 @@
 		9F2E1F5E1B7664B800DB082C /* tinyxmlparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tinyxmlparser.cpp; sourceTree = "<group>"; };
 		9F2E1F601B7664B800DB082C /* ofxXmlSettings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxXmlSettings.cpp; sourceTree = "<group>"; };
 		9F2E1F611B7664B800DB082C /* ofxXmlSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxXmlSettings.h; sourceTree = "<group>"; };
+		9F317A3B1CA2912900AF3A1F /* mmFloatingObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mmFloatingObject.cpp; sourceTree = "<group>"; };
+		9F317A3C1CA2912900AF3A1F /* mmFloatingObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mmFloatingObject.h; sourceTree = "<group>"; };
+		9F317A481CA2921400AF3A1F /* mmXmlParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmXmlParser.cpp; path = ../../../MoMa/parsers/mmXmlParser.cpp; sourceTree = "<group>"; };
+		9F317A491CA2921400AF3A1F /* mmXmlParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmXmlParser.h; path = ../../../MoMa/parsers/mmXmlParser.h; sourceTree = "<group>"; };
 		9F497BDC1AC751FB00F4DE3D /* mmParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmParser.cpp; path = ../../../MoMa/parsers/mmParser.cpp; sourceTree = "<group>"; };
 		9F497BDD1AC751FB00F4DE3D /* mmParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmParser.h; path = ../../../MoMa/parsers/mmParser.h; sourceTree = "<group>"; };
 		9F497BE01AC752E700F4DE3D /* mmC3dParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmC3dParser.cpp; path = ../../../MoMa/parsers/mmC3dParser.cpp; sourceTree = "<group>"; };
@@ -557,6 +565,8 @@
 				9F2E1C091B76645000DB082C /* MoMaUI.h */,
 				9F2E1C051B76645000DB082C /* mmSceneApp.cpp */,
 				9F2E1C061B76645000DB082C /* mmSceneApp.h */,
+				9F317A3B1CA2912900AF3A1F /* mmFloatingObject.cpp */,
+				9F317A3C1CA2912900AF3A1F /* mmFloatingObject.h */,
 				9FA83F151B9888D0004221CE /* mmOptionsView.cpp */,
 				9FA83F161B9888D0004221CE /* mmOptionsView.h */,
 				E877132E1B8B1943003C2FEF /* mmMenuView.cpp */,
@@ -833,6 +843,8 @@
 		E868E6AA1AC5C23900B1B2A2 /* Parsers */ = {
 			isa = PBXGroup;
 			children = (
+				9F317A481CA2921400AF3A1F /* mmXmlParser.cpp */,
+				9F317A491CA2921400AF3A1F /* mmXmlParser.h */,
 				E88F98EC1B84B64300CEB63F /* mmKinParser.cpp */,
 				E88F98ED1B84B64300CEB63F /* mmKinParser.h */,
 				9F497BDC1AC751FB00F4DE3D /* mmParser.cpp */,
@@ -893,6 +905,7 @@
 				9F2E1C141B76645000DB082C /* mmOfUtils.h in Headers */,
 				9F2E1FE01B7664B800DB082C /* ofxUIWidgetWithLabel.h in Headers */,
 				9F497BDF1AC751FB00F4DE3D /* mmParser.h in Headers */,
+				9F317A3E1CA2912900AF3A1F /* mmFloatingObject.h in Headers */,
 				E8C048FE1B7BA0CD0012DA2D /* mmCmpParser.h in Headers */,
 				9F2E1F6E1B7664B800DB082C /* OscHostEndianness.h in Headers */,
 				9F2E1FB51B7664B800DB082C /* ofxUIMultiImageToggle.h in Headers */,
@@ -933,6 +946,7 @@
 				9F2E1FA11B7664B800DB082C /* ofxUIImageButton.h in Headers */,
 				9F2E1C191B76645000DB082C /* MoMaUI.h in Headers */,
 				9F00DC6A1A9C8A1F0022A309 /* MoMa.h in Headers */,
+				9F317A4B1CA2921400AF3A1F /* mmXmlParser.h in Headers */,
 				9F2E1F791B7664B800DB082C /* ofxOscArg.h in Headers */,
 				9F2E1FB71B7664B800DB082C /* ofxUINumberDialer.h in Headers */,
 				9F2E1F771B7664B800DB082C /* OscTypes.h in Headers */,
@@ -1065,6 +1079,7 @@
 				9F7CE7E61C7252A600568462 /* mmUtils.cpp in Sources */,
 				9F2E1F9A1B7664B800DB082C /* ofxUIFPS.cpp in Sources */,
 				9F2E1FAA1B7664B800DB082C /* ofxUILabelButton.cpp in Sources */,
+				9F317A3D1CA2912900AF3A1F /* mmFloatingObject.cpp in Sources */,
 				9F2E1F9E1B7664B800DB082C /* ofxUIImage.cpp in Sources */,
 				9F2E1F911B7664B800DB082C /* ofxUICircleSlider.cpp in Sources */,
 				9F2E1F801B7664B800DB082C /* ofxOscReceiver.cpp in Sources */,
@@ -1079,6 +1094,7 @@
 				9F2E1FCD1B7664B800DB082C /* ofxUITabBar.cpp in Sources */,
 				9F2E1FC71B7664B800DB082C /* ofxUISpacer.cpp in Sources */,
 				9F2E1FC31B7664B800DB082C /* ofxUISlider.cpp in Sources */,
+				9F317A4A1CA2921400AF3A1F /* mmXmlParser.cpp in Sources */,
 				9F2E1C1A1B76645000DB082C /* mmBoundingBoxUI.cpp in Sources */,
 				9F2E1F871B7664B800DB082C /* ofxUI2DPad.cpp in Sources */,
 				9F2E1FD51B7664B800DB082C /* ofxUIToggleMatrix.cpp in Sources */,
