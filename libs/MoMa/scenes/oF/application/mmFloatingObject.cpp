@@ -23,6 +23,7 @@ vector<FloatingObject*> FloatingObject::objects;
 FloatingObject::FloatingObject(SceneApp *app, std::string title, int x, int y, int width, int height, bool minified) :
     _app(app)
 {
+    verbose = false;
     savedWidth = width;
     titleHeight = DEFAULT_TITLE_HEIGHT;
     titleWidth = DEFAULT_TITLE_WIDTH;
@@ -53,8 +54,9 @@ FloatingObject::FloatingObject(SceneApp *app, std::string title, int x, int y, i
     enableAllEvents();
     objects.push_back(this);
     //order.push_back(order.size());
-    //index = objects.size();
-    verbose = false;
+    //index = objects.size();    
+    mouseDX = 0;
+    mouseDY = 0;
 }
 //--------------------------------------------------------------
 FloatingObject::~FloatingObject() {
@@ -63,7 +65,7 @@ FloatingObject::~FloatingObject() {
     disableAllEvents();
     setFocus(false);
 
-    //objects.erase(find(objects.begin(), objects.end(), this)); //Erase this object from objects static vector
+    objects.erase(find(objects.begin(), objects.end(), this)); //Erase this object from objects static vector
     //order.erase(order.begin() + index);
 }
 //--------------------------------------------------------------
@@ -177,6 +179,7 @@ void FloatingObject::enableAppEvents() {
 
     if (!appEnabled) {
 
+        if (verbose) cout << "enabling _update of " << title << endl;
         ofAddListener(ofEvents().update, this, &FloatingObject::_update);
         ofAddListener(ofEvents().draw, this, &FloatingObject::_draw, OF_EVENT_ORDER_AFTER_APP);
         appEnabled = true;
@@ -187,6 +190,7 @@ void FloatingObject::disableAppEvents() {
 
     if (appEnabled) {
 
+        if (verbose) cout << "disabling _update of " << title << endl;
         ofRemoveListener(ofEvents().update, this, &FloatingObject::_update);
         ofRemoveListener(ofEvents().draw, this, &FloatingObject::_draw, OF_EVENT_ORDER_AFTER_APP);
         appEnabled = false;
