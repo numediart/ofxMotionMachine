@@ -450,17 +450,32 @@ void FloatingObject::setFocus(bool val) {
         isFocusFree = true;
         titleColor = MoMa::Turquoise;
 
-        //Re-enable app, canvas and other objects 
-        MoMa::Canvas::enableAllCanvas();
-        _app->enableControl();
         unlockOtherObjects(this);
+        
+        //Check is another object is under the mouse-click
+        bool objectUnderMouse = false;
 
-        //recall listeners as objects are now unlocked and could catch the focus!
-        ofMouseEventArgs evt;
-        evt.x = ofGetMouseX();
-        evt.y = ofGetMouseY();
+        for (auto obj : objects) {
 
-        ofNotifyEvent(ofEvents().mousePressed, evt);
+            if (obj->isInsideObjectOrTitle(ofGetMouseX(), ofGetMouseY())) {
+
+                //obj->setFocus(true);
+                objectUnderMouse = true;
+
+                ofMouseEventArgs evt;
+                evt.x = ofGetMouseX();
+                evt.y = ofGetMouseY();
+                ofNotifyEvent(ofEvents().mousePressed, evt);  //(the object under the mouse didn't receive the event! )
+                break;
+            }
+        }
+
+        //If no object has focus, we re-enable app and canvas
+        if (!objectUnderMouse) {
+
+            MoMa::Canvas::enableAllCanvas();
+            _app->enableControl();
+        }
     }
 
     /*if (val && !hasFocus) {
