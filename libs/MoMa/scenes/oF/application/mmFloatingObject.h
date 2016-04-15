@@ -16,7 +16,8 @@
 #define TIME_DELAY_FOR_DOUBLE_CLICK 0.35
 #define DEFAULT_TITLE_HEIGHT 25
 #define DEFAULT_TITLE_WIDTH 211
-#define CLOSIG_BUTTON_WIDTH 15
+#define CLOSING_BUTTON_WIDTH 15
+#define SAVING_BUTTON_WIDTH 15
 
 
 /*namespace MoMa { 
@@ -69,6 +70,7 @@ namespace MoMa {
         inline bool isInsideObjectOrTitle(int x, int y);
         inline bool isInsideTitle(int x, int y);
         inline bool isInsideClosingButton(int x, int y);
+        inline bool isInsideSavingButton(int x, int y);
         inline bool isOnCorner(int x, int y);
         inline int getX() { return x; }
         inline int getY() { return y; }
@@ -81,6 +83,7 @@ namespace MoMa {
         void disableBackGround() { isBackGround = false; }
         void enableBackGround() { isBackGround = true; }
         void setBackGround(ofColor color) { backGroundColor = color; }
+        void saveAsImage();
         
         //virtual void setup(void) {}
         virtual void update(void) {}
@@ -98,6 +101,7 @@ namespace MoMa {
         virtual void doubleClicked(int x, int y, int button) {}
 
         virtual void windowResized(int w, int h) {}
+        virtual void windowReduced() {}
 
         virtual void dragEvent(ofDragInfo dragInfo) {}
 
@@ -111,6 +115,7 @@ namespace MoMa {
         int titleWidth;
         ofColor titleColor;
         ofColor closingButtonColor;
+        ofColor savingButtonColor;
         ofColor backGroundColor;
         int transparency();
 
@@ -125,7 +130,7 @@ namespace MoMa {
         void _mousePressed(ofMouseEventArgs &evt);
         void _mouseDragged(ofMouseEventArgs &evt);
         void _mouseReleased(ofMouseEventArgs &evt);
-        void _windowResized(ofResizeEventArgs &evt);
+        void _windowResized(ofResizeEventArgs &evt);        
         void _draw(ofEventArgs &args);
         void _update(ofEventArgs &args);
 
@@ -142,6 +147,7 @@ namespace MoMa {
         bool hasFocus;
         bool drawObject;
         bool closingButtonFocused;
+        bool savingButtonFocused;
         bool resizing;
         bool onCorner;
         bool objectResizeEnabled;
@@ -150,11 +156,15 @@ namespace MoMa {
         float lastHitTime;
         //float lastObjectHitTime;
         float deltaTime;        
-        int closingButtonWidth;        
+        int buttonSize; 
+        int savingButtonWidth;
         std::string title;
         SceneApp* _app;
 
         bool verbose;
+
+        bool saveIt;
+        //unsigned char* pixels;
     };
 }
 
