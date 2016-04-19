@@ -5,9 +5,17 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
@@ -240,7 +248,19 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -251,12 +271,25 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="MMOpenFrameworksRelease.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="MMOpenFrameworksRelease.props" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="MMOpenFrameworksDebug.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="MMOpenFrameworksDebug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>..\..\lib\vs\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\lib\vs\</OutDir>
     <IntDir>obj\$(Configuration)\</IntDir>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
@@ -267,7 +300,22 @@
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
     <TargetName>$(ProjectName)_debug</TargetName>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\..\lib\vs\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <TargetName>$(ProjectName)_debug</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>..\..\..\armadillo\include;..\..\..\armadillo\include\armadillo_bits;..\..\..\MoMa\core;..\..\..\MoMa\features;..\..\..\MoMa\features\BoundingBox;..\..\..\MoMa\features\Geometry;..\..\..\MoMa\features\Signal;..\..\..\MoMa\parsers;..\..\..\MoMa\scenes;..\..\..\MoMa\scenes\oF;..\..\..\MoMa\scenes\oF\application;..\..\..\MoMa\scenes\oF\features;..\..\..\oF\addons;..\..\..\oF\addons\ofxOsc\libs;..\..\..\oF\addons\ofxOsc\libs\oscpack;..\..\..\oF\addons\ofxOsc\libs\oscpack\src;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\posix;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\win32;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\oF\addons\ofxOsc\src;..\..\..\oF\addons\ofxXmlSettings\libs;..\..\..\oF\addons\ofxXmlSettings\src;..\..\..\oF\addons\ofxUI\src;..\..\..\oF\addons\ofxUI\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;DISABLE_SOME_FLOATING_POINT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <AdditionalIncludeDirectories>..\..\..\armadillo\include;..\..\..\armadillo\include\armadillo_bits;..\..\..\MoMa\core;..\..\..\MoMa\features;..\..\..\MoMa\features\BoundingBox;..\..\..\MoMa\features\Geometry;..\..\..\MoMa\features\Signal;..\..\..\MoMa\parsers;..\..\..\MoMa\scenes;..\..\..\MoMa\scenes\oF;..\..\..\MoMa\scenes\oF\application;..\..\..\MoMa\scenes\oF\features;..\..\..\oF\addons;..\..\..\oF\addons\ofxOsc\libs;..\..\..\oF\addons\ofxOsc\libs\oscpack;..\..\..\oF\addons\ofxOsc\libs\oscpack\src;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\posix;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\win32;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\oF\addons\ofxOsc\src;..\..\..\oF\addons\ofxXmlSettings\libs;..\..\..\oF\addons\ofxXmlSettings\src;..\..\..\oF\addons\ofxUI\src;..\..\..\oF\addons\ofxUI\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -285,6 +333,25 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BrowseInformation>false</BrowseInformation>
+    </ClCompile>
+    <Lib>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+    <ProjectReference />
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>..\..\..\armadillo\include;..\..\..\armadillo\include\armadillo_bits;..\..\..\MoMa\core;..\..\..\MoMa\features;..\..\..\MoMa\features\BoundingBox;..\..\..\MoMa\features\Geometry;..\..\..\MoMa\features\Signal;..\..\..\MoMa\parsers;..\..\..\MoMa\scenes;..\..\..\MoMa\scenes\oF;..\..\..\MoMa\scenes\oF\application;..\..\..\MoMa\scenes\oF\features;..\..\..\oF\addons;..\..\..\oF\addons\ofxOsc\libs;..\..\..\oF\addons\ofxOsc\libs\oscpack;..\..\..\oF\addons\ofxOsc\libs\oscpack\src;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\posix;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\win32;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\oF\addons\ofxOsc\src;..\..\..\oF\addons\ofxXmlSettings\libs;..\..\..\oF\addons\ofxXmlSettings\src;..\..\..\oF\addons\ofxUI\src;%(AdditionalIncludeDirectories);..\..\..\oF\addons\ofxUI\src</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DISABLE_SOME_FLOATING_POINT</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <BrowseInformation>false</BrowseInformation>
     </ClCompile>

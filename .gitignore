@@ -31,6 +31,7 @@
 # Exclude build folders
 
 libs/compiled/lib/osx/*.build/*
+libs/compiled/project/win/obj/*
 **.build/*
 */build/*
 

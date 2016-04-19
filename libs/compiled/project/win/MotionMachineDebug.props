@@ -6,7 +6,7 @@
     <_PropertySheetDisplayName>MotionMachineDebug</_PropertySheetDisplayName>
     <OutDir>$(SolutionDir)bin\</OutDir>
   </PropertyGroup>
-  <ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\..\libs\armadillo\include;..\..\..\libs\armadillo\include\armadillo_bits;..\..\..\libs\MoMa\core;..\..\..\libs\MoMa\features;..\..\..\libs\MoMa\features\BoundingBox;..\..\..\libs\MoMa\features\Geometry;..\..\..\libs\MoMa\features\Signal;..\..\..\libs\MoMa\features\Walloon;..\..\..\libs\MoMa\parsers;..\..\..\libs\MoMa\scenes;..\..\..\libs\MoMa\scenes\oF;..\..\..\libs\MoMa\scenes\oF\application;..\..\..\libs\MoMa\scenes\oF\features;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DISABLE_SOME_FLOATING_POINT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -20,6 +20,22 @@
     </Link>
     <PostBuildEvent>
       <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Platform)'=='x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\libs\armadillo\include;..\..\..\libs\armadillo\include\armadillo_bits;..\..\..\libs\MoMa\core;..\..\..\libs\MoMa\features;..\..\..\libs\MoMa\features\BoundingBox;..\..\..\libs\MoMa\features\Geometry;..\..\..\libs\MoMa\features\Signal;..\..\..\libs\MoMa\features\Walloon;..\..\..\libs\MoMa\parsers;..\..\..\libs\MoMa\scenes;..\..\..\libs\MoMa\scenes\oF;..\..\..\libs\MoMa\scenes\oF\application;..\..\..\libs\MoMa\scenes\oF\features;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DISABLE_SOME_FLOATING_POINT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\..\libs\armadillo\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>blas_win64_MT.lib;lapack_win64_MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\x64\*.dll" "$(ProjectDir)bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup />

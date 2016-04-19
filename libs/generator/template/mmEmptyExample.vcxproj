@@ -74,6 +74,8 @@
 		<TargetName>$(ProjectName)_debug</TargetName>
 		<LinkIncremental>true</LinkIncremental>
 		<GenerateManifest>true</GenerateManifest>
+		<LocalDebuggerWorkingDirectory>$(ProjectDir)/bin</LocalDebuggerWorkingDirectory>
+		<DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
 		<OutDir>bin\</OutDir>
@@ -81,16 +83,22 @@
 		<TargetName>$(ProjectName)_debug</TargetName>
 		<LinkIncremental>true</LinkIncremental>
 		<GenerateManifest>true</GenerateManifest>
+		<LocalDebuggerWorkingDirectory>$(ProjectDir)/bin</LocalDebuggerWorkingDirectory>
+		<DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
 		<OutDir>bin\</OutDir>
 		<IntDir>obj\$(Configuration)\</IntDir>
 		<LinkIncremental>false</LinkIncremental>
+	    <LocalDebuggerWorkingDirectory>$(ProjectDir)/bin</LocalDebuggerWorkingDirectory>
+		<DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
 		<OutDir>bin\</OutDir>
 		<IntDir>obj\$(Configuration)\</IntDir>
 		<LinkIncremental>false</LinkIncremental>
+		<LocalDebuggerWorkingDirectory>$(ProjectDir)/bin</LocalDebuggerWorkingDirectory>
+		<DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
 	</PropertyGroup>
 	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
 		<ClCompile>
@@ -111,7 +119,7 @@
             <IgnoreSpecificDefaultLibraries>PocoFoundationmd.lib;PocoFoundationd.lib;atlthunk.lib;LIBC.lib;LIBCMT;PocoXMLd.lib</IgnoreSpecificDefaultLibraries>
 		</Link>
 		<PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"
+      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\$(Platform_Actual)\*.dll" "$(ProjectDir)bin"
 	  robocopy "$(ProjectDir)../../../libs/oF/export/vs/$(Platform_Actual)/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
 if errorlevel 1 exit 0 else exit %errorlevel%</Command>
     </PostBuildEvent>
@@ -136,7 +144,7 @@ if errorlevel 1 exit 0 else exit %errorlevel%</Command>
             <IgnoreSpecificDefaultLibraries>PocoFoundationmd.lib;PocoFoundationd.lib;atlthunk.lib;LIBC.lib;LIBCMT;PocoXMLd.lib</IgnoreSpecificDefaultLibraries>
 		</Link>
 		<PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"
+      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\$(Platform_Actual)\*.dll" "$(ProjectDir)bin"
 	  robocopy "$(ProjectDir)../../../libs/oF/export/vs/$(Platform_Actual)/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
 if errorlevel 1 exit 0 else exit %errorlevel%</Command>
     </PostBuildEvent>
@@ -163,7 +171,7 @@ if errorlevel 1 exit 0 else exit %errorlevel%</Command>
             <IgnoreSpecificDefaultLibraries>PocoFoundationmd.lib;PocoFoundationd.lib;atlthunk.lib;LIBC.lib;LIBCMT;PocoXMLd.lib</IgnoreSpecificDefaultLibraries>
 		</Link>
 		<PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"
+      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\$(Platform_Actual)\*.dll" "$(ProjectDir)bin"
 	  robocopy "$(ProjectDir)../../../libs/oF/export/vs/$(Platform_Actual)/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
 	  xcopy /e /i /y "$(ProjectDir)..\..\..\libs\MoMa\resources" "$(ProjectDir)bin\data\resources"
 if errorlevel 1 exit 0 else exit %errorlevel%</Command>
@@ -190,7 +198,7 @@ if errorlevel 1 exit 0 else exit %errorlevel%</Command>
             <IgnoreSpecificDefaultLibraries>PocoFoundationmd.lib;PocoFoundationd.lib;atlthunk.lib;LIBC.lib;LIBCMT;PocoXMLd.lib</IgnoreSpecificDefaultLibraries>
 		</Link>
 		<PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"
+      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\$(Platform_Actual)\*.dll" "$(ProjectDir)bin"
 	  robocopy "$(ProjectDir)../../../libs/oF/export/vs/$(Platform_Actual)/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
 	  xcopy /e /i /y "$(ProjectDir)..\..\..\libs\MoMa\resources" "$(ProjectDir)bin\data\resources"
 if errorlevel 1 exit 0 else exit %errorlevel%</Command>
