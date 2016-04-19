@@ -23,11 +23,13 @@ vector<FloatingObject*> FloatingObject::objects;
 FloatingObject::FloatingObject(SceneApp *app, std::string title, int x, int y, int width, int height, bool minified) :
     _app(app)
 {
+    saveIt = false;
     verbose = false;
     savedWidth = width;
     titleHeight = DEFAULT_TITLE_HEIGHT;
     titleWidth = DEFAULT_TITLE_WIDTH;
-    closingButtonWidth = CLOSIG_BUTTON_WIDTH;
+    buttonSize = CLOSING_BUTTON_WIDTH;
+    savingButtonWidth = SAVING_BUTTON_WIDTH;
     drawObject = true;
     lastTitleHitTime = 0.0;
     lastHitTime = 0.0;
@@ -36,6 +38,7 @@ FloatingObject::FloatingObject(SceneApp *app, std::string title, int x, int y, i
     hasFocus = false;
     titleColor = MoMa::Turquoise;
     closingButtonColor = MoMa::Red;
+    savingButtonColor = ofColor(100,100,100);
     backGroundColor = ofColor(150);
     this->minified = minified;
     setPosition(x, y);
@@ -48,6 +51,7 @@ FloatingObject::FloatingObject(SceneApp *app, std::string title, int x, int y, i
     appEnabled = false;
     resizeEnabled = false;
     closingButtonFocused = false;
+    savingButtonFocused = false;
     resizing = false;
     onCorner = false;
     objectResizeEnabled = true;
@@ -207,6 +211,11 @@ void FloatingObject::_keyPressed(ofKeyEventArgs &key)
 {
     if (hasFocus) {
 
+        if (key.key == 's') {
+
+                saveAsImage();
+        }
+
         keyPressed(key.key);
     }
 }
@@ -221,13 +230,21 @@ void FloatingObject::_keyReleased(ofKeyEventArgs &key)
 //--------------------------------------------------------------
 void FloatingObject::_mouseMoved(ofMouseEventArgs & evt) {
 
-    if (isInsideClosingButton(evt.x, evt.y)) { //Over Closing Button
+    if (isInsideClosingButton(evt.x, evt.y)) { //Over Saving Button
 
         closingButtonFocused = true;
     }
     else {
 
         closingButtonFocused = false;
+    }
+    if (isInsideSavingButton(evt.x, evt.y)) { //Over Saving Button
+
+        savingButtonFocused = true;
+    }
+    else {
+
+        savingButtonFocused = false;
     }
 
     //Focus on move!
@@ -258,6 +275,12 @@ void FloatingObject::_mousePressed(ofMouseEventArgs &evt)
     if (isInsideClosingButton(evt.x, evt.y)) { //Inside Closing Button
 
         hide();
+        return;
+    }
+    if (isInsideSavingButton(evt.x, evt.y)) { //Inside Closing Button
+
+        saveAsImage();
+        setFocus(true);
         return;
     }
 
@@ -343,12 +366,15 @@ void FloatingObject::_mouseReleased(ofMouseEventArgs &evt)
 //--------------------------------------------------------------
 void FloatingObject::_windowResized(ofResizeEventArgs & evt) {
 
-    windowResized(evt.width, evt.height);
+    if (evt.width > 0)
+        windowResized(evt.width, evt.height);
+    else
+        windowReduced();
 }
 //--------------------------------------------------------------
 void FloatingObject::_draw(ofEventArgs & args) {
 
-    if (drawObject) {
+    if (drawObject) {        
 
         ofPushStyle();
         ofPushMatrix();
@@ -356,6 +382,7 @@ void FloatingObject::_draw(ofEventArgs & args) {
         // draw title
         ofFill();
         ofSetColor(titleColor, 200);
+        if (saveIt) ofSetColor(titleColor); //Draw without transparency if we are saving the object as an image
         int tmpW = max(width, titleWidth);
         if (minified) tmpW = titleWidth;
         ofDrawRectangle(0, 0, tmpW, titleHeight);
@@ -363,13 +390,28 @@ void FloatingObject::_draw(ofEventArgs & args) {
         ofDrawBitmapString(title, 1, titleHeight - 3);
 
         // draw closing button
-        ofSetColor(closingButtonColor, 200);
-        if (closingButtonFocused) ofSetColor(closingButtonColor, 255);
-        if (closingButtonWidth > titleHeight) closingButtonWidth = titleHeight;
-        ofDrawRectangle(tmpW - 5 - closingButtonWidth, (titleHeight - closingButtonWidth) / 2, closingButtonWidth, closingButtonWidth);
-        ofSetColor(255, 200);
-        ofLine(tmpW - 5 - closingButtonWidth, (titleHeight - closingButtonWidth) / 2, tmpW - 5, (titleHeight + closingButtonWidth) / 2);
-        ofLine(tmpW - 5 - closingButtonWidth, (titleHeight + closingButtonWidth) / 2, tmpW - 5, (titleHeight - closingButtonWidth) / 2);
+        if (!saveIt) { //don't draw the closing button if we are saving the object as an image
+
+            ofSetColor(closingButtonColor, 200);
+            if (closingButtonFocused) ofSetColor(closingButtonColor, 255);
+            if (buttonSize > titleHeight) buttonSize = titleHeight;
+            ofDrawRectangle(tmpW - 5 - buttonSize, (titleHeight - buttonSize) / 2, buttonSize, buttonSize);
+            ofSetColor(255, 200);
+            ofLine(tmpW - 5 - buttonSize + 2, (titleHeight - buttonSize) / 2 + 2, tmpW - 5 - 2, (titleHeight + buttonSize) / 2 - 2);
+            ofLine(tmpW - 5 - buttonSize + 2, (titleHeight + buttonSize) / 2 - 2, tmpW - 5 - 2, (titleHeight - buttonSize) / 2 + 2);
+        }
+
+        // draw saving button
+        if (!saveIt) { //don't draw the saving button if we are saving the object as an image
+
+            ofSetColor(savingButtonColor, 200);
+            if (savingButtonFocused) ofSetColor(savingButtonColor, 255);
+            if (buttonSize > titleHeight) buttonSize = titleHeight;
+            ofDrawRectangle(tmpW - 5 - buttonSize - 5 - buttonSize, (titleHeight - buttonSize) / 2, buttonSize, buttonSize);
+            ofSetColor(255, 200);
+            ofDrawRectangle(tmpW - 5 - buttonSize - 5 - buttonSize + 3, (titleHeight - buttonSize) / 2 + 7, buttonSize-6, 5);
+            ofLine(tmpW - 5 - buttonSize - 5 - buttonSize + 3, (titleHeight - buttonSize) / 2 + 3, tmpW - 5 - buttonSize - 5 - 3, (titleHeight - buttonSize) / 2 + 3);
+        }
 
         if (!minified) {
 
@@ -377,10 +419,97 @@ void FloatingObject::_draw(ofEventArgs & args) {
             // draw background
             ofFill();
             ofSetColor(backGroundColor, transparency());
+
+            if(saveIt) ofSetColor(backGroundColor); //Draw without transparency if we are saving the object as an image
+
             ofDrawRectangle(0, 0, width, height);
 
             // draw object
             draw();
+
+            /*if (saveIt) {
+                ofImage imgSaver;
+                
+                string imageFileName = "testImage";
+                unsigned char* pixels = new unsigned char[width*(height+titleHeight) * 3];
+
+                imgSaver.allocate(width, height + titleHeight, OF_IMAGE_COLOR);
+                imgSaver.setUseTexture(false);
+
+                glPixelStorei(GL_PACK_ALIGNMENT, 1);
+                glReadPixels(x, ofGetHeight()-y-height, width, height + titleHeight, GL_RGB, GL_UNSIGNED_BYTE, pixels); //Reading from bottom to top!
+
+                imgSaver.setFromPixels(pixels, width, height + titleHeight, OF_IMAGE_COLOR);
+                imgSaver.mirror(true, false);
+                imgSaver.saveImage("C:/oftest/" + imageFileName + ".png");
+
+
+
+                saveIt = false;
+                //Save image!
+                ofImage img;
+                img.grabScreen(x, y, width, height);
+                //img.grabScreen(0, 0, width, height);
+
+                string path = getAbsoluteDataPath() + "images/" + getTitle() + ".png";
+
+                correctPath(path, false); //correct accent for ofDirectory ?
+                cout << "Trying to save image to : " << path << " ..." << endl;
+                string command = "del " + path;
+                system(command.c_str());
+                img.saveImage(path);
+                imgSaver.saveImage(path);
+
+                //Useful only if special characters are in the path
+                correctPath(path, true); //correct accent for ofDirectory ?
+                cout << "Trying to save image to : " << path << " ..." << endl;
+                command = "del " + path;
+                system(command.c_str());
+                img.saveImage(path);
+                imgSaver.saveImage(path);
+
+                cout << "Image saved.\n" << endl;
+            }*/
+
+            if (saveIt) {
+
+                saveIt = false;
+
+                //Save image!
+                ofImage imgSaver;
+                //imgSaver.grabScreen(x, y, width, height);
+
+                //Works better than grabScreen!
+                //if (pixels) delete pixels;
+                unsigned char *pixels = new unsigned char[width*(height + titleHeight) * 3];
+                imgSaver.allocate(width, height + titleHeight, OF_IMAGE_COLOR);
+                imgSaver.setUseTexture(false);
+                glPixelStorei(GL_PACK_ALIGNMENT, 1);
+                glReadPixels(x, ofGetHeight() - y - height, width, height + titleHeight, GL_RGB, GL_UNSIGNED_BYTE, pixels); //Reading from bottom to top!
+                imgSaver.setFromPixels(pixels, width, height + titleHeight, OF_IMAGE_COLOR);
+                imgSaver.mirror(true, false);
+
+                string path = getAbsoluteDataPath() + "images/" + getTitle() + ".png";
+
+                correctPath(path, false); //correct accent for ofDirectory ?
+                cout << "Trying to save image to : " << path << " ..." << endl;
+                //string command = "del " + path;
+                //system(command.c_str());
+                imgSaver.saveImage(path);
+
+                //Useful only if special characters are in the path
+                correctPath(path, true); //correct accent for ofDirectory ?
+                cout << "Trying to save image to : " << path << " ..." << endl;
+                //command = "del " + path;
+                //system(command.c_str());
+                imgSaver.saveImage(path);
+
+                cout << "test\n";
+
+                cout << "Image saved.\n" << endl;  
+
+                delete pixels;
+            }
         }
 
         //draw resizing indicator
@@ -450,53 +579,33 @@ void FloatingObject::setFocus(bool val) {
         isFocusFree = true;
         titleColor = MoMa::Turquoise;
 
-        //Re-enable app, canvas and other objects 
-        MoMa::Canvas::enableAllCanvas();
-        _app->enableControl();
         unlockOtherObjects(this);
 
-        //recall listeners as objects are now unlocked and could catch the focus!
-        ofMouseEventArgs evt;
-        evt.x = ofGetMouseX();
-        evt.y = ofGetMouseY();
+        //Check is another object is under the mouse-click
+        bool objectUnderMouse = false;
 
-        ofNotifyEvent(ofEvents().mousePressed, evt);
-    }
+        for (auto obj : objects) {
 
-    /*if (val && !hasFocus) {
+            if (obj->isInsideObjectOrTitle(ofGetMouseX(), ofGetMouseY())) {
 
-        hasFocus = true;
-        titleColor = MoMa::DarkTurquoise;
+                //obj->setFocus(true);
+                objectUnderMouse = true;
 
-
-
-        if (isFocusFree) { //First object focused! We disable app, canvas and other objects
-            //savedMode = _app->activeMode; // save mode previous to click
-            //_app->setActiveMode(-1); //_app->setActiveMode(-1); disable all controls (idem as MoMa::CANVAS actually!)
-                                               //_app->isShortcut = false; //we do not want to block completely shortcuts of ofApp. setActiveMode to -1 is enough
-            MoMa::Canvas::disableAllCanvas(); // disable canvas
-            _app->disableControl();
-
-            disableAppEvents();
-            enableAppEvents(); // put the listener at the end of the stack for control!
-
-            lockOtherObjects(this);
+                ofMouseEventArgs evt;
+                evt.x = ofGetMouseX();
+                evt.y = ofGetMouseY();
+                ofNotifyEvent(ofEvents().mousePressed, evt);  //(the object under the mouse didn't receive the event! )
+                break;
+            }
         }
-        isFocusFree = false;
-    }
-    else if (!val && hasFocus) {
 
-        hasFocus = false;
-        titleColor = MoMa::Turquoise;
-        isFocusFree = true;
+        //If no object has focus, we re-enable app and canvas
+        if (!objectUnderMouse) {
 
-        //_app->setActiveMode(savedMode);
-        //_app->isShortcut = true;
-        MoMa::Canvas::enableAllCanvas();
-        _app->enableControl();
-        unlockOtherObjects(this);
+            MoMa::Canvas::enableAllCanvas();
+            _app->enableControl();
+        }
     }
-        */
 }
 //--------------------------------------------------------------
 void FloatingObject::hide() {
@@ -536,8 +645,14 @@ bool FloatingObject::isInsideTitle(int mouseX, int mouseY) {
 //--------------------------------------------------------------
 bool FloatingObject::isInsideClosingButton(int mouseX, int mouseY) {
 
-    if (!isMinified()) return ofRectangle(x + max(width, titleWidth) - 5 - closingButtonWidth, y - (titleHeight + closingButtonWidth) / 2, closingButtonWidth, closingButtonWidth).inside(mouseX, mouseY);
-    else return ofRectangle(x + titleWidth - 5 - closingButtonWidth, y - (titleHeight + closingButtonWidth) / 2, closingButtonWidth, closingButtonWidth).inside(mouseX, mouseY);
+    if (!isMinified()) return ofRectangle(x + max(width, titleWidth) - 5 - buttonSize, y - (titleHeight + buttonSize) / 2, buttonSize, buttonSize).inside(mouseX, mouseY);
+    else return ofRectangle(x + titleWidth - 5 - buttonSize, y - (titleHeight + buttonSize) / 2, buttonSize, buttonSize).inside(mouseX, mouseY);
+}
+//--------------------------------------------------------------
+bool FloatingObject::isInsideSavingButton(int mouseX, int mouseY) {
+
+    if (!isMinified()) return ofRectangle(x + max(width, titleWidth) - 5 - buttonSize - 5 - savingButtonWidth, y - (titleHeight + buttonSize) / 2, savingButtonWidth, buttonSize).inside(mouseX, mouseY);
+    else return ofRectangle(x + titleWidth - 5 - buttonSize - 5 - savingButtonWidth, y - (titleHeight + buttonSize) / 2, savingButtonWidth, buttonSize).inside(mouseX, mouseY);
 }
 //--------------------------------------------------------------
 bool FloatingObject::isOnCorner(int mouseX, int mouseY) {
@@ -569,9 +684,14 @@ void FloatingObject::unlockOtherObjects(FloatingObject *thisObject) {
         }
     }
 }
-
+//--------------------------------------------------------------
 int FloatingObject::transparency() {
 
     if (hasFocus) return 200;
     else return 50;
+}
+//--------------------------------------------------------------
+void FloatingObject::saveAsImage() {
+
+    saveIt = true;
 }
