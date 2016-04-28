@@ -1228,7 +1228,6 @@ void MoMa::SceneApp::draw(const Frame &frame ) {
 		}
 	}
 
-	const int DefaultNodeSize = 40;
 	if (frame.hasRotation()) {
 		if (frame.hasBoneList == false) {
 			ofPushStyle();
@@ -1239,7 +1238,7 @@ void MoMa::SceneApp::draw(const Frame &frame ) {
 
 				box.setPosition(toVec3f(frame.node(b).position));
 				box.setOrientation(toQuaternion(frame.node(b).rotation));
-				box.set(DefaultNodeSize); // Set position, rotation and radius            
+				box.set(nodeSize); // Set position, rotation and radius            
 				box.draw();
 			}
 
