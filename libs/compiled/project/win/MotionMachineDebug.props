@@ -1,41 +1,52 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ImportGroup Label="PropertySheets" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="MoMaLibDebug.props" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_PropertySheetDisplayName>MotionMachineDebug</_PropertySheetDisplayName>
-    <OutDir>$(SolutionDir)bin\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\libs\armadillo\include;..\..\..\libs\armadillo\include\armadillo_bits;..\..\..\libs\MoMa\core;..\..\..\libs\MoMa\features;..\..\..\libs\MoMa\features\BoundingBox;..\..\..\libs\MoMa\features\Geometry;..\..\..\libs\MoMa\features\Signal;..\..\..\libs\MoMa\features\Walloon;..\..\..\libs\MoMa\parsers;..\..\..\libs\MoMa\scenes;..\..\..\libs\MoMa\scenes\oF;..\..\..\libs\MoMa\scenes\oF\application;..\..\..\libs\MoMa\scenes\oF\features;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MM_ROOT)\libs\armadillo\include;$(MM_ROOT)\libs\armadillo\include\armadillo_bits;$(MM_ROOT)\libs\MoMa\core;$(MM_ROOT)\libs\MoMa\features;$(MM_ROOT)\libs\MoMa\features\BoundingBox;$(MM_ROOT)\libs\MoMa\features\Geometry;$(MM_ROOT)\libs\MoMa\features\Signal;$(MM_ROOT)\libs\MoMa\features\Walloon;$(MM_ROOT)\libs\MoMa\parsers;$(MM_ROOT)\libs\MoMa\scenes;$(MM_ROOT)\libs\MoMa\scenes\oF;$(MM_ROOT)\libs\MoMa\scenes\oF\application;$(MM_ROOT)\libs\MoMa\scenes\oF\features;..\..\..\..\addons;$(OF_ROOT)\addons;$(OF_ROOT)\addons\ofxOsc\libs;$(OF_ROOT)\addons\ofxOsc\libs\oscpack;$(OF_ROOT)\addons\ofxOsc\libs\oscpack\src;$(OF_ROOT)\addons\ofxOsc\libs\oscpack\src\ip;$(OF_ROOT)\addons\ofxOsc\libs\oscpack\src\ip\posix;$(OF_ROOT)\addons\ofxOsc\libs\oscpack\src\ip\win32;$(OF_ROOT)\addons\ofxOsc\libs\oscpack\src\osc;$(OF_ROOT)\addons\ofxOsc\src;$(OF_ROOT)\addons\ofxXmlSettings\libs;$(OF_ROOT)\addons\ofxXmlSettings\src;$(OF_ROOT)\addons\ofxUI\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DISABLE_SOME_FLOATING_POINT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <IgnoreSpecificDefaultLibraries>atlthunk.lib;msvcrt;libcmt;LIBC;LIBCMTD;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>..\..\..\libs\armadillo\lib\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>blas_win32_MT.lib;lapack_win32_MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>
-      </IgnoreSpecificDefaultLibraries>
+    <Link Condition="'$(ConfigurationType)'=='Application'">
+      <AdditionalLibraryDirectories>$(MM_ROOT)\libs\armadillo\lib\win32;$(MM_ROOT)\libs\compiled\lib\$(Platform)\;$(OF_ROOT)\libs\glut\lib\vs\Win32;$(OF_ROOT)\libs\glfw\lib\vs\Win32;$(OF_ROOT)\libs\rtAudio\lib\vs\Win32;$(OF_ROOT)\libs\FreeImage\lib\vs\Win32;$(OF_ROOT)\libs\freetype\lib\vs\Win32;$(OF_ROOT)\libs\quicktime\lib\vs\Win32;$(OF_ROOT)\libs\fmodex\lib\vs\Win32;$(OF_ROOT)\libs\videoInput\lib\vs\Win32;$(OF_ROOT)\libs\cairo\lib\vs\Win32;$(OF_ROOT)\libs\glew\lib\vs\Win32;$(OF_ROOT)\libs\glu\lib\vs\Win32;$(OF_ROOT)\libs\openssl\lib\vs\Win32;$(OF_ROOT)\libs\Poco\lib\vs\Win32;$(OF_ROOT)\libs\tess2\lib\vs\Win32;$(OF_ROOT)\libs\boost\lib\vs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>cairo-static.lib;pixman-1.lib;libpng.lib;msimg32.lib;OpenGL32.lib;GLu32.lib;kernel32.lib;setupapi.lib;Vfw32.lib;comctl32.lib;glut32.lib;rtAudioD.lib;videoInputD.lib;libfreetype.lib;FreeImage.lib;qtmlClient.lib;dsound.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;fmodex_vc.lib;glu32.lib;ssleay32MD.lib;libeay32MD.lib;crypt32.lib;PocoFoundationmdd.lib;PocoNetmdd.lib;PocoUtilmdd.lib;PocoXMLmdd.lib;Ws2_32.lib;tess2.lib;glfw3.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"</Command>
+      <Command>xcopy /e /i /y "$(ProjectDir)$(MM_ROOT)\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"</Command>
     </PostBuildEvent>
+    <Lib>
+      <AdditionalLibraryDirectories>$(MM_ROOT)\libs\armadillo\lib\win32;$(MM_ROOT)\libs\compiled\lib\$(Platform)\;$(OF_ROOT)\libs\glut\lib\vs\Win32;$(OF_ROOT)\libs\glfw\lib\vs\Win32;$(OF_ROOT)\libs\rtAudio\lib\vs\Win32;$(OF_ROOT)\libs\FreeImage\lib\vs\Win32;$(OF_ROOT)\libs\freetype\lib\vs\Win32;$(OF_ROOT)\libs\quicktime\lib\vs\Win32;$(OF_ROOT)\libs\fmodex\lib\vs\Win32;$(OF_ROOT)\libs\videoInput\lib\vs\Win32;$(OF_ROOT)\libs\cairo\lib\vs\Win32;$(OF_ROOT)\libs\glew\lib\vs\Win32;$(OF_ROOT)\libs\glu\lib\vs\Win32;$(OF_ROOT)\libs\openssl\lib\vs\Win32;$(OF_ROOT)\libs\Poco\lib\vs\Win32;$(OF_ROOT)\libs\tess2\lib\vs\Win32;$(OF_ROOT)\libs\boost\lib\vs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>cairo-static.lib;pixman-1.lib;libpng.lib;msimg32.lib;OpenGL32.lib;GLu32.lib;kernel32.lib;setupapi.lib;Vfw32.lib;comctl32.lib;glut32.lib;rtAudioD.lib;videoInputD.lib;libfreetype.lib;FreeImage.lib;qtmlClient.lib;dsound.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;fmodex_vc.lib;glu32.lib;ssleay32MD.lib;libeay32MD.lib;crypt32.lib;PocoFoundationmdd.lib;PocoNetmdd.lib;PocoUtilmdd.lib;PocoXMLmdd.lib;Ws2_32.lib;tess2.lib;glfw3.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Platform)'=='x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\..\libs\armadillo\include;..\..\..\libs\armadillo\include\armadillo_bits;..\..\..\libs\MoMa\core;..\..\..\libs\MoMa\features;..\..\..\libs\MoMa\features\BoundingBox;..\..\..\libs\MoMa\features\Geometry;..\..\..\libs\MoMa\features\Signal;..\..\..\libs\MoMa\features\Walloon;..\..\..\libs\MoMa\parsers;..\..\..\libs\MoMa\scenes;..\..\..\libs\MoMa\scenes\oF;..\..\..\libs\MoMa\scenes\oF\application;..\..\..\libs\MoMa\scenes\oF\features;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MM_ROOT)\libs\armadillo\include;$(MM_ROOT)\libs\armadillo\include\armadillo_bits;$(MM_ROOT)\libs\MoMa\core;$(MM_ROOT)\libs\MoMa\features;$(MM_ROOT)\libs\MoMa\features\BoundingBox;$(MM_ROOT)\libs\MoMa\features\Geometry;$(MM_ROOT)\libs\MoMa\features\Signal;$(MM_ROOT)\libs\MoMa\features\Walloon;$(MM_ROOT)\libs\MoMa\parsers;$(MM_ROOT)\libs\MoMa\scenes;$(MM_ROOT)\libs\MoMa\scenes\oF;$(MM_ROOT)\libs\MoMa\scenes\oF\application;$(MM_ROOT)\libs\MoMa\scenes\oF\features;$(OF_ROOT)\addons;$(OF_ROOT)\addons\ofxOsc\libs;$(OF_ROOT)\addons\ofxOsc\libs\oscpack;$(OF_ROOT)\addons\ofxOsc\libs\oscpack\src;$(OF_ROOT)\addons\ofxOsc\libs\oscpack\src\ip;$(OF_ROOT)\addons\ofxOsc\libs\oscpack\src\ip\posix;$(OF_ROOT)\addons\ofxOsc\libs\oscpack\src\ip\win32;$(OF_ROOT)\addons\ofxOsc\libs\oscpack\src\osc;$(OF_ROOT)\addons\ofxOsc\src;$(OF_ROOT)\addons\ofxXmlSettings\libs;$(OF_ROOT)\addons\ofxXmlSettings\src;$(OF_ROOT)\addons\ofxUI\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;DISABLE_SOME_FLOATING_POINT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <IgnoreSpecificDefaultLibraries>atlthunk.lib;msvcrt;libcmt;LIBC;LIBCMTD;MSVCRTD.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>..\..\..\libs\armadillo\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>blas_win64_MT.lib;lapack_win64_MT.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>
-      </IgnoreSpecificDefaultLibraries>
+    <Link Condition="'$(ConfigurationType)'=='Application'">
+      <AdditionalLibraryDirectories>$(MM_ROOT)\libs\armadillo\lib\x64;$(MM_ROOT)\libs\compiled\lib\$(Platform)\;$(OF_ROOT)\libs\glut\lib\vs\x64;$(OF_ROOT)\libs\glfw\lib\vs\x64;$(OF_ROOT)\libs\rtAudio\lib\vs\x64;$(OF_ROOT)\libs\FreeImage\lib\vs\x64;$(OF_ROOT)\libs\freetype\lib\vs\x64;$(OF_ROOT)\libs\fmodex\lib\vs\x64;$(OF_ROOT)\libs\videoInput\lib\vs\x64;$(OF_ROOT)\libs\cairo\lib\vs\x64;$(OF_ROOT)\libs\glew\lib\vs\x64;$(OF_ROOT)\libs\glu\lib\vs\x64;$(OF_ROOT)\libs\openssl\lib\vs\x64;$(OF_ROOT)\libs\Poco\lib\vs\x64;$(OF_ROOT)\libs\tess2\lib\vs\x64;$(OF_ROOT)\libs\boost\lib\vs\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glut32.lib;cairo-static.lib;pixman-1.lib;libpng.lib;msimg32.lib;OpenGL32.lib;kernel32.lib;setupapi.lib;Vfw32.lib;comctl32.lib;rtAudioD.lib;videoInputD.lib;libfreetype.lib;FreeImage.lib;dsound.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;fmodex64_vc.lib;ssleay32MD.lib;libeay32MD.lib;crypt32.lib;PocoFoundationmdd.lib;PocoNetmdd.lib;PocoUtilmdd.lib;PocoXMLmdd.lib;Ws2_32.lib;tess2.lib;glfw3.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(MM_ROOT)\libs\armadillo\lib\x64;$(MM_ROOT)\libs\compiled\lib\$(Platform)\;$(OF_ROOT)\libs\glut\lib\vs\x64;$(OF_ROOT)\libs\glfw\lib\vs\x64;$(OF_ROOT)\libs\rtAudio\lib\vs\x64;$(OF_ROOT)\libs\FreeImage\lib\vs\x64;$(OF_ROOT)\libs\freetype\lib\vs\x64;$(OF_ROOT)\libs\fmodex\lib\vs\x64;$(OF_ROOT)\libs\videoInput\lib\vs\x64;$(OF_ROOT)\libs\cairo\lib\vs\x64;$(OF_ROOT)\libs\glew\lib\vs\x64;$(OF_ROOT)\libs\glu\lib\vs\x64;$(OF_ROOT)\libs\openssl\lib\vs\x64;$(OF_ROOT)\libs\Poco\lib\vs\x64;$(OF_ROOT)\libs\tess2\lib\vs\x64;$(OF_ROOT)\libs\boost\lib\vs\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glut32.lib;cairo-static.lib;pixman-1.lib;libpng.lib;msimg32.lib;OpenGL32.lib;kernel32.lib;setupapi.lib;Vfw32.lib;comctl32.lib;rtAudioD.lib;videoInputD.lib;libfreetype.lib;FreeImage.lib;dsound.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;fmodex64_vc.lib;ssleay32MD.lib;libeay32MD.lib;crypt32.lib;PocoFoundationmdd.lib;PocoNetmdd.lib;PocoUtilmdd.lib;PocoXMLmdd.lib;Ws2_32.lib;tess2.lib;glfw3.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Lib>
     <PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\x64\*.dll" "$(ProjectDir)bin"</Command>
+      <Command>xcopy /e /i /y "$(ProjectDir)$(MM_ROOT)\libs\armadillo\lib\x64\*.dll" "$(ProjectDir)bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup />

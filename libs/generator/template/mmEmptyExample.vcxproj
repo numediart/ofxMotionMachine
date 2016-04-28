@@ -49,28 +49,27 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\libs\compiled\project\win\AppOpenFrameworksRelease.props" />
     <Import Project="..\..\..\libs\compiled\project\win\MotionMachineRelease.props" />
+	<Import Project="..\..\..\libs\oF\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\libs\compiled\project\win\MotionMachineDebug.props" />
-    <Import Project="..\..\..\libs\compiled\project\win\AppOpenFrameworksDebug.props" />
+    <Import Project="..\..\..\libs\oF\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\libs\compiled\project\win\AppOpenFrameworksRelease.props" />
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" /> 
     <Import Project="..\..\..\libs\compiled\project\win\MotionMachineRelease.props" />
+	<Import Project="..\..\..\libs\oF\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\libs\compiled\project\win\MotionMachineDebug.props" />
-    <Import Project="..\..\..\libs\compiled\project\win\AppOpenFrameworksDebug.props" />
+    <Import Project="..\..\..\libs\oF\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-		<OutDir>bin\</OutDir>
-		<IntDir>obj\$(Configuration)\</IntDir>
+		<IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
 		<TargetName>$(ProjectName)_debug</TargetName>
 		<LinkIncremental>true</LinkIncremental>
 		<GenerateManifest>true</GenerateManifest>
@@ -78,8 +77,7 @@
 		<DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-		<OutDir>bin\</OutDir>
-		<IntDir>obj\$(Configuration)\</IntDir>
+		<IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
 		<TargetName>$(ProjectName)_debug</TargetName>
 		<LinkIncremental>true</LinkIncremental>
 		<GenerateManifest>true</GenerateManifest>
@@ -87,15 +85,13 @@
 		<DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-		<OutDir>bin\</OutDir>
-		<IntDir>obj\$(Configuration)\</IntDir>
+		<IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
 		<LinkIncremental>false</LinkIncremental>
 	    <LocalDebuggerWorkingDirectory>$(ProjectDir)/bin</LocalDebuggerWorkingDirectory>
 		<DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-		<OutDir>bin\</OutDir>
-		<IntDir>obj\$(Configuration)\</IntDir>
+		<IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
 		<LinkIncremental>false</LinkIncremental>
 		<LocalDebuggerWorkingDirectory>$(ProjectDir)/bin</LocalDebuggerWorkingDirectory>
 		<DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
