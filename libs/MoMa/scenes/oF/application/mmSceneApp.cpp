@@ -1230,44 +1230,47 @@ void MoMa::SceneApp::draw(const Frame &frame ) {
 
 	if (frame.hasRotation()) {
 		if (frame.hasBoneList == false) {
-			ofPushStyle();
-			ofSetColor(DarkTurquoise);
 			ofBoxPrimitive box;
 		
 			for (int b = 0; b < frame.nOfNodes(); b++) {
+				ofPushStyle();
+				ofSetColor(DarkTurquoise, ofGetStyle().color.a);
 
 				box.setPosition(toVec3f(frame.node(b).position));
 				box.setOrientation(toQuaternion(frame.node(b).rotation));
 				box.set(nodeSize); // Set position, rotation and radius            
 				box.draw();
+
+				ofPopStyle();
 			}
 
-			ofPopStyle();
 		}
+
 		if (frame.hasBoneList) {
 			ofBone bone;
 
 			for (int b = 0; b < frame.boneList->size(); b++) {
-				if (frame.node(frame.boneList->at(b).second).rotationOffset.is_finite()) {
-					float s = arma::norm(frame.node(frame.boneList->at(b).first).position - frame.node(frame.boneList->at(b).second).position);
-					bone.setScale(s, 1, 1);
-					bone.setPosition(toVec3f(frame.node(frame.boneList->at(b).first).position));
+				
+				if (frame.getRotationOffset().is_finite()) {
+					{
+						float s = arma::norm(frame.getPosition().col(frame.boneList->at(b).first) - frame.getPosition().col(frame.boneList->at(b).second));
+						bone.setPosition(toVec3f(frame.getPosition().col(frame.boneList->at(b).first)));
 
-					if (frame.boneList->hasOrigNodeRot_as_boneRot)
-						bone.setOrientation(toQuaternion(frame.node(frame.boneList->at(b).second).rotationOffset) *toQuaternion(frame.node(frame.boneList->at(b).first).rotation));//
-					else
-						bone.setOrientation(toQuaternion(frame.node(frame.boneList->at(b).second).rotationOffset) *toQuaternion(frame.node(frame.boneList->at(b).second).rotation));//
-					bone.draw();
+						if (frame.boneList->hasOrigNodeRot_as_boneRot)
+							bone.setOrientation(toQuaternion(frame.getRotationOffset().col(frame.boneList->at(b).second)) *toQuaternion(frame.getRotation().col(frame.boneList->at(b).first)));//
+						else
+							bone.setOrientation(toQuaternion(frame.getRotationOffset().col(frame.boneList->at(b).second)) *toQuaternion(frame.getRotation().col(frame.boneList->at(b).second)));//
+						bone.setScale(s, 1, 1);
+						bone.draw();
+					}
 				}
-
 			}
-
 		}
 	}
 	else {
 
 		ofPushStyle();
-		ofSetColor(DarkTurquoise);
+		ofSetColor(DarkTurquoise, ofGetStyle().color.a);
 		ofSpherePrimitive sphere;
 		
 		sphere.setRadius(DefaultNodeSize / 2); // Set position and radius
