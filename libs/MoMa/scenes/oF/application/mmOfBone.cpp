@@ -22,7 +22,7 @@ namespace MoMa{
         for (int j=0;j<4;j++)
             for (int i=0;i<4;i++){
                 mesh->addVertex(ofVec3f(vdata[i][0],vdata[i][1],vdata[i][2]));
-                mesh->addColor(ofFloatColor(vcolor[j][0],vcolor[j][1],vcolor[j][2]));
+                //mesh->addColor(ofFloatColor(vcolor[j][0],vcolor[j][1],vcolor[j][2]));
             }
         for (int i = 0; i<4; ++i){
             mesh->addIndex((i*4)+indices[i][0]);

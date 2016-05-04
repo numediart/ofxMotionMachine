@@ -9,6 +9,10 @@
 
 #include "mmUtils.h"
 
+#ifndef _WIN32
+#include "unistd.h"
+#endif
+
 using namespace std;
 
 //string MoMa::getExeFilePath( void ) {
@@ -70,7 +74,7 @@ string MoMa::getAbsoluteAppPath( void ) {
     char* cwd;
     char buff[PATH_MAX + 1];
 
-    cwd = getcwd( buff, PATH_MAX + 1 );
+    cwd = getcwd( (char*)buff, (size_t)(PATH_MAX + 1) );
     
     if( cwd != NULL ) {
         
