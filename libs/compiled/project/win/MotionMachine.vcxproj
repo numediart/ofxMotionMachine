@@ -312,7 +312,7 @@
     <ClCompile>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <AdditionalIncludeDirectories>..\..\..\armadillo\include;..\..\..\armadillo\include\armadillo_bits;..\..\..\MoMa\core;..\..\..\MoMa\features;..\..\..\MoMa\features\BoundingBox;..\..\..\MoMa\features\Geometry;..\..\..\MoMa\features\Signal;..\..\..\MoMa\parsers;..\..\..\MoMa\scenes;..\..\..\MoMa\scenes\oF;..\..\..\MoMa\scenes\oF\application;..\..\..\MoMa\scenes\oF\features;..\..\..\oF\addons;..\..\..\oF\addons\ofxOsc\libs;..\..\..\oF\addons\ofxOsc\libs\oscpack;..\..\..\oF\addons\ofxOsc\libs\oscpack\src;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\posix;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\win32;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\oF\addons\ofxOsc\src;..\..\..\oF\addons\ofxXmlSettings\libs;..\..\..\oF\addons\ofxXmlSettings\src;..\..\..\oF\addons\ofxUI\src;..\..\..\oF\addons\ofxUI\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;DISABLE_SOME_FLOATING_POINT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARMA_NO_DEBUG;WIN32;NDEBUG;_CONSOLE;DISABLE_SOME_FLOATING_POINT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
@@ -320,7 +320,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;DISABLE_SOME_FLOATING_POINT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARMA_NO_DEBUG;WIN32;NDEBUG;_CONSOLE;DISABLE_SOME_FLOATING_POINT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <AdditionalIncludeDirectories>..\..\..\MoMa\core;..\..\..\MoMa\features;..\..\..\MoMa\features\BoundingBox;..\..\..\MoMa\features\Geometry;..\..\..\MoMa\features\Signal;..\..\..\MoMa\parsers;..\..\..\MoMa\scenes;..\..\..\MoMa\scenes\oF;..\..\..\MoMa\scenes\oF\application;..\..\..\MoMa\scenes\oF\features;..\..\..\oF\addons;..\..\..\oF\addons\ofxOsc\libs;..\..\..\oF\addons\ofxOsc\libs\oscpack;..\..\..\oF\addons\ofxOsc\libs\oscpack\src;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\posix;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\win32;..\..\..\oF\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\oF\addons\ofxOsc\src;..\..\..\oF\addons\ofxXmlSettings\libs;..\..\..\oF\addons\ofxXmlSettings\src;..\..\..\oF\addons\ofxUI\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
