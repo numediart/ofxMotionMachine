@@ -398,69 +398,78 @@ bool Track::setJointOffsetRotation() {
         if( debug ) std::cout<<"sag"<<std::endl;
         if( debug ) std::cout<<sagAxis  <<std::endl;
         
-        for (int i=0;i<this->boneList->size();i++){
-            int orig=this->boneList->at(i).first;
-            int dest=this->boneList->at(i).second;
-            if( debug ){
-                std::cout<<orig<<" "<<dest<<std::endl;
-            }
-            std::vector<float> val;
-            arma::mat offsetMatrix;
-            offsetMatrix.eye(3,3);
-            arma::colvec tempVecX,tempVecY,tempVecZ;
-            tempVecX<<frame0.node(dest).position[0]-frame0.node(orig).position[0]<<frame0.node(dest).position[1]-frame0.node(orig).position[1]<<frame0.node(dest).position[2]-frame0.node(orig).position[2];
-            tempVecX=arma::normalise(tempVecX);
-            if( debug ){
-                std::cout<<tempVecX<<std::endl;
-            }
-            if (std::abs(arma::dot(tempVecX,sagAxis))>std::abs(arma::dot(tempVecX,longAxis))&&std::abs(arma::dot(tempVecX,sagAxis))>std::abs(arma::dot(tempVecX,frontalAxis))){
-                
-                tempVecZ=arma::cross(tempVecX,frontalAxis);
-                tempVecY=arma::cross(tempVecZ,tempVecX);
-                
-            }
-            else if (std::abs(arma::dot(tempVecX,frontalAxis))>std::abs(arma::dot(tempVecX,longAxis))){
-                
-                tempVecY=arma::cross(longAxis,tempVecX);
-                tempVecZ=arma::cross(tempVecX,tempVecY);
-                
-            }
-            else if (arma::dot(tempVecX,longAxis)>0){
-                
-                tempVecZ=arma::cross(frontalAxis,tempVecX);
-                tempVecY=arma::cross(tempVecZ,tempVecX);
-            }
-            else {
-                tempVecZ=arma::cross(tempVecX,frontalAxis);
-                tempVecY=arma::cross(tempVecZ,tempVecX);
-            }
-            
-            offsetMatrix.col(0)=arma::normalise( tempVecX);
-            offsetMatrix.col(1)=arma::normalise( tempVecY);
-            offsetMatrix.col(2)=arma::normalise( tempVecZ);
-            if( debug ) std::cout<<offsetMatrix<<std::endl;
-            
-            quaternion origQuat(frame0.node(orig).rotation);
-            quaternion offsetQuat;
-            offsetQuat.set(offsetMatrix);
-            quaternion lquat(origQuat.inverse()*offsetQuat);
-            
-            if( debug ) std::cout<<lquat(0)<<" "<<lquat(1)<<" "<<lquat(2)<<" "<<lquat(3)<<std::endl;
-            
-            this->rotationOffset.col(dest)=lquat;
+//        for (int i=0;i<this->boneList->size();i++){
+		for (boneMapType::iterator it = this->boneList->begin(); it != this->boneList->end();it++){
+			int i = it->second.boneId;
+            int orig=it->second.jointParent;//id of the origin joint of the current bone.
+			for (int j = 0; j <it->second.jointChildren.size(); j++) {//loop on the ids of the destination joints of the current bone.
+				int dest = it->second.jointChildren[j];
+				if (debug) {
+					std::cout << orig << " " << dest << std::endl;
+				}
+				std::vector<float> val;
+				arma::mat offsetMatrix;
+				offsetMatrix.eye(3, 3);
+				arma::colvec tempVecX, tempVecY, tempVecZ;
+				tempVecX = frame0.getPosition().col(dest) - frame0.getPosition().col(orig);//<<  frame0.node(dest).position[0] - frame0.node(orig).position[0] << frame0.node(dest).position[1] - frame0.node(orig).position[1] << frame0.node(dest).position[2] - frame0.node(orig).position[2];
+				tempVecX = arma::normalise(tempVecX);
+				if (debug) {
+					std::cout << tempVecX << std::endl;
+				}
+				if (std::abs(arma::dot(tempVecX, sagAxis))>std::abs(arma::dot(tempVecX, longAxis)) && std::abs(arma::dot(tempVecX, sagAxis))>std::abs(arma::dot(tempVecX, frontalAxis))) {
+
+					tempVecZ = arma::cross(tempVecX, frontalAxis);
+					tempVecY = arma::cross(tempVecZ, tempVecX);
+
+				}
+				else if (std::abs(arma::dot(tempVecX, frontalAxis)) > std::abs(arma::dot(tempVecX, longAxis))) {
+
+					tempVecY = arma::cross(longAxis, tempVecX);
+					tempVecZ = arma::cross(tempVecX, tempVecY);
+
+				}
+				else if (arma::dot(tempVecX, longAxis) > 0) {
+
+					tempVecZ = arma::cross(frontalAxis, tempVecX);
+					tempVecY = arma::cross(tempVecZ, tempVecX);
+				}
+				else {
+					tempVecZ = arma::cross(tempVecX, frontalAxis);
+					tempVecY = arma::cross(tempVecZ, tempVecX);
+				}
+
+				offsetMatrix.col(0) = arma::normalise(tempVecX);
+				offsetMatrix.col(1) = arma::normalise(tempVecY);
+				offsetMatrix.col(2) = arma::normalise(tempVecZ);
+				if (debug) std::cout << offsetMatrix << std::endl;
+
+//				quaternion origQuat(frame0.node(orig).rotation);
+				quaternion origQuat(frame0.getRotation().col(i));
+				quaternion offsetQuat;
+				offsetQuat.set(offsetMatrix);
+				quaternion lquat(origQuat.inverse()*offsetQuat);
+
+				if (debug) std::cout << lquat(0) << " " << lquat(1) << " " << lquat(2) << " " << lquat(3) << std::endl;
+
+				this->rotationOffset.col(dest) = lquat;
+			}
         }
     }
-    else{
+    else{//Kinect
         
         this->rotationOffset.zeros(4, nodeList->size());
-        for (int i=0;i<boneList->size();i++){
+
+		int i = 0;
+		for (boneMapType::iterator it = this->boneList->begin(); it != this->boneList->end(); it++) {
             int orig,dest;
             MoMa::quaternion lquat,lquat2;
             
-            orig=this->boneList->at(i).first;
-            dest=this->boneList->at(i).second;
-            lquat<<0<<-0.7<<0<<0.7;
-            this->rotationOffset.col(dest)=lquat;
+            orig=it->second.jointParent;
+			for (int j = 0; j < it->second.jointChildren.size(); j++) {
+				dest = it->second.jointChildren[j];
+				lquat << 0 << -0.7 << 0 << 0.7;
+				this->rotationOffset.col(dest) = lquat;
+			}
             
         }
     }

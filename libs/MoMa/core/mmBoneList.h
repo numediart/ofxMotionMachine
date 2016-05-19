@@ -45,23 +45,45 @@
 #define __mmBoneList__
 
 #include <vector>
+#include <map>
 #include <cstring>
 #include <sstream>
 #include <iostream>
 #include <fstream>
 
 namespace MoMa {
-    
-    class BoneList : public std::vector< std::pair<int,int> > {
+	struct boneData {
+		boneData(int a, int b, std::vector<int> c) : boneId(a), jointParent(b), jointChildren(c) {};
+		int boneId;
+		int jointParent;
+		std::vector<int> jointChildren;
+
+	} ;
+
+
+	typedef std::map< std::string , boneData> boneMapType;
+
+
+    class BoneList : public boneMapType {
         
       public:
         
-        BoneList( void ) : std::vector< std::pair<int,int> >() {hasOrigNodeRot_as_boneRot=true;} // Constructor
+        BoneList( void ) : boneMapType() {hasOrigNodeRot_as_boneRot=true;} // Constructor
         BoneList( std::string fileName ); // Create object from text file
         void load( std::string fileName ); // Load bones from text file
         void print( void ); // Print the list of bones
         bool hasOrigNodeRot_as_boneRot;//difference between V3D BVH skel and kinect
         // TODO add a push function
+		int getParentNode(std::string boneName) { return (this->find(boneName)!=this->end() ? this->at(boneName).jointParent : -1); }
+		std::vector<int> getChildrenNodes(std::string boneName) { return (this->find(boneName) != this->end() ? this->at(boneName).jointChildren : std::vector<int>()); }
+		int getBoneId(std::string boneName) { return (this->find(boneName) != this->end() ? this->at(boneName).boneId : -1); };
+		std::string getName(int boneId) 
+		{
+			for (boneMapType::iterator it = this->begin(); it != this->end(); it++)
+				if (it->second.boneId == boneId)
+					return (it->first);
+			return std::string("");
+		};
     };
 }
 

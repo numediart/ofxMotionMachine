@@ -94,16 +94,17 @@ void KinParser::load( string const &fileName, Track *track ) {
                        
                     // Data are ignored and the oneNode stays with ARMA NaNs
                     
-                } else {
+                } 
+				else {
                     
 
-                    pos(X,nodeId,frameId) = atof( value[0].c_str() );
-                    pos(Y,nodeId,frameId) = atof( value[1].c_str() );
-                    pos(Z,nodeId,frameId) = atof( value[2].c_str() );
-                    rot(qX,nodeId,frameId) =atof( value[3].c_str() );
-                    rot(qY,nodeId,frameId)=atof( value[4].c_str() );
-                    rot(qZ,nodeId,frameId)=atof( value[5].c_str() );
-                    rot(qW,nodeId,frameId)=atof( value[6].c_str() );
+                    pos(0,nodeId,frameId) = atof( value[0].c_str() );
+                    pos(1,nodeId,frameId) = atof( value[1].c_str() );
+                    pos(2,nodeId,frameId) = atof( value[2].c_str() );
+                    rot(0,nodeId,frameId) =atof( value[3].c_str() );
+                    rot(1,nodeId,frameId)=atof( value[4].c_str() );
+                    rot(2,nodeId,frameId)=atof( value[5].c_str() );
+                    rot(3,nodeId,frameId)=atof( value[6].c_str() );
                     /*
 					if (qw==1||(qx==0&&qy==0&&qz==0)){
                         oneNode.setRotation( arma::datum::nan,arma::datum::nan,arma::datum::nan,arma::datum::nan);

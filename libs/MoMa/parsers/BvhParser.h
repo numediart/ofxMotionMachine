@@ -38,9 +38,10 @@ public:
     bool newRoot(std::string jointName);
     bool newJoint(std::string jointName,std::string JointParentName);
     bvhJoint* getJoint(std::string jointName);
-    unsigned int getNofJoints(){return mHierarchy.size();}
+	unsigned int getNofJoints() { return mHierarchy.size(); }
+	unsigned int getNofBones() { return nbBones; }
     std::string getNodeName(unsigned int i){return (mHierarchy.size()>0)?mHierarchy[i]->jointName:std::string("");}
-    std::vector<std::pair<int,int> > getBonesIndices();
+	std::vector<std::pair<int, std::vector<int> > > getBonesIndices();
     unsigned int mFrames;
     double mFrameRate;
 protected:
@@ -54,6 +55,7 @@ protected:
     bool bvhJointRead(std::fstream &pFile,bvhJoint *pJoint,bool eos=false,std::string JointParentName=std::string(""));
     bool bvhJointFrameRead(std::fstream &pFile,bvhJoint *pJoint);
     arma::mat axisTransfo;
+	int nbBones;
 };
 
 #endif

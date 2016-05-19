@@ -55,7 +55,7 @@ namespace MoMa {
         //vector<vector<float> > jointOffsetRotation;
         //jointOffsetRotation=parser.getJointOffsetRotation();
         arma::cube positionData(3,nNodes,nFrames);
-        arma::cube rotationData(4,nNodes,nFrames);
+        arma::cube rotationData(4,parser.getNofBones(),nFrames);
 		for (int i=0;i<nFrames;i++){
             if (i%100==0)
 				std::cout<<i<<std::endl;
@@ -68,20 +68,24 @@ namespace MoMa {
             //lFrame.setRotationFlag(hasRotation);
             //lFrame.setSynoList(track->synoList);
 
-            for (int j=0;j<bvhFrame.size();j++){
-                //MoMa::Node lNode(bvhFrame[j][0]*10,bvhFrame[j][1]*10,bvhFrame[j][2]*10);
-				positionData(0,j,i)=bvhFrame[j][0]*10;
-				positionData(1,j,i)=bvhFrame[j][1]*10;
-				positionData(2,j,i)=bvhFrame[j][2]*10;
-                if (hasRotation){
+			for (int j = 0; j < bvhFrame.size(); j++) {
+				//MoMa::Node lNode(bvhFrame[j][0]*10,bvhFrame[j][1]*10,bvhFrame[j][2]*10);
+				positionData(0, j, i) = bvhFrame[j][0] * 10;
+				positionData(1, j, i) = bvhFrame[j][1] * 10;
+				positionData(2, j, i) = bvhFrame[j][2] * 10;
+			}
+             
+			if (hasRotation){
 					//	lNode.setRotation(bvhRotationFrame[j][0],bvhRotationFrame[j][1],bvhRotationFrame[j][2],bvhRotationFrame[j][3]);
-					rotationData(0,j,i)=bvhRotationFrame[j][0];
-					rotationData(1,j,i)=bvhRotationFrame[j][1];
-					rotationData(2,j,i)=bvhRotationFrame[j][2];
-					rotationData(3,j,i)=bvhRotationFrame[j][3];
+
+				for (int j = 0; j < bvhRotationFrame.size(); j++) {
+					rotationData(0, j, i) = bvhRotationFrame[j][0];
+					rotationData(1, j, i) = bvhRotationFrame[j][1];
+					rotationData(2, j, i) = bvhRotationFrame[j][2];
+					rotationData(3, j, i) = bvhRotationFrame[j][3];
+				}
 					//std::cout<<" "<<bvhRotationFrame[j][0]<<" "<<bvhRotationFrame[j][1]<<" "<<bvhRotationFrame[j][2]<<" "<<bvhRotationFrame[j][3]<<std::endl;
                     //lNode.setOffsetRotation(jointOffsetRotation[j][0],jointOffsetRotation[j][1],jointOffsetRotation[j][2],jointOffsetRotation[j][3]);
-                }
                 //lNode.setName(parser.getNodeName(j));
                 //lNode.setTime(i*parser.mFrameRate);
                 //lFrame.push(lNode);
@@ -106,11 +110,11 @@ namespace MoMa {
         }
         
         track->boneList=new BoneList;
-        std::vector<std::pair<int,int> > lBones=parser.getBonesIndices();
+        std::vector<std::pair<int,std::vector<int> > > lBones=parser.getBonesIndices();
         track->hasBoneList=true;
         unsigned int nBones=lBones.size();
         for (unsigned int i=0;i<nBones;i++){
-            track->boneList->push_back(lBones[i]);
+            track->boneList->emplace(parser.getNodeName(lBones[i].first),boneData(i,lBones[i].first, lBones[i].second));//By convention for BVH, bone name is the name of the origin node 
         }
 //        track->hasSynoList=false;
         track->hasRotation=hasRotation;

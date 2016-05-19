@@ -25,6 +25,7 @@
 #include "mmFrame.h"
 #include "mmTrace.h"
 #include "mmNode.h"
+#include "mmBone.h"
 
 #define MOMAINF 1000000000
 

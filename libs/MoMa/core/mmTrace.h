@@ -58,19 +58,26 @@ namespace MoMa {
         inline void push( Node node ) {
             if (!position.isTimed()){
                 position.push( node.position );
-                if (_hasRotation&&node.hasRotation()){
-                    rotation.push( node.rotation );
-                    if (rotationOffset.n_elem==0)
-                        rotationOffset=node.rotationOffset;
-                }
+				if (_hasRotation)/*&&node.hasRotation()){
+					rotation.push( node.rotation );
+					if (rotationOffset.n_elem==0)
+						rotationOffset=node.rotationOffset;
+				}*/
+				{
+					throw std::exception("Trace::push(Node) not compatible with an oriented trace");
+				}
             }
             else{
                 position.push( node.position,node.time() );
-                if (_hasRotation&&node.hasRotation()){
+                if (_hasRotation)/*&&node.hasRotation()){
                     rotation.push( node.rotation,node.time() );
                     if (rotationOffset.n_elem==0)
                         rotationOffset=node.rotationOffset;
-                }
+                }*/
+				{
+					throw std::exception("Trace::push(Node) not compatible with an oriented trace");
+				}
+
             }
         
         } // Add node

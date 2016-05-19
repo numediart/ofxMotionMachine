@@ -14,24 +14,24 @@ using namespace arma;
 MoMa::Node::Node( void ) {
     
     position.resize( 3 );
-    rotation.resize( 4 );
-    rotationOffset.resize( 4 );
+//    rotation.resize( 4 );
+//   rotationOffset.resize( 4 );
     
     position( X ) = datum::nan;
     position( Y ) = datum::nan;
     position( Z ) = datum::nan;
     
-    rotation( X ) = 0.0f;
-    rotation( Y ) = 0.0f;
-    rotation( Z ) = 0.0f;
-    rotation( 3 ) = 1.0f;
+    //rotation( X ) = 0.0f;
+    //rotation( Y ) = 0.0f;
+    //rotation( Z ) = 0.0f;
+    //rotation( 3 ) = 1.0f;
+    //
+    //rotationOffset( X ) = 0.0f;
+    //rotationOffset( Y ) = 0.0f;
+    //rotationOffset( Z ) = 0.0f;
+    //rotationOffset( 3 ) = 1.0f;
     
-    rotationOffset( X ) = 0.0f;
-    rotationOffset( Y ) = 0.0f;
-    rotationOffset( Z ) = 0.0f;
-    rotationOffset( 3 ) = 1.0f;
-    
-    _hasRotation = false;
+    //_hasRotation = false;
     _hasTime = false;
     _time = 0.0f;
     _name = "";
@@ -40,30 +40,30 @@ MoMa::Node::Node( void ) {
 MoMa::Node::Node( float x, float y, float z ) {
     
     position.resize( 3 );
-    rotation.resize( 4 );
-    rotationOffset.resize( 4 );
+    //rotation.resize( 4 );
+    //rotationOffset.resize( 4 );
     
     position( X ) = x;
     position( Y ) = y;
     position( Z ) = z;
     
-    rotation( X ) = 0.0f;
-    rotation( Y ) = 0.0f;
-    rotation( Z ) = 0.0f;
-    rotation( 3 ) = 1.0f;
+    //rotation( X ) = 0.0f;
+    //rotation( Y ) = 0.0f;
+    //rotation( Z ) = 0.0f;
+    //rotation( 3 ) = 1.0f;
     
-    rotationOffset( X ) = 0.0f;
-    rotationOffset( Y ) = 0.0f;
-    rotationOffset( Z ) = 0.0f;
-    rotationOffset( 3 ) = 1.0f;
+    //rotationOffset( X ) = 0.0f;
+    //rotationOffset( Y ) = 0.0f;
+    //rotationOffset( Z ) = 0.0f;
+    //rotationOffset( 3 ) = 1.0f;
     
-    _hasRotation = false;
+    //_hasRotation = false;
     _hasTime = false;
     _time = 0.0f;
     _name = "";
     
 }
-MoMa::Node::Node( float x, float y, float z, float qx, float qy, float qz, float qw ) {
+/*MoMa::Node::Node( float x, float y, float z, float qx, float qy, float qz, float qw ) {
     
     position.resize( 3 );
     rotation.resize( 4 );
@@ -88,8 +88,8 @@ MoMa::Node::Node( float x, float y, float z, float qx, float qy, float qz, float
     _time = 0.0f;
     _name = "";
     
-}
-MoMa::Node::Node( arma::vec coord, arma::vec rot, arma::vec offsetRot) {
+}*/
+/*MoMa::Node::Node( arma::vec coord, arma::vec rot, arma::vec offsetRot) {
     
     position.resize( 3 );
     rotation.resize( 4 );
@@ -114,7 +114,7 @@ MoMa::Node::Node( arma::vec coord, arma::vec rot, arma::vec offsetRot) {
     _time = 0.0f;
     _name = "";
     
-}
+}*/
 
 void MoMa::Node::setPosition( float x, float y, float z ) {
     
@@ -123,7 +123,7 @@ void MoMa::Node::setPosition( float x, float y, float z ) {
     position( Z ) = z;
 }
 
-void MoMa::Node::setRotation( float x, float y, float z, float w ) {
+/*void MoMa::Node::setRotation( float x, float y, float z, float w ) {
     
     _hasRotation = true;
     
@@ -134,8 +134,8 @@ void MoMa::Node::setRotation( float x, float y, float z, float w ) {
         rotation( qZ ) = z;
         rotation( qW ) = w;
     }
-}
-void MoMa::Node::setOffsetRotation( float x, float y, float z, float w ) {
+}*/
+/*void MoMa::Node::setOffsetRotation( float x, float y, float z, float w ) {
     
     _hasRotation = true;
     
@@ -146,13 +146,14 @@ void MoMa::Node::setOffsetRotation( float x, float y, float z, float w ) {
         rotationOffset( qZ ) = z;
         rotationOffset( qW ) = w;
     }
-}
+}*/
 
 void MoMa::Node::setPosition( arma::vec pos ) {
     
     position = pos;
 }
-void MoMa::Node::setRotation( arma::vec rot ) {
+
+/*void MoMa::Node::setRotation( arma::vec rot ) {
     
     if( arma::norm(rot) != 0 ) {
         
@@ -167,4 +168,4 @@ void MoMa::Node::setOffsetRotation( arma::vec off ) {
         _hasRotation = true;
         rotationOffset=off;
     }
-}
+}*/

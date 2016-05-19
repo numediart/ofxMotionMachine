@@ -174,6 +174,35 @@ int MoMa::Frame::index( std::string name ) {
     */
 }
 
+MoMa::Bone MoMa::Frame::bone(std::string name) const {
+	Bone bon;
+	if (this->hasBoneList==false)
+		throw std::exception("Frame::bone impossible to get a MoMa::bone without bonelist or orientation");
+	if (this->hasRotation() == false)
+		throw std::exception("Frame::bone impossible to get a MoMa::bone without bonelist or orientation");
+	int boneId = this->boneList->getBoneId(name);
+	int parentId = this->boneList->getParentNode(name);
+	std::vector<int> childrenIds = this->boneList->getChildrenNodes(name);
+
+	std::vector<double> lengths;
+	std::vector<arma::vec> off;
+	for (int i = 0; i < childrenIds.size(); i++) {
+		off.push_back(rotationOffset.col(childrenIds[i]));
+		lengths.push_back(arma::norm(position.col(parentId) - position.col(childrenIds[i])));
+	}
+	bon.setBoneData(off,lengths);
+
+	bon.position = this->position.col(parentId);
+	bon.rotation = this->rotation.col(boneId);
+	bon.setName(name);
+	return bon;
+};
+
+MoMa::Bone MoMa::Frame::bone(int index) const {
+	std::string  name = this->boneList->getName(index);
+	return bone(name);
+};
+
 int MoMa::Frame::nOfNodes( void ) const {
 
     return( (int)std::max( (float)(position.n_cols), (float)(rotation.n_cols) ) );

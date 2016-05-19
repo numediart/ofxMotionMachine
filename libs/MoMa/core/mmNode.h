@@ -4,6 +4,7 @@
  *  @brief MotionMachine header file for Node class.
  *  @copyright Numediart Institute, UMONS (c) 2014-2015
  *
+ * 
  */
 
 #ifndef __mmNode__
@@ -13,15 +14,18 @@
 #include <armadillo>
 
 namespace MoMa {
-    
-    enum PositionDimension {
-        
-        X, // Position or rotation @ x
-        Y, // Position or rotation @ y
-        Z, // Position or rotation @ z
-        T // Index for the time-stamp
-    };
-    
+
+#ifndef _PositionDimension_
+#define _PositionDimension_
+	enum PositionDimension {
+
+		X, // Position or rotation @ x
+		Y, // Position or rotation @ y
+		Z, // Position or rotation @ z
+		T // Index for the time-stamp
+	};
+#endif
+  /*  
     enum RotationDimension {
         
         qX, // Quaternion @ x
@@ -29,26 +33,26 @@ namespace MoMa {
         qZ, // Quaternion @ z
         qW // Quaternion @ w
     };
-    
+    */
     class Node {
         
       public:
         
         Node( void ); // Default constructor
         Node( float x, float y, float z ); // Other kinds of constructors
-        Node( float x, float y, float z, float qx, float qy, float qz, float qw );
-        Node( arma::vec coord, arma::vec rotation, arma::vec offsetRot);
+    //    Node( float x, float y, float z, float qx, float qy, float qz, float qw );
+      //  Node( arma::vec coord, arma::vec rotation, arma::vec offsetRot);
         
         void setPosition( float x, float y, float z ); // Set position
-        void setRotation( float x, float y, float z , float w); // Set rotation
-        void setOffsetRotation( float x, float y, float z , float w); // Set offset
+      //  void setRotation( float x, float y, float z , float w); // Set rotation
+      //  void setOffsetRotation( float x, float y, float z , float w); // Set offset
         
         void setPosition( arma::vec pos); // Set position
-        void setRotation( arma::vec rot); // Set rotation
-        void setOffsetRotation( arma::vec off); // Set offset
+        //void setRotation( arma::vec rot); // Set rotation
+        //void setOffsetRotation( arma::vec off); // Set offset
         
-        inline bool hasRotation( void ) const { return( _hasRotation ); } // Use rotation?
-        inline void setRotationFlag( bool rot ) { _hasRotation = rot; } // Force it
+        //inline bool hasRotation( void ) const { return( _hasRotation ); } // Use rotation?
+        //inline void setRotationFlag( bool rot ) { _hasRotation = rot; } // Force it
         
         double time( void )const { return( _time ); } // Get time
         bool hasTime( void )const { return( _hasTime ); } // Flag
@@ -61,12 +65,12 @@ namespace MoMa {
         void setState( int st ) { _state = st; }
         
         arma::vec position; // 3D position of the node
-        arma::vec rotation; // Quaternion rotation
-        arma::vec rotationOffset; // Quaternion offset
+        //arma::vec rotation; // Quaternion rotation
+        //arma::vec rotationOffset; // Quaternion offset
         
       protected:
         
-        bool _hasRotation; // Do we use rotation?
+        //bool _hasRotation; // Do we use rotation?
         double _time; // Transfered time stamp
         bool _hasTime; // Any time stamp?
         std::string _name; // Node name

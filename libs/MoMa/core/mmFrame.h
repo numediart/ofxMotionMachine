@@ -16,6 +16,7 @@
 #include "mmSynoList.h"
 
 #include "mmNode.h"
+#include "mmBone.h"
 
 namespace MoMa {
     
@@ -39,8 +40,11 @@ namespace MoMa {
         bool hasTime( void ) const { return( _hasTime ); } // Flag
         void setTime( double t ); // Set time ( with flag )
         
-        inline Node node( std::string name ); // Query node by name ( from string )
-        inline Node node( int index ) const; // Query node by index ( from int )
+        inline Node node( std::string name) const; // Query node by name ( from string )
+		inline Node node(int index) const; // Query node by index ( from int )
+        
+        Bone bone( std::string name ) const; // Query node by name ( from string )
+		Bone bone(int index) const; // Query node by index ( from int )
         
         inline Node operator()( std::string name ); // Short version of node()
         inline Node operator()( int index ); // Short version of node()
@@ -49,13 +53,13 @@ namespace MoMa {
         inline void setRotationFlag( bool rot ) { _hasRotation = rot; } // Force it
         
         inline void push( Node node ) {
-            
-            if (node.hasRotation()&&((!nOfNodes())||this->hasRotation())){
-                _hasRotation=true;
-                rotation.insert_cols(rotation.n_cols, node.rotation);
 
-                rotationOffset.insert_cols(rotationOffset.n_cols,node.rotationOffset);
-            }
+            //if (node.hasRotation()&&((!nOfNodes())||this->hasRotation())){
+            //    _hasRotation=true;
+            //    rotation.insert_cols(rotation.n_cols, node.rotation);
+
+            //    rotationOffset.insert_cols(rotationOffset.n_cols,node.rotationOffset);
+            //}
             position.insert_cols(position.n_cols, node.position);
             
         } // Add node//Can we push a node if there is a nodelist?? it will not be compatible, will it?
@@ -101,7 +105,7 @@ namespace MoMa {
     
     // Inlined functions
     
-    Node Frame::node( std::string name ) {
+    Node Frame::node( std::string name ) const {
         
         Node nod;
         int nIdx = -1;
@@ -113,13 +117,13 @@ namespace MoMa {
             if( nIdx > -1 ) {
                 
                 nod.setPosition( position.col( nIdx ) );
-                nod.setRotationFlag( hasRotation() );
+                //nod.setRotationFlag( hasRotation() );
                 
-                if( hasRotation() ) {
+                //if( hasRotation() ) {
                     
-                    nod.setOffsetRotation( rotationOffset.col( nIdx ) );
-                    nod.setRotation( rotation.col(nIdx) );
-                }
+                //    nod.setOffsetRotation( rotationOffset.col( nIdx ) );
+                //    nod.setRotation( rotation.col(nIdx) );
+                //}
                 
                 if( hasNodeList ) {
                     
@@ -220,13 +224,13 @@ namespace MoMa {
         if( index >= 0 && index < nOfNodes() ) {
         
             nod.setPosition( position.col(index) );
-            nod.setRotationFlag( hasRotation() );
+            //nod.setRotationFlag( hasRotation() );
         
-            if( hasRotation() ) {
+            //if( hasRotation() ) {
                 
-                nod.setOffsetRotation( rotationOffset.col(index) );
-                nod.setRotation( rotation.col(index) );
-            }
+            //    nod.setOffsetRotation( rotationOffset.col(index) );
+            //    nod.setRotation( rotation.col(index) );
+            //}
             
             if( hasNodeList ) {
                 
@@ -241,7 +245,8 @@ namespace MoMa {
         
         return( nod );
     }
-    
+
+
     Node Frame::operator()( std::string name ){
     
         return( this->node( name ) );
