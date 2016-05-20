@@ -136,9 +136,11 @@ void V3dParser::load( string const &fileName, Track *track ) {
     track->position.getRefData().resize( 3, nbOfNodes, nbOfFrames );
     
     if( track->hasRotation ) {
-        
-        track->rotation.getRefData().resize( 4, nbOfNodes, nbOfFrames );
+		int nbofbones = track->boneList->size();
+        track->rotation.getRefData().resize( 4, nbofbones, nbOfFrames );
         track->rotationOffset.resize( 4, nbOfNodes );
+		track->rotationOffset = arma::zeros(4, nbOfNodes);
+		track->rotationOffset.row(track->rotationOffset.n_rows-1) = arma::ones(1, nbOfNodes);
     }
     
     unsigned int frameCpt = 0; // Init frame count
@@ -151,9 +153,10 @@ void V3dParser::load( string const &fileName, Track *track ) {
         
         if( thisLine != "" && thisLine != " " &&
         thisLine != "\t" && thisLine != "\n" ) {
-            
+
+			int nbofbones = track->boneList->size();
             arma::mat posMat( 3, nbOfNodes );
-            arma::mat rotMat( 4, nbOfNodes );
+            arma::mat rotMat( 4, nbofbones);
             
             thisStream.clear(); // Clear and grab
             thisStream << thisLine; // a new line
@@ -222,7 +225,9 @@ void V3dParser::load( string const &fileName, Track *track ) {
                             axis3 << 0 << 0 << 1;
                             
                             quat.makeRotate( yaw, axis3, pitch, axis2, roll, axis1 );
-                            rotMat.col( nodeCpt ) = quat; // Achieve the rotation
+							for (boneMapType::iterator it = track->boneList->begin(); it != track->boneList->end(); it++)
+								if (it->second.jointParent == nodeCpt)
+									rotMat.col(it->second.boneId) = quat; // Achieve rotation from the full matrix
                         }
                         
                         if( dim == 12 ) {
@@ -234,7 +239,10 @@ void V3dParser::load( string const &fileName, Track *track ) {
                             << atof( value[4].c_str() ) << atof( value[7].c_str() ) << atof( value[10].c_str() ) << arma::endr
                             << atof( value[5].c_str() ) << atof( value[8].c_str() ) << atof( value[11].c_str() ) << arma::endr;
                             
-                            quat.set( Rot ); rotMat.col( nodeCpt ) = quat; // Achieve rotation from the full matrix
+                            quat.set( Rot ); 
+							for (boneMapType::iterator it = track->boneList->begin(); it != track->boneList->end();it++)
+								if (it->second.jointParent==nodeCpt)	
+									rotMat.col(it->second.boneId) = quat; // Achieve rotation from the full matrix
                         }
                     }
                     
@@ -251,5 +259,6 @@ void V3dParser::load( string const &fileName, Track *track ) {
     
     track->setFrameRate( 177 ); // TODO to define to look for it somewhere
     track->hasOrigNodeRot_as_boneRot=true;
+
     v3dFile.close();
 }

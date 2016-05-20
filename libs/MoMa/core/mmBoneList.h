@@ -53,7 +53,12 @@
 
 namespace MoMa {
 	struct boneData {
-		boneData(int a, int b, std::vector<int> c) : boneId(a), jointParent(b), jointChildren(c) {};
+		boneData() {};
+		boneData(int a, int b, std::vector<int> c){
+			boneId = a;
+			jointParent = b;
+			jointChildren = c;
+		};
 		int boneId;
 		int jointParent;
 		std::vector<int> jointChildren;

@@ -42,7 +42,9 @@ void MoMa::BoneList::load( string fileName ) {
             curStrm >> begIdx; curStrm >> endIdx;
 			std::vector<int> lVec;
 			lVec.push_back(endIdx);
-            this->at(boneName)= boneData(boneId, begIdx, lVec);
+			boneData lBone(boneId, begIdx, lVec);
+            (*this)[boneName]= lBone;
+			boneId++;
         }
     }
 }

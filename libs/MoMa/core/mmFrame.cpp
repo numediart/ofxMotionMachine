@@ -181,6 +181,8 @@ MoMa::Bone MoMa::Frame::bone(std::string name) const {
 	if (this->hasRotation() == false)
 		throw std::exception("Frame::bone impossible to get a MoMa::bone without bonelist or orientation");
 	int boneId = this->boneList->getBoneId(name);
+	if (boneId==-1)
+		throw std::exception("Frame::bone no Bone with this name in BoneList");
 	int parentId = this->boneList->getParentNode(name);
 	std::vector<int> childrenIds = this->boneList->getChildrenNodes(name);
 
