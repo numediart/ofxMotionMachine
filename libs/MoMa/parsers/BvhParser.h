@@ -30,8 +30,10 @@ public:
     bvhParser();
     ~bvhParser();
     bool bvhRead(std::string fileName);
-    std::vector<std::vector<float> > bvh2xyz(unsigned int frameId);
-    std::vector<std::vector<float> > bvh2quat(unsigned int frameId);
+	std::vector<std::vector<float> > bvh2xyz(unsigned int frameId);
+	std::vector<std::vector<float> > bvh2quat(unsigned int frameId);
+	std::vector<std::vector<float> > bvh2LocalXyz(unsigned int frameId);
+	std::vector<std::vector<float> > bvh2LocalQuat(unsigned int frameId);
     std::vector<std::vector<float> > getJointOffsetRotation();
     
     bool bvhWrite(std::string fileName);
@@ -48,8 +50,10 @@ protected:
     std::string mFileName;
     std::vector<bvhJoint*> mHierarchy;
     arma::mat rotMat(double angle,unsigned int axisId);
-    std::vector<std::vector<float> > children2xyz(unsigned int frameId,unsigned int nodeId, arma::mat parentTransfo);
-    std::vector<std::vector<float> > children2quat(unsigned int frameId,unsigned int nodeId, arma::mat parentTransfo);
+	std::vector<std::vector<float> > children2xyz(unsigned int frameId, unsigned int nodeId, arma::mat parentTransfo);
+	std::vector<std::vector<float> > children2quat(unsigned int frameId, unsigned int nodeId, arma::mat parentTransfo);
+	std::vector<std::vector<float> > children2LocalXyz(unsigned int frameId, unsigned int nodeId);
+	std::vector<std::vector<float> > children2LocalQuat(unsigned int frameId, unsigned int nodeId);
     bool bvhJointHeaderWrite(std::fstream &pFile,bvhJoint *pJoint,int nTab);
     bool bvhJointFrameWrite(std::fstream &pFile,bvhJoint *pJoint,int pFrameIndex);
     bool bvhJointRead(std::fstream &pFile,bvhJoint *pJoint,bool eos=false,std::string JointParentName=std::string(""));

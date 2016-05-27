@@ -52,7 +52,7 @@ void Track::init( void ) {
 
     boneList = NULL; // Not allocated
     hasBoneList = false; // No node name list
-
+	hasGlobalCoordinate = true;
     //FIXME this should not be in constructor, among other things, it causes unnecessary
     //      load of the SynoList when creating a subtrack.
     this->synolist(SynoList::DefaultPath);
@@ -60,7 +60,7 @@ void Track::init( void ) {
     ringSize = 0; // Init ring buffer size
     isRing = false; // Not ring buffer
     
-    hasOrigNodeRot_as_boneRot=true;
+  //  hasOrigNodeRot_as_boneRot=true;
     
     setFrameRate( 177.0f ); // Qualisys
 }
@@ -108,6 +108,12 @@ void Track::bones( string fileName ) {
 
 void Track::load( string const &fileName ) {
 
+	if (hasNodeList) delete nodeList; // Deallocation
+	nodeList = NULL;
+	if (hasBoneList) delete boneList; // Deallocation
+	boneList = NULL;
+
+	init();
     Parser parser( fileName, this );
 }
 
@@ -124,7 +130,7 @@ void Track::setRingBufferSize( int size ,bool pHasRotation,bool pTimed) {
 			rotation.setRealTimeMode(size,_frameRate,4u,nodeList->size());
 
 		hasRotation=true;
-		this->hasOrigNodeRot_as_boneRot=false;
+		//this->hasOrigNodeRot_as_boneRot=false;
 		this->setJointOffsetRotation();
 	};
 	ringSize = size;
@@ -361,17 +367,45 @@ bool Track::setJointOffsetRotation() {
     
     if (this->hasBoneList==false||this->hasNodeList==false)
         return false;
-    boneList->hasOrigNodeRot_as_boneRot=this->hasOrigNodeRot_as_boneRot;
-    if (hasOrigNodeRot_as_boneRot){
+
+    //boneList->hasOrigNodeRot_as_boneRot=this->hasOrigNodeRot_as_boneRot;
+    //if (hasOrigNodeRot_as_boneRot){
         if (this->rotation.getData().size()==0)
             return false;
         this->rotationOffset.resize(4,this->rotation.nOfCols());
         bool debug = false;
         if (!this->boneList || !this->hasNodeList || !this->hasRotation /*|| !this->hasSynoList*/ )
             return false;
-        
+
         this->rotationOffset.resize(4,this->nOfNodes());
         Frame frame0 = this->frame((unsigned int)0);
+
+		if (this->hasGlobalCoordinate==false) {
+			for (boneMapType::iterator it = this->boneList->begin(); it != this->boneList->end(); it++) {
+				for (int j = 0; j < it->second.jointChildren.size(); j++) {//loop on the ids of the destination joints of the current bone.
+					int dest = it->second.jointChildren[j];
+					
+					arma::colvec xVec, yVec, zVec;
+					xVec=frame0.getPosition().col(dest);
+					yVec << 0.0 << 1.0 << 0.0;
+					zVec << -1.0 << 0.0 << 0.0;
+					yVec = arma::cross(zVec, xVec);
+					zVec = arma::cross(xVec, yVec);
+					arma::mat offsetMatrix(3,3);
+					offsetMatrix.col(0) = arma::normalise(xVec);
+					offsetMatrix.col(1) = arma::normalise(yVec);
+					offsetMatrix.col(2) = arma::normalise(zVec);
+
+					//				quaternion origQuat(frame0.node(orig).rotation);
+					quaternion offsetQuat;
+					offsetQuat.set(offsetMatrix);
+					quaternion lquat(offsetQuat);
+					this->rotationOffset.col(dest) = lquat;
+
+				}
+			}
+			return true;
+		}
         arma::colvec frontalAxis;
         arma::colvec tempVec;
         
@@ -399,6 +433,7 @@ bool Track::setJointOffsetRotation() {
         if( debug ) std::cout<<sagAxis  <<std::endl;
         
 //        for (int i=0;i<this->boneList->size();i++){
+		{
 		for (boneMapType::iterator it = this->boneList->begin(); it != this->boneList->end();it++){
 			int i = it->second.boneId;
             int orig=it->second.jointParent;//id of the origin joint of the current bone.
@@ -408,8 +443,6 @@ bool Track::setJointOffsetRotation() {
 					std::cout << orig << " " << dest << std::endl;
 				}
 				std::vector<float> val;
-				arma::mat offsetMatrix;
-				offsetMatrix.eye(3, 3);
 				arma::colvec tempVecX, tempVecY, tempVecZ;
 				tempVecX = frame0.getPosition().col(dest) - frame0.getPosition().col(orig);//<<  frame0.node(dest).position[0] - frame0.node(orig).position[0] << frame0.node(dest).position[1] - frame0.node(orig).position[1] << frame0.node(dest).position[2] - frame0.node(orig).position[2];
 				tempVecX = arma::normalise(tempVecX);
@@ -438,6 +471,8 @@ bool Track::setJointOffsetRotation() {
 					tempVecY = arma::cross(tempVecZ, tempVecX);
 				}
 
+				arma::mat offsetMatrix;
+				offsetMatrix.eye(3, 3);
 				offsetMatrix.col(0) = arma::normalise(tempVecX);
 				offsetMatrix.col(1) = arma::normalise(tempVecY);
 				offsetMatrix.col(2) = arma::normalise(tempVecZ);
@@ -455,7 +490,8 @@ bool Track::setJointOffsetRotation() {
 			}
         }
     }
-    else{//Kinect
+
+/*    else{//Kinect
         
         this->rotationOffset.zeros(4, nodeList->size());
 
@@ -472,7 +508,7 @@ bool Track::setJointOffsetRotation() {
 			}
             
         }
-    }
+    }*/
     
     return true;
 }

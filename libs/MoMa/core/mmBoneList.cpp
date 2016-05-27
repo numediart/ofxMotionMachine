@@ -59,3 +59,28 @@ void MoMa::BoneList::print( void ) {
 
 	}
 }
+
+void MoMa::BoneList::updateBoneChildrenName() {
+	for (boneMapType::iterator it = this->begin(); it != this->end(); it++) {
+		it->second.boneChildrenIt.clear();
+		for (int i = 0; i < it->second.jointChildren.size(); i++) {
+			int nodeId = it->second.jointChildren[i];
+			for (boneMapType::iterator it2 = this->begin(); it2 != this->end(); it2++) {
+				if (it2->second.jointParent == nodeId) {
+					it->second.boneChildrenIt.push_back(it2);
+				}
+			}
+		}
+	}
+	for (boneMapType::iterator it = this->begin(); it != this->end(); it++) {
+		bool rootFlag = true;
+		for (boneMapType::iterator it2 = this->begin(); it2 != this->end(); it2++) {
+			for (int i = 0; i < it2->second.boneChildrenIt.size(); i++) {
+				if (it2->second.boneChildrenIt[i] == it)
+					rootFlag = false;
+			}
+		}
+		if (rootFlag)
+			rootIt = it;
+	}
+}

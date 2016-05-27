@@ -258,7 +258,7 @@ void V3dParser::load( string const &fileName, Track *track ) {
     }
     
     track->setFrameRate( 177 ); // TODO to define to look for it somewhere
-    track->hasOrigNodeRot_as_boneRot=true;
+//    track->hasOrigNodeRot_as_boneRot=true;
 
     v3dFile.close();
 }

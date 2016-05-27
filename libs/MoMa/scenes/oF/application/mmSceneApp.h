@@ -357,6 +357,8 @@ namespace MoMa {
         
         virtual void dragged( ofDragInfo &drag );
         
+
+		void boneLocalDraw(const Frame &frame, boneMapType::iterator it);
         // - Protected methods -
         
         void render2d( void );

@@ -117,8 +117,9 @@ namespace MoMa {
         TimedCube rotation; // Quaternion frames
         arma::mat rotationOffset; // Rotation offset
         bool hasRotation; // Has track rotations?
-        bool hasOrigNodeRot_as_boneRot;//difference between V3D BVH skel and kinect
-        
+		bool hasGlobalCoordinate;//if true, coordinates are encoded in a global coordinate system. If false (rotation flag and skeleton necessary) coordinate of each segment are encoded in a local system link to the parent bone.
+
+
         NodeList *nodeList; // List of node names
         bool hasNodeList; // Has track nodeList?
         
@@ -156,6 +157,8 @@ namespace MoMa {
             oneFrame.hasBoneList = hasBoneList;
             oneFrame.boneList = boneList;
             
+			oneFrame.hasGlobalCoordinate = hasGlobalCoordinate;
+
             // oneFrame.hasSynoList = hasSynoList;
             // oneFrame.synoList = synoList;
         }
@@ -186,7 +189,8 @@ namespace MoMa {
             
             oneFrame.hasBoneList = hasBoneList;
             oneFrame.boneList = boneList;
-            
+
+			oneFrame.hasGlobalCoordinate = hasGlobalCoordinate;
             // oneFrame.hasSynoList = hasSynoList;
             // oneFrame.synoList = synoList;
         }

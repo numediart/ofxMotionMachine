@@ -141,7 +141,7 @@ void KinParser::load( string const &fileName, Track *track ) {
 	track->rotation.setData(30, sortedRot);
 	track->hasRotation=true;
 	
-	track->hasOrigNodeRot_as_boneRot=false;
+	//track->hasOrigNodeRot_as_boneRot=false;
     datFile.close();
    
 }

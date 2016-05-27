@@ -1253,93 +1253,130 @@ void MoMa::SceneApp::draw(LabelList labelList) {
 }
 
 void MoMa::SceneApp::draw(const Frame &frame) {
-	if (frame.hasBoneList) {
-
-		//for (int b = 0; b < frame.boneList->size(); b++) {
-		for (boneMapType::iterator it = frame.boneList->begin(); it != frame.boneList->end(); it++) {
-
-			//            ofVec3f beg = toVec3f( frame.node( frame.boneList->at( b ).first ).position );
-			//            ofVec3f end = toVec3f( frame.node( frame.boneList->at( b ).second ).position );
-			ofVec3f beg = toVec3f(frame.getPosition().col(it->second.jointParent));
-			for (int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++) {
-				ofVec3f end = toVec3f(frame.getPosition().col(it->second.jointChildren[bEnd]));
-				ofSetLineWidth(2);
-				ofLine(beg, end);
-			}
-		}
-	}
-
-	if (frame.hasRotation()) {
-		if (frame.hasBoneList == false) {
-			throw std::exception("imposible to draw an orientated frame without bonelist");
-			/*ofBoxPrimitive box;
-
-			for (int b = 0; b < frame.nOfNodes(); b++) {
-				ofPushStyle();
-				ofSetColor(DarkTurquoise, ofGetStyle().color.a);
-
-				box.setPosition(toVec3f(frame.node(b).position));
-				box.setOrientation(toQuaternion(frame.node(b).rotation));
-				box.set(nodeSize); // Set position, rotation and radius
-				box.draw();
-
-				ofPopStyle();
-			}*/
-
-		}
-
+	if (frame.hasGlobalCoordinate) {
+	
 		if (frame.hasBoneList) {
-			ofBone bone;
+
+			//for (int b = 0; b < frame.boneList->size(); b++) {
 			for (boneMapType::iterator it = frame.boneList->begin(); it != frame.boneList->end(); it++) {
 
-
+				//            ofVec3f beg = toVec3f( frame.node( frame.boneList->at( b ).first ).position );
+				//            ofVec3f end = toVec3f( frame.node( frame.boneList->at( b ).second ).position );
+				ofVec3f beg = toVec3f(frame.getPosition().col(it->second.jointParent));
 				for (int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++) {
-					arma::colvec lOffRot = frame.getRotationOffset().col(it->second.jointChildren[bEnd]);
-					if (lOffRot.is_finite()){
+					ofVec3f end = toVec3f(frame.getPosition().col(it->second.jointChildren[bEnd]));
+					ofSetLineWidth(2);
+					ofLine(beg, end);
+				}
+			}
+		}
 
-						float s = arma::norm(frame.getPosition().col(it->second.jointParent) - frame.getPosition().col(it->second.jointChildren[bEnd]));
-						bone.setPosition(toVec3f(frame.getPosition().col(it->second.jointParent)));
+		if (frame.hasRotation()) {
+			if (frame.hasBoneList == false) {
+				throw std::exception("imposible to draw an orientated frame without bonelist");
+				/*ofBoxPrimitive box;
 
-						//if (frame.boneList->hasOrigNodeRot_as_boneRot)
-						bone.setOrientation(toQuaternion(frame.getRotationOffset().col(it->second.jointChildren[bEnd])) *toQuaternion(frame.getRotation().col(it->second.boneId)));//
-					//else
-					//	bone.setOrientation(toQuaternion(frame.getRotationOffset().col(frame.boneList->at(b).second[bEnd])) *toQuaternion(frame.getRotation().col(frame.boneList->at(b).second[bEnd])));//
-						bone.setScale(s, 1, 1);
-						bone.draw();
+				for (int b = 0; b < frame.nOfNodes(); b++) {
+					ofPushStyle();
+					ofSetColor(DarkTurquoise, ofGetStyle().color.a);
+
+					box.setPosition(toVec3f(frame.node(b).position));
+					box.setOrientation(toQuaternion(frame.node(b).rotation));
+					box.set(nodeSize); // Set position, rotation and radius
+					box.draw();
+
+					ofPopStyle();
+				}*/
+
+			}
+
+			if (frame.hasBoneList) {
+				ofBone bone;
+				for (boneMapType::iterator it = frame.boneList->begin(); it != frame.boneList->end(); it++) {
+
+
+					for (int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++) {
+						arma::colvec lOffRot = frame.getRotationOffset().col(it->second.jointChildren[bEnd]);
+						if (lOffRot.is_finite()) {
+
+							float s = arma::norm(frame.getPosition().col(it->second.jointParent) - frame.getPosition().col(it->second.jointChildren[bEnd]));
+							bone.setPosition(toVec3f(frame.getPosition().col(it->second.jointParent)));
+
+							//if (frame.boneList->hasOrigNodeRot_as_boneRot)
+							bone.setOrientation(toQuaternion(frame.getRotationOffset().col(it->second.jointChildren[bEnd])) *toQuaternion(frame.getRotation().col(it->second.boneId)));//
+						//else
+						//	bone.setOrientation(toQuaternion(frame.getRotationOffset().col(frame.boneList->at(b).second[bEnd])) *toQuaternion(frame.getRotation().col(frame.boneList->at(b).second[bEnd])));//
+							bone.setScale(s, 1, 1);
+							bone.draw();
+						}
 					}
 				}
 			}
 		}
-	}
 
-	else {
+		else {
 
+			ofPushStyle();
+			ofSetColor(DarkTurquoise, ofGetStyle().color.a);
+			ofSpherePrimitive sphere;
+
+			sphere.setRadius(DefaultNodeSize / 2); // Set position and radius
+			for (int s = 0; s < frame.nOfNodes(); s++) {
+
+				ofPushMatrix();
+				ofTranslate(toVec3f(frame.node(s).position));
+				sphere.draw();
+				ofPopMatrix();
+			}
+
+			ofPopStyle();
+		}
 		ofPushStyle();
-		ofSetColor(DarkTurquoise, ofGetStyle().color.a);
-		ofSpherePrimitive sphere;
+		ofSetColor(ofGetStyle().color, 120); // We keep the color but make it transparent
 
-		sphere.setRadius(DefaultNodeSize / 2); // Set position and radius
-		for (int s = 0; s < frame.nOfNodes(); s++) {
+		for (int n = 0; n < frame.nOfNodes(); n++) {
 
-			ofPushMatrix();
-			ofTranslate(toVec3f(frame.node(s).position));
-			sphere.draw();
-			ofPopMatrix();
+			string tag = ""; if (frame.hasNodeList && isNodeNames) tag = frame.nodeList->name(n);
+			if (frame.hasTime() && isTimeTags && n == 0) tag += ("(" + ofToString(frame.time()) + ")");
+			ofDrawBitmapString(tag, toVec3f(frame.getPosition().col(n)) + nodeSize / 1.5f);
 		}
 
 		ofPopStyle();
 	}
-	ofPushStyle();
-	ofSetColor(ofGetStyle().color, 120); // We keep the color but make it transparent
+	else {
 
-	for (int n = 0; n < frame.nOfNodes(); n++) {
+		if (frame.hasBoneList == false)
+			throw std::exception("impossible to have local system data without a correct bonelist");
+		int boneId = 0;
+		boneLocalDraw(frame,frame.boneList->rootIt);
 
-		string tag = ""; if (frame.hasNodeList && isNodeNames) tag = frame.nodeList->name(n);
-		if (frame.hasTime() && isTimeTags && n == 0) tag += ("(" + ofToString(frame.time()) + ")");
-		ofDrawBitmapString(tag, toVec3f(frame.getPosition().col(n)) + nodeSize / 1.5f);
 	}
+}
 
-	ofPopStyle();
+void MoMa::SceneApp::boneLocalDraw(const Frame &frame, boneMapType::iterator it){
+		ofPushMatrix();
+	int parent = it->second.jointParent;
+	int boneId = it->second.boneId;
+	vec transValue=frame.getPosition().col(parent);
+	ofTranslate(transValue(0), transValue(1), transValue(2) );
+	MoMa::quaternion lquat(frame.getRotation().col(boneId));
+	double alpha, x, y, z;
+	lquat.getRotate(alpha, x, y, z);
+	ofRotate(alpha,x,y,z);
+	ofBone bone;
+	ofVec3f beg (0,0,0);
+	for (int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++) {
+		ofVec3f end = toVec3f(frame.getPosition().col(it->second.jointChildren[bEnd]));
+		ofSetLineWidth(2);
+		ofLine(beg, end);
+		float s = arma::norm(frame.getPosition().col(it->second.jointChildren[bEnd]));
+		bone.setOrientation(toQuaternion(frame.getRotationOffset().col(it->second.jointChildren[bEnd])));
+		bone.setScale(s, 1, 1);
+		bone.draw();
+		if  (bEnd<it->second.boneChildrenIt.size())
+			boneLocalDraw(frame, it->second.boneChildrenIt[bEnd]);
+	}
+	ofPopMatrix();
 }
 
 void MoMa::SceneApp::setNumOfTracks(int nOfTracks) {

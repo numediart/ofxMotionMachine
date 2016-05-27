@@ -89,6 +89,8 @@ namespace MoMa {
         BoneList *boneList; // Bone list
         bool hasBoneList; // Check if set
         
+		bool hasGlobalCoordinate;//if true, coordinates are encoded in a global coordinate system. If false (rotation flag and skeleton necessary) coordinate of each segment are encoded in a local system link to the parent bone.
+
         // SynoList *synoList; // Synonym list
         // bool hasSynoList; // Check if set
         

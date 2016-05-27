@@ -52,6 +52,8 @@
 #include <fstream>
 
 namespace MoMa {
+	struct boneData;
+	typedef std::map< std::string, boneData> boneMapType;
 	struct boneData {
 		boneData() {};
 		boneData(int a, int b, std::vector<int> c){
@@ -62,11 +64,10 @@ namespace MoMa {
 		int boneId;
 		int jointParent;
 		std::vector<int> jointChildren;
-
+		std::vector<boneMapType::iterator> boneChildrenIt;
 	} ;
 
 
-	typedef std::map< std::string , boneData> boneMapType;
 
 
     class BoneList : public boneMapType {
@@ -89,6 +90,8 @@ namespace MoMa {
 					return (it->first);
 			return std::string("");
 		};
+		void updateBoneChildrenName();
+		boneMapType::iterator rootIt;
     };
 }
 
