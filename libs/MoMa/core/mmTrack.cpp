@@ -36,16 +36,7 @@ Track::~Track( void ) {
     if( hasBoneList ) delete boneList; // Deallocation
     // if( hasSynoList ) delete synoList; // Deallocation
 }
-void Track::clear() {
-    if( hasNodeList ) delete nodeList; // Deallocation
-    nodeList = NULL;
-    if( hasBoneList ) delete boneList; // Deallocation
-    boneList = NULL;
-    this->rotation.clear();
-    this->position.clear();
-    this->rotationOffset.clear();
 
-};
 void Track::init( void ) {
 
     easyName = ""; // No name
@@ -243,6 +234,10 @@ void Track::setFrameRate( float rate ) {
 
 void Track::clear( void ) {
 
+    if( hasNodeList ) delete nodeList; // Deallocation
+    nodeList = NULL;
+    if( hasBoneList ) delete boneList; // Deallocation
+    boneList = NULL;
     rotationOffset.clear();
     rotation.clear();
     position.clear();
