@@ -578,7 +578,7 @@ void MoMa::SceneApp::keyPressed(ofKeyEventArgs &key) {
 			if (key.key == OF_KEY_RIGHT)
 				if (isPlayback == false)
 					++appMoment;
-					
+
 		}
 
 		switch (activeMode) {
@@ -1254,22 +1254,6 @@ void MoMa::SceneApp::draw(LabelList labelList) {
 
 void MoMa::SceneApp::draw(const Frame &frame) {
 	if (frame.hasGlobalCoordinate) {
-	
-		if (frame.hasBoneList) {
-
-			//for (int b = 0; b < frame.boneList->size(); b++) {
-			for (boneMapType::iterator it = frame.boneList->begin(); it != frame.boneList->end(); it++) {
-
-				//            ofVec3f beg = toVec3f( frame.node( frame.boneList->at( b ).first ).position );
-				//            ofVec3f end = toVec3f( frame.node( frame.boneList->at( b ).second ).position );
-				ofVec3f beg = toVec3f(frame.getPosition().col(it->second.jointParent));
-				for (int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++) {
-					ofVec3f end = toVec3f(frame.getPosition().col(it->second.jointChildren[bEnd]));
-					ofSetLineWidth(2);
-					ofLine(beg, end);
-				}
-			}
-		}
 
 		if (frame.hasRotation()) {
 			if (frame.hasBoneList == false) {
@@ -1289,32 +1273,38 @@ void MoMa::SceneApp::draw(const Frame &frame) {
 				}*/
 
 			}
+			ofBone bone;
+			for (boneMapType::iterator it = frame.boneList->begin(); it != frame.boneList->end(); it++) {
+				for (int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++) {
+					arma::colvec lOffRot = frame.getRotationOffset().col(it->second.jointChildren[bEnd]);
+					if (lOffRot.is_finite()) {
 
-			if (frame.hasBoneList) {
-				ofBone bone;
-				for (boneMapType::iterator it = frame.boneList->begin(); it != frame.boneList->end(); it++) {
+						float s = arma::norm(frame.getPosition().col(it->second.jointParent) - frame.getPosition().col(it->second.jointChildren[bEnd]));
+						bone.setPosition(toVec3f(frame.getPosition().col(it->second.jointParent)));
 
-
-					for (int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++) {
-						arma::colvec lOffRot = frame.getRotationOffset().col(it->second.jointChildren[bEnd]);
-						if (lOffRot.is_finite()) {
-
-							float s = arma::norm(frame.getPosition().col(it->second.jointParent) - frame.getPosition().col(it->second.jointChildren[bEnd]));
-							bone.setPosition(toVec3f(frame.getPosition().col(it->second.jointParent)));
-
-							//if (frame.boneList->hasOrigNodeRot_as_boneRot)
-							bone.setOrientation(toQuaternion(frame.getRotationOffset().col(it->second.jointChildren[bEnd])) *toQuaternion(frame.getRotation().col(it->second.boneId)));//
-						//else
-						//	bone.setOrientation(toQuaternion(frame.getRotationOffset().col(frame.boneList->at(b).second[bEnd])) *toQuaternion(frame.getRotation().col(frame.boneList->at(b).second[bEnd])));//
-							bone.setScale(s, 1, 1);
-							bone.draw();
-						}
+						//if (frame.boneList->hasOrigNodeRot_as_boneRot)
+						bone.setOrientation(toQuaternion(frame.getRotationOffset().col(it->second.jointChildren[bEnd])) *toQuaternion(frame.getRotation().col(it->second.boneId)));//
+					//else
+					//	bone.setOrientation(toQuaternion(frame.getRotationOffset().col(frame.boneList->at(b).second[bEnd])) *toQuaternion(frame.getRotation().col(frame.boneList->at(b).second[bEnd])));//
+						bone.setScale(s, 1, 1);
+						bone.draw();
 					}
 				}
 			}
 		}
-
 		else {
+
+			if (frame.hasBoneList) {
+
+				for (boneMapType::iterator it = frame.boneList->begin(); it != frame.boneList->end(); it++) {
+					ofVec3f beg = toVec3f(frame.getPosition().col(it->second.jointParent));
+					for (int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++) {
+						ofVec3f end = toVec3f(frame.getPosition().col(it->second.jointChildren[bEnd]));
+						ofSetLineWidth(2);
+						ofLine(beg, end);
+					}
+				}
+			}
 
 			ofPushStyle();
 			ofSetColor(DarkTurquoise, ofGetStyle().color.a);
@@ -1333,38 +1323,36 @@ void MoMa::SceneApp::draw(const Frame &frame) {
 		}
 		ofPushStyle();
 		ofSetColor(ofGetStyle().color, 120); // We keep the color but make it transparent
-
-		for (int n = 0; n < frame.nOfNodes(); n++) {
-
-			string tag = ""; if (frame.hasNodeList && isNodeNames) tag = frame.nodeList->name(n);
-			if (frame.hasTime() && isTimeTags && n == 0) tag += ("(" + ofToString(frame.time()) + ")");
-			ofDrawBitmapString(tag, toVec3f(frame.getPosition().col(n)) + nodeSize / 1.5f);
+		if (frame.hasNodeList && isNodeNames) {
+			for (int n = 0; n < frame.nOfNodes(); n++) {
+				string tag = frame.nodeList->name(n);
+				if (frame.hasTime() && isTimeTags && n == 0) tag += ("(" + ofToString(frame.time()) + ")");
+				ofDrawBitmapString(tag, toVec3f(frame.getPosition().col(n)) + nodeSize / 1.5f);
+			}
 		}
-
 		ofPopStyle();
 	}
 	else {
 
-		if (frame.hasBoneList == false)
-			throw std::exception("impossible to have local system data without a correct bonelist");
-		int boneId = 0;
-		boneLocalDraw(frame,frame.boneList->rootIt);
+		if (frame.hasBoneList == false || frame.hasRotation() == false)
+			throw std::exception("impossible to have local system data without a correct oriented bonelist");
+		boneLocalDraw(frame, frame.boneList->rootIt);
 
 	}
 }
 
-void MoMa::SceneApp::boneLocalDraw(const Frame &frame, boneMapType::iterator it){
-		ofPushMatrix();
+void MoMa::SceneApp::boneLocalDraw(const Frame &frame, boneMapType::iterator it) {
+	ofPushMatrix();
 	int parent = it->second.jointParent;
 	int boneId = it->second.boneId;
-	vec transValue=frame.getPosition().col(parent);
-	ofTranslate(transValue(0), transValue(1), transValue(2) );
+	vec transValue = frame.getPosition().col(parent);
+	ofTranslate(transValue(0), transValue(1), transValue(2));
 	MoMa::quaternion lquat(frame.getRotation().col(boneId));
 	double alpha, x, y, z;
 	lquat.getRotate(alpha, x, y, z);
-	ofRotate(alpha,x,y,z);
+	ofRotate(alpha, x, y, z);
 	ofBone bone;
-	ofVec3f beg (0,0,0);
+	ofVec3f beg(0, 0, 0);
 	for (int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++) {
 		ofVec3f end = toVec3f(frame.getPosition().col(it->second.jointChildren[bEnd]));
 		ofSetLineWidth(2);
@@ -1373,7 +1361,7 @@ void MoMa::SceneApp::boneLocalDraw(const Frame &frame, boneMapType::iterator it)
 		bone.setOrientation(toQuaternion(frame.getRotationOffset().col(it->second.jointChildren[bEnd])));
 		bone.setScale(s, 1, 1);
 		bone.draw();
-		if  (bEnd<it->second.boneChildrenIt.size())
+		if (bEnd < it->second.boneChildrenIt.size())
 			boneLocalDraw(frame, it->second.boneChildrenIt[bEnd]);
 	}
 	ofPopMatrix();

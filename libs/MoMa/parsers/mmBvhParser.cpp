@@ -54,25 +54,17 @@ namespace MoMa {
 			//vector<vector<float> > jointOffsetRotation;
 			//jointOffsetRotation=parser.getJointOffsetRotation();
 			arma::cube positionData(3, nNodes, nFrames);
-			arma::cube rotationData(4, parser.getNofBones(), nFrames);
 			for (int i = 0; i < nFrames; i++) {
 				if (i % 100 == 0)
 					std::cout << i << std::endl;
 				vector<vector<float> > bvhFrame;
-				vector<vector<float> > bvhRotationFrame;
 		
 				if (globalCoordinate) {
 
 					bvhFrame = parser.bvh2xyz(i);
-					if (hasRotation) {
-						bvhRotationFrame = parser.bvh2quat(i);
-					}
 				}
 				else{
 					bvhFrame = parser.bvh2LocalXyz(i);
-					if (hasRotation) {
-						bvhRotationFrame = parser.bvh2LocalQuat(i);
-					}
 				}
 
 				//MoMa::Frame lFrame;
@@ -86,37 +78,48 @@ namespace MoMa {
 					positionData(2, j, i) = bvhFrame[j][2] * 10;
 				}
 
-				if (hasRotation) {
-					//	lNode.setRotation(bvhRotationFrame[j][0],bvhRotationFrame[j][1],bvhRotationFrame[j][2],bvhRotationFrame[j][3]);
-
-					for (int j = 0; j < bvhRotationFrame.size(); j++) {
-						rotationData(0, j, i) = bvhRotationFrame[j][0];
-						rotationData(1, j, i) = bvhRotationFrame[j][1];
-						rotationData(2, j, i) = bvhRotationFrame[j][2];
-						rotationData(3, j, i) = bvhRotationFrame[j][3];
-					}
-					//std::cout<<" "<<bvhRotationFrame[j][0]<<" "<<bvhRotationFrame[j][1]<<" "<<bvhRotationFrame[j][2]<<" "<<bvhRotationFrame[j][3]<<std::endl;
-					//lNode.setOffsetRotation(jointOffsetRotation[j][0],jointOffsetRotation[j][1],jointOffsetRotation[j][2],jointOffsetRotation[j][3]);
-				//lNode.setName(parser.getNodeName(j));
-				//lNode.setTime(i*parser.mFrameRate);
-				//lFrame.push(lNode);
-
-				}
 				//track->push(lFrame);
 
-				if (hasRotation) {
-					track->rotation.setData(parser.mFrameRate, rotationData);
-				}
 
 				track->position.setData(parser.mFrameRate, positionData);
 				track->setFrameRate(parser.mFrameRate);
+
+			}
+			if (hasRotation) {
+				arma::cube rotationData(4, parser.getNofBones(), nFrames);
+				for (int i = 0; i < nFrames; i++) {
+					if (i % 100 == 0)
+						std::cout << i << std::endl;
+					vector<vector<float> > bvhFrame;
+					vector<vector<float> > bvhRotationFrame;
+
+					if (globalCoordinate) {
+						bvhRotationFrame = parser.bvh2quat(i);
+					}
+					else {
+						bvhRotationFrame = parser.bvh2LocalQuat(i);
+					}
+
+						for (int j = 0; j < bvhRotationFrame.size(); j++) {
+							rotationData(0, j, i) = bvhRotationFrame[j][0];
+							rotationData(1, j, i) = bvhRotationFrame[j][1];
+							rotationData(2, j, i) = bvhRotationFrame[j][2];
+							rotationData(3, j, i) = bvhRotationFrame[j][3];
+						}
+
+						track->rotation.setData(parser.mFrameRate, rotationData);
+					
+
+					track->setFrameRate(parser.mFrameRate);
+
+				}
 
 			}
 			track->hasRotation = hasRotation;
 			track->hasGlobalCoordinate = globalCoordinate;
 			
 
-		track->nodeList = new NodeList;
+			track->nodeList = new NodeList;
 			track->hasNodeList = true;
 
 			for (unsigned int i = 0; i < nNodes; i++) {

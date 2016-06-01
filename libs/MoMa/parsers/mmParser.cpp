@@ -104,7 +104,8 @@ Parser::Parser( string const &fName, Track *tr ) {
     }
     
     else if( extension == "bvh" ) {
-        
+        track->clear();
+        track->init();
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
         
         BvhParser::load( fileName, track,true,false );

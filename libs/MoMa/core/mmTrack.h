@@ -38,7 +38,7 @@ namespace MoMa {
         Track( void ); // Default constructor
         virtual ~Track( void ); // Default destructor
         Track( Frame frame ); // Construt a track containing one frame
-
+        void clear();
         void init( void ); // Initialize track
 
         // - Loading files -
@@ -50,17 +50,17 @@ namespace MoMa {
         
         // - Extracting frames and frame-related matrices
         
-        inline Frame frame( unsigned int index ); // Extract frame from track (by index)
-        inline Frame frame( double time ); // Extract frame from track (by time tag)
+        inline Frame frame( unsigned int index ) const; // Extract frame from track (by index)
+        inline Frame frame( double time ) const ; // Extract frame from track (by time tag)
         
         inline Frame operator[]( unsigned int index ); // Short version of frame()
         inline Frame operator[]( double time ); // Short version of frame()
         
-        inline const arma::mat &framePosition( unsigned int index ); // Query frame by index in the track
-        inline arma::mat framePosition( double time ); // Query frame by time in the track
+        inline const arma::mat &framePosition( unsigned int index ) const; // Query frame by index in the track
+        inline arma::mat framePosition( double time ) const; // Query frame by time in the track
         
-        inline const arma::mat &frameRotation( unsigned int index ); // Query frame by index in the track
-        inline arma::mat frameRotation( double time ); // Query frame by time in the track
+        inline const arma::mat &frameRotation( unsigned int index ) const; // Query frame by index in the track
+        inline arma::mat frameRotation( double time ) const; // Query frame by time in the track
         
         // - Extracting traces and trace-related matrices
         
@@ -80,7 +80,8 @@ namespace MoMa {
         void cut( int beg, int end); // Cut track's data from beg to end
 
         void copy(Track & tr);
-
+		inline const arma::mat &getRotationOffset() const { return (this->rotationOffset); };
+		
         bool setJointOffsetRotation();
         
         void pushPosition( arma::mat frame ); // Add frame + checking if ringbuffer
@@ -98,12 +99,12 @@ namespace MoMa {
         int index( std::string name ); // Get index from name
         
         void setFrameRate( float rate ); // Set/get frame rate
-        inline float frameRate( void ) { return _frameRate; }
+        inline float frameRate( void ) const { return _frameRate; }
         
         inline double maxTime( void ); // Get the max time
         inline double minTime( void ); // Get the max time
-        inline unsigned int nOfFrames( void ); // Get # frames
-        inline unsigned int nOfNodes( void ); // Get # nodes
+        inline unsigned int nOfFrames( void ) const; // Get # frames
+        inline unsigned int nOfNodes( void ) const; // Get # nodes
         void clear( void ); // Clear the track
         
         // protected:
@@ -137,7 +138,7 @@ namespace MoMa {
     
     // - Inlined functions -
     
-    Frame Track::frame( unsigned int index ) {
+    Frame Track::frame( unsigned int index ) const {
         
         Frame oneFrame;
         
@@ -166,7 +167,7 @@ namespace MoMa {
         return( oneFrame );
     }
     
-    Frame Track::frame( double time ) {
+    Frame Track::frame( double time ) const {
         
         Frame oneFrame;
         
@@ -208,22 +209,22 @@ namespace MoMa {
         return( frame( time ) );
     }
     
-    const arma::mat &Track::framePosition( unsigned int index ) {
+    const arma::mat &Track::framePosition( unsigned int index ) const {
     
         return( position.get( index ) );
     }
     
-    arma::mat Track::framePosition( double time ) {
+    arma::mat Track::framePosition( double time ) const {
     
         return( position.get( time ) );
     }
     
-    const arma::mat &Track::frameRotation( unsigned int index ) {
+    const arma::mat &Track::frameRotation( unsigned int index ) const {
     
         return( rotation.get( index ) );
     }
     
-    arma::mat Track::frameRotation( double time ) {
+    arma::mat Track::frameRotation( double time ) const{
     
         return( rotation.get( time ) );
     }
@@ -381,13 +382,13 @@ namespace MoMa {
         else return( position.minTime() ); // Make a robust version of this return
     }
     
-    unsigned int Track::nOfFrames( void ) {
+    unsigned int Track::nOfFrames( void ) const{
         
         if( hasRotation ) return( std::max( position.nOfFrames(), rotation.nOfFrames() ) );
         else return( position.nOfFrames() ); // Make a robust version of this return
     }
     
-    unsigned int Track::nOfNodes( void ) {
+    unsigned int Track::nOfNodes( void ) const {
         
         if( hasRotation ) return( std::max( rotation.nOfCols(), position.nOfCols() ) );
         else return( position.nOfCols() ); // Make a robust version of this return

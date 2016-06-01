@@ -11,7 +11,7 @@
 namespace MoMa {
         
     
-    void TimedData::interpIndexFind(const arma::vec pVec, double pValue, unsigned int &index1, double &weight1, unsigned int &index2, double &weight2 ){
+    void TimedData::interpIndexFind(const arma::vec pVec, double pValue, unsigned int &index1, double &weight1, unsigned int &index2, double &weight2 ) const{
         unsigned int lIndex1;
 		arma::uword ltemp;
 		arma::abs(pVec-pValue).min(ltemp);
