@@ -58,7 +58,7 @@ namespace MoMa {
         
         BoneList( void ) : std::vector< std::pair<int,int> >() {hasOrigNodeRot_as_boneRot=true;} // Constructor
         BoneList( std::string fileName ); // Create object from text file
-        void load( std::string fileName ); // Load bones from text file
+        bool load( std::string fileName ); // Load bones from text file
         void print( void ); // Print the list of bones
         bool hasOrigNodeRot_as_boneRot;//difference between V3D BVH skel and kinect
         // TODO add a push function

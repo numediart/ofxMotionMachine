@@ -15,14 +15,14 @@ MoMa::BoneList::BoneList( string fileName ) {
     load( fileName );
 }
 
-void MoMa::BoneList::load( string fileName ) {
+bool MoMa::BoneList::load( string fileName ) {
     
     ifstream bonFile( fileName.c_str() );
     
     if( !bonFile.is_open() ) {
         
         cout << "BoneList: File could not be opened!" << endl;
-        return; // We alert in stdout and quit if no/wrong file!
+        return false; // We alert in stdout and quit if no/wrong file!
     }
     
     while ( bonFile.good() ) {
@@ -42,6 +42,8 @@ void MoMa::BoneList::load( string fileName ) {
             this->push_back( make_pair( begIdx, endIdx ) );
         }
     }
+
+    return true;
 }
 
 void MoMa::BoneList::print( void ) {

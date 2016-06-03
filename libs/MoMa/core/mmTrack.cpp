@@ -102,8 +102,18 @@ void Track::bones( string fileName ) {
 
     if( hasBoneList == true ) delete boneList;
 
-    boneList = new BoneList( fileName );
-    hasBoneList = true;
+    ifstream bonFile(fileName.c_str());
+
+    if (!bonFile.is_open()) { //Temporary, find a better way... such as a load function instead of the constructor so we can return a boolean telling if the bone file could be loaded.
+
+          hasBoneList = false;
+    }
+    else {
+
+        bonFile.close();
+        boneList = new BoneList(fileName);
+        hasBoneList = true;
+    }
 }
 
 void Track::load( string const &fileName ) {
