@@ -14,6 +14,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <armadillo>
 
 #ifndef MAX_PATH
 #define MAX_PATH 260
@@ -43,7 +44,18 @@ namespace MoMa {
     void checkFilePath( std::string &path ); //check if the path exists; if not, tries to correct the path with correctPath(...)
     //std::string checkFilePath( std::string const &path ); //check if the file path exists; if not, tries to correct the path with correctPath(...)
     //std::string checkDirectoryPath( std::string const &path ); //check if the directory path exists; if not, tries to correct the path with correctPath(...)
+    
+    template<typename Type> double nanmean(Type v) {
 
+        Type tmp = v.elem(find_finite(v));
+        return arma::mean(tmp);
+    }
+
+    template<typename Type> double nanstd(Type v) {
+
+        Type tmp = v.elem(find_finite(v));
+        return arma::stddev(tmp);
+    }
 }
 
 #endif
