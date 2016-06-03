@@ -586,7 +586,7 @@ void FloatingObject::setFocus(bool val) {
 
         for (auto obj : objects) {
 
-            if (obj->isInsideObjectOrTitle(ofGetMouseX(), ofGetMouseY())) {
+            if (obj->isInsideObjectOrTitle(ofGetMouseX(), ofGetMouseY()) && obj != this) {
 
                 //obj->setFocus(true);
                 objectUnderMouse = true;
