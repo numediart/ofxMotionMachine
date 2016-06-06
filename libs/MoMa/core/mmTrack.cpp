@@ -178,6 +178,112 @@ void Track::push( Frame _frame ) {
     }
 }
 
+bool Track::localToGlobal() {
+
+    if( hasNodeList == false || hasBoneList == false || hasGlobalCoordinate==true )
+        return false;
+    for( int i = 0; i < boneList->rootIt.size(); i++)
+        localToGlobal( boneList->rootIt[i] );
+    hasGlobalCoordinate = true;
+    this->setJointOffsetRotation();
+    return true;
+}
+
+void Track::localToGlobal( boneMapType::iterator it ){
+    int indMax = max( it->second.jointChildren.size(), it->second.boneChildrenIt.size() );
+    for( int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++ ) {
+
+
+        for( int idFrame = 0; idFrame < nOfFrames(); idFrame++ ) {
+            MoMa::quaternion lQuat( rotation.getRefData().slice( idFrame ).col( it->second.boneId ) );
+            arma::mat lMat, lMat2;
+            lQuat.get( lMat );
+            lQuat.clear();
+            lQuat.set( lMat );
+            lMat.submat( 0, 3, 2, 3 ) = position.getData().slice( idFrame ).col( it->second.jointParent );//last column is the translation column
+            
+                arma::vec lVec = lMat.submat( 0, 3, 2, 3 );
+                lMat = lMat.submat( 0, 0, 2, 2 );
+                position.getRefData().slice( idFrame ).col( it->second.jointChildren[bEnd] ) = lMat*position.getRefData().slice( idFrame ).col( it->second.jointChildren[bEnd] ) + lVec;
+            
+        }
+
+    }
+    for( int bEnd = 0; bEnd < it->second.boneChildrenIt.size(); bEnd++ ) {
+
+
+        for( int idFrame = 0; idFrame < nOfFrames(); idFrame++ ) {
+            MoMa::quaternion lQuat( rotation.getRefData().slice( idFrame ).col( it->second.boneId ) );
+            arma::mat lMat, lMat2;
+            lQuat.get( lMat );
+            lQuat.clear();
+            lQuat.set( lMat );
+            lMat.submat( 0, 3, 2, 3 ) = position.getData().slice( idFrame ).col( it->second.jointParent );//last column is the translation column
+            
+            MoMa::quaternion( rotation.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.boneId ) ).get( lMat2 );
+            
+            lQuat.set( ( arma::mat )( lMat*lMat2 ) );
+            rotation.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.boneId ) = lQuat;
+            
+        }
+
+        localToGlobal( it->second.boneChildrenIt[bEnd] );
+
+
+    }
+}
+
+bool Track::globalToLocal() {
+    if( hasNodeList == false || hasBoneList == false || hasGlobalCoordinate==false )
+        return false;
+    for( int i = 0; i < boneList->rootIt.size(); i++ )
+        globalToLocal( boneList->rootIt [i]);
+    hasGlobalCoordinate = false;
+    this->setJointOffsetRotation();
+
+    return true;
+
+};
+void Track::globalToLocal( boneMapType::iterator it ){
+    int indMax=max( it->second.jointChildren.size(), it->second.boneChildrenIt.size());
+   
+    for( int bEnd = 0; bEnd <  it->second.boneChildrenIt.size(); bEnd++ ) {
+            globalToLocal( it->second.boneChildrenIt[bEnd] );
+
+
+        for( int idFrame = 0; idFrame < nOfFrames(); idFrame++ ) {
+            MoMa::quaternion lQuat( rotation.getRefData().slice( idFrame ).col( it->second.boneId ) );
+            arma::mat lMat,lMat2;
+            lQuat.get( lMat );
+            lMat.submat( 0, 3, 2, 3 ) = position.getData().slice( idFrame ).col( it->second.jointParent );
+            lMat=inv(lMat);
+
+                MoMa::quaternion( rotation.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.boneId ) ).get( lMat2 );
+                lQuat.set( ( arma::mat )( lMat*lMat2 ) );
+                rotation.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.boneId ) = lQuat;
+            
+
+        }
+
+    }
+    for( int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++ ) {
+
+        for( int idFrame = 0; idFrame < nOfFrames(); idFrame++ ) {
+            MoMa::quaternion lQuat( rotation.getRefData().slice( idFrame ).col( it->second.boneId ) );
+            arma::mat lMat, lMat2;
+            lQuat.get( lMat );
+            lMat.submat( 0, 3, 2, 3 ) = position.getData().slice( idFrame ).col( it->second.jointParent );
+            lMat = inv( lMat );
+            arma::vec lVec = lMat.submat( 0, 3, 2, 3 );
+            lMat = lMat.submat( 0, 0, 2, 2 );
+            position.getRefData().slice( idFrame ).col( it->second.jointChildren[bEnd] ) = lMat*position.getRefData().slice( idFrame ).col( it->second.jointChildren[bEnd] ) + lVec;
+            
+        }
+
+    }
+}
+
+
 void Track::setName( string name ) {
 
     easyName = name;
@@ -239,6 +345,12 @@ void Track::clear( void ) {
     if( hasBoneList ) delete boneList; // Deallocation
     boneList = NULL;
     rotationOffset.clear();
+    rotation.clear();
+    position.clear();
+    hasRotation = false;
+}
+
+void Track::clearData( void ) {
     rotation.clear();
     position.clear();
     hasRotation = false;

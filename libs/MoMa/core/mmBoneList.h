@@ -91,7 +91,7 @@ namespace MoMa {
 			return std::string("");
 		};
 		void updateBoneChildrenName();
-		boneMapType::iterator rootIt;
+		std::vector<boneMapType::iterator> rootIt;
     };
 }
 

@@ -92,6 +92,10 @@ namespace MoMa {
         void push( Frame _frame ); // Push new frame into the track (at the end)
         
         // - Misc -
+        bool localToGlobal();
+        void localToGlobal( boneMapType::iterator it );
+        bool globalToLocal();
+        void globalToLocal( boneMapType::iterator it );
         
         void setName( std::string name ); // Define track name
         void setFileName( std::string name ); // Define track name
@@ -105,7 +109,7 @@ namespace MoMa {
         inline unsigned int nOfFrames( void ) const; // Get # frames
         inline unsigned int nOfNodes( void ) const; // Get # nodes
         void clear( void ); // Clear the track
-        
+        void clearData( void );
         // protected:
         
         // TODO Re-protect this

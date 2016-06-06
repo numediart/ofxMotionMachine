@@ -44,15 +44,17 @@ void ofSkeleton::draw(unsigned int index){
 		const arma::mat & lRotation = track.rotation.getData().slice(index);
 		const arma::mat & lPosition = track.position.getData().slice(index);
 
-		if (track.hasGlobalCoordinate)
-		{
-			boneGlobalDraw(lRotation, lPosition, boneList->rootIt);
+        for( int i = 0; i < boneList->rootIt.size(); i++ )
+    		if (track.hasGlobalCoordinate)
+	    	{
+                    
+    			boneGlobalDraw(lRotation, lPosition, boneList->rootIt[i]);
 
-		}
-		else {
-			boneLocalDraw(lRotation, lPosition, boneList->rootIt);
+    		}
+	    	else {
+		    	boneLocalDraw(lRotation, lPosition, boneList->rootIt[i]);
 
-		}
+		    }
 	}
 }
 
@@ -76,9 +78,9 @@ void ofSkeleton::boneLocalDraw(const arma::mat &rotation, const arma::mat &posit
 		ofSetLineWidth(2);
 		ofLine(beg, end);
 		bones[it->second.jointChildren[bEnd]].draw();
-		if (bEnd < it->second.boneChildrenIt.size())
-			boneLocalDraw(rotation,position, it->second.boneChildrenIt[bEnd]);
 	}
+    for( int bEnd = 0; bEnd < it->second.boneChildrenIt.size(); bEnd++ )
+        boneLocalDraw( rotation, position, it->second.boneChildrenIt[bEnd] );
 	ofPopMatrix();
 }
 void ofSkeleton::draw(double time) {

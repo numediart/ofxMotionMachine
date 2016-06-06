@@ -81,6 +81,6 @@ void MoMa::BoneList::updateBoneChildrenName() {
 			}
 		}
 		if (rootFlag)
-			rootIt = it;
+			rootIt.push_back( it );
 	}
 }

@@ -17,7 +17,7 @@ void KinParser::load( string const &fileName, Track *track ) {
         return; // We alert on stdout and quit if no file!
     }
     
-    track->clear();
+    track->clearData();
 	
 	unsigned int nbFrames=0;
 	unsigned int nbNodes=0;
@@ -127,12 +127,14 @@ void KinParser::load( string const &fileName, Track *track ) {
 				
             }
 			//oneFrame.setRotationFlag( track->hasRotation );
-			arma::mat rotTemp(4, nbBones);
-			for (boneMapType::iterator it = track->boneList->begin(); it != track->boneList->end(); it++) {
+            if( track->hasBoneList ) {
+                arma::mat rotTemp( 4, nbBones );
+                for( boneMapType::iterator it = track->boneList->begin(); it != track->boneList->end(); it++ ) {
 
-				rotTemp.col(it->second.boneId) = rot.col(it->second.jointChildren[0]);
-			}
-			sortedRot.slice(frameId) = rotTemp;
+                    rotTemp.col( it->second.boneId ) = rot.col( it->second.jointChildren[0] );
+                }
+                sortedRot.slice( frameId ) = rotTemp;
+            }
 			frameId++;
 		}
 	}
