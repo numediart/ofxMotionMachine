@@ -80,6 +80,8 @@ Parser::Parser( string const &fName, Track *tr ) {
                 track->hasBoneList = false;
                 delete track->boneList;
         }
+        if( track->hasBoneList == true )
+            tr->boneList->updateBoneChildrenName();
         tr->setJointOffsetRotation();
     }
 
