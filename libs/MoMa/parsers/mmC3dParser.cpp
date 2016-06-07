@@ -53,6 +53,7 @@ void C3dParser::load( string const &fileName, Track *track ) {
     bool printing = debug;
     size_t fres = 0;
     int ret = 0;
+    string unit = "";
 
     /// Open file ///
     if( printing ) {
@@ -325,6 +326,38 @@ void C3dParser::load( string const &fileName, Track *track ) {
                 else if(dimnum==1 && datalength>0){
                     fres = fread(data,sizeof(char),wordlength,fid);        //numerical data record of 1-D array
                     (param.data).push_back(string(data,wordlength));
+                    if (ParameterGroup[GroupNumber - 1].name == "POINT" && param.name == "UNITS") {
+
+                        if (printing) {
+                            cout << "param.data[0] (unit) : " << param.data[0] << endl;
+                            ret = system("pause");
+                        }
+
+                        // This bit of code removes the space characters that
+                        // sometimes happen after the extracted node names. It's
+                        // a hack because I have no idea why they get added.
+
+                        // TODO We need to review the parser for errors.
+
+                        bool isGoing = true;
+
+                        while (isGoing) {
+
+                            size_t found = param.data[0].find(' ');
+
+                            if (found != string::npos) {
+
+                                param.data[0].erase(found, 1);
+
+                            }
+                            else {
+
+                                isGoing = false;
+                            }
+                        }
+
+                        unit = param.data[0];
+                    }
                 }
                 delete data;
 
@@ -504,6 +537,23 @@ void C3dParser::load( string const &fileName, Track *track ) {
             }
 
         }
+        if (unit == "m") {
+
+            positionData *= 1000; //Default unit in motionmachine is mm
+        }
+        else if (unit == "dm") {
+
+            positionData *= 100; //Default unit in motionmachine is mm
+        }
+        else if (unit == "cm") {
+
+            positionData *= 10; //Default unit in motionmachine is mm
+        }
+        else if (unit == "mm") {
+
+            //Do nothing //Default unit in motionmachine is mm
+        }
+
 		track->position.setData(VideoFrameRate,positionData);
 
         delete analogtmp;
