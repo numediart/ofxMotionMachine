@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\MoMa\core\mmArmaUtils.cpp" />
+    <ClCompile Include="..\..\..\MoMa\core\mmBone.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmBoneList.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmContainer.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmFrame.cpp" />
@@ -28,6 +29,7 @@
     <ClCompile Include="..\..\..\MoMa\core\mmNode.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmNodeList.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmQuaternion.cpp" />
+    <ClCompile Include="..\..\..\MoMa\core\mmSkeleton.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmSynoList.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmTrace.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmTrack.cpp" />
@@ -46,6 +48,7 @@
     <ClCompile Include="..\..\..\MoMa\parsers\mmXmlParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmFloatingObject.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmMenuView.cpp" />
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOfSkeleton.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOptionsView.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmPlayBar.cpp" />
     <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp" />
@@ -117,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\MoMa\core\mmArmaUtils.h" />
+    <ClInclude Include="..\..\..\MoMa\core\mmBone.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmBoneList.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmContainer.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmFrame.h" />
@@ -125,6 +129,7 @@
     <ClInclude Include="..\..\..\MoMa\core\mmNode.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmNodeList.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmQuaternion.h" />
+    <ClInclude Include="..\..\..\MoMa\core\mmSkeleton.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmSynoList.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmTrace.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmTrack.h" />
@@ -144,6 +149,7 @@
     <ClInclude Include="..\..\..\MoMa\parsers\mmXmlParser.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmFloatingObject.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmMenuView.h" />
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOfSkeleton.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOptionsView.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmPlayBar.h" />
     <ClInclude Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h" />

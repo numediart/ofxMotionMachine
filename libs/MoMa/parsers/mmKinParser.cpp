@@ -17,7 +17,7 @@ void KinParser::load( string const &fileName, Track *track ) {
         return; // We alert on stdout and quit if no file!
     }
     
-    track->clear();
+    track->clearData();
 	
 	unsigned int nbFrames=0;
 	unsigned int nbNodes=0;
@@ -55,7 +55,10 @@ void KinParser::load( string const &fileName, Track *track ) {
     datFile.clear() ;
 	datFile.seekg(0, ios::beg) ;
 	arma::cube pos(3,nbNodes,nbFrames);
-	arma::cube rot(4,nbNodes,nbFrames);
+	int nbBones = nbNodes;
+	if (track->hasBoneList)
+		nbBones = track->boneList->size();
+	arma::cube sortedRot(4, nbBones, nbFrames);
 	unsigned int frameId=0;
     while ( datFile.good() ) {
 		string name;
@@ -69,7 +72,8 @@ void KinParser::load( string const &fileName, Track *track ) {
         && curLine != "\t" && curLine != "\n" ) {
             
             //Frame oneFrame;
-            
+
+			arma::mat rot(4, nbNodes);//size nbNode cause kinect model give an orientation for each node (some orientation are fake)
             curStrm.clear();
             curStrm << curLine;
             unsigned int nodeId=0;
@@ -94,16 +98,17 @@ void KinParser::load( string const &fileName, Track *track ) {
                        
                     // Data are ignored and the oneNode stays with ARMA NaNs
                     
-                } else {
+                } 
+				else {
                     
 
-                    pos(X,nodeId,frameId) = atof( value[0].c_str() );
-                    pos(Y,nodeId,frameId) = atof( value[1].c_str() );
-                    pos(Z,nodeId,frameId) = atof( value[2].c_str() );
-                    rot(qX,nodeId,frameId) =atof( value[3].c_str() );
-                    rot(qY,nodeId,frameId)=atof( value[4].c_str() );
-                    rot(qZ,nodeId,frameId)=atof( value[5].c_str() );
-                    rot(qW,nodeId,frameId)=atof( value[6].c_str() );
+                    pos(0,nodeId,frameId) = atof( value[0].c_str() );
+                    pos(1,nodeId,frameId) = atof( value[1].c_str() );
+                    pos(2,nodeId,frameId) = atof( value[2].c_str() );
+                    rot(0,nodeId) =atof( value[3].c_str() );
+                    rot(1,nodeId)=atof( value[4].c_str() );
+                    rot(2,nodeId)=atof( value[5].c_str() );
+                    rot(3,nodeId)=atof( value[6].c_str() );
                     /*
 					if (qw==1||(qx==0&&qy==0&&qz==0)){
                         oneNode.setRotation( arma::datum::nan,arma::datum::nan,arma::datum::nan,arma::datum::nan);
@@ -122,15 +127,23 @@ void KinParser::load( string const &fileName, Track *track ) {
 				
             }
 			//oneFrame.setRotationFlag( track->hasRotation );
+            if( track->hasBoneList ) {
+                arma::mat rotTemp( 4, nbBones );
+                for( boneMapType::iterator it = track->boneList->begin(); it != track->boneList->end(); it++ ) {
+
+                    rotTemp.col( it->second.boneId ) = rot.col( it->second.jointChildren[0] );
+                }
+                sortedRot.slice( frameId ) = rotTemp;
+            }
 			frameId++;
 		}
 	}
-	
+
 	track->position.setData(30,pos);
-	track->rotation.setData(30,rot);
+	track->rotation.setData(30, sortedRot);
 	track->hasRotation=true;
 	
-	track->hasOrigNodeRot_as_boneRot=false;
+	//track->hasOrigNodeRot_as_boneRot=false;
     datFile.close();
    
 }

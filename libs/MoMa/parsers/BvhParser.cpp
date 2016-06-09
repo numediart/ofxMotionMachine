@@ -7,6 +7,8 @@ bvhParser::bvhParser(){
     <<   1<<   0<<   0<<   0<<arma::endr
     <<   0<<   1<<   0<<   0<<arma::endr
     <<   0<<   0<<   0<<   1;
+
+	nbBones = 0;
     
 };
 bvhParser::~bvhParser(){
@@ -52,16 +54,17 @@ bool bvhParser::bvhJointRead(std::fstream &pFile,bvhJoint *pJoint,bool eos,std::
     int nbRot=0;
     for (int i=0;i<nbChan;i++){
         pFile>>bufString;
-        if (bufString.find("position")<bufString.length())
-            pJoint->cartesianFlag=true;
+		if (bufString.find("position") < bufString.length()) {
+			pJoint->cartesianFlag = true;
+		}
         if (bufString.find("rotation")<bufString.length()){
+			nbBones++;
             pJoint->rotationFlag=true;
-            if (nbRot>=3)
-                return false;
-            order[nbRot]=bufString[0];
-            nbRot++;
-            
-        }
+			if (nbRot>=3)
+				return false;
+			order[nbRot]=bufString[0];
+			nbRot++;
+		}
     }
     //In bvh file they give the axis order for the multiplication order. It's not the rotation order that we use in MoMa 
     if (order=="XYZ")
@@ -151,6 +154,7 @@ bool bvhParser::bvhRead(std::string fileName){
             return false;
     }
     //Read the frames
+	nbBones /= 3;
     lFile>>bufString;
     if (bufString!=std::string("MOTION")){
         return false;
@@ -246,13 +250,15 @@ std::vector<std::vector<float> > bvhParser::children2quat(unsigned int frameId,u
     lTransfo.eye(4,4);
     if (mHierarchy[nodeId]->rotationFlag){
         if (mHierarchy[nodeId]->cartesianFlag&&(mHierarchy[nodeId]->frame[frameId].size()==6))
-            lTransfo=coordMat(mHierarchy[nodeId]->frame[frameId][5],mHierarchy[nodeId]->frame[frameId][4],mHierarchy[nodeId]->frame[frameId][3],mHierarchy[nodeId]->rotationOrder);
-        
+            lTransfo=coordMat(mHierarchy[nodeId]->frame[frameId][5],mHierarchy[nodeId]->frame[frameId][4],mHierarchy[nodeId]->frame[frameId][3],mHierarchy[nodeId]->rotationOrder);        
         else
             if (mHierarchy[nodeId]->frame[frameId].size()==3)
                 lTransfo=coordMat(mHierarchy[nodeId]->frame[frameId][2],mHierarchy[nodeId]->frame[frameId][1],mHierarchy[nodeId]->frame[frameId][0],mHierarchy[nodeId]->rotationOrder);
-        
     }
+	else {
+		int j = 0;
+		j++;
+	}
     arma::colvec offset;
     offset<<mHierarchy[nodeId]->offsetX<<mHierarchy[nodeId]->offsetY<<mHierarchy[nodeId]->offsetZ<<1.0;
     
@@ -284,7 +290,7 @@ std::vector<std::vector<float> > bvhParser::children2quat(unsigned int frameId,u
         while (mHierarchy[nodeId]->child[i]!=mHierarchy[k]){
             k++;
         }
-        if (mHierarchy[nodeId]->child[i]==mHierarchy[k]){
+        if (mHierarchy[nodeId]->child[i]==mHierarchy[k]&& (mHierarchy[nodeId]->child[i]->rotationFlag==true)){
             std::vector<std::vector<float> > childRet=this->children2quat(frameId, k, lTransfo);
             for (int j=0;j<childRet.size();j++){
                 ret.push_back(childRet[j]);
@@ -301,6 +307,125 @@ std::vector<std::vector<float> > bvhParser::bvh2quat(unsigned int frameId){
     return ret;
 }
 
+std::vector<std::vector<float> > bvhParser::bvh2LocalXyz(unsigned int frameId) {
+	std::vector<std::vector<float> > ret = this->children2LocalXyz(frameId, 0);
+	return ret;
+
+}
+
+std::vector<std::vector<float> > bvhParser::bvh2LocalQuat(unsigned int frameId) {
+
+	arma::mat rootCoord = arma::eye(4, 4);
+	std::vector<std::vector<float> > ret = this->children2LocalQuat(frameId, 0);
+	return ret;
+
+}
+
+std::vector<std::vector<float> > bvhParser::children2LocalXyz(unsigned int frameId, unsigned int nodeId) {
+	std::vector<std::vector<float> > ret;
+	arma::mat lTransfo;
+	lTransfo.eye(4, 4);
+/*	if (mHierarchy[nodeId]->rotationFlag) {
+		if (mHierarchy[nodeId]->cartesianFlag && (mHierarchy[nodeId]->frame[frameId].size() == 6))
+			lTransfo = coordMat(mHierarchy[nodeId]->frame[frameId][5], mHierarchy[nodeId]->frame[frameId][4], mHierarchy[nodeId]->frame[frameId][3], mHierarchy[nodeId]->rotationOrder);
+
+		else
+			if (mHierarchy[nodeId]->frame[frameId].size() == 3)
+				lTransfo = coordMat(mHierarchy[nodeId]->frame[frameId][2], mHierarchy[nodeId]->frame[frameId][1], mHierarchy[nodeId]->frame[frameId][0], mHierarchy[nodeId]->rotationOrder);
+
+	}*/
+	arma::colvec offset;
+	offset << mHierarchy[nodeId]->offsetX << mHierarchy[nodeId]->offsetY << mHierarchy[nodeId]->offsetZ << 1.0;
+
+	lTransfo.col(3) = offset;
+	//lTransfo = parentTransfo*lTransfo;
+
+	if (mHierarchy[nodeId]->cartesianFlag) {
+		offset << mHierarchy[nodeId]->frame[frameId][0] << mHierarchy[nodeId]->frame[frameId][1] << mHierarchy[nodeId]->frame[frameId][2] << 1.0;
+		lTransfo.col(3) = offset;
+	}
+	std::vector<float> val;
+	arma::mat lTransfo3;
+	lTransfo3 = axisTransfo*lTransfo*axisTransfo.t();
+	//val.push_back(-lTransfo(2,3));
+	//val.push_back(-lTransfo(0,3));
+	//val.push_back(lTransfo(1,3));
+	val.push_back(lTransfo3(0, 3));
+	val.push_back(lTransfo3(1, 3));
+	val.push_back(lTransfo3(2, 3));
+
+	ret.push_back(val);
+	for (int i = 0; i<mHierarchy[nodeId]->child.size(); i++) {
+		int k = 0;
+		while (mHierarchy[nodeId]->child[i] != mHierarchy[k]) {
+			k++;
+		}
+		if (mHierarchy[nodeId]->child[i] == mHierarchy[k]) {
+			std::vector<std::vector<float> > childRet = this->children2LocalXyz(frameId, k);
+			for (int j = 0; j<childRet.size(); j++) {
+				ret.push_back(childRet[j]);
+			}
+		}
+	}
+	return ret;
+}
+
+std::vector<std::vector<float> > bvhParser::children2LocalQuat(unsigned int frameId, unsigned int nodeId) {
+
+	std::vector<std::vector<float> > ret;
+	arma::mat lTransfo;
+	lTransfo.eye(4, 4);
+	if (mHierarchy[nodeId]->rotationFlag) {
+		if (mHierarchy[nodeId]->cartesianFlag && (mHierarchy[nodeId]->frame[frameId].size() == 6))
+			lTransfo = coordMat(mHierarchy[nodeId]->frame[frameId][5], mHierarchy[nodeId]->frame[frameId][4], mHierarchy[nodeId]->frame[frameId][3], mHierarchy[nodeId]->rotationOrder);
+		else
+			if (mHierarchy[nodeId]->frame[frameId].size() == 3)
+				lTransfo = coordMat(mHierarchy[nodeId]->frame[frameId][2], mHierarchy[nodeId]->frame[frameId][1], mHierarchy[nodeId]->frame[frameId][0], mHierarchy[nodeId]->rotationOrder);
+	}
+	else {
+		int j = 0;
+		j++;
+	}
+	arma::colvec offset;
+	offset << mHierarchy[nodeId]->offsetX << mHierarchy[nodeId]->offsetY << mHierarchy[nodeId]->offsetZ << 1.0;
+
+	lTransfo.col(3) = offset;
+//	lTransfo = parentTransfo*lTransfo;
+
+	if (mHierarchy[nodeId]->cartesianFlag) {
+		offset << mHierarchy[nodeId]->frame[frameId][0] << mHierarchy[nodeId]->frame[frameId][1] << mHierarchy[nodeId]->frame[frameId][2] << 1.0;
+		lTransfo.col(3) = offset;
+	}
+
+	arma::mat lTransfo3;
+
+	lTransfo3 = axisTransfo*lTransfo*axisTransfo.t();
+
+	double w = sqrt(arma::trace(lTransfo3)) / 2;
+	double x = (lTransfo3(2, 1) - lTransfo3(1, 2)) / (4 * w);
+	double y = (lTransfo3(0, 2) - lTransfo3(2, 0)) / (4 * w);
+	double z = (lTransfo3(1, 0) - lTransfo3(0, 1)) / (4 * w);
+
+	std::vector<float> val;
+	val.push_back(x);
+	val.push_back(y);
+	val.push_back(z);
+	val.push_back(w);
+	ret.push_back(val);
+	for (int i = 0; i<mHierarchy[nodeId]->child.size(); i++) {
+		int k = 0;
+		while (mHierarchy[nodeId]->child[i] != mHierarchy[k]) {
+			k++;
+		}
+		if (mHierarchy[nodeId]->child[i] == mHierarchy[k] && (mHierarchy[nodeId]->child[i]->rotationFlag == true)) {
+			std::vector<std::vector<float> > childRet = this->children2LocalQuat(frameId, k);
+			for (int j = 0; j<childRet.size(); j++) {
+				ret.push_back(childRet[j]);
+			}
+		}
+	}
+	return ret;
+}
 
 std::vector<std::vector<float> > bvhParser::getJointOffsetRotation(){
     
@@ -577,19 +702,20 @@ bvhJoint* bvhParser::getJoint(std::string jointName){
     return 0;
 }
 
-std::vector<std::pair<int,int> > bvhParser::getBonesIndices(){
-    std::vector<std::pair<int,int> > ret;
+std::vector<std::pair<int, std::vector<int> > > bvhParser::getBonesIndices(){
+    std::vector<std::pair<int, std::vector<int> > > ret;
     for (unsigned int i=0;i<mHierarchy.size();i++){
         unsigned int k=i+1;
-        
+		std::vector<int> lVec;
         for (unsigned int j=0;j<mHierarchy[i]->child.size();j++){
-            
             while (mHierarchy[i]->child[j]!=mHierarchy[k]){
                 k++;
             }
-            if (mHierarchy[i]->child[j]==mHierarchy[k])
-                ret.push_back(std::pair<int,int>(i,k));
+			if (mHierarchy[i]->child[j] == mHierarchy[k]) 
+                lVec.push_back(k);
         }
+		if (lVec.size()>0)
+			ret.push_back(std::pair<int, std::vector<int> >  (i, lVec));
     }
     return ret;
 }

@@ -87,7 +87,7 @@ namespace MoMa {
         bool checkTimeVec( arma::vec pTime ,unsigned int pLastId); // Check time stamp vector
         unsigned int checkLastId(const arma::vec &pTime);
         void interpIndexFind( const arma::vec pVec, double pValue, unsigned int &index1,
-        double &weight1, unsigned int &index2, double &weight2 ); // Interpolation data
+        double &weight1, unsigned int &index2, double &weight2 ) const; // Interpolation data
         
     protected:
         arma::vec mTimeVec; // Time stamp vector
@@ -386,8 +386,8 @@ namespace MoMa {
         
         TimedCube( void ) { interpolAlgo = LINEAR; }
         
-        inline const arma::mat &get( unsigned int pIndex ); // Frame getter
-        inline arma::mat get( double pTime ); // by index and time
+        inline const arma::mat &get( unsigned int pIndex ) const; // Frame getter
+        inline arma::mat get( double pTime ) const; // by index and time
         
 		inline arma::mat getLast( double &pTime );
 		inline arma::mat getLast( ); 
@@ -436,12 +436,12 @@ namespace MoMa {
     
     // - Inlined functions -
     
-    const arma::mat &TimedCube::get( unsigned int pIndex ) {
+    const arma::mat &TimedCube::get( unsigned int pIndex ) const{
         
 		return mData.slice( memIndex( pIndex) );
     }
     
-    arma::mat TimedCube::get( double pTime ) {
+    arma::mat TimedCube::get( double pTime ) const {
         
         if( mTimed ) {
             

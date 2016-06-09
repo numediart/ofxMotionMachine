@@ -24,11 +24,12 @@ bool MoMa::BoneList::load( string fileName ) {
         cout << "BoneList: File could not be opened!" << endl;
         return false; // We alert in stdout and quit if no/wrong file!
     }
-    
+	int boneId = 0;
     while ( bonFile.good() ) {
         
         string curLine;
-        stringstream curStrm;
+		string boneName;
+		stringstream curStrm;
         int begIdx, endIdx;
         
         getline( bonFile, curLine ); // Grab the line
@@ -37,9 +38,13 @@ bool MoMa::BoneList::load( string fileName ) {
         && curLine != "\t" && curLine != "\n" ) {
             
             curStrm << curLine;
-            
+			curStrm >> boneName;
             curStrm >> begIdx; curStrm >> endIdx;
-            this->push_back( make_pair( begIdx, endIdx ) );
+			std::vector<int> lVec;
+			lVec.push_back(endIdx);
+			boneData lBone(boneId, begIdx, lVec);
+            (*this)[boneName]= lBone;
+			boneId++;
         }
     }
 
@@ -47,9 +52,37 @@ bool MoMa::BoneList::load( string fileName ) {
 }
 
 void MoMa::BoneList::print( void ) {
-    
-    for( int n=0; n<size(); n++ ) {
-        
-        cout << at( n ).first << " " << at( n ).second << endl;
-    }
+	for (boneMapType::iterator it = this->begin(); it != this->end(); it++) {
+		cout << it->first << " ";
+		cout << it->second.jointParent << " ";
+		for (int m = 0; m <it->second.jointChildren.size(); m++)
+			cout << it->second.jointChildren[m] << " ";
+		std::cout << endl;
+
+	}
+}
+
+void MoMa::BoneList::updateBoneChildrenName() {
+	for (boneMapType::iterator it = this->begin(); it != this->end(); it++) {
+		it->second.boneChildrenIt.clear();
+		for (int i = 0; i < it->second.jointChildren.size(); i++) {
+			int nodeId = it->second.jointChildren[i];
+			for (boneMapType::iterator it2 = this->begin(); it2 != this->end(); it2++) {
+				if (it2->second.jointParent == nodeId) {
+					it->second.boneChildrenIt.push_back(it2);
+				}
+			}
+		}
+	}
+	for (boneMapType::iterator it = this->begin(); it != this->end(); it++) {
+		bool rootFlag = true;
+		for (boneMapType::iterator it2 = this->begin(); it2 != this->end(); it2++) {
+			for (int i = 0; i < it2->second.boneChildrenIt.size(); i++) {
+				if (it2->second.boneChildrenIt[i] == it)
+					rootFlag = false;
+			}
+		}
+		if (rootFlag)
+			rootIt.push_back( it );
+	}
 }

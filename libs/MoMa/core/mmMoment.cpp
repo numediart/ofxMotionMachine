@@ -60,3 +60,16 @@ void Moment::setIndex( int idx ) {
 
     setIndex( idx, _frameRate );
 }
+Moment& Moment::operator++() {
+
+	_time += 1.0 / _frameRate;
+	_index++;
+	return (*this);
+}
+Moment& Moment::operator--() {
+	if (_index > 0) {
+		_time -= 1.0 / _frameRate;
+		_index--;
+	}
+	return (*this);
+}

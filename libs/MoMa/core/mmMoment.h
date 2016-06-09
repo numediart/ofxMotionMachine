@@ -26,6 +26,8 @@ namespace MoMa {
         void setTime( double time );
         void setIndex( unsigned int idx );
         void setIndex( int idx );
+		Moment & operator++();
+		Moment & operator--();
         
       protected:
         

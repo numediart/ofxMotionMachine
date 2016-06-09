@@ -192,6 +192,8 @@ namespace MoMa {
         // - Drawing methods for the 3D & 2D -
         
         void draw( const Node &node ); // Draw a node
+		void draw(const Bone &frame); // Draw a bone
+
         void draw( const Frame &frame ); // Draw a frame
         
         void draw( const TimedVec &tvec, int hue, std::string name="" ); // TimedVec
@@ -355,6 +357,8 @@ namespace MoMa {
         
         virtual void dragged( ofDragInfo &drag );
         
+
+		void boneLocalDraw(const Frame &frame, boneMapType::iterator it);
         // - Protected methods -
         
         void render2d( void );

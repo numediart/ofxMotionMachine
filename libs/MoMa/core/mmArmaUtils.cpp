@@ -85,5 +85,43 @@ arma::mat coordMat(double a1,double a2,double a3,rotationOrder order){
         
     }
 
+	arma::mat quat2ExpMap(arma::mat pMat) {
+		arma::rowvec sinhalftheta =arma::sqrt(arma::sum(pMat.rows(0, 2) % pMat.rows(0, 2), 0));
+		arma::rowvec coshalftheta = pMat.row(3);
+		arma::mat temp = (arma::ones(3,1)*sinhalftheta + arma::datum::eps);
+		arma::mat r0 = pMat.rows(0, 2) /temp;
+		arma::rowvec theta=2 * arma::atan(sinhalftheta/ coshalftheta);
+		theta.elem(find(theta > 2 * arma::datum::pi)) -= 2 * arma::datum::pi;
+		theta.elem(find(theta <  0)) += 2 * arma::datum::pi;
+		r0.cols(find(theta > arma::datum::pi)) = -r0.cols(find(theta > arma::datum::pi));
+		theta.elem(find(theta > arma::datum::pi)) = 2 * arma::datum::pi- theta.elem(find(theta > arma::datum::pi));
+		return (r0% (arma::ones(3, 1)*theta));
+	}
+
+	arma::cube quat2ExpMap(arma::cube pCube) {
+		arma::cube ret(3, pCube.n_cols, pCube.n_slices);
+		for (int i = 0; i < pCube.n_slices; i++)
+			ret.slice(i) = quat2ExpMap(pCube.slice(i));
+		return ret;
+	}
+	arma::mat expMap2quat(arma::mat pMat) {
+		arma::mat ret(4, pMat.n_cols);
+		arma::rowvec theta= arma::sqrt(arma::sum(pMat % pMat, 0));
+		ret.row(3) = cos(theta / 2);
+		arma::uvec ind;
+		ind << 0 << 1 << 2;
+		ret.rows(0, 2) = pMat % (arma::ones(3, 1)*(sin(theta / 2) / theta));
+		ret.submat(ind, find(abs(theta) <= arma::datum::eps)).zeros();
+		ind.clear();
+		ind << 3;
+		ret.submat(ind, find(abs(theta) <= arma::datum::eps)).ones();
+		return ret;
+	}
+	arma::cube expMap2quat(arma::cube pCube) {
+		arma::cube ret(4, pCube.n_cols, pCube.n_slices);
+		for (int i = 0; i < pCube.n_slices; i++)
+			ret.slice(i) = expMap2quat(pCube.slice(i));
+		return ret;
+	}
 
 }

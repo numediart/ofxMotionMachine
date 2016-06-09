@@ -31,7 +31,7 @@ Parser::Parser( string const &fName, Track *tr ) {
     int previousSize = track->nOfNodes();
     extension = fileName.substr( dot + 1) ;
     transform( extension.begin(), extension.end(), extension.begin(), ::tolower );
-
+	tr->hasGlobalCoordinate = true;//value by default
     if( extension == "txt" ) {        
 
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
@@ -80,6 +80,8 @@ Parser::Parser( string const &fName, Track *tr ) {
                 track->hasBoneList = false;
                 delete track->boneList;
         }
+        if( track->hasBoneList == true )
+            tr->boneList->updateBoneChildrenName();
         tr->setJointOffsetRotation();
     }
 
@@ -104,23 +106,26 @@ Parser::Parser( string const &fName, Track *tr ) {
     }
     
     else if( extension == "bvh" ) {
-        
+        track->clear();
+        track->init();
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
         
-        BvhParser::load( fileName, track );
+        BvhParser::load( fileName, track,true,false );
 		 tr->position.SetValidParam();
 		 if (tr->hasRotation)
 			 tr->rotation.SetValidParam();
+		 tr->boneList->updateBoneChildrenName();
         // Check validity of list of bones
         if( track->nOfNodes() != previousSize &&
            previousSize !=0 && track->hasBoneList == true ) {
             
             // different number of
             // markers => different skeleton
-            track->hasBoneList = false;
-            delete track->boneList;
+            //track->hasBoneList = false;
+            //delete track->boneList;
         }
         tr->setJointOffsetRotation();
+
     }
     else if( extension == "cmp" ) {
         
@@ -169,6 +174,8 @@ Parser::Parser( string const &fName, Track *tr ) {
                 delete track->boneList;
             }
         }
+        if( track->hasBoneList == true)
+            tr->boneList->updateBoneChildrenName();
          tr->setJointOffsetRotation();
     }
 
