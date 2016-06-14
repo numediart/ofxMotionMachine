@@ -19,7 +19,7 @@ void XmlParser::load( string const &fileName, Track *track ) {
         return; // We alert on stdout and quit if no file!
     }
     
-    track->clear();
+    track->clearData();
 	
 	unsigned int nbFrames = 0;
 	unsigned int nbNodes = 0;
@@ -174,12 +174,30 @@ void XmlParser::load( string const &fileName, Track *track ) {
 	}
 	
 	// Rotations part needs to be finished [ How to push rotations to the track? ]
-	
+
+    int nbBones = nbNodes;
+    if( track->hasBoneList ) {
+
+        nbBones = track->boneList->size();
+        arma::cube sortedRot( 4, nbBones, nbFrames );
+        for( int frameId = 0; frameId < nbFrames; frameId++ ) {
+            arma::mat rotTemp( 4, nbBones );
+            for( boneMapType::iterator it = track->boneList->begin(); it != track->boneList->end(); it++ ) {
+
+                rotTemp.col( it->second.boneId ) = rot.slice(frameId).col( it->second.jointChildren[0] );
+            }
+            sortedRot.slice( frameId ) = rotTemp;
+        }
+        track->hasRotation = true;
+        track->rotation.setData( 30, sortedRot );
+    }
+    else
+        track->hasRotation = false;
+
+    
+
 	track->position.setData( 30, pos );
-	//track->rotation.setData( 30, rot );
-	track->hasRotation = false;
     track->setFrameRate(30);
-	//track->hasOrigNodeRot_as_boneRot = false;
 
     datFile.close();
    

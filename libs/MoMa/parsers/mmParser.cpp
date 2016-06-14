@@ -185,8 +185,10 @@ Parser::Parser( string const &fName, Track *tr ) {
 
         XmlParser xmlParser( fileName,track );
 		 tr->position.SetValidParam();
-		 if ( tr->hasRotation )
-			 tr->rotation.SetValidParam();
+         if( tr->hasRotation ) {
+             tr->rotation.SetValidParam();
+             tr->setJointOffsetRotation();
+         }
 
         // Check validity of lists of bones and nodes
         if( track->nOfNodes() != previousSize && previousSize != 0 ) {
@@ -211,6 +213,9 @@ Parser::Parser( string const &fName, Track *tr ) {
     else if( extension == "bones" ) {
         track->bones( fileName );
         tr->setJointOffsetRotation();
+
+        if( track->hasBoneList == true )
+            tr->boneList->updateBoneChildrenName();
     }
 
     else if( extension == "nodes" ) track->nodes( fileName );

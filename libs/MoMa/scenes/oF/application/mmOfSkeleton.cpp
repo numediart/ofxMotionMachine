@@ -70,14 +70,17 @@ void ofSkeleton::boneLocalDraw(const arma::mat &rotation, const arma::mat &posit
 	ofTranslate(transValue(0), transValue(1), transValue(2));
 	MoMa::quaternion lquat(rotation.col(boneId));
 	double alpha, x, y, z;
-	lquat.getRotate(alpha, x, y, z);
-	ofRotate(alpha, x, y, z);
+    if( arma::norm( ( arma::colvec ) lquat ) > arma::datum::eps ) {
+        lquat.getRotate( alpha, x, y, z );
+        ofRotate( alpha, x, y, z );
+    }
 	ofVec3f beg(0, 0, 0);
 	for (int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++) {
 		ofVec3f end = toVec3f(position.col(it->second.jointChildren[bEnd]));
 		ofSetLineWidth(2);
 		ofLine(beg, end);
-		bones[it->second.jointChildren[bEnd]].draw();
+        if( arma::norm ( (arma::colvec)lquat ) > arma::datum::eps )
+    		bones[it->second.jointChildren[bEnd]].draw();
 	}
     for( int bEnd = 0; bEnd < it->second.boneChildrenIt.size(); bEnd++ )
         boneLocalDraw( rotation, position, it->second.boneChildrenIt[bEnd] );

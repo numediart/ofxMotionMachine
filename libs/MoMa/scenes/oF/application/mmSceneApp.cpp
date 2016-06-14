@@ -1289,6 +1289,14 @@ void MoMa::SceneApp::draw(const Frame &frame) {
 						bone.setScale(s, 1, 1);
 						bone.draw();
 					}
+                    else {
+                        ofVec3f beg = toVec3f( frame.getPosition().col( it->second.jointParent ) );
+                        ofVec3f end = toVec3f( frame.getPosition().col( it->second.jointChildren[bEnd] ) );
+                        ofSetLineWidth( 2 );
+                        ofLine( beg, end );
+
+
+                    }
 				}
 			}
 		}
