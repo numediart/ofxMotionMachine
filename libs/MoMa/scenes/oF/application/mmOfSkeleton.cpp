@@ -40,26 +40,68 @@ ofSkeleton::~ofSkeleton()
 }
 
 void ofSkeleton::draw(unsigned int index){
-	if (index < track.nOfFrames()) {
-		const arma::mat & lRotation = track.rotation.getData().slice(index);
-		const arma::mat & lPosition = track.position.getData().slice(index);
+	if (index < track.nOfFrames() && track.hasNodeList && track.hasBoneList) {
+        if( track.hasRotation ) {
+            const arma::mat & lRotation = track.rotation.getData().slice( index );
+            const arma::mat & lPosition = track.position.getData().slice( index );
 
-        for( int i = 0; i < boneList->rootIt.size(); i++ )
-    		if (track.hasGlobalCoordinate)
-	    	{
-                    
-    			boneGlobalDraw(lRotation, lPosition, boneList->rootIt[i]);
+            for( int i = 0; i < boneList->rootIt.size(); i++ )
+                if( track.hasGlobalCoordinate )
+                {
 
-    		}
-	    	else {
-		    	boneLocalDraw(lRotation, lPosition, boneList->rootIt[i]);
+                    boneGlobalDraw( lRotation, lPosition, boneList->rootIt[i] );
 
-		    }
+                }
+                else {
+                    boneLocalDraw( lRotation, lPosition, boneList->rootIt[i] );
+
+                }
+        }
+        else {
+            const arma::mat lRotation = arma::zeros(4,track.boneList->size());
+            const arma::mat & lPosition = track.position.getData().slice( index );
+
+            for( int i = 0; i < boneList->rootIt.size(); i++ )
+                if( track.hasGlobalCoordinate )
+                {
+
+                    boneGlobalDraw( lRotation, lPosition, boneList->rootIt[i] );
+
+                }
+                else {
+                    boneLocalDraw( lRotation, lPosition, boneList->rootIt[i] );
+
+                }
+        }
 	}
 }
 
 void ofSkeleton::boneGlobalDraw(const arma::mat &rotation, const arma::mat &position, boneMapType::iterator it) {
+    ofPushMatrix();
+    int parent = it->second.jointParent;
+    int boneId = it->second.boneId;
+    arma::vec transValue = position.col( parent );
+    ofTranslate( transValue( 0 ), transValue( 1 ), transValue( 2 ) );
+    MoMa::quaternion lquat( rotation.col( boneId ) );
+    double alpha, x, y, z;
+    ofVec3f beg( 0, 0, 0 );
 
+    if( arma::norm( ( arma::colvec ) lquat ) < arma::datum::eps )
+    for( int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++ ) {
+        ofVec3f end = toVec3f( position.col( it->second.jointChildren[bEnd] ) ) - toVec3f( position.col( it->second.jointParent ) );
+        ofSetLineWidth( 2 );
+        ofLine( beg, end );
+    }
+    else {
+        lquat.getRotate( alpha, x, y, z );
+        ofRotate( alpha, x, y, z );
+        for( int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++ ) {
+            bones[it->second.jointChildren[bEnd]].draw();
+        }
+    }
+    ofPopMatrix();
+    for( int bEnd = 0; bEnd < it->second.boneChildrenIt.size(); bEnd++ )
+        boneGlobalDraw( rotation, position, it->second.boneChildrenIt[bEnd] );
 }
 
 void ofSkeleton::boneLocalDraw(const arma::mat &rotation, const arma::mat &position, boneMapType::iterator it) {
@@ -73,15 +115,18 @@ void ofSkeleton::boneLocalDraw(const arma::mat &rotation, const arma::mat &posit
     if( arma::norm( ( arma::colvec ) lquat ) > arma::datum::eps ) {
         lquat.getRotate( alpha, x, y, z );
         ofRotate( alpha, x, y, z );
+        for( int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++ ) {
+                bones[it->second.jointChildren[bEnd]].draw();
+        }
     }
-	ofVec3f beg(0, 0, 0);
-	for (int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++) {
-		ofVec3f end = toVec3f(position.col(it->second.jointChildren[bEnd]));
-		ofSetLineWidth(2);
-		ofLine(beg, end);
-        if( arma::norm ( (arma::colvec)lquat ) > arma::datum::eps )
-    		bones[it->second.jointChildren[bEnd]].draw();
-	}
+    else {
+        ofVec3f beg( 0, 0, 0 );
+        for( int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++ ) {
+            ofVec3f end = toVec3f( position.col( it->second.jointChildren[bEnd] ) );
+            ofSetLineWidth( 2 );
+            ofLine( beg, end );
+        }
+    }
     for( int bEnd = 0; bEnd < it->second.boneChildrenIt.size(); bEnd++ )
         boneLocalDraw( rotation, position, it->second.boneChildrenIt[bEnd] );
 	ofPopMatrix();

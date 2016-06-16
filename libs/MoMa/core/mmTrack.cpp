@@ -206,16 +206,18 @@ void Track::localToGlobal( boneMapType::iterator it ){
 
         for( int idFrame = 0; idFrame < nOfFrames(); idFrame++ ) {
             MoMa::quaternion lQuat( rotation.getRefData().slice( idFrame ).col( it->second.boneId ) );
+            if( arma::norm( ( arma::colvec ) lQuat ) < arma::datum::eps )
+                continue;
             arma::mat lMat, lMat2;
             lQuat.get( lMat );
             lQuat.clear();
             lQuat.set( lMat );
             lMat.submat( 0, 3, 2, 3 ) = position.getData().slice( idFrame ).col( it->second.jointParent );//last column is the translation column
-            
-                arma::vec lVec = lMat.submat( 0, 3, 2, 3 );
-                lMat = lMat.submat( 0, 0, 2, 2 );
-                position.getRefData().slice( idFrame ).col( it->second.jointChildren[bEnd] ) = lMat*position.getRefData().slice( idFrame ).col( it->second.jointChildren[bEnd] ) + lVec;
-            
+
+            arma::vec lVec = lMat.submat( 0, 3, 2, 3 );
+            lMat = lMat.submat( 0, 0, 2, 2 );
+            position.getRefData().slice( idFrame ).col( it->second.jointChildren[bEnd] ) = lMat*position.getRefData().slice( idFrame ).col( it->second.jointChildren[bEnd] ) + lVec;
+
         }
 
     }
@@ -224,17 +226,30 @@ void Track::localToGlobal( boneMapType::iterator it ){
 
         for( int idFrame = 0; idFrame < nOfFrames(); idFrame++ ) {
             MoMa::quaternion lQuat( rotation.getRefData().slice( idFrame ).col( it->second.boneId ) );
+            if( arma::norm( ( arma::colvec ) lQuat ) < arma::datum::eps ) {
+                throw std::exception( " Track::globalToLocal, no Valid orientation for a non endpoint node" );
+            }
             arma::mat lMat, lMat2;
             lQuat.get( lMat );
             lQuat.clear();
             lQuat.set( lMat );
             lMat.submat( 0, 3, 2, 3 ) = position.getData().slice( idFrame ).col( it->second.jointParent );//last column is the translation column
             
-            MoMa::quaternion( rotation.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.boneId ) ).get( lMat2 );
-            
-            lQuat.set( ( arma::mat )( lMat*lMat2 ) );
-            rotation.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.boneId ) = lQuat;
-            
+            MoMa::quaternion lQuat2( rotation.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.boneId ) );
+                
+            lQuat2.get( lMat2 );
+            if( arma::norm( ( arma::colvec ) lQuat2 ) > arma::datum::eps ) {
+                lQuat.set( ( arma::mat )( lMat*lMat2 ) );
+                rotation.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.boneId ) = lQuat;
+            }
+            else {
+                lMat = lMat.submat( 0, 0, 2, 2 );
+                arma::vec lVec2 = position.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.jointParent );
+                for( int b2 = 0; b2 < it->second.boneChildrenIt[bEnd]->second.jointChildren.size(); b2++ ) {
+                    arma::vec lVec3 = lMat*position.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.jointChildren[b2] );
+                    position.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.jointChildren[b2] ) = lVec3 + lVec2;// = lMat*position.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.jointChildren[bEnd] ) + lVec;
+                }
+            }
         }
 
         localToGlobal( it->second.boneChildrenIt[bEnd] );
@@ -244,7 +259,7 @@ void Track::localToGlobal( boneMapType::iterator it ){
 }
 
 bool Track::globalToLocal() {
-    if( hasNodeList == false || hasBoneList == false || hasGlobalCoordinate==false )
+    if( hasRotation==false || hasNodeList == false || hasBoneList == false || hasGlobalCoordinate==false )
         return false;
     for( int i = 0; i < boneList->rootIt.size(); i++ )
         globalToLocal( boneList->rootIt [i]);
@@ -258,21 +273,33 @@ void Track::globalToLocal( boneMapType::iterator it ){
     int indMax=max( it->second.jointChildren.size(), it->second.boneChildrenIt.size());
    
     for( int bEnd = 0; bEnd <  it->second.boneChildrenIt.size(); bEnd++ ) {
-            globalToLocal( it->second.boneChildrenIt[bEnd] );
-
-
+        globalToLocal( it->second.boneChildrenIt[bEnd] );
         for( int idFrame = 0; idFrame < nOfFrames(); idFrame++ ) {
             MoMa::quaternion lQuat( rotation.getRefData().slice( idFrame ).col( it->second.boneId ) );
+            if( arma::norm( ( arma::colvec ) lQuat ) < arma::datum::eps ) {
+                throw std::exception( " Track::globalToLocal, no Valid orientation for a non endpoint node" );
+            }
             arma::mat lMat,lMat2;
             lQuat.get( lMat );
             lMat.submat( 0, 3, 2, 3 ) = position.getData().slice( idFrame ).col( it->second.jointParent );
             lMat=inv(lMat);
 
-                MoMa::quaternion( rotation.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.boneId ) ).get( lMat2 );
+            MoMa::quaternion lQuat2( rotation.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.boneId ) );
+
+            if( arma::norm( ( arma::colvec ) lQuat2 ) > arma::datum::eps ) {
+                lQuat2.get( lMat2 );
                 lQuat.set( ( arma::mat )( lMat*lMat2 ) );
                 rotation.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.boneId ) = lQuat;
-            
-
+            }
+            else {
+                arma::vec lVec = lMat.submat( 0, 3, 2, 3 );
+                lMat = lMat.submat( 0, 0, 2, 2 );
+                arma::vec lVec2 = lMat*position.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.jointParent );
+                for( int b2 = 0; b2 < it->second.boneChildrenIt[bEnd]->second.jointChildren.size(); b2++ ) {
+                    arma::vec lVec3 = lMat*position.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.jointChildren[b2] );
+                    position.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.jointChildren[b2] ) = lVec3 - lVec2;// = lMat*position.getRefData().slice( idFrame ).col( it->second.boneChildrenIt[bEnd]->second.jointChildren[bEnd] ) + lVec;
+                }
+            }
         }
 
     }
@@ -280,8 +307,11 @@ void Track::globalToLocal( boneMapType::iterator it ){
 
         for( int idFrame = 0; idFrame < nOfFrames(); idFrame++ ) {
             MoMa::quaternion lQuat( rotation.getRefData().slice( idFrame ).col( it->second.boneId ) );
+            if( arma::norm( ( arma::colvec ) lQuat ) < arma::datum::eps )
+                continue;
             arma::mat lMat, lMat2;
             lQuat.get( lMat );
+            arma::vec lVec3= position.getData().slice( idFrame ).col( it->second.jointParent );
             lMat.submat( 0, 3, 2, 3 ) = position.getData().slice( idFrame ).col( it->second.jointParent );
             lMat = inv( lMat );
             arma::vec lVec = lMat.submat( 0, 3, 2, 3 );

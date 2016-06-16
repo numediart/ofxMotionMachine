@@ -74,6 +74,7 @@ void MoMa::BoneList::updateBoneChildrenName() {
 			}
 		}
 	}
+    rootIt.clear();
 	for (boneMapType::iterator it = this->begin(); it != this->end(); it++) {
 		bool rootFlag = true;
 		for (boneMapType::iterator it2 = this->begin(); it2 != this->end(); it2++) {

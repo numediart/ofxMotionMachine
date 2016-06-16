@@ -212,13 +212,19 @@ Parser::Parser( string const &fName, Track *tr ) {
     }
     else if( extension == "bones" ) {
         track->bones( fileName );
-        tr->setJointOffsetRotation();
-
         if( track->hasBoneList == true )
             tr->boneList->updateBoneChildrenName();
+        tr->setJointOffsetRotation();
+
     }
 
-    else if( extension == "nodes" ) track->nodes( fileName );
+    else if( extension == "nodes" ) { 
+        track->nodes( fileName );
+        if( track->hasBoneList == true )
+            tr->boneList->updateBoneChildrenName();
+        tr->setJointOffsetRotation();
+
+    }
 
     else cout << "Invalid file format" << endl;
 }
