@@ -25,6 +25,7 @@ namespace MoMa {
         std::vector<std::string> rawJoint;
         std::vector<int> axisIndex;
         NodeList *nodeList;
+        BoneList *boneList;
         int dim;
 
         std::stringstream thisStream;

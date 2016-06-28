@@ -1,0 +1,16 @@
+Head 1 0
+Thorax 2 3
+LArm 4 6
+RArm 5 7
+LForeArm 6 8
+RForeArm 7 9
+LHand 8 10
+RHand 9 11
+LHip 12 13
+RHip 12 14
+LThigh 13 15
+RThigh 14 16
+LCalf 15 17
+RCalf 16 18
+LFoot 17 19
+RFoot 18 20
