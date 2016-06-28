@@ -51,6 +51,7 @@
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOfSkeleton.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOptionsView.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmPlayBar.cpp" />
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmTextDialog.cpp" />
     <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp" />
     <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtils.cpp" />
     <ClCompile Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocket.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOfSkeleton.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOptionsView.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmPlayBar.h" />
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmTextDialog.h" />
     <ClInclude Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h" />
     <ClInclude Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h" />
     <ClInclude Include="..\..\..\oF\addons\ofxOsc\libs\oscpack\src\ip\PacketListener.h" />
