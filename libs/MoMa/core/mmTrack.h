@@ -104,8 +104,8 @@ namespace MoMa {
         void setFrameRate( float rate ); // Set/get frame rate
         inline float frameRate( void ) const { return _frameRate; }
         
-        inline double maxTime( void ); // Get the max time
-        inline double minTime( void ); // Get the max time
+        inline double maxTime( void ) const; // Get the max time
+        inline double minTime( void ) const; // Get the max time
         inline unsigned int nOfFrames( void ) const; // Get # frames
         inline unsigned int nOfNodes( void ) const; // Get # nodes
         void clear( void ); // Clear the track
@@ -374,12 +374,12 @@ namespace MoMa {
         return( rotation.getData().tube( 0, index, 2 , index ) );
     }
     
-    double Track::maxTime( void ) {
+    double Track::maxTime( void ) const {
         
         if( hasRotation ) return( std::max( position.maxTime(), rotation.maxTime() ) );
         else return( position.maxTime() ); // Make a robust version of this return
     }
-    double Track::minTime( void ) {
+    double Track::minTime( void ) const {
         
         if( hasRotation ) return( std::min( position.minTime(), rotation.minTime() ) );
         else return( position.minTime() ); // Make a robust version of this return

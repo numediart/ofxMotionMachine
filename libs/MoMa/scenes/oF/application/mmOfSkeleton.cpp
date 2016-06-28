@@ -132,4 +132,43 @@ void ofSkeleton::boneLocalDraw(const arma::mat &rotation, const arma::mat &posit
 	ofPopMatrix();
 }
 void ofSkeleton::draw(double time) {
+
+    if( (time < track.maxTime()) && time > track.minTime() && track.hasNodeList && track.hasBoneList ) {
+        if( track.hasRotation ) {
+            const arma::mat & lRotation = track.rotation.get(time);
+            const arma::mat & lPosition = track.position.get(time);
+            if( lRotation.is_finite() && lPosition.is_finite() ) {
+                for( int i = 0; i < boneList->rootIt.size(); i++ )
+                    if( track.hasGlobalCoordinate )
+                    {
+
+                        boneGlobalDraw( lRotation, lPosition, boneList->rootIt[i] );
+
+                    }
+                    else {
+                        boneLocalDraw( lRotation, lPosition, boneList->rootIt[i] );
+
+                    }
+            }
+
+        }
+        else {
+            const arma::mat lRotation = arma::zeros( 4, track.boneList->size() );
+            const arma::mat & lPosition = track.position.get(time);
+            if( lPosition.is_finite() ) {
+
+                for( int i = 0; i < boneList->rootIt.size(); i++ )
+                    if( track.hasGlobalCoordinate )
+                    {
+
+                        boneGlobalDraw( lRotation, lPosition, boneList->rootIt[i] );
+
+                    }
+                    else {
+                        boneLocalDraw( lRotation, lPosition, boneList->rootIt[i] );
+
+                    }
+            }
+        }
+    }
 }

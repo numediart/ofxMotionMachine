@@ -1,6 +1,6 @@
 #ifndef __mmOfSkeleton__
 #define __mmOfSkeleton__
-namespace MoMa { class mmOfSkeleton; }
+namespace MoMa { class ofSkeleton; }
 
 #include <armadillo>
 
