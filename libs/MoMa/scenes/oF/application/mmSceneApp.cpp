@@ -2,6 +2,7 @@
 #include "mmMenuView.h"
 #include "mmPlayBar.h"
 #include "mmOptionsView.h"
+#include "mmTextDialog.h"
 
 using namespace std;
 using namespace arma;
@@ -67,8 +68,9 @@ void MoMa::SceneApp::setup(ofEventArgs &args) {
 
 	menuView = NULL;
 	playBar = NULL;
-	optionsView = NULL;
+	optionsView = NULL;    
 	addMenuView();
+    labelEditor = new TextDialog(this);
 
 	hasDragEventRegTrack = false;
 	hasMouseEventRegLabelList = false;
@@ -600,57 +602,13 @@ void MoMa::SceneApp::keyPressed(ofKeyEventArgs &key) {
 
 				if (key.key == 'z') isZoom = true; // 'z' like 'zoom'
 				if (key.key == 'u') showAll(); // 'u' like 'unzoom'
+                if (key.key == 'n') insertNewLabel = true;
 			}
-
-			if (hasMouseEventRegLabelList && isLabelSelected) {
-
-				if (key.key == OF_KEY_BACKSPACE) {
-
-					if (isEditing) {
-
-						if ((*mouseEventRegLabelList)[selectedLabelIdx].name.size() > 0) {
-
-							(*mouseEventRegLabelList)[selectedLabelIdx].name.resize(
-								(*mouseEventRegLabelList)[selectedLabelIdx].name.size() - 1);
-						}
-
-					}
-					else {
-
-						(*mouseEventRegLabelList).erase((*mouseEventRegLabelList).begin() + selectedLabelIdx);
-						isLabelSelected = false;
-					}
-
-				}
-				else if (key.key == OF_KEY_RETURN) {
-
-					if (isEditing) {
-
-						(*mouseEventRegLabelList)[selectedLabelIdx].state = UNSELECTED;
-						isLabelSelected = false;
-						isEditing = false;
-
-					}
-					else {
-
-						// TODO Rewire the logic to take system text box into account
-
-						(*mouseEventRegLabelList)[selectedLabelIdx].name
-							= ofSystemTextBoxDialog("Enter label name:");
-						// isEditing = true;
-					}
-
-				}
-				else if (isEditing) {
-
-					(*mouseEventRegLabelList)[selectedLabelIdx].name.push_back(key.key);
-				}
-
-			}
-			else if (key.key == 'n') { // 'n' like 'new label'
+			
+			/*else if (key.key == 'n') { // 'n' like 'new label'
 
 				insertNewLabel = true;
-			}
+			}*/
 
 			break;
 		}
@@ -720,6 +678,58 @@ void MoMa::SceneApp::keyReleased(ofKeyEventArgs &key) {
 				if (key.key == 'z') isZoom = false;
 				if (key.key == 'n') insertNewLabel = false;
 			}
+
+            if (hasMouseEventRegLabelList && isLabelSelected) {
+
+                if (key.key == OF_KEY_BACKSPACE) {
+
+                    if (isEditing) {
+
+                        if ((*mouseEventRegLabelList)[selectedLabelIdx].name.size() > 0) {
+
+                            (*mouseEventRegLabelList)[selectedLabelIdx].name.resize(
+                                (*mouseEventRegLabelList)[selectedLabelIdx].name.size() - 1);
+                        }
+
+                    }
+                    else {
+
+                        (*mouseEventRegLabelList).erase((*mouseEventRegLabelList).begin() + selectedLabelIdx);
+                        isLabelSelected = false;
+                    }
+
+                }
+                else if (key.key == OF_KEY_RETURN) {
+
+                    if (!isEditing) {
+
+                        labelEditor->set((*mouseEventRegLabelList)[selectedLabelIdx].name);
+                        isEditing = true;
+                    }
+
+                    if (isEditing) {
+
+                        (*mouseEventRegLabelList)[selectedLabelIdx].state = UNSELECTED;
+                        isLabelSelected = false;
+                        isEditing = false;
+
+                    }
+                    //else {
+
+                        // TODO Rewire the logic to take system text box into account
+                        
+
+                        //(*mouseEventRegLabelList)[selectedLabelIdx].name = ofSystemTextBoxDialog("Enter label name:");
+                        // isEditing = true;
+                   // }
+
+                }
+                /*else if (isEditing) {
+
+                    (*mouseEventRegLabelList)[selectedLabelIdx].name.push_back(key.key);
+                }*/
+
+            }
 
 			break;
 		}
@@ -1315,7 +1325,7 @@ void MoMa::SceneApp::draw(const Frame &frame) {
 			}
 
 			ofPushStyle();
-			ofSetColor(DarkTurquoise, ofGetStyle().color.a);
+			//ofSetColor(DarkTurquoise, ofGetStyle().color.a);
 			ofSpherePrimitive sphere;
 
 			sphere.setRadius(DefaultNodeSize / 2); // Set position and radius

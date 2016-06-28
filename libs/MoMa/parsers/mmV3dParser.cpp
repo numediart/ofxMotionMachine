@@ -48,11 +48,14 @@ void V3dParser::load( string const &fileName, Track *track ) {
     v3dFile.clear(); // Return to beginning
     v3dFile.seekg(v3dFile.beg); // of the file
     
-    track->clearData(); // Clear the track before
-    
+    //track->clearData(); // Clear the track before
+    track->clear(); // Clear the track before
+
     nodeList = new NodeList(); // We create a nodeList,
     track->nodeList = nodeList; // add it to the track
     track->hasNodeList = true; // and tell everybody
+
+    track->load(getAbsoluteResPath() + "v3d.bones"); // Add bones          
     
     // Two more lines to skip
     if( v3dFile.good() ) getline( v3dFile, thisLine ); // Aller a la ligne 1
