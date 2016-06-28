@@ -50,7 +50,8 @@ namespace MoMa {
         
       protected:
         
-        TimedData() { mTimed = false; mFrameRate = -1.0f;mInitialTime=0.f; mTimeVec=arma::zeros(0,0);
+          TimedData() {
+              mTimed = false; mFrameRate = -1.0f; mInitialTime = 0.f; mTimeVec = arma::zeros( 0, 0 ); mInterpValidTime = 0.5;
 		mBufferSize=0;mLastId=0;mIsRealTime=false;mBufferSize=0;mLastId=0;mIsFilled=true;}
 	public:
         inline const arma::vec &getTimeVec( void ) const{ return( mTimeVec ); }
@@ -86,14 +87,15 @@ namespace MoMa {
         bool checkTimeVec( arma::vec pTime ); // Check time stamp vector
         bool checkTimeVec( arma::vec pTime ,unsigned int pLastId); // Check time stamp vector
         unsigned int checkLastId(const arma::vec &pTime);
-        void interpIndexFind( const arma::vec pVec, double pValue, unsigned int &index1,
+        bool interpIndexFind( const arma::vec pVec, double pValue, unsigned int &index1,
         double &weight1, unsigned int &index2, double &weight2 ) const; // Interpolation data
-        
+        bool setValidIntervalTime( double time ) { mInterpValidTime = time; };
     protected:
         arma::vec mTimeVec; // Time stamp vector
         double mFrameRate; // Frame rate (if any)
         double mInitialTime;
         bool mTimed; // Is it timed or not?
+        double mInterpValidTime;
 		
 		//RealTime properties
 		void initRealTime(unsigned int bufferSize){
@@ -233,9 +235,11 @@ namespace MoMa {
             double weight1, weight2;
             unsigned int index1, index2;
             
-            interpIndexFind( this->mTimeVec, pTime, index1, weight1, index2, weight2 );
-            
-            return( ( weight1*mData(index1)+weight2*mData(index2))/(weight1+weight2) );
+            bool validFlag=interpIndexFind( this->mTimeVec, pTime, index1, weight1, index2, weight2 );
+            if( validFlag )
+                return( ( weight1*mData( index1 ) + weight2*mData( index2 ) ) / ( weight1 + weight2 ) );
+            else
+                return arma::datum::nan;
         
         } else {
 			return( this->mData(memIndex( this->nearestIndex(pTime)) ));
@@ -343,8 +347,11 @@ namespace MoMa {
             double weight1,weight2;
             unsigned int index1,index2;
             
-            interpIndexFind( this->mTimeVec, pTime, index1, weight1, index2, weight2 );
-            return( ( weight1*mData.col(index1) + weight2*mData.col(index2) ) / (weight1+weight2) );
+            bool validFlag=interpIndexFind( this->mTimeVec, pTime, index1, weight1, index2, weight2 );
+            if( validFlag )
+                return ( ( weight1*mData.col( index1 ) + weight2*mData.col( index2 ) ) / ( weight1 + weight2 ) );
+            else
+                return (arma::datum::nan*arma::ones( mData.n_rows, 1 ));
             
             // TODO : Implement QSLERP interpolation
         
@@ -448,12 +455,15 @@ namespace MoMa {
             double weight1,weight2;
             unsigned int index1,index2;
             
-            interpIndexFind( this->mTimeVec, pTime, index1, weight1, index2, weight2 );
-            
+            bool validFlag =interpIndexFind( this->mTimeVec, pTime, index1, weight1, index2, weight2 );
+
             if( interpolAlgo == LINEAR ) {
-                
-                return( ( weight1 * mData.slice( index1 ) + weight2
+                if( validFlag )  
+                    return( ( weight1 * mData.slice( index1 ) + weight2
                          * mData.slice( index2 ) )/ ( weight1+weight2 ) );
+                else
+                    return ( arma::datum::nan*arma::ones( mData.n_rows, mData.n_cols ) );
+
                 
             } else if ( interpolAlgo == QSLERP ) {
                 

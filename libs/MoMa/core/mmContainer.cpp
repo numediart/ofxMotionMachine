@@ -11,7 +11,7 @@
 namespace MoMa {
         
     
-    void TimedData::interpIndexFind(const arma::vec pVec, double pValue, unsigned int &index1, double &weight1, unsigned int &index2, double &weight2 ) const{
+    bool TimedData::interpIndexFind(const arma::vec pVec, double pValue, unsigned int &index1, double &weight1, unsigned int &index2, double &weight2 ) const{
         unsigned int lIndex1;
 		arma::uword ltemp;
 		arma::abs(pVec-pValue).min(ltemp);
@@ -21,21 +21,26 @@ namespace MoMa {
             index2=lIndex1;
             weight1=1.0;
             weight2=0.0;
-            return;
+            return true;
         }
 		if (pValue<pVec((mLastId+1)%pVec.size())){
+            
 			index1=lIndex1;
             index2=lIndex1;
             weight1=0;
             weight2=1;
-			return;
+            if( ( pVec( ( mLastId + 1 ) % pVec.size() ) - pValue ) > mInterpValidTime )
+                return false;
+            return true;
 		}
 		if (pValue>pVec((mLastId)%pVec.size())){
 			index1=lIndex1;
             index2=lIndex1;
             weight1=1;
             weight2=0;
-			return;
+            if( ( pValue - pVec( mLastId % pVec.size() ) ) > mInterpValidTime )
+                return false;
+			return true;
 		}
 		if (pVec(lIndex1)<pValue){
 	        index1=lIndex1;
@@ -47,7 +52,9 @@ namespace MoMa {
 		}
 		weight1=(pVec(index2)-pValue)/(pVec(index2)-pVec(index1));
 		weight2=1-weight1;
-		return;
+        if( ( pVec( index2 ) - pVec( index1 ) ) > 2 * mInterpValidTime )
+            return false;
+		return true;
 	}
     
 	
