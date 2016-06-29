@@ -822,10 +822,21 @@ void MoMa::SceneApp::mouseReleased(ofMouseEventArgs &mouse) {
 
 			zoomHighBound = mouse.x;
 
+            if (zoomHighBound >= ofGetWidth()) {
+
+                zoomHighBound = ofGetWidth();
+            }
+
+            if (zoomLowBound <= 0) {
+
+                zoomLowBound = 0;
+            }
+
 			if (zoomLowBound >= zoomHighBound) {
 
+                int tmp = zoomHighBound;
 				zoomHighBound = zoomLowBound;
-				zoomLowBound = mouse.x;
+				zoomLowBound = zoomHighBound;
 			}
 
 			double newMin = ofMap(zoomLowBound, 0, ofGetWidth(), lowBound.time(), highBound.time());
