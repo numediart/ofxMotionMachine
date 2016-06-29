@@ -90,6 +90,16 @@ void LabelList::save( string fName, int type, double maxTime ) {
     }
 }
 
+bool comparelabels(Label i, Label j) { 
+
+    return (i.moment.time()<j.moment.time()); 
+}
+
+void LabelList::sort() {
+
+    std::sort(this->begin(), this->end(), comparelabels);
+}
+
 void LabelList::insert( MoMa::Moment mom, std::string nam ) {
 
     push_back( Label( mom, nam ) );

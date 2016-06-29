@@ -16,6 +16,7 @@
 #include <fstream>
 
 #include "mmMoment.h"
+#include <algorithm>
 
 namespace MoMa {
     
@@ -57,7 +58,9 @@ namespace MoMa {
         
         void load( std::string fName, double frameRate ); // Load/save labels
         void save( std::string fName, int type = EVENT, double maxTime = 0.0f );
-        
+        void sort();
+        //bool compare(Label i, Label j);
+
         void insert( MoMa::Moment mom, std::string nam );
         void remove( std::string nam ); // Insert/remove
         void remove( int idx ); // here remove @ index
