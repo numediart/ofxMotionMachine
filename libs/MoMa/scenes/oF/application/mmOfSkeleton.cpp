@@ -3,7 +3,8 @@ using namespace MoMa;
 ofSkeleton::ofSkeleton(const MoMa::Track &pTrack) :
 	track(pTrack), boneList(pTrack.boneList), nodeList(pTrack.nodeList)
 {
-	this->_isValid = true;
+
+    this->_isValid = true;
 	if (track.hasNodeList == false)
 		this->_isValid = false;
 	if (track.hasBoneList == false)
@@ -31,6 +32,9 @@ ofSkeleton::ofSkeleton(const MoMa::Track &pTrack) :
 			}
 		}
 	}
+    mNodeSize = DefaultNodeSize;
+    mNodeSphere.setRadius( mNodeSize / 2 );
+
 
 }
 
@@ -91,6 +95,8 @@ void ofSkeleton::boneGlobalDraw(const arma::mat &rotation, const arma::mat &posi
         ofVec3f end = toVec3f( position.col( it->second.jointChildren[bEnd] ) ) - toVec3f( position.col( it->second.jointParent ) );
         ofSetLineWidth( 2 );
         ofLine( beg, end );
+        mNodeSphere.setPosition( end );
+        mNodeSphere.draw();
     }
     else {
         lquat.getRotate( alpha, x, y, z );
@@ -125,6 +131,8 @@ void ofSkeleton::boneLocalDraw(const arma::mat &rotation, const arma::mat &posit
             ofVec3f end = toVec3f( position.col( it->second.jointChildren[bEnd] ) );
             ofSetLineWidth( 2 );
             ofLine( beg, end );
+            mNodeSphere.setPosition( end  );
+            mNodeSphere.draw();
         }
     }
     for( int bEnd = 0; bEnd < it->second.boneChildrenIt.size(); bEnd++ )
