@@ -29,7 +29,7 @@ namespace MoMa {
             index2=lIndex1;
             weight1=0;
             weight2=1;
-            if( ( pVec( ( mLastId + 1 ) % pVec.size() ) - pValue ) > mInterpValidTime )
+            if( ( pVec( ( mLastId + 1 ) % pVec.size() ) - pValue ) > 1E-6 )
                 return false;
             return true;
 		}
@@ -38,7 +38,7 @@ namespace MoMa {
             index2=lIndex1;
             weight1=1;
             weight2=0;
-            if( ( pValue - pVec( mLastId % pVec.size() ) ) > mInterpValidTime )
+            if( ( pValue - pVec( mLastId % pVec.size() ) ) > 1E-6 )
                 return false;
 			return true;
 		}
