@@ -49,48 +49,52 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\libs\compiled\project\win\AppOpenFrameworksRelease.props" />
     <Import Project="..\..\..\libs\compiled\project\win\MotionMachineRelease.props" />
+	<Import Project="..\..\..\libs\oF\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\libs\compiled\project\win\MotionMachineDebug.props" />
-    <Import Project="..\..\..\libs\compiled\project\win\AppOpenFrameworksDebug.props" />
+    <Import Project="..\..\..\libs\oF\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\libs\compiled\project\win\AppOpenFrameworksRelease.props" />
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" /> 
     <Import Project="..\..\..\libs\compiled\project\win\MotionMachineRelease.props" />
+	<Import Project="..\..\..\libs\oF\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\libs\compiled\project\win\MotionMachineDebug.props" />
-    <Import Project="..\..\..\libs\compiled\project\win\AppOpenFrameworksDebug.props" />
+    <Import Project="..\..\..\libs\oF\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-		<OutDir>bin\</OutDir>
-		<IntDir>obj\$(Configuration)\</IntDir>
+		<IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
 		<TargetName>$(ProjectName)_debug</TargetName>
 		<LinkIncremental>true</LinkIncremental>
 		<GenerateManifest>true</GenerateManifest>
+		<LocalDebuggerWorkingDirectory>$(ProjectDir)/bin</LocalDebuggerWorkingDirectory>
+		<DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-		<OutDir>bin\</OutDir>
-		<IntDir>obj\$(Configuration)\</IntDir>
+		<IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
 		<TargetName>$(ProjectName)_debug</TargetName>
 		<LinkIncremental>true</LinkIncremental>
 		<GenerateManifest>true</GenerateManifest>
+		<LocalDebuggerWorkingDirectory>$(ProjectDir)/bin</LocalDebuggerWorkingDirectory>
+		<DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-		<OutDir>bin\</OutDir>
-		<IntDir>obj\$(Configuration)\</IntDir>
+		<IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
 		<LinkIncremental>false</LinkIncremental>
+	    <LocalDebuggerWorkingDirectory>$(ProjectDir)/bin</LocalDebuggerWorkingDirectory>
+		<DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-		<OutDir>bin\</OutDir>
-		<IntDir>obj\$(Configuration)\</IntDir>
+		<IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
 		<LinkIncremental>false</LinkIncremental>
+		<LocalDebuggerWorkingDirectory>$(ProjectDir)/bin</LocalDebuggerWorkingDirectory>
+		<DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
 	</PropertyGroup>
 	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
 		<ClCompile>
@@ -111,7 +115,7 @@
             <IgnoreSpecificDefaultLibraries>PocoFoundationmd.lib;PocoFoundationd.lib;atlthunk.lib;LIBC.lib;LIBCMT;PocoXMLd.lib</IgnoreSpecificDefaultLibraries>
 		</Link>
 		<PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"
+      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\$(Platform_Actual)\*.dll" "$(ProjectDir)bin"
 	  robocopy "$(ProjectDir)../../../libs/oF/export/vs/$(Platform_Actual)/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
 if errorlevel 1 exit 0 else exit %errorlevel%</Command>
     </PostBuildEvent>
@@ -136,7 +140,7 @@ if errorlevel 1 exit 0 else exit %errorlevel%</Command>
             <IgnoreSpecificDefaultLibraries>PocoFoundationmd.lib;PocoFoundationd.lib;atlthunk.lib;LIBC.lib;LIBCMT;PocoXMLd.lib</IgnoreSpecificDefaultLibraries>
 		</Link>
 		<PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"
+      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\$(Platform_Actual)\*.dll" "$(ProjectDir)bin"
 	  robocopy "$(ProjectDir)../../../libs/oF/export/vs/$(Platform_Actual)/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
 if errorlevel 1 exit 0 else exit %errorlevel%</Command>
     </PostBuildEvent>
@@ -163,7 +167,7 @@ if errorlevel 1 exit 0 else exit %errorlevel%</Command>
             <IgnoreSpecificDefaultLibraries>PocoFoundationmd.lib;PocoFoundationd.lib;atlthunk.lib;LIBC.lib;LIBCMT;PocoXMLd.lib</IgnoreSpecificDefaultLibraries>
 		</Link>
 		<PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"
+      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\$(Platform_Actual)\*.dll" "$(ProjectDir)bin"
 	  robocopy "$(ProjectDir)../../../libs/oF/export/vs/$(Platform_Actual)/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
 	  xcopy /e /i /y "$(ProjectDir)..\..\..\libs\MoMa\resources" "$(ProjectDir)bin\data\resources"
 if errorlevel 1 exit 0 else exit %errorlevel%</Command>
@@ -190,7 +194,7 @@ if errorlevel 1 exit 0 else exit %errorlevel%</Command>
             <IgnoreSpecificDefaultLibraries>PocoFoundationmd.lib;PocoFoundationd.lib;atlthunk.lib;LIBC.lib;LIBCMT;PocoXMLd.lib</IgnoreSpecificDefaultLibraries>
 		</Link>
 		<PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"
+      <Command>xcopy /e /i /y "$(ProjectDir)..\..\..\libs\armadillo\lib\$(Platform_Actual)\*.dll" "$(ProjectDir)bin"
 	  robocopy "$(ProjectDir)../../../libs/oF/export/vs/$(Platform_Actual)/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
 	  xcopy /e /i /y "$(ProjectDir)..\..\..\libs\MoMa\resources" "$(ProjectDir)bin\data\resources"
 if errorlevel 1 exit 0 else exit %errorlevel%</Command>
