@@ -22,8 +22,4 @@ Windows (Visual Studio 2015)
 
 Work in progress...
 
-You can find below a series of tutorials for installation and first use of MotionMachine.
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/-00fcnDebVE?list=PLBdzvc6iEN7WqJqM1oi1nwyGaLZHu_QB3" frameborder="0" allowfullscreen></iframe>
-
-
+You can find a series of tutorials for installation and first use of MotionMachine [here](https://youtu.be/-00fcnDebVE?list=PLBdzvc6iEN7WqJqM1oi1nwyGaLZHu_QB3).
