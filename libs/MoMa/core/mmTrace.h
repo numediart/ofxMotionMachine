@@ -64,7 +64,7 @@ namespace MoMa {
 						rotationOffset=node.rotationOffset;
 				}*/
 				{
-					throw std::exception("Trace::push(Node) not compatible with an oriented trace");
+					throw std::runtime_error("Trace::push(Node) not compatible with an oriented trace");
 				}
             }
             else{
@@ -75,7 +75,7 @@ namespace MoMa {
                         rotationOffset=node.rotationOffset;
                 }*/
 				{
-					throw std::exception("Trace::push(Node) not compatible with an oriented trace");
+					throw std::runtime_error("Trace::push(Node) not compatible with an oriented trace");
 				}
 
             }
