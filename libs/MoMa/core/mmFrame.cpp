@@ -177,12 +177,12 @@ int MoMa::Frame::index( std::string name ) {
 MoMa::Bone MoMa::Frame::bone(std::string name) const {
 	Bone bon;
 	if (this->hasBoneList==false)
-		throw std::exception("Frame::bone impossible to get a MoMa::bone without bonelist or orientation");
+		throw std::runtime_error("Frame::bone impossible to get a MoMa::bone without bonelist or orientation");
 	if (this->hasRotation() == false)
-		throw std::exception("Frame::bone impossible to get a MoMa::bone without bonelist or orientation");
+		throw std::runtime_error("Frame::bone impossible to get a MoMa::bone without bonelist or orientation");
 	int boneId = this->boneList->getBoneId(name);
 	if (boneId==-1)
-		throw std::exception("Frame::bone no Bone with this name in BoneList");
+		throw std::runtime_error("Frame::bone no Bone with this name in BoneList");
 	int parentId = this->boneList->getParentNode(name);
 	std::vector<int> childrenIds = this->boneList->getChildrenNodes(name);
 

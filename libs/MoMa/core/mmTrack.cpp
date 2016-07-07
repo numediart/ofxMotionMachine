@@ -227,7 +227,7 @@ void Track::localToGlobal( boneMapType::iterator it ){
         for( int idFrame = 0; idFrame < nOfFrames(); idFrame++ ) {
             MoMa::quaternion lQuat( rotation.getRefData().slice( idFrame ).col( it->second.boneId ) );
             if( arma::norm( ( arma::colvec ) lQuat ) < arma::datum::eps ) {
-                throw std::exception( " Track::globalToLocal, no Valid orientation for a non endpoint node" );
+                throw std::runtime_error( " Track::globalToLocal, no Valid orientation for a non endpoint node" );
             }
             arma::mat lMat, lMat2;
             lQuat.get( lMat );
@@ -277,7 +277,7 @@ void Track::globalToLocal( boneMapType::iterator it ){
         for( int idFrame = 0; idFrame < nOfFrames(); idFrame++ ) {
             MoMa::quaternion lQuat( rotation.getRefData().slice( idFrame ).col( it->second.boneId ) );
             if( arma::norm( ( arma::colvec ) lQuat ) < arma::datum::eps ) {
-                throw std::exception( " Track::globalToLocal, no Valid orientation for a non endpoint node" );
+                throw std::runtime_error( " Track::globalToLocal, no Valid orientation for a non endpoint node" );
             }
             arma::mat lMat,lMat2;
             lQuat.get( lMat );
@@ -530,7 +530,7 @@ bool Track::setJointOffsetRotation() {
         return false;
 
     if( this->rotation.getData().size() == 0 )
-        throw std::exception( "Track::setJointOffsetRotation : empty rotation matrix with a rotation true flag" );
+        throw std::runtime_error( "Track::setJointOffsetRotation : empty rotation matrix with a rotation true flag" );
     bool debug = false;
 
     this->rotationOffset.resize( 4, this->nOfNodes() );//for each mocap format, the orientation offset is stored in the destination node of the bone

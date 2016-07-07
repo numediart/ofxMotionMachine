@@ -126,11 +126,11 @@ _name = "";
 MoMa::Bone::Bone(arma::vec coord, arma::vec rot, std::vector< arma::vec> offsetRot, std::vector< double> lengths) {
 
 	if (coord.size() != 3)
-		throw std::exception("MoMa::Bone position vector has not the good size");
+		throw std::runtime_error("MoMa::Bone position vector has not the good size");
 	if (rot.size() != 4)
-		throw std::exception("MoMa::Bone rotation vector has not the good size");
+		throw std::runtime_error("MoMa::Bone rotation vector has not the good size");
 	if (lengths.size() != offsetRot.size())
-		throw std::exception("MoMa::Bone offset data and lengths data must have the same size");
+		throw std::runtime_error("MoMa::Bone offset data and lengths data must have the same size");
 	position.resize(3);
 	rotation.resize(4);
 //	rotationOffset.resize(4);
@@ -176,7 +176,7 @@ void MoMa::Bone::setRotation( float x, float y, float z, float w ) {
 
 void MoMa::Bone::setPosition(arma::vec pos) {
 	if (pos.size() != 3)
-		throw std::exception("MoMa::Bone position vector has not the good size");
+		throw std::runtime_error("MoMa::Bone position vector has not the good size");
 
 	position = pos;
 }
@@ -191,11 +191,11 @@ void MoMa::Bone::setRotation( arma::vec rot ) {
 
 void MoMa::Bone::setBoneData(std::vector<arma::vec> off, std::vector< double> lengths){
 	if (lengths.size()!=off.size())
-		throw std::exception("MoMa::Bone offset data and lengths data must have the same size");
+		throw std::runtime_error("MoMa::Bone offset data and lengths data must have the same size");
 
 	for (int i = 0; i < off.size(); i++)
 		if (arma::norm(off[i]) == 0)
-			throw std::exception("MoMa::Bone::setBoneData theses quaternion must be non null ");
+			throw std::runtime_error("MoMa::Bone::setBoneData theses quaternion must be non null ");
 	rotationOffset = off;
 	boneLength = lengths;
 }
