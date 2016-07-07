@@ -86,6 +86,14 @@ void ofSkeleton::boneGlobalDraw(const arma::mat &rotation, const arma::mat &posi
     int boneId = it->second.boneId;
     arma::vec transValue = position.col( parent );
     ofTranslate( transValue( 0 ), transValue( 1 ), transValue( 2 ) );
+    /*ofPushStyle();
+    ofSetColor( 255, 0, 0 );
+    ofDrawArrow( ofVec3f( 0, 0, 0 ), ofVec3f( 100, 0, 0 ), 10 );
+    ofSetColor( 0, 255, 0 );
+    ofDrawArrow( ofVec3f( 0, 0, 0 ), ofVec3f( 0, 100, 0 ), 10 );
+    ofSetColor( 0, 0, 255 );
+    ofDrawArrow( ofVec3f( 0, 0, 0 ), ofVec3f( 0, 0, 100 ), 10 );
+    ofPopStyle();*/
     MoMa::quaternion lquat( rotation.col( boneId ) );
     double alpha, x, y, z;
     ofVec3f beg( 0, 0, 0 );
@@ -116,6 +124,14 @@ void ofSkeleton::boneLocalDraw(const arma::mat &rotation, const arma::mat &posit
 	int boneId = it->second.boneId;
 	arma::vec transValue = position.col(parent);
 	ofTranslate(transValue(0), transValue(1), transValue(2));
+    /*ofPushStyle();
+    ofSetColor( 255, 0, 0 );
+    ofDrawArrow( ofVec3f( 0, 0, 0 ), ofVec3f( 100, 0, 0 ), 10 );
+    ofSetColor( 0, 255, 0 );
+    ofDrawArrow( ofVec3f( 0, 0, 0 ), ofVec3f( 0, 100, 0 ), 10 );
+    ofSetColor( 0, 0, 255 );
+    ofDrawArrow( ofVec3f( 0, 0, 0 ), ofVec3f( 0, 0, 100 ), 10 );
+    ofPopStyle();*/
 	MoMa::quaternion lquat(rotation.col(boneId));
 	double alpha, x, y, z;
     if( arma::norm( ( arma::colvec ) lquat ) > arma::datum::eps ) {
@@ -135,8 +151,11 @@ void ofSkeleton::boneLocalDraw(const arma::mat &rotation, const arma::mat &posit
             mNodeSphere.draw();
         }
     }
-    for( int bEnd = 0; bEnd < it->second.boneChildrenIt.size(); bEnd++ )
+    for( int bEnd = 0; bEnd < it->second.boneChildrenIt.size(); bEnd++ ) {
+
         boneLocalDraw( rotation, position, it->second.boneChildrenIt[bEnd] );
+    }
+    
 	ofPopMatrix();
 }
 void ofSkeleton::draw(double time) {
