@@ -53,7 +53,7 @@
 			void setBoneData( std::vector<arma::vec> off, std::vector< double> lengths); // Set offset
 			
 			//inline void setBoneLength(std::vector<double> length) { this->boneLength = length; }; //we have the same number of length tnath the number of dest node 
-			inline const int &getSize() const { return boneLength.size(); };
+			inline const int getSize() const { return boneLength.size(); };
 			inline const double & getBoneLength(int i) const { return boneLength[i]; };
 			inline const arma::vec & getRotationOffset(int i) const { return rotationOffset[i]; };
 
