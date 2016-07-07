@@ -1278,7 +1278,7 @@ void MoMa::SceneApp::draw(const Frame &frame) {
 
 		if (frame.hasRotation()) {
 			if (frame.hasBoneList == false) {
-				throw std::exception("imposible to draw an orientated frame without bonelist");
+				throw std::runtime_error("imposible to draw an orientated frame without bonelist");
 				/*ofBoxPrimitive box;
 
 				for (int b = 0; b < frame.nOfNodes(); b++) {
@@ -1364,7 +1364,7 @@ void MoMa::SceneApp::draw(const Frame &frame) {
 	else {
 
 		if (frame.hasBoneList == false || frame.hasRotation() == false)
-			throw std::exception("impossible to have local system data without a correct oriented bonelist");
+			throw std::runtime_error("impossible to have local system data without a correct oriented bonelist");
 
         for( int i = 0; i < frame.boneList->rootIt.size(); i++ )
 		    boneLocalDraw(frame, frame.boneList->rootIt[i]);
