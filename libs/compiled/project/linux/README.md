@@ -17,6 +17,8 @@ As far as we currently know, MotionMachine requires at least the following (all 
 * armadillo 4.650 or later
 * CMake 3.1 or later
 
+Note that it is possible to use GCC 4.8.x to compile but the content of the function `MoMa::checkFilePath(string &)` in `/libs/MoMa/core/mmUtils.cpp` must be commented or compilation will fail with error message related to `std::ifstream(string &)` constructor being deleted for some reason. This might be due to a C++11 feature missing in GCC < 5.x
+
 ##Compilation of libmoma
 
 libmoma depends only on armadillo (4.650 or later, so you might need to install it manually). To build and install it properly, do the following:
