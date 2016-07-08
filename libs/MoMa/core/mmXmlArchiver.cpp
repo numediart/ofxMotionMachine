@@ -247,7 +247,7 @@ void XmlArchiver::save( std::string archiveFileName ) {
     if( trackNum )
         mArchiver.SaveFile( archiveFileName );
     else
-        throw std::exception( "XmlArchiver::save : no added track to archive" );
+        throw std::runtime_error( "XmlArchiver::save : no added track to archive" );
 }
 
 void XmlArchiver::load( std::string archiveFileName ) {
@@ -255,7 +255,7 @@ void XmlArchiver::load( std::string archiveFileName ) {
     mArchiver.LoadFile( archiveFileName );
     mRoot = mArchiver.FirstChildElement( "MoMaArchive" );
     if (mRoot==0)
-        throw std::exception( "XmlArchiver::load : This file doesn't contain a MoMa archive" );
+        throw std::runtime_error( "XmlArchiver::load : This file doesn't contain a MoMa archive" );
 
     TiXmlElement* mHandle=mRoot->FirstChildElement("track");
 
@@ -263,7 +263,7 @@ void XmlArchiver::load( std::string archiveFileName ) {
     for( trackNum = 0; mHandle; mHandle = mHandle->NextSiblingElement("track"), ++trackNum ) {
         //nothing
     }
-    std::cout <<trackNum<< endl;
+    std::cout <<trackNum<< std::endl;
 
 }
 void XmlArchiver::getTrack( Track& pTrack ,int index) {
