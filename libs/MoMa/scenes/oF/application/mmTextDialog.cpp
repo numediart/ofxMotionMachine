@@ -1,4 +1,4 @@
-#include "mmTextdialog.h"
+#include "mmTextDialog.h"
 
 using namespace MoMa;
 using namespace std;
