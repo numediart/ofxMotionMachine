@@ -1,13 +1,23 @@
 ##Introduction
 
-On Linux, Motion Machine (MoMa) is composed of two parts, as opposed to what is done in OSX and Windows where xcode/VS configs take care of everything as one big project. The two parts are:
+On Linux, MotionMachine (MoMa) is composed of two parts, as opposed to what is done in OSX and Windows where Xcode/VS configs take care of everything as one big project. The two parts are:
 
-1. libmoma, a shared library based on the files in `./libs/MoMa/{core,features,parsers}`. You can use it to load, access and process mocap data in your applications independently of openFrameworks.
-2. ofxMoMa, an openFrameworks (oFx) "adapter" to make it easy to use MoMa into oFx.
+1. libmoma, a shared library based on the files in `./libs/MoMa/{core,features,parsers}`. You can use it to load, access and process mocap data in your applications independently of openFrameworks. It gets installed into /usr/local/{lib,include}.
+2. ofxMoMa, an openFrameworks (oFx) addon to make it easy to use MoMa into oFx. It goes into /path/to/openframeworks/addons/
 
 Additionaly, examples of oFx applications are available into `./apps/` and they can be used as starting points to your own applications.
 
 In the following, we assume that you downloaded openFrameworks and unzipped it into a folder `$(OF_ROOT)` (`/opt/openframeworks` is the default set into the example of MoMa, adapt accordingly) and that MoMa is installed into a folder `$(MOMA_ROOT)`
+
+##Requirements
+
+As far as we currently know, MotionMachine requires at least the following (all available in packages for Ubuntu 16.04 but not for 14.04):
+
+* GCC 5.x or later
+* armadillo 4.650 or later
+* CMake 3.1 or later
+
+Note that it is possible to use GCC 4.8.x to compile but the content of the function `MoMa::checkFilePath(string &)` in `/libs/MoMa/core/mmUtils.cpp` must be commented or compilation will fail with error message related to `std::ifstream(string &)` constructor being deleted for some reason. This might be due to a C++11 feature missing in GCC < 5.x
 
 ##Compilation of libmoma
 
@@ -53,7 +63,7 @@ $ make
 $ make run
 ```
 
-If your project has dependencies, you need to edit its config.make and adapt `PROJECT_LDFLAGS` and `PROJECT_CFLAGS`. For instance if you have a dependency to armadillo, you need to add an `-laramdillo` flag to the linker parameters:
+If your project has dependencies, you need to edit its config.make and adapt `PROJECT_LDFLAGS` and `PROJECT_CFLAGS`. For instance if you have a dependency to armadillo, you need to add an `-larmadillo` flag to the linker parameters:
 
 ```
 PROJECT_LDFLAGS = -lmoma -larmadillo
@@ -64,3 +74,5 @@ Same thing if the header files are not in the default path, you need to edit the
 ```
 PROJECT_CFLAGS = -I/usr/local/include/moma -I/usr/local/include/myawesomelib
 ```
+
+Finally, if you did not install openframeworks in /opt/openframeworks, update OF_ROOT accordingly.
