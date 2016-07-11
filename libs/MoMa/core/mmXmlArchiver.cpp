@@ -8,6 +8,8 @@ XmlArchiver::XmlArchiver() {
     mRoot = new TiXmlElement( "MoMaArchive" );
     mArchiver.LinkEndChild( mRoot );
     trackNum = 0;
+    labelNum = 0;
+    featureNum = 0; 
     rootPositionOnlyFlag = false;
     binaryData = true;
 }
@@ -128,7 +130,7 @@ void XmlArchiver::addFeature( const TimedVec feat, std::string name, std::string
     mFeat->SetAttribute( "Id", featureNum );
     mFeat->SetAttribute( "name", name );
     if (trackName.length()>0 )
-        mFeat->SetAttribute( "linkedTrackName", name );
+        mFeat->SetAttribute( "linkedTrackName", trackName );
     mFeat->SetAttribute( "numDim", 1 );
     mFeat->SetAttribute( "numElem", feat.getData().n_elem );
 
@@ -142,13 +144,20 @@ void XmlArchiver::addFeature( const TimedVec feat, std::string name, std::string
     }
     else
         mFrames->SetAttribute( "FrameRate", feat.frameRate() );
+    if( feat.isTimed() ) {
+        TiXmlElement* mTimestamp = new TiXmlElement( "timestamps" );
+        mTimestamp->LinkEndChild( mTimestamp );
+        for( int i = 0; i < feat.nOfFrames(); i++ ) {
+            mTimestamp->InsertEndChild( TiXmlText( std::to_string( feat.time( i ) ) ) );
+        }
+
+    }
+    TiXmlElement* mValues = new TiXmlElement( "values" );
+    mFrames->LinkEndChild( mValues );
     for( int i = 0; i < feat.nOfFrames(); i++ ) {
-        TiXmlElement* mFrame = new TiXmlElement( "frame" );
-        mFrames->LinkEndChild( mFrame );
-        mFrame->SetAttribute( "id", i );
-        if( feat.isTimed() )
-            mFrame->SetAttribute( "time", feat.time( i ) );
-        mFrame->InsertEndChild( TiXmlText( std::to_string( feat.getData().at(i) )) );
+        mValues->InsertEndChild( TiXmlText( std::to_string( feat.getData().at(i) )) );
+        if( i < feat.getData().n_elem - 1 )
+            mValues->InsertEndChild( TiXmlText( " " ) );
     }
 
 
@@ -161,7 +170,7 @@ void XmlArchiver::addFeature( const TimedMat feat, std::string name, std::string
     mFeat->SetAttribute( "Id", featureNum );
     mFeat->SetAttribute( "name", name );
     if( trackName.length()>0 )
-        mFeat->SetAttribute( "linkedTrackName", name );
+        mFeat->SetAttribute( "linkedTrackName", trackName );
     mFeat->SetAttribute( "numDim", 2 );
 
     TiXmlElement* mFrames = new TiXmlElement( "frames" );
@@ -192,7 +201,7 @@ void XmlArchiver::addFeature( const TimedCube feat, std::string name, std::strin
     mFeat->SetAttribute( "Id", featureNum );
     mFeat->SetAttribute( "name", name );
     if( trackName.length()>0 )
-        mFeat->SetAttribute( "linkedTrackName", name );
+        mFeat->SetAttribute( "linkedTrackName", trackName );
     mFeat->SetAttribute( "numDim", 2 );
 
     TiXmlElement* mFrames = new TiXmlElement( "frames" );
@@ -225,7 +234,7 @@ void XmlArchiver::addLabels(  LabelList label,std::string name, std::string trac
     mLabelHeader->SetAttribute( "Id", labelNum );
     mLabelHeader->SetAttribute( "name", name );
     if( trackName.length()>0 )
-        mLabelHeader->SetAttribute( "linkedTrackName", name );
+        mLabelHeader->SetAttribute( "linkedTrackName", trackName );
     TiXmlElement* mSegments = new TiXmlElement( "Segments" );
     mLabelHeader->LinkEndChild( mSegments );
 
