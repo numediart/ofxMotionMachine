@@ -5,6 +5,7 @@
 #include <cmath>
 #include <armadillo>
 #include "mmNode.h"
+#include "MoMa.h"
 
 namespace MoMa {
 namespace Geometry {
@@ -14,6 +15,10 @@ float degToRad( float deg );
 float radToDeg( float rad );
     
 float distance( const arma::vec &a, const arma::vec &b );
+
+arma::vec distance(const arma::mat &a, const arma::mat &b);
+
+MoMa::TimedVec distance(const MoMa::TimedMat &a, const MoMa::TimedMat &b);
 
 float distanceToPlane( const arma::vec &a, const arma::vec &b, const arma::vec &c, const arma::vec &d );
 

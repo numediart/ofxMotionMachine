@@ -21,7 +21,8 @@
 
 #include "mmTrack.h"
 #include "mmFrame.h"
-#include "mmTrace.h"
+#include "mmBoneTrace.h"
+#include "mmNodeTrace.h"
 #include "mmNode.h"
 
 #include "mmUtils.h"

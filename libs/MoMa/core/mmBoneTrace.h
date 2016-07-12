@@ -1,13 +1,13 @@
 /**
  *
- *  @file mmTrace.h
- *  @brief MotionMachine header file for Trace class.
+ *  @file mmBoneTrace.h
+ *  @brief MotionMachine header file for BoneTrace class.
  *  @copyright Numediart Institute, UMONS (c) 2014-2015
  *
  */
 
-#ifndef __mmTrace__
-#define __mmTrace__
+#ifndef __mmBoneTrace__
+#define __mmBoneTrace__
 
 #include <vector>
 #include <iostream>
@@ -15,11 +15,11 @@
 #include <armadillo>
 #include "mmContainer.h"
 
-#include "mmNode.h"
+#include "mmBone.h"
 
 namespace MoMa {
 
-    class Trace {
+    class BoneTrace {
         
         // TODO It seems the new traces are "transposed"
         // compared to what is expected. It gives me the
@@ -28,7 +28,7 @@ namespace MoMa {
         
       public:
         
-        Trace( void ); // Default constructor
+        BoneTrace( void ); // Default constructor
         
         std::string name( void ) const{ return( _name ); } // Get name
         inline void setName( std::string n ) { _name = n; } // Set name
@@ -39,48 +39,44 @@ namespace MoMa {
         bool hasRotation( void ) const{ return( _hasRotation ); } // Use rotation?
         inline void setRotationFlag( bool rot ) { _hasRotation = rot; } // Force it
         arma::mat matrix( void ) ;
-        Node nodeFrame( double time );
         inline arma::vec getFramePosition( unsigned int index ) { return( position.get(index) ); } // By index
-        arma::vec getFramePosition( double time ){ return( position.get(time) ); }; // Query node by time in the trace
+        arma::vec getFramePosition( double time ){ return( position.get(time) ); }; // Query bone by time in the trace
         inline arma::vec getFramerotation( unsigned int index ) { return( rotation.get(index) ); } // By index
-        arma::vec getFramerotation( double time ){ return( rotation.get(time) ); }; // Query node by time in the trace
-        inline arma::vec  nodeRotationOffset( ) { return( rotationOffset ); } // By index
+        arma::vec getFramerotation( double time ){ return( rotation.get(time) ); }; // Query bone by time in the trace
         
         inline void setPosition(const arma::mat &data,float fr, float initT = 0.0f){position.setData(fr, data, initT);};
         inline void setRotation(const arma::mat &data,float fr, float initT = 0.0f){rotation.setData(fr, data, initT);};
-        inline void setRotationOffset(const arma::vec &data){rotationOffset = data;};
+        inline void setRotationOffset(const arma::vec &data){ rotationOffset.resize(1); rotationOffset[0] = data; };
+        inline void setRotationOffset(const std::vector<arma::vec> &data) { rotationOffset = data; };
         inline void setPosition(const arma::mat &data,const arma::vec &time){position.setData(time, data);};
         inline void setRotation(const arma::mat &data,const arma::vec &time ){rotation.setData(time, data);};
+        inline void setBoneLength(std::vector<double> bLength) { boneLength = bLength; };
+
+        inline const double & getBoneLength(int i) const { return boneLength[i]; };
+        inline const arma::vec & getRotationOffset(int i) const { return rotationOffset[i]; };
         
-        inline arma::vec operator[]( unsigned int index ); // Short version of node()
-        inline arma::vec operator[]( double time ); // Short version of node()
+        inline Bone bone( unsigned int index );
+        inline Bone bone( double time );
+
+        inline Bone operator[]( unsigned int index ); // Short version of bone()
+        inline Bone operator[]( double time ); // Short version of bone()
         
-        inline void push( Node node ) {
+        inline void push( Bone bone ) {
             if (!position.isTimed()){
-                position.push( node.position );
-				if (_hasRotation)/*&&node.hasRotation()){
-					rotation.push( node.rotation );
-					if (rotationOffset.n_elem==0)
-						rotationOffset=node.rotationOffset;
-				}*/
-				{
-					throw std::runtime_error("Trace::push(Node) not compatible with an oriented trace");
-				}
+                position.push( bone.position );
+					rotation.push(bone.rotation );
+					if (rotationOffset.size()==0)
+						rotationOffset = bone.getRotationOffset();
             }
             else{
-                position.push( node.position,node.time() );
-                if (_hasRotation)/*&&node.hasRotation()){
-                    rotation.push( node.rotation,node.time() );
-                    if (rotationOffset.n_elem==0)
-                        rotationOffset=node.rotationOffset;
-                }*/
-				{
-					throw std::runtime_error("Trace::push(Node) not compatible with an oriented trace");
-				}
-
+                position.push( bone.position,bone.time() );
+               
+                    rotation.push(bone.rotation, bone.time() );
+                    if (rotationOffset.size() == 0)
+                        rotationOffset= bone.getRotationOffset();
             }
         
-        } // Add node
+        } // Add bone
         
         inline arma::mat getRotation( void ) {return rotation.getData();}; // Extract Armadillo matrix from trace
         inline arma::mat getPosition( void ) {return position.getData();}; // Extract Armadillo matrix from trace
@@ -98,22 +94,33 @@ namespace MoMa {
         
         TimedMat position;
         TimedMat rotation;
-        arma::vec rotationOffset;
+        std::vector<arma::vec> rotationOffset; // Quaternion offset
+        std::vector<double> boneLength;
         bool _hasTime;
         bool _hasRotation;
         std::string _name;
     };
     
     // Inlined functions
-    
-    arma::vec Trace::operator[]( unsigned int index ){
-        
-        return( position.get(index) );
+
+    Bone BoneTrace::bone(unsigned int index) {
+
+        return Bone(position.get(index), rotation.get(index), rotationOffset, boneLength);
+    }
+
+    Bone BoneTrace::bone(double time) {
+
+        return Bone(position.get(time), rotation.get(time), rotationOffset, boneLength);
     }
     
-    arma::vec Trace::operator[]( double time ){
+    Bone BoneTrace::operator[]( unsigned int index ){
         
-        return( position.get(time ) );
+        return Bone(position.get(index), rotation.get(index), rotationOffset, boneLength);
+    }
+    
+    Bone BoneTrace::operator[]( double time ){
+        
+        return Bone(position.get(time), rotation.get(time), rotationOffset, boneLength);
     }
 }
 

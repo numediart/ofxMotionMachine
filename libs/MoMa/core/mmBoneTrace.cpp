@@ -1,40 +1,25 @@
 /**
  *
- *  @file mmTrace.cpp
- *  @brief MotionMachine source file for Trace class.
+ *  @file mmBoneTrace.cpp
+ *  @brief MotionMachine source file for BoneTrace class.
  *  @copyright Numediart Institute, UMONS (c) 2014-2015
  *
  */
 
-#include "mmTrace.h"
+#include "mmBoneTrace.h"
 
 using namespace std;
 using namespace arma;
 using namespace MoMa;
 
-Trace::Trace( void ) {
+BoneTrace::BoneTrace( void ) {
 
     _hasRotation = false;
     _hasTime = false;
     _name = "";
 }
 
-Node Trace::nodeFrame( double time ) {
-
-    Node oneNode;
-    oneNode.setPosition(position.get(time));
-    oneNode.setName(this->name());
-    //oneNode.setRotationFlag( hasRotation() );
-    //if (hasRotation()){
-    //    oneNode.setRotation(rotation.get(time));
-    //    oneNode.setOffsetRotation(rotationOffset);
-    //}
-    if (hasTime())
-        oneNode.setTime( time);
-    return( oneNode );
-}
-
-mat Trace::matrix( void ) {
+mat BoneTrace::matrix( void ) {
  
     mat trace;
     // int nOfDims = 3;
@@ -49,7 +34,7 @@ mat Trace::matrix( void ) {
 
 
 
-void Trace::print( void ) {
+void BoneTrace::print( void ) {
 
     cout << "--- # of frames: " << nOfFrames();
     cout << " ---" << endl;
