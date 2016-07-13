@@ -11,7 +11,7 @@ XmlArchiver::XmlArchiver() {
     labelNum = 0;
     featureNum = 0; 
     rootPositionOnlyFlag = false;
-    binaryData = true;
+    binaryData = false;
 }
 
 XmlArchiver::~XmlArchiver() {
@@ -125,8 +125,16 @@ void XmlArchiver::addTrack( const Track& pTrack ){
     trackNum++;
 }
 void XmlArchiver::addFeature( const TimedVec feat, std::string name, std::string trackName ) {
+    if( name == std::string( "" ) )
+        throw std::runtime_error( "XmlArchiver::addFeature this feature must have a name to be archived" );
+
+    TiXmlElement* mFeatRoot = mRoot->FirstChildElement( "features" );
+    if( mFeatRoot == 0 ) {
+        mFeatRoot = new TiXmlElement( "features" );
+        mRoot->LinkEndChild( mFeatRoot );
+    }
     TiXmlElement* mFeat = new TiXmlElement( "feature" );
-    mRoot->LinkEndChild( mFeat );
+    mFeatRoot->LinkEndChild( mFeat );
     mFeat->SetAttribute( "Id", featureNum );
     mFeat->SetAttribute( "name", name );
     if (trackName.length()>0 )
@@ -155,6 +163,9 @@ void XmlArchiver::addFeature( const TimedVec feat, std::string name, std::string
     TiXmlElement* mValues = new TiXmlElement( "values" );
     mFrames->LinkEndChild( mValues );
     for( int i = 0; i < feat.nOfFrames(); i++ ) {
+        if( feat.getData().at( i ) == arma::datum::nan )
+            mValues->InsertEndChild( TiXmlText( "nan" ) );
+        else
         mValues->InsertEndChild( TiXmlText( std::to_string( feat.getData().at(i) )) );
         if( i < feat.getData().n_elem - 1 )
             mValues->InsertEndChild( TiXmlText( " " ) );
@@ -165,8 +176,16 @@ void XmlArchiver::addFeature( const TimedVec feat, std::string name, std::string
 }
 void XmlArchiver::addFeature( const TimedMat feat, std::string name, std::string trackName ) {
 
+    if( name == std::string( "" ) )
+        throw std::runtime_error( "XmlArchiver::addFeature this feature must have a name to be archived" );
+
+    TiXmlElement* mFeatRoot = mRoot->FirstChildElement( "features" );
+    if( mFeatRoot == 0 ) {
+        mFeatRoot = new TiXmlElement( "features" );
+        mRoot->LinkEndChild( mFeatRoot );
+    }
     TiXmlElement* mFeat = new TiXmlElement( "feature" );
-    mRoot->LinkEndChild( mFeat );
+    mFeatRoot->LinkEndChild( mFeat );
     mFeat->SetAttribute( "Id", featureNum );
     mFeat->SetAttribute( "name", name );
     if( trackName.length()>0 )
@@ -190,14 +209,28 @@ void XmlArchiver::addFeature( const TimedMat feat, std::string name, std::string
         mFrame->SetAttribute( "id", i );
         if( feat.isTimed() )
             mFrame->SetAttribute( "time", feat.time( i ) );
-        for( int j = 0; j < feat.getData().n_rows;j++)
-            mFrame->InsertEndChild( TiXmlText( std::to_string( feat.getData().at(j,i) ) ) );
+        for( int j = 0; j < feat.getData().n_rows; j++ ) {
+            if ( feat.getData().at( j, i ) ==arma::datum::nan)
+                mFrame->InsertEndChild( TiXmlText("nan" ) );
+            else
+                mFrame->InsertEndChild( TiXmlText( std::to_string( feat.getData().at( j, i ) ) ) );
+            if ( j < feat.getData().n_rows-1 )  
+                mFrame->InsertEndChild( TiXmlText( " ") );
+        }
     }
     featureNum++;
 }
 void XmlArchiver::addFeature( const TimedCube feat, std::string name, std::string trackName ) {
+    if( name == std::string( "" ) )
+        throw std::runtime_error( "XmlArchiver::addFeature this feature must have a name to be archived" );
+       
+    TiXmlElement* mFeatRoot= mRoot->FirstChildElement( "features" );
+    if( mFeatRoot == 0 ) {
+        mFeatRoot = new TiXmlElement( "features" );
+        mRoot->LinkEndChild( mFeatRoot );
+    }
     TiXmlElement* mFeat = new TiXmlElement( "feature" );
-    mRoot->LinkEndChild( mFeat );
+    mFeatRoot->LinkEndChild( mFeat );
     mFeat->SetAttribute( "Id", featureNum );
     mFeat->SetAttribute( "name", name );
     if( trackName.length()>0 )
@@ -222,15 +255,26 @@ void XmlArchiver::addFeature( const TimedCube feat, std::string name, std::strin
         mFrame->SetAttribute( "id", i );
         if( feat.isTimed() )
             mFrame->SetAttribute( "time", feat.time( i ) );
-        for( int j = 0; j < feat.getData().n_elem; j++ )
-            mFrame->InsertEndChild( TiXmlText( std::to_string( feat.getData().at( j ) ) ) );
+        for( int j = 0; j < feat.getData().n_elem; j++ ) {
+            if( feat.getData().at( j ) == arma::datum::nan )
+                mFrame->InsertEndChild( TiXmlText( "nan" ) );
+            else
+                mFrame->InsertEndChild( TiXmlText( std::to_string( feat.getData().at( j ) ) ) );
+            if( j < feat.getData().n_rows - 1 )
+                mFrame->InsertEndChild( TiXmlText( " " ) );
+        }
     }
     featureNum++;
 }
 
 void XmlArchiver::addLabels(  LabelList label,std::string name, std::string trackName ) {
+    TiXmlElement* mLabelRoot = mRoot->FirstChildElement( "LabelCollections" );
+    if( mLabelRoot == 0 ) {
+        mLabelRoot = new TiXmlElement( "LabelCollections" );
+        mRoot->LinkEndChild( mLabelRoot );
+    }
     TiXmlElement* mLabelHeader = new TiXmlElement( "LabelCollection" );
-    mRoot->LinkEndChild( mLabelHeader );
+    mLabelRoot->LinkEndChild( mLabelHeader );
     mLabelHeader->SetAttribute( "Id", labelNum );
     mLabelHeader->SetAttribute( "name", name );
     if( trackName.length()>0 )
@@ -261,23 +305,336 @@ void XmlArchiver::save( std::string archiveFileName ) {
 
 void XmlArchiver::load( std::string archiveFileName ) {
     mArchiver.Clear();
-    mArchiver.LoadFile( archiveFileName );
+    if( !mArchiver.LoadFile( archiveFileName ) )
+        throw std::runtime_error( "XmlArchiver::load failed to open this file" );
     mRoot = mArchiver.FirstChildElement( "MoMaArchive" );
     if (mRoot==0)
         throw std::runtime_error( "XmlArchiver::load : This file doesn't contain a MoMa archive" );
 
     TiXmlElement* mHandle=mRoot->FirstChildElement("track");
 
-   
-    for( trackNum = 0; mHandle; mHandle = mHandle->NextSiblingElement("track"), ++trackNum ) {
+
+    for( trackNum = 0; mHandle; mHandle = mHandle->NextSiblingElement( "track" ), ++trackNum ) {
+
         //nothing
     }
-    std::cout <<trackNum<< std::endl;
+    std::cout << trackNum << std::endl;
+   
 
 }
 void XmlArchiver::getTrack( Track& pTrack ,int index) {
+    if (index>trackNum )
+        throw std::runtime_error( "XmlArchiver::load : track index is not in this archive" );
 
+    TiXmlElement* mTrackRoot = mRoot->FirstChildElement( "track" );
+        
+    for( int i = 0; mTrackRoot, i < index; ++trackNum, mTrackRoot->FirstChildElement( "track" ) ) {
+    }
+    if( mTrackRoot ) {
+        pTrack.clear();
+        TiXmlElement* mProperties = mTrackRoot->FirstChildElement( "properties" );
+        pTrack.hasRotation = mProperties->Attribute( "BonesOrientation" );
+        pTrack.hasGlobalCoordinate = mProperties->Attribute( "encoding" ) == std::string("Global");
+        rootPositionOnlyFlag = mProperties->Attribute( "RootPositionOnly" );
+
+        TiXmlElement* mSkeleton = mTrackRoot->FirstChildElement( "skeleton" );
+        pTrack.nodeList = this->loadNodeList( mSkeleton->FirstChildElement( "nodes" ) );
+        if( pTrack.nodeList )
+            pTrack.hasNodeList = true;
+        pTrack.boneList = this->loadBoneList( mSkeleton->FirstChildElement( "bones" ) );
+        if( pTrack.boneList )
+            pTrack.hasBoneList = true;
+
+        loadData( mTrackRoot->FirstChildElement( "frames" ), pTrack );
+        
+    }
+
+}
+NodeList *XmlArchiver::loadNodeList( TiXmlElement * nodeRoot) {
+    if( nodeRoot == 0 )
+        return 0;
+    NodeList * ret = new NodeList;
+    for ( TiXmlElement *mHandle = nodeRoot->FirstChildElement( "node" ); mHandle; mHandle = mHandle->NextSiblingElement( "node" )) {
+       
+        ret->emplace( mHandle->Attribute( "label" ),atoi( mHandle->Attribute( "id" )));
+        //nothing
+    }
+    return ret;
+}
+
+BoneList *XmlArchiver::loadBoneList( TiXmlElement * boneRoot ) {
+    if( boneRoot == 0 )
+        return 0;
+    BoneList * ret = new BoneList;
+    for( TiXmlElement *mHandle = boneRoot->FirstChildElement( "bone" ); mHandle; mHandle = mHandle->NextSiblingElement( "bone" ) ) {
+        boneData lBone;
+        TiXmlElement *mLoc = mHandle->FirstChildElement( "nodeParent" );
+        int nodeParent;
+
+        std::string parentString= mLoc->FirstChild()->ToText()->Value();
+        lBone.jointParent = std::stoi( parentString ); 
+        
+        mLoc = mHandle->FirstChildElement( "nodeChildrens" );
+        std::string childrenString = mLoc->FirstChild()->ToText()->Value();
+
+        std::string::size_type sz=0;   // alias of size_t
+        while( sz<childrenString.length()) {
+            lBone.jointChildren.push_back( std::stoi( childrenString ) );
+            sz = childrenString.find_first_of( " " );
+            childrenString = childrenString.substr( sz + 1 );
+        }
+        lBone.boneId = atoi( mHandle->Attribute( "id" ));
+        ret->emplace( mHandle->Attribute( "label" ),  lBone) ;
+    }
+    ret->updateBoneChildrenName();
+    return ret;
+}
+
+void XmlArchiver::loadData( TiXmlElement * frameRoot, MoMa::Track &pTrack) {
+    int numFrames = 0;
+    int numNodes = pTrack.nodeList->size();
+    int numBones = pTrack.boneList->size();
+    
+    bool isTimedStamped = std::stoi( frameRoot->Attribute( "TimeStamped" ) );
+    int frameRate = 0;
+    if ( isTimedStamped == false)
+        frameRate=std::stoi( frameRoot->Attribute( "FrameRate" ) );
+    pTrack.setFrameRate(frameRate);
+    TiXmlElement* mFrame = frameRoot->FirstChildElement( "frame" );
+    for( numFrames = 0; mFrame; mFrame = mFrame->NextSiblingElement( "frame" ), ++numFrames ) {
+
+        //nothing
+    }
+    arma::cube positionCube( 3, numNodes, numFrames );
+
+    arma::cube rotationCube;
+    arma::vec timeStamp;
+    if( pTrack.hasRotation )
+        rotationCube.resize( 4, numBones, numFrames );
+    if( isTimedStamped )
+        timeStamp.resize( numFrames );
+    for( mFrame = frameRoot->FirstChildElement( "frame" ); mFrame; mFrame = mFrame->NextSiblingElement( "frame" )){
+        int frameId = std::stoi( mFrame->Attribute( "id" ) );
+        if ( isTimedStamped )
+            timeStamp( frameId )= std::stod( mFrame->Attribute( "time" ) );
+        std::string frameString = mFrame->FirstChild("position")->FirstChild()->ToText()->Value();
+
+        std::string::size_type sz=0;   // alias of size_t
+        int j = 0;
+        while( sz<frameString.length() ) {
+            for( int i = 0; i < 3; i++ ) {
+                positionCube( i, j, frameId ) = std::stod( frameString);
+                sz = frameString.find_first_of( " " );
+                frameString=frameString.substr( sz+1 );
+            }
+            sz = frameString.find_first_of( " " );
+            j++;
+        }
+        if( pTrack.hasRotation ) {
+            frameString = mFrame->FirstChild( "orientation" )->FirstChild()->ToText()->Value();
+            std::string::size_type sz = 0;   // alias of size_t
+            int j = 0;
+            while( sz < frameString.length() ) {
+                for( int i = 0; i < 4; i++ ) {
+                    rotationCube( i, j, frameId ) = std::stod( frameString );
+                    sz = frameString.find_first_of( " " );
+                    frameString = frameString.substr( sz + 1 );
+                }
+                sz = frameString.find_first_of( " " );
+                j++;
+            }
+        }
+
+    }
+    if( isTimedStamped == false ){
+        pTrack.position.swapData( frameRate, positionCube );
+        if (pTrack.hasRotation )
+            pTrack.rotation.swapData( frameRate, rotationCube );
+    }
+    else {
+        pTrack.position.swapData( timeStamp, positionCube );
+        if( pTrack.hasRotation )
+            pTrack.rotation.swapData( timeStamp, rotationCube );
+    }
+    pTrack.setJointOffsetRotation();
+}
+
+bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedCube &feat ) {
+
+    TiXmlElement* featRoot = mRoot->FirstChildElement( "features" );
+    if( featRoot==0 )
+        throw std::runtime_error( "XmlArchiver::getFeature no feature in this archive" );
+
+    TiXmlElement* searchedFeat=0;
+    for(TiXmlElement* xmlFeat = featRoot->FirstChildElement( "feature" ); xmlFeat; xmlFeat = xmlFeat->NextSiblingElement( "feature" ) ) {
+        if( xmlFeat->Attribute( "name" ) == featureName ) {
+            searchedFeat = xmlFeat;
+            break;
+        }
+    }
+    if( searchedFeat==0 || searchedFeat->Attribute("numDim")!=std::string("3") )//check cube dimension
+        throw std::runtime_error( "XmlArchiver::getFeature no such feature in this archive" );
+    TiXmlElement* frames = searchedFeat->FirstChildElement( "frames" );
+    int numFrames = std::stoi( frames->Attribute( "numFrames" ) );
+    int numCols = std::stoi( frames->Attribute( "numCols" ) );
+    int numRows = std::stoi( frames->Attribute( "numRows" ) );
+
+    bool isTimeStamped = std::stoi( frames->Attribute( "TimeStamped" ) );
+    arma::vec timeStamped;
+    double frameRate;
+    if( isTimeStamped )
+        timeStamped.resize( numFrames );
+    else
+        frameRate = std::stod( frames->Attribute( "FrameRate" ) );
+    arma::cube featData( numRows , numCols , numFrames );
+    
+    TiXmlElement* frame = frames->FirstChildElement( "frame" );
+    for( frame = frames->FirstChildElement( "frame" ); frame; frame = frame->NextSiblingElement( "frame" ) ) {
+        int frameId = std::stoi( frame->Attribute( "id" ) );
+        if( isTimeStamped )
+            timeStamped( frameId ) = std::stod( frame->Attribute( "time" ) );
+        std::string frameString = frame->FirstChild()->ToText()->Value();
+
+        std::string::size_type sz = 0;   // alias of size_t
+        int i = 0;
+        while( sz < frameString.length() && i<(numRows*numCols) ) {
+            sz = frameString.find_first_of( " " );
+            if( frameString.substr( 0, sz ) == std::string( "nan" ) )
+                featData.slice( frameId ).at( i ) = arma::datum::nan;
+            else
+            featData.slice( frameId ).at( i ) = std::stod( frameString );
+            frameString = frameString.substr( sz + 1 );
+            i++;
+        }
+    }
+    if( isTimeStamped )
+        feat.setData( timeStamped, featData );
+    else
+        feat.setData( frameRate, featData );
+
+    return true;
+}
+
+bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedMat &feat ) {
+
+    TiXmlElement* featRoot = mRoot->FirstChildElement( "features" );
+    if( featRoot == 0 )
+        throw std::runtime_error( "XmlArchiver::getFeature no feature in this archive" );
+
+    TiXmlElement* searchedFeat = 0;
+    for( TiXmlElement* xmlFeat = featRoot->FirstChildElement( "feature" ); xmlFeat; xmlFeat = xmlFeat->NextSiblingElement( "feature" ) ) {
+        if( xmlFeat->Attribute( "name" ) == featureName ) {
+            searchedFeat = xmlFeat;
+            break;
+        }
+    }
+    if( searchedFeat == 0 || searchedFeat->Attribute( "numDim" ) != std::string( "2" ) )//check cube dimension
+        throw std::runtime_error( "XmlArchiver::getFeature no such feature in this archive" );
+    TiXmlElement* frames = searchedFeat->FirstChildElement( "frames" );
+    int numFrames = std::stoi( frames->Attribute( "numFrames" ) );
+    int numRows = std::stoi( frames->Attribute( "numRows" ) );
+
+    bool isTimeStamped = std::stoi( frames->Attribute( "TimeStamped" ) );
+    arma::vec timeStamped;
+    double frameRate;
+    if( isTimeStamped )
+        timeStamped.resize( numFrames );
+    else
+        frameRate = std::stod( frames->Attribute( "FrameRate" ) );
+    arma::mat featData( numRows, numFrames );
+
+    TiXmlElement* frame = frames->FirstChildElement( "frame" );
+    for( frame = frames->FirstChildElement( "frame" ); frame; frame = frame->NextSiblingElement( "frame" ) ) {
+        int frameId = std::stoi( frame->Attribute( "id" ) );
+        if( isTimeStamped )
+            timeStamped( frameId ) = std::stod( frame->Attribute( "time" ) );
+        std::string frameString = frame->FirstChild()->ToText()->Value();
+
+        std::string::size_type sz = 0;   // alias of size_t
+        int i = 0;
+        while( sz < frameString.length() && i<( numRows ) ) {
+            sz = frameString.find_first_of( " " );
+            if ( frameString.substr( 0, sz ) == std::string( "nan" ) )
+                featData( i, frameId ) = arma::datum::nan;
+            else
+                featData( i, frameId )= std::stod( frameString );
+            frameString = frameString.substr( sz + 1 );
+            i++;
+        }
+    }
+    if( isTimeStamped )
+        feat.setData( timeStamped, featData );
+    else
+        feat.setData( frameRate, featData );
+
+    return true;
+}
+
+bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedVec &feat ) {
+
+    TiXmlElement* featRoot = mRoot->FirstChildElement( "features" );
+    if( featRoot == 0 )
+        throw std::runtime_error( "XmlArchiver::getFeature no feature in this archive" );
+
+    TiXmlElement* searchedFeat = 0;
+    for( TiXmlElement* xmlFeat = featRoot->FirstChildElement( "feature" ); xmlFeat; xmlFeat = xmlFeat->NextSiblingElement( "feature" ) ) {
+        if( xmlFeat->Attribute( "name" ) == featureName ) {
+            searchedFeat = xmlFeat;
+            break;
+        }
+    }
+    if( searchedFeat == 0 || searchedFeat->Attribute( "numDim" ) != std::string( "1" ) )//check cube dimension
+        throw std::runtime_error( "XmlArchiver::getFeature no such feature in this archive" );
+    TiXmlElement* frames = searchedFeat->FirstChildElement( "frames" );
+    int numFrames = std::stoi( frames->Attribute( "numFrames" ) );
+
+    bool isTimeStamped = std::stoi( frames->Attribute( "TimeStamped" ) );
+    arma::vec timeStamped;
+    double frameRate;
+    if( isTimeStamped )
+        timeStamped.resize( numFrames );
+    else
+        frameRate = std::stod( frames->Attribute( "FrameRate" ) );
+    arma::vec featData( numFrames );
+
+    std::string::size_type sz = 0;   // alias of size_t
+    int frameId = 0;
+    if( isTimeStamped ) {
+        std::string timeString = frames->FirstChild( "timestamps" )->FirstChild()->ToText()->Value();
+        while( sz < timeString.length() && frameId < ( numFrames ) ) {
+            timeStamped( frameId ) = std::stod( timeString );
+            sz = timeString.find_first_of( " " );
+            timeString= timeString.substr( sz + 1 );
+            frameId++;
+        }
+    }
+
+    sz = 0;   // alias of size_t
+    frameId = 0;
+    std::string frameString = frames->FirstChild( "values" )->FirstChild()->ToText()->Value();
+    while( sz < frameString.length() && frameId < ( numFrames ) ) {
+        sz = frameString.find_first_of( " " );
+        if( frameString.substr( 0, sz ) == std::string( "nan" ) )
+            featData( frameId ) = arma::datum::nan;
+        else
+            featData( frameId ) = std::stod( frameString );
+        frameString = frameString.substr( sz + 1 );
+        frameId++;
+    }
+
+    if( isTimeStamped )
+        feat.setData( timeStamped, featData );
+    else
+        feat.setData( frameRate, featData );
+
+    return true;
 }
 
 void XmlArchiver::clear() {
+    mArchiver.Clear();
+    mRoot = 0;
+    trackNum=0;
+    featureNum=0;
+    labelNum=0;
 }
+

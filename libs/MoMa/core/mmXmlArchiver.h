@@ -29,8 +29,16 @@ namespace MoMa {
         void addLabels( const LabelList label, std::string name, std::string trackName );
         void save( std::string archiveFileName );
         void load( std::string archiveFileName );
+        NodeList *loadNodeList( TiXmlElement * nodeRoot );
+        BoneList *loadBoneList( TiXmlElement * boneRoot );
+        void loadData( TiXmlElement * frameRoot, MoMa::Track &pTrack );
         void getTrack( Track& pTrack, int index = 0 );
         inline int getNumberOfTrack() { return trackNum; };
+
+
+        bool getFeature( std::string featureName, MoMa::TimedCube &feat );
+        bool getFeature( std::string featureName, MoMa::TimedMat &feat );
+        bool getFeature( std::string featureName, MoMa::TimedVec &feat );
         void clear();
     protected:
 
