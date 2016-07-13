@@ -18,10 +18,22 @@ float Geometry::distance( const arma::vec &a, const arma::vec &b ) {
     
     float dist;
     
-    dist = sqrt( pow( a(X)-b(X), 2 ) + pow( a(Y)
-    -b(Y), 2 ) + pow( a(Z)-b(Z), 2 ) );
+    dist = sqrt( pow( a(X)-b(X), 2 ) + pow( a(Y)-b(Y), 2 ) + pow( a(Z)-b(Z), 2 ) );
     
     return( dist );
+}
+
+vec Geometry::distance(const mat &a, const mat &b) {
+
+    return sqrt(sum(pow(a - b, 2)));
+}
+
+TimedVec Geometry::distance(const TimedMat &a, const TimedMat &b) {
+
+    vec tmp = sqrt(sum(pow(a.getData() - b.getData(), 2)).t());
+    TimedVec ret;
+    ret.setData(a.frameRate(), tmp);
+    return ret;
 }
 
 float Geometry::distanceToPlane( const arma::vec &a, const arma::vec &b, const arma::vec &c, const arma::vec &d ) {

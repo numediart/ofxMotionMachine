@@ -56,7 +56,7 @@
 			inline const int getSize() const { return boneLength.size(); };
 			inline const double & getBoneLength(int i) const { return boneLength[i]; };
 			inline const arma::vec & getRotationOffset(int i) const { return rotationOffset[i]; };
-
+            inline const std::vector<arma::vec> & getRotationOffset() const { return rotationOffset; };
 
 			inline bool hasRotation( void ) const { return( _hasRotation ); } // Use rotation?
 			inline void setRotationFlag( bool rot ) { _hasRotation = rot; } // Force it
@@ -80,8 +80,8 @@
 			bool _hasRotation; // Do we use rotation?
 			double _time; // Transfered time stamp
 			bool _hasTime; // Any time stamp?
-			std::string _name; // Node name
-			int _state; // Node state
+			std::string _name; // Bone name
+			int _state; // Bone state
 		};
 
 		// Inlined functions

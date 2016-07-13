@@ -38,8 +38,9 @@ namespace MoMa {
         
       public:
         
-        Node( void ); // Default constructor
-        Node( float x, float y, float z ); // Other kinds of constructors
+        Node( std::string name = "", bool hasTime = false, float time = 0.0f ); // Default constructor
+        Node( float x, float y, float z, std::string name = "", bool hasTime = false, float time = 0.0f); // Other kinds of constructors
+        Node(arma::vec pos, std::string name = "", bool hasTime = false, float time = 0.0f);
     //    Node( float x, float y, float z, float qx, float qy, float qz, float qw );
       //  Node( arma::vec coord, arma::vec rotation, arma::vec offsetRot);
         

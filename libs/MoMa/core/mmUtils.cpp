@@ -239,3 +239,94 @@ void MoMa::checkFilePath( string &path ) {
         }
     }
 }
+
+string MoMa::getExtension(string filePath) {
+
+    size_t dot = filePath.find_last_of(".");
+    string extension = filePath.substr(dot + 1);
+    transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+    return extension;
+}
+
+string MoMa::getName(string filePath) {
+
+    size_t sep = filePath.find_last_of("\\/");
+    size_t dot = filePath.find_last_of(".");
+    return filePath.substr(sep + 1, dot - sep - 1);
+}
+
+string MoMa::getFolder(string filePath) {
+
+    size_t sep = filePath.find_last_of("\\/");
+    return filePath.substr(0,sep);
+}
+
+double MoMa::nanmean(arma::vec v) {
+
+    arma::vec tmp = v.elem(find_finite(v));
+    return arma::mean(tmp);
+}
+
+double MoMa::nanstd(arma::vec v) {
+
+    arma::vec tmp = v.elem(find_finite(v));
+    return arma::stddev(tmp);
+}
+
+arma::vec MoMa::nanmean(arma::mat v, int dim) {
+
+    //arma::mat tmp = v.elem(find_finite(v)); // treats v as a long vector
+    arma::rowvec tmpvec = sum(v);
+    arma::mat tmp = v.cols(find_finite(tmpvec));
+    if(dim==0)
+        return arma::mean(tmp, 0);
+    else
+        return arma::mean(tmp, 1);
+}
+
+arma::vec MoMa::nanstd(arma::mat v, int dim) {
+
+    //arma::mat tmp = v.elem(find_finite(v)); // treats v as a long vector
+    arma::rowvec tmpvec = sum(v);
+    arma::mat tmp = v.cols(find_finite(tmpvec));
+    if(dim==0)
+        return arma::stddev(tmp, 0, 1);
+    else
+        return arma::stddev(tmp, 0, 1);
+}
+
+/*template<typename Type> double MoMa::nanmean(Type v, int dim) {
+
+    Type tmp = v.elem(find_finite(v));
+    return arma::mean(tmp, dim);
+}
+
+template<typename Type> double MoMa::nanstd(Type v, int dim) {
+
+    Type tmp = v.elem(find_finite(v));
+    return arma::stddev(tmp, 0, dim);
+}
+
+template<typename Type> arma::vec MoMa::nanmean(Type v, int dim) {
+
+    Type tmp = v.elem(find_finite(v));
+    return arma::mean(tmp, dim);
+}
+
+template<typename Type> arma::vec  MoMa::nanstd(Type v, int dim) {
+
+    Type tmp = v.elem(find_finite(v));
+    return arma::stddev(tmp, 0, dim);
+}*/
+
+/*template<typename Type, typename Type2> void MoMa::nanmean(const Type &v, Type2 &ret, int dim) {
+
+    Type tmp = v.elem(find_finite(v));
+    ret = arma::mean(tmp, dim);
+}
+
+template<typename Type, typename Type2> void MoMa::nanstd(const Type &v, Type2 &ret, int dim) {
+
+    Type tmp = v.elem(find_finite(v));
+    ret = arma::stddev(tmp, 0, dim);
+}*/

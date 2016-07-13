@@ -11,7 +11,7 @@
 using namespace std;
 using namespace arma;
 
-MoMa::Node::Node( void ) {
+MoMa::Node::Node( string name, bool hasTime, float time) {
     
     position.resize( 3 );
 //    rotation.resize( 4 );
@@ -32,12 +32,12 @@ MoMa::Node::Node( void ) {
     //rotationOffset( 3 ) = 1.0f;
     
     //_hasRotation = false;
-    _hasTime = false;
-    _time = 0.0f;
-    _name = "";
+    _hasTime = hasTime;
+    _time = time;
+    _name = name;
 }
 
-MoMa::Node::Node( float x, float y, float z ) {
+MoMa::Node::Node( float x, float y, float z, string name, bool hasTime, float time) {
     
     position.resize( 3 );
     //rotation.resize( 4 );
@@ -58,11 +58,21 @@ MoMa::Node::Node( float x, float y, float z ) {
     //rotationOffset( 3 ) = 1.0f;
     
     //_hasRotation = false;
-    _hasTime = false;
-    _time = 0.0f;
-    _name = "";
+    _hasTime = hasTime;
+    _time = time;
+    _name = name;
     
 }
+
+MoMa::Node::Node(vec pos, string name, bool hasTime, float time) {
+        
+    setPosition(pos);
+    position.resize(3);
+    _hasTime = hasTime;
+    _time = time;
+    _name = name;
+}
+
 /*MoMa::Node::Node( float x, float y, float z, float qx, float qy, float qz, float qw ) {
     
     position.resize( 3 );

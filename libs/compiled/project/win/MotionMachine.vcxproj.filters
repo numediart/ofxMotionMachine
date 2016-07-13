@@ -105,9 +105,6 @@
     <ClCompile Include="..\..\..\MoMa\core\mmNodeList.cpp">
       <Filter>MoMa\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\MoMa\core\mmTrace.cpp">
-      <Filter>MoMa\core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\MoMa\core\mmTrack.cpp">
       <Filter>MoMa\core</Filter>
     </ClCompile>
@@ -408,6 +405,12 @@
     <ClCompile Include="..\..\..\MoMa\core\mmXmlArchiver.cpp">
       <Filter>MoMa\core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\core\mmBoneTrace.cpp">
+      <Filter>MoMa\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\core\mmNodeTrace.cpp">
+      <Filter>MoMa\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\MoMa\core\mmBoneList.h">
@@ -420,9 +423,6 @@
       <Filter>MoMa\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\MoMa\core\mmNodeList.h">
-      <Filter>MoMa\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\MoMa\core\mmTrace.h">
       <Filter>MoMa\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\MoMa\core\mmTrack.h">
@@ -771,6 +771,12 @@
       <Filter>MoMa\scenes\oF\application</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\MoMa\core\mmXmlArchiver.h">
+      <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\core\mmNodeTrace.h">
+      <Filter>MoMa\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\core\mmBoneTrace.h">
       <Filter>MoMa\core</Filter>
     </ClInclude>
   </ItemGroup>

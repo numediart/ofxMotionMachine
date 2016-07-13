@@ -201,7 +201,8 @@ namespace MoMa {
         void draw( const TimedVec &tvec, std::string name="" ); // TimedVec (no hue)
         void draw( const TimedMat &trace, std::string name="" ); // TimedMat
         
-        void draw(const Trace &trace, std::string name="" ); // Trace
+        void draw(const Trace &trace ); // Trace
+        void draw(const BoneTrace &boneTrace); // BoneTrace
         
         void draw( const arma::vec &data, int hue, std::string name="" );
         void draw( const arma::vec &data, std::string name="" ); // Vec

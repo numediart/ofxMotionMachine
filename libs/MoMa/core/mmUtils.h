@@ -15,6 +15,7 @@
 #include <iostream>
 #include <fstream>
 #include <armadillo>
+#include <algorithm>
 
 #ifndef MAX_PATH
 #define MAX_PATH 260
@@ -39,23 +40,40 @@ namespace MoMa {
     std::string getAbsoluteDataPath( void ); //get the absolute path to the directory containing the data
     //std::string getResPath( void ); // get resources path
     std::string getAbsoluteResPath( void ); // get absolute resources path
+    std::string getName( std::string filePath ); // returns filename of the filepath
+    std::string getExtension(std::string filePath); // returns filename of the filepath
+    std::string getFolder(std::string filePath); // returns folder of the filepath (path without filename)
 
     void correctPath( std::string &path, bool invert = false ); // manage special characters bugs (extended ASCII characters). The conversion can be done in both way by use of "invert".
     void checkFilePath( std::string &path ); //check if the path exists; if not, tries to correct the path with correctPath(...)
     //std::string checkFilePath( std::string const &path ); //check if the file path exists; if not, tries to correct the path with correctPath(...)
     //std::string checkDirectoryPath( std::string const &path ); //check if the directory path exists; if not, tries to correct the path with correctPath(...)
     
-    template<typename Type> double nanmean(Type v) {
+    double nanmean(arma::vec v);
+
+    double nanstd(arma::vec v);
+
+    arma::vec nanmean(arma::mat v, int dim = 0);
+
+    arma::vec nanstd(arma::mat v, int dim = 0);
+
+    /*template<typename Type> double nanmean(Type v, int dim = 0);
+
+    template<typename Type> double nanstd(Type v, int dim = 0);
+
+    template<typename Type> arma::vec nanmean(Type v, int dim = 0);
+
+    template<typename Type> arma::vec nanstd(Type v, int dim = 0);*/
+
+    /*template<typename Type, typename Type2> void nanmean(Type v, Type2 ret, int dim = 0);
+
+    template<typename Type, typename Type2> void nanstd(Type v, Type2 ret, int dim = 0);*/
+
+    /*template<typename Type, typename Type2> void nanmean(Type v, Type2 ret, int dim = 0) {
 
         Type tmp = v.elem(find_finite(v));
-        return arma::mean(tmp);
-    }
-
-    template<typename Type> double nanstd(Type v) {
-
-        Type tmp = v.elem(find_finite(v));
-        return arma::stddev(tmp);
-    }
+        ret = arma::mean(tmp, dim);
+    }*/
 }
 
 #endif
