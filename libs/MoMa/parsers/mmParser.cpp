@@ -177,6 +177,7 @@ Parser::Parser( string const &fName, Track *tr ) {
         if( track->hasBoneList == true)
             tr->boneList->updateBoneChildrenName();
          tr->setJointOffsetRotation();
+         tr->setFrameRate( 30 );
     }
 
 	else if( extension == "xml" ) {        

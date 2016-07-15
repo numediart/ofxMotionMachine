@@ -12,6 +12,7 @@ namespace MoMa {
         Moment( void );
         Moment( double time, double frameRate );
         Moment( unsigned int idx, double frameRate );
+        Moment( double time , unsigned int idx );
         
         inline double time( void ) { return( _time ); }
         inline unsigned int index( void ) { return( _index ); }
@@ -20,7 +21,6 @@ namespace MoMa {
         void setFrameRate( double frameRate );
         
         void setTime( double time, double frameRate );
-        void setIndex( unsigned int idx, double frameRate );
         void setIndex( int idx, double frameRate );
         
         void setTime( double time );

@@ -18,12 +18,19 @@ XmlArchiver::~XmlArchiver() {
 }
 
 
+
 void XmlArchiver::addTrack( const Track& pTrack ){
+
+    TiXmlElement* mTracks = mRoot->FirstChildElement( "tracks" );
+    if( mTracks == 0 ) {
+        mTracks = new TiXmlElement( "tracks" );
+        mRoot->LinkEndChild( mTracks );
+    }
     TiXmlElement* mTrack = new TiXmlElement( "track" );
-    mRoot->LinkEndChild( mTrack );
+    mTracks->LinkEndChild( mTrack );
 
     if (pTrack.easyName.length() > 0 )
-        mTrack->SetAttribute( "Name", pTrack.easyName);
+        mTrack->SetAttribute( "name", pTrack.easyName);
     if (pTrack.fileName.length()>0)
         mTrack->SetAttribute(  "fileName", pTrack.fileName );
     mTrack->SetAttribute( "Id", trackNum );
@@ -268,26 +275,27 @@ void XmlArchiver::addFeature( const TimedCube feat, std::string name, std::strin
 }
 
 void XmlArchiver::addLabels(  LabelList label,std::string name, std::string trackName ) {
-    TiXmlElement* mLabelRoot = mRoot->FirstChildElement( "LabelCollections" );
+    TiXmlElement* mLabelRoot = mRoot->FirstChildElement( "labelCollections" );
     if( mLabelRoot == 0 ) {
-        mLabelRoot = new TiXmlElement( "LabelCollections" );
+        mLabelRoot = new TiXmlElement( "labelCollections" );
         mRoot->LinkEndChild( mLabelRoot );
     }
-    TiXmlElement* mLabelHeader = new TiXmlElement( "LabelCollection" );
+    TiXmlElement* mLabelHeader = new TiXmlElement( "labelCollection" );
     mLabelRoot->LinkEndChild( mLabelHeader );
     mLabelHeader->SetAttribute( "Id", labelNum );
     mLabelHeader->SetAttribute( "name", name );
     if( trackName.length()>0 )
         mLabelHeader->SetAttribute( "linkedTrackName", trackName );
-    TiXmlElement* mSegments = new TiXmlElement( "Segments" );
+    TiXmlElement* mSegments = new TiXmlElement( "segments" );
     mLabelHeader->LinkEndChild( mSegments );
 
     mSegments->SetAttribute( "numSegment", label.size() );
     for( int i = 0; i < label.size(); i++ ) {
-        TiXmlElement* mSegment = new TiXmlElement( "Segment" );
+        TiXmlElement* mSegment = new TiXmlElement( "segment" );
         mSegments->LinkEndChild( mSegment );
-        mSegment->SetAttribute( "FrameIndex", label[i].moment.index() );//TODO verify if index==frameIndex of the track
-        mSegment->SetAttribute( "Time", std::to_string( label[i].moment.time() ) );
+        mSegment->SetAttribute( "frameIndex", label[i].moment.index() );//TODO verify if index==frameIndex of the track
+        mSegment->SetAttribute( "time", std::to_string( label[i].moment.time() ) );
+        mSegment->SetAttribute( "frameRate", std::to_string( label[i].moment.frameRate() ) );
         mSegment->SetAttribute( "name", label[i].name);
         mSegment->SetAttribute( "state", label[i].state );
         
@@ -311,7 +319,8 @@ void XmlArchiver::load( std::string archiveFileName ) {
     if (mRoot==0)
         throw std::runtime_error( "XmlArchiver::load : This file doesn't contain a MoMa archive" );
 
-    TiXmlElement* mHandle=mRoot->FirstChildElement("track");
+    TiXmlElement* mHandle = mRoot->FirstChildElement( "tracks" );
+    mHandle = mHandle->FirstChildElement( "track" );
 
 
     for( trackNum = 0; mHandle; mHandle = mHandle->NextSiblingElement( "track" ), ++trackNum ) {
@@ -319,16 +328,18 @@ void XmlArchiver::load( std::string archiveFileName ) {
         //nothing
     }
     std::cout << trackNum << std::endl;
-   
-
 }
 void XmlArchiver::getTrack( Track& pTrack ,int index) {
     if (index>trackNum )
         throw std::runtime_error( "XmlArchiver::load : track index is not in this archive" );
 
-    TiXmlElement* mTrackRoot = mRoot->FirstChildElement( "track" );
+    TiXmlElement* mTracks = mRoot->FirstChildElement( "tracks" );
+    TiXmlElement* mTrackRoot = mTracks->FirstChildElement( "track" );
+    int id=-1;
+    if( mTrackRoot ==0)
+        throw std::runtime_error( "XmlArchiver::load : no track is in this archive" );
         
-    for( int i = 0; mTrackRoot, i < index; ++trackNum, mTrackRoot->FirstChildElement( "track" ) ) {
+    for( id = std::stoi( mTrackRoot->Attribute("Id")); mTrackRoot, id != index; mTrackRoot->NextSiblingElement( "track" ) ) {
     }
     if( mTrackRoot ) {
         pTrack.clear();
@@ -628,6 +639,60 @@ bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedVec &feat ) {
         feat.setData( frameRate, featData );
 
     return true;
+}
+
+bool XmlArchiver::getLabel( std::string labelName,LabelList &pLabelList  ) {
+
+    TiXmlElement* labelRoot = mRoot->FirstChildElement( "labelCollections" );
+    if( labelRoot == 0 )
+        throw std::runtime_error( "XmlArchiver::getLabel no label collection in this archive" );
+
+    TiXmlElement* searchedLabel = 0;
+    for( TiXmlElement* xmlLabel = labelRoot->FirstChildElement( "labelCollection" ); xmlLabel; xmlLabel = xmlLabel->NextSiblingElement( "LabelCollection" ) ) {
+        if( xmlLabel->Attribute( "name" ) == labelName ) {
+            searchedLabel = xmlLabel;
+            break;
+        }
+    }
+    if( searchedLabel == 0 )//check cube dimension
+        throw std::runtime_error( "XmlArchiver::getLabel no such label collection in this archive" );
+    TiXmlElement* segments = searchedLabel->FirstChildElement( "segments" );
+    int numSegment = std::stoi( segments->Attribute( "numSegment" ) );
+
+    pLabelList.clear();
+    for( TiXmlElement* segment = segments->FirstChildElement( "segment" ); segment; segment = segment->NextSiblingElement( "segment" ) ) {
+        MoMa::Moment mo;
+        mo.setIndex( std::stoi( segment->Attribute( "frameIndex" ) ) );
+        mo.setFrameRate( std::stod( segment->Attribute( "frameRate" ) ) );
+        mo.setTime( std::stod( segment->Attribute( "time" ) ));
+        MoMa::Label lLabel(mo, segment->Attribute( "name" ) );
+
+        lLabel.state = std::stoi( segment->Attribute( "state" ) );
+        pLabelList.push_back( lLabel );
+
+    
+    }
+
+    return true;
+}
+
+
+void XmlArchiver::contentPrint() {
+    std::cout << "tracks"<<":"<< std::endl;
+    TiXmlElement* mTemp = mRoot->FirstChildElement( "tracks" );
+    for( TiXmlElement *mTrack = mTemp->FirstChildElement("track"); mTrack; mTrack = mTrack->NextSiblingElement( "track" ) ) {
+        std::cout << mTrack->Attribute( "Id" ) <<"\t"<< mTrack->Attribute( "name" ) << std::endl;
+    }
+    std::cout <<"features" << ":" << std::endl;
+    mTemp = mRoot->FirstChildElement( "features" );
+    for( TiXmlElement *mFeature = mTemp->FirstChildElement("feature"); mFeature; mFeature = mFeature->NextSiblingElement( "feature" ) ) {
+        std::cout << mFeature->Attribute( "Id" ) << "\t" << mFeature->Attribute( "name" ) << std::endl;
+    }
+    std::cout <<"labelCollections" << ":" << std::endl;
+    mTemp = mRoot->FirstChildElement( "labelCollections" );
+    for( TiXmlElement *mLabelCollection = mTemp->FirstChildElement("labelCollection"); mLabelCollection; mLabelCollection = mLabelCollection->NextSiblingElement( "labelCollection") ) {
+        std::cout << mLabelCollection->Attribute( "Id" ) << "\t" << mLabelCollection->Attribute( "name" ) << std::endl;
+    }
 }
 
 void XmlArchiver::clear() {

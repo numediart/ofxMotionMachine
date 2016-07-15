@@ -26,7 +26,7 @@ namespace MoMa {
         void addFeature( const MoMa::TimedVec feat, std::string name, std::string trackName=std::string("") );
         void addFeature( const MoMa::TimedMat feat, std::string name, std::string trackName = std::string( "" ) );
         void addFeature( const MoMa::TimedCube feat, std::string name, std::string trackName = std::string( "" ) );
-        void addLabels( const LabelList label, std::string name, std::string trackName );
+        void addLabels( const LabelList label, std::string name, std::string trackName = std::string( "" ) );
         void save( std::string archiveFileName );
         void load( std::string archiveFileName );
         NodeList *loadNodeList( TiXmlElement * nodeRoot );
@@ -39,6 +39,8 @@ namespace MoMa {
         bool getFeature( std::string featureName, MoMa::TimedCube &feat );
         bool getFeature( std::string featureName, MoMa::TimedMat &feat );
         bool getFeature( std::string featureName, MoMa::TimedVec &feat );
+        bool getLabel( std::string name, LabelList &pLabelList );
+        void contentPrint();
         void clear();
     protected:
 
