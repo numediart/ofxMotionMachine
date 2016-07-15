@@ -470,7 +470,7 @@ void XmlArchiver::loadData( TiXmlElement * frameRoot, MoMa::Track &pTrack) {
     pTrack.setJointOffsetRotation();
 }
 
-bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedCube &feat ) {
+bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedCube &feat, std::string &trackName ) {
 
     TiXmlElement* featRoot = mRoot->FirstChildElement( "features" );
     if( featRoot==0 )
@@ -485,6 +485,9 @@ bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedCube &feat ) {
     }
     if( searchedFeat==0 || searchedFeat->Attribute("numDim")!=std::string("3") )//check cube dimension
         throw std::runtime_error( "XmlArchiver::getFeature no such feature in this archive" );
+    const char *tempName = searchedFeat->Attribute( "trackName" );
+    if( tempName )
+        trackName = std::string( tempName );
     TiXmlElement* frames = searchedFeat->FirstChildElement( "frames" );
     int numFrames = std::stoi( frames->Attribute( "numFrames" ) );
     int numCols = std::stoi( frames->Attribute( "numCols" ) );
@@ -526,7 +529,7 @@ bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedCube &feat ) {
     return true;
 }
 
-bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedMat &feat ) {
+bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedMat &feat, std::string &trackName ) {
 
     TiXmlElement* featRoot = mRoot->FirstChildElement( "features" );
     if( featRoot == 0 )
@@ -541,6 +544,10 @@ bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedMat &feat ) {
     }
     if( searchedFeat == 0 || searchedFeat->Attribute( "numDim" ) != std::string( "2" ) )//check cube dimension
         throw std::runtime_error( "XmlArchiver::getFeature no such feature in this archive" );
+    
+    const char *tempName = searchedFeat->Attribute( "trackName" );
+    if( tempName )
+        trackName = std::string(  tempName);
     TiXmlElement* frames = searchedFeat->FirstChildElement( "frames" );
     int numFrames = std::stoi( frames->Attribute( "numFrames" ) );
     int numRows = std::stoi( frames->Attribute( "numRows" ) );
@@ -581,7 +588,7 @@ bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedMat &feat ) {
     return true;
 }
 
-bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedVec &feat ) {
+bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedVec &feat, std::string &trackName ) {
 
     TiXmlElement* featRoot = mRoot->FirstChildElement( "features" );
     if( featRoot == 0 )
@@ -596,6 +603,10 @@ bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedVec &feat ) {
     }
     if( searchedFeat == 0 || searchedFeat->Attribute( "numDim" ) != std::string( "1" ) )//check cube dimension
         throw std::runtime_error( "XmlArchiver::getFeature no such feature in this archive" );
+
+    const char *tempName = searchedFeat->Attribute( "trackName" );
+    if( tempName )
+        trackName = std::string( tempName );
     TiXmlElement* frames = searchedFeat->FirstChildElement( "frames" );
     int numFrames = std::stoi( frames->Attribute( "numFrames" ) );
 
@@ -641,7 +652,7 @@ bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedVec &feat ) {
     return true;
 }
 
-bool XmlArchiver::getLabel( std::string labelName,LabelList &pLabelList  ) {
+bool XmlArchiver::getLabel( std::string labelName,LabelList &pLabelList, std::string &trackName  ) {
 
     TiXmlElement* labelRoot = mRoot->FirstChildElement( "labelCollections" );
     if( labelRoot == 0 )
@@ -656,6 +667,10 @@ bool XmlArchiver::getLabel( std::string labelName,LabelList &pLabelList  ) {
     }
     if( searchedLabel == 0 )//check cube dimension
         throw std::runtime_error( "XmlArchiver::getLabel no such label collection in this archive" );
+
+    const char *tempName = searchedLabel->Attribute( "trackName" );
+    if( tempName )
+        trackName = std::string( tempName );
     TiXmlElement* segments = searchedLabel->FirstChildElement( "segments" );
     int numSegment = std::stoi( segments->Attribute( "numSegment" ) );
 
