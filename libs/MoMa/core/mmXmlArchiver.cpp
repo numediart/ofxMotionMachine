@@ -547,7 +547,7 @@ bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedMat &feat, std
     
     const char *tempName = searchedFeat->Attribute( "trackName" );
     if( tempName )
-        trackName = std::string(  tempName);
+        trackName = std::string( tempName );
     TiXmlElement* frames = searchedFeat->FirstChildElement( "frames" );
     int numFrames = std::stoi( frames->Attribute( "numFrames" ) );
     int numRows = std::stoi( frames->Attribute( "numRows" ) );

@@ -108,9 +108,9 @@ namespace MoMa {
         * @param pTrack ref to timedContainer (with the appropriate dimension) object to store the data.
         *
         */
-        bool getFeature( std::string featureName, MoMa::TimedCube &feat, std::string &trackName=std::string() );
-        bool getFeature( std::string featureName, MoMa::TimedMat &feat, std::string &trackName = std::string() );
-        bool getFeature( std::string featureName, MoMa::TimedVec &feat, std::string &trackName = std::string() );
+        bool getFeature( std::string featureName, MoMa::TimedCube &feat, std::string &trackName );
+        bool getFeature( std::string featureName, MoMa::TimedMat &feat, std::string &trackName );
+        bool getFeature( std::string featureName, MoMa::TimedVec &feat, std::string &trackName );
         /**
         *
         * getLabel fill a MoMa::TimedContaine with the information from one of the archived feature
@@ -118,7 +118,7 @@ namespace MoMa {
         * @param pLabelList ref to labelList object to store the data.
         *
         */
-        bool getLabel( std::string name, LabelList &pLabelList, std::string &trackName = std::string() );
+        bool getLabel( std::string name, LabelList &pLabelList, std::string &trackName );
         /**
         *
         * contentPrint display in a console the content of the xml archive
