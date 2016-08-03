@@ -16,6 +16,7 @@ void V3dParser::load( string const &fileName, Track *track ) {
     if( !v3dFile.is_open() ) {
         
         cout << "Track: File could not be opened!" << endl;
+        throw std::runtime_error("File could not be opened.");
         return; // We alert on stdout and quit if no file!
     }
     
@@ -259,7 +260,7 @@ void V3dParser::load( string const &fileName, Track *track ) {
         }
     }
     
-    track->setFrameRate( 177 ); // TODO to define to look for it somewhere
+    track->setFrameRate( 179 ); // TODO to define to look for it somewhere
 //    track->hasOrigNodeRot_as_boneRot=true;
 
     v3dFile.close();
