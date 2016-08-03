@@ -28,11 +28,23 @@
 #include "mmNode.h"
 #include "mmBone.h"
 
-#include "mmGeometry.h"
+//#include "mmGeometry.h"
+
 
 #define MOMAINF 1000000000
 
 namespace MoMa {
+
+    enum TrackType {
+
+        FLAT,
+        V3D,
+        C3D,
+        BVH,
+        CMP,
+        KIN,
+        XML
+    };
 
     class Track {
 
@@ -125,6 +137,7 @@ namespace MoMa {
 
         std::string easyName; // Track name
         std::string fileName; // Track file name
+        TrackType type;
 
         TimedCube position; // Position frames
         TimedCube rotation; // Quaternion frames

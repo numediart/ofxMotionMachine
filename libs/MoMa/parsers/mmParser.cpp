@@ -34,6 +34,7 @@ Parser::Parser( string const &fName, Track *tr ) {
 	tr->hasGlobalCoordinate = true;//value by default
     if( extension == "txt" ) {        
 
+        track->type = FLAT;
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
 
         FlatParser flatParser( fileName,track );
@@ -64,6 +65,7 @@ Parser::Parser( string const &fName, Track *tr ) {
 
     else if( extension == "v3d" ) {
 
+        track->type = V3D;
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
 
         V3dParser v3dParser( fileName, track );
@@ -87,6 +89,7 @@ Parser::Parser( string const &fName, Track *tr ) {
 
     else if( extension == "c3d" ) {
 
+        track->type = C3D;
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
 
         C3dParser c3dParser( fileName, track );
@@ -108,6 +111,7 @@ Parser::Parser( string const &fName, Track *tr ) {
     else if( extension == "bvh" ) {
         track->clear();
         track->init();
+        track->type = BVH;
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
         
         BvhParser::load( fileName, track,true,false );
@@ -129,6 +133,7 @@ Parser::Parser( string const &fName, Track *tr ) {
     }
     else if( extension == "cmp" ) {
         
+        track->type = CMP;
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
         
         CmpParser Parser;
@@ -150,6 +155,7 @@ Parser::Parser( string const &fName, Track *tr ) {
     }
     else if( extension == "kin" ) {
         
+        track->type = KIN;
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
         KinParser kinParser( fileName, track );
         // Check validity of lists of bones and nodes
@@ -182,6 +188,7 @@ Parser::Parser( string const &fName, Track *tr ) {
 
 	else if( extension == "xml" ) {        
 
+        track->type = XML;
         track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
 
         XmlParser xmlParser( fileName,track );
