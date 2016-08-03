@@ -119,6 +119,26 @@ namespace MoMa {
         *
         */
         bool getLabel( std::string name, LabelList &pLabelList, std::string &trackName = std::string() );
+        
+
+        /**
+        *
+        * getTrackNames return the names of tracks stored in the xml archive
+        * @return a vector with the names of the tracks
+        */
+        std::vector<std::string> getTrackNames();
+        /**
+        *
+        * getFeatureNames return the names of features stored in the xml archive
+        * @return a vector with the names of the tracks and the dimension of this feature
+        */
+        std::vector< std::pair<std::string, int > > getFeatureNames();
+        /**
+        *
+        * getLabelNames return the names of label collections stored in the xml archive
+        * @return a vector with the names of the tracks
+        */
+        std::vector<std::string> getLabelNames();
         /**
         *
         * contentPrint display in a console the content of the xml archive
@@ -130,7 +150,7 @@ namespace MoMa {
         * clear clear the tinyXml object 
         *
         */
-        
+
         void clear();
     protected:
 

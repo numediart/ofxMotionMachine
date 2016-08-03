@@ -710,6 +710,32 @@ void XmlArchiver::contentPrint() {
     }
 }
 
+std::vector<std::string> XmlArchiver::getTrackNames() {
+    std::vector<std::string> ret;
+    TiXmlElement* mTemp = mRoot->FirstChildElement( "tracks" );
+    for( TiXmlElement *mTrack = mTemp->FirstChildElement( "track" ); mTrack; mTrack = mTrack->NextSiblingElement( "track" ) ) {
+        
+        ret.push_back( mTrack->Attribute( "name" ));
+    }
+    return ret;
+}
+
+std::vector< std::pair<std::string,  int > > XmlArchiver::getFeatureNames() {
+    std::vector<std::pair<std::string,  int> > ret;
+    TiXmlElement* mTemp = mRoot->FirstChildElement( "features" );
+    for( TiXmlElement *mFeature = mTemp->FirstChildElement( "feature" ); mFeature; mFeature = mFeature->NextSiblingElement( "feature" ) ) { 
+        ret.push_back(std::pair< std::string,int> (mFeature->Attribute( "name" ),std::stoi( mFeature->Attribute( "numDim" ) )));
+    }
+    return ret;
+}
+std::vector<std::string> XmlArchiver::getLabelNames() {
+    std::vector<std::string> ret;
+    TiXmlElement* mTemp = mRoot->FirstChildElement( "labelCollections" );
+    for( TiXmlElement *mLabelCollection = mTemp->FirstChildElement( "labelCollection" ); mLabelCollection; mLabelCollection = mLabelCollection->NextSiblingElement( "labelCollection" ) ) {
+        ret.push_back( mLabelCollection->Attribute( "name" ) );
+    }
+    return ret;
+}
 void XmlArchiver::clear() {
     mArchiver.Clear();
     mRoot = 0;
