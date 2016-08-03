@@ -71,7 +71,7 @@ namespace MoMa {
         
 		//RealTime methods
 		inline bool isRealTime() const{return mIsRealTime;} ;
-		inline unsigned int getBufferSize(){return mBufferSize;};
+		inline unsigned int getBufferSize() const{return mBufferSize;};
 		inline unsigned int setBufferSize(unsigned int pBufferSize){mBufferSize=pBufferSize;};
 		inline unsigned int memIndex(unsigned int index) const;//transform the index relative to mLastId in the index in memory
 		inline unsigned int usedIndex(unsigned int index) const;
@@ -90,6 +90,7 @@ namespace MoMa {
         bool interpIndexFind( const arma::vec pVec, double pValue, unsigned int &index1,
         double &weight1, unsigned int &index2, double &weight2 ) const; // Interpolation data
         bool setValidIntervalTime( double time ) { mInterpValidTime = time; };
+
     protected:
         arma::vec mTimeVec; // Time stamp vector
         double mFrameRate; // Frame rate (if any)
@@ -180,8 +181,13 @@ namespace MoMa {
     // == TIMED VEC ==
     
     class TimedVec : public TimedData {
-        
+
       public:
+
+        TimedVec() : TimedData() {};
+        TimedVec(double pFrameRate, const arma::vec &pData, float initTime = 0.0f) : TimedVec() { setData(pFrameRate, pData, initTime); };
+        TimedVec(const arma::vec  &pTime, const arma::vec &pData) : TimedVec() { setData(pTime, pData); };
+
         inline double get( unsigned int pIndex );
         inline double get( double pTime );
 		
@@ -214,6 +220,15 @@ namespace MoMa {
         unsigned int nOfElems( void ) const { return( 1 ); }
         void clear( void ) { mData.clear(); }
 		bool SetValidParam();
+
+        TimedVec operator+(double d) { TimedVec ret(*this); ret.getRefData() += d; return ret; }
+        TimedVec operator-(double d) { TimedVec ret(*this); ret.getRefData() -= d; return ret; }
+        TimedVec operator*(double d) { TimedVec ret(*this); ret.getRefData() *= d; return ret; }
+        TimedVec operator/(double d) { TimedVec ret(*this); ret.getRefData() /= d; return ret; }
+        void operator+=(double d) { this->getRefData() += d;}
+        void operator-=(double d) { this->getRefData() -= d; }
+        void operator*=(double d) { this->getRefData() *= d; }
+        void operator/=(double d) { this->getRefData() /= d; }
 	
       protected:
         
@@ -288,7 +303,9 @@ namespace MoMa {
         
         
         TimedMat( void ) { interpolAlgo = LINEAR; }
-        
+        TimedMat(double pFrameRate, const arma::mat &pData, float initTime = 0.0f) : TimedMat() { setData(pFrameRate, pData, initTime); };
+        TimedMat(const arma::vec  &pTime, const arma::mat &pData) : TimedMat() { setData(pTime, pData); };
+
         inline arma::vec get( unsigned int pIndex ); // Frame getter
         inline arma::vec get( double pTime ); // by index and time
         
@@ -324,6 +341,15 @@ namespace MoMa {
         unsigned int nOfElems( void ) const { return( mData.n_rows ); }
         void clear( void ) { mData.clear(); }
 		bool SetValidParam();
+
+        TimedMat operator+(double d) { TimedMat ret(*this); ret.getRefData() += d; return ret; }
+        TimedMat operator-(double d) { TimedMat ret(*this); ret.getRefData() -= d; return ret; }
+        TimedMat operator*(double d) { TimedMat ret(*this); ret.getRefData() *= d; return ret; }
+        TimedMat operator/(double d) { TimedMat ret(*this); ret.getRefData() /= d; return ret; }
+        void operator+=(double d) { this->getRefData() += d; }
+        void operator-=(double d) { this->getRefData() -= d; }
+        void operator*=(double d) { this->getRefData() *= d; }
+        void operator/=(double d) { this->getRefData() /= d; }
     
       protected:
         
@@ -392,6 +418,8 @@ namespace MoMa {
       public:
         
         TimedCube( void ) { interpolAlgo = LINEAR; }
+        TimedCube(double pFrameRate, const arma::cube &pData, float initTime = 0.0f) : TimedCube() { setData(pFrameRate, pData, initTime); };
+        TimedCube(const arma::vec  &pTime, const arma::cube &pData) : TimedCube() { setData(pTime, pData); };
         
         inline const arma::mat &get( unsigned int pIndex ) const; // Frame getter
         inline arma::mat get( double pTime ) const; // by index and time
@@ -432,6 +460,15 @@ namespace MoMa {
         unsigned int nOfCols( void ) const { return( mData.n_cols ); } // # of cols
         void clear( void ) { mData.clear(); } // Clear
  		bool SetValidParam();
+
+        TimedCube operator+(double d) { TimedCube ret(*this); ret.getRefData() += d; return ret; }
+        TimedCube operator-(double d) { TimedCube ret(*this); ret.getRefData() -= d; return ret; }
+        TimedCube operator*(double d) { TimedCube ret(*this); ret.getRefData() *= d; return ret; }
+        TimedCube operator/(double d) { TimedCube ret(*this); ret.getRefData() /= d; return ret; }
+        void operator+=(double d) { this->getRefData() += d; }
+        void operator-=(double d) { this->getRefData() -= d; }
+        void operator*=(double d) { this->getRefData() *= d; }
+        void operator/=(double d) { this->getRefData() /= d; }
        
       protected:
         
