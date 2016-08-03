@@ -247,7 +247,7 @@ namespace MoMa {
         
         // - Figure-related methods -
         
-        int nOfFigures( void ) { return( _figure.size() ); }
+        inline int nOfFigures( void ) { return( _figure.size() ); }
         void setNumOfFigures( int nOfFigures ); // # of Figs
         void figure( int figId ); // Choose the target figure
         
