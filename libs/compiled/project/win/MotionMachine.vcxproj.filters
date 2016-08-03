@@ -91,6 +91,9 @@
     <Filter Include="oF\addons\ofxOsc\src">
       <UniqueIdentifier>{37c657dc-f69f-42ee-aed5-1ba7c4dad0b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MoMa\features\Kinematics">
+      <UniqueIdentifier>{f086f867-22bf-4afd-bb3c-75feb4bd1a9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\MoMa\core\mmBoneList.cpp">
@@ -410,6 +413,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\MoMa\core\mmNodeTrace.cpp">
       <Filter>MoMa\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\features\Kinematics\mmKinematics.cpp">
+      <Filter>MoMa\features\Kinematics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -779,5 +785,11 @@
     <ClInclude Include="..\..\..\MoMa\core\mmBoneTrace.h">
       <Filter>MoMa\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\features\Kinematics\mmKinematics.h">
+      <Filter>MoMa\features\Kinematics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
