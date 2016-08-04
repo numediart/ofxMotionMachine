@@ -30,6 +30,11 @@ Track::Track( Frame frame ) {
     if( hasBoneList ) boneList = new BoneList( *( frame.boneList ) );
 }
 
+MoMa::Track::Track(const Track & tr) : Track()
+{
+    tr.copy(*this);
+}
+
 Track::~Track( void ) {
 
     if( hasNodeList ) delete nodeList; // Deallocation
@@ -436,7 +441,7 @@ void Track::cut( int beg, int end ) {
     }*/
 }
 
-void Track::copy( Track &tr ) {
+void Track::copy( Track &tr ) const {
 
     if( tr.nodeList ) delete tr.nodeList;
     if( tr.boneList ) delete tr.boneList;

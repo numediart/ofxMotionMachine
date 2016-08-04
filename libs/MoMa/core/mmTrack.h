@@ -53,6 +53,7 @@ namespace MoMa {
         Track(void); // Default constructor
         virtual ~Track(void); // Default destructor
         Track(Frame frame); // Construt a track containing one frame
+        Track(const Track &tr); //Copy constructor
         void init(void); // Initialize track
 
         // - Loading files -
@@ -101,7 +102,7 @@ namespace MoMa {
         void subTrack(Track &subTr, int beg, int end); // Extract a subtrack (into another track)
         void cut(int beg, int end); // Cut track's data from beg to end
 
-        void copy(Track & tr);
+        void copy(Track & tr) const;
         inline const arma::mat &getRotationOffset() const { return (this->rotationOffset); };
 
         bool setJointOffsetRotation();
