@@ -91,7 +91,9 @@ namespace MoMa {
         inline Trace operator()(int index); // Short version of trace()
 
         inline arma::mat tracePosition(int index) const; // Query node trace by index in the track
+        inline arma::mat tracePosition(std::string name) const; // Query node trace by index in the track
         inline arma::mat traceRotation(int index) const; // Query node trace by index in the track
+        inline arma::mat traceRotation(std::string name) const; // Query node trace by index in the track
 
         // - Ringbuffer-related methods -
 
@@ -500,9 +502,19 @@ namespace MoMa {
         return(position.getData().tube(0, index, 2, index));
     }
 
+    arma::mat Track::tracePosition(std::string name) const {
+
+        return tracePosition(nodeList->index(name));
+    }
+
     arma::mat Track::traceRotation(int index) const {
 
         return(rotation.getData().tube(0, index, 2, index));
+    }
+
+    arma::mat Track::traceRotation(std::string name) const {
+
+        return traceRotation(nodeList->index(name));
     }
 
     double Track::maxTime(void) const {
