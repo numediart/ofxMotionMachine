@@ -28,11 +28,23 @@
 #include "mmNode.h"
 #include "mmBone.h"
 
-#include "mmGeometry.h"
+//#include "mmGeometry.h"
+
 
 #define MOMAINF 1000000000
 
 namespace MoMa {
+
+    enum TrackType {
+
+        FLAT,
+        V3D,
+        C3D,
+        BVH,
+        CMP,
+        KIN,
+        XML
+    };
 
     class Track {
 
@@ -66,20 +78,20 @@ namespace MoMa {
 
         // - Extracting traces and trace-related matrices
 
-        inline MoMa::Trace trace(std::string name); // Extract trace (by name)
-        inline MoMa::Trace trace(int index); // Extract trace (by index)
+        inline MoMa::Trace trace(std::string name) const; // Extract trace (by name)
+        inline MoMa::Trace trace(int index) const; // Extract trace (by index)
 
-        inline MoMa::Trace nodeTrace(std::string name); // Extract trace (by name)
-        inline MoMa::Trace nodeTrace(int index); // Extract trace (by index)
+        inline MoMa::Trace nodeTrace(std::string name) const; // Extract trace (by name)
+        inline MoMa::Trace nodeTrace(int index) const; // Extract trace (by index)
 
-        inline MoMa::BoneTrace boneTrace(std::string name); // Extract bone trace (by name)
-        inline MoMa::BoneTrace boneTrace(int index); // Extract bone trace (by index)
+        inline MoMa::BoneTrace boneTrace(std::string name) const; // Extract bone trace (by name)
+        inline MoMa::BoneTrace boneTrace(int index) const; // Extract bone trace (by index)
 
         inline Trace operator()(std::string name); // Short version of trace()
         inline Trace operator()(int index); // Short version of trace()
 
-        inline arma::mat tracePosition(int index); // Query node trace by index in the track
-        inline arma::mat traceRotation(int index); // Query node trace by index in the track
+        inline arma::mat tracePosition(int index) const; // Query node trace by index in the track
+        inline arma::mat traceRotation(int index) const; // Query node trace by index in the track
 
         // - Ringbuffer-related methods -
 
@@ -125,6 +137,7 @@ namespace MoMa {
 
         std::string easyName; // Track name
         std::string fileName; // Track file name
+        TrackType type;
 
         TimedCube position; // Position frames
         TimedCube rotation; // Quaternion frames
@@ -146,6 +159,8 @@ namespace MoMa {
 
         int ringSize; // Ringbuffer size
         bool isRing; // Is ringbuffer?
+
+        
     };
 
     // - Inlined functions -
@@ -241,7 +256,7 @@ namespace MoMa {
         return(rotation.get(time));
     }
 
-    Trace Track::trace(std::string name) {
+    Trace Track::trace(std::string name) const {
 
         Trace oneTrace;
         int nIdx = -1; // Initialise
@@ -320,12 +335,12 @@ namespace MoMa {
         // If not found, return empty trace
     }
 
-    Trace Track::nodeTrace(std::string name) {
+    Trace Track::nodeTrace(std::string name) const {
 
         return trace(name);
     }
 
-    Trace Track::trace(int index) {
+    Trace Track::trace(int index) const {
 
         Trace oneTrace;
 
@@ -371,12 +386,12 @@ namespace MoMa {
         return(oneTrace);
     }
 
-    Trace Track::nodeTrace(int index) {
+    Trace Track::nodeTrace(int index) const {
 
         return trace(index);
     }
 
-    BoneTrace Track::boneTrace(std::string name) {
+    BoneTrace Track::boneTrace(std::string name) const {
 
         BoneTrace oneTrace;
         int nIdx = -1; // Initialise
@@ -404,7 +419,7 @@ namespace MoMa {
         }
     }
 
-    BoneTrace Track::boneTrace(int index) {
+    BoneTrace Track::boneTrace(int index) const {
 
         BoneTrace oneTrace;
 
@@ -480,12 +495,12 @@ namespace MoMa {
         return(trace(index));
     }
 
-    arma::mat Track::tracePosition(int index) {
+    arma::mat Track::tracePosition(int index) const {
 
         return(position.getData().tube(0, index, 2, index));
     }
 
-    arma::mat Track::traceRotation(int index) {
+    arma::mat Track::traceRotation(int index) const {
 
         return(rotation.getData().tube(0, index, 2, index));
     }

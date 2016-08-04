@@ -385,13 +385,13 @@ void MoMa::SceneApp::draw(ofEventArgs &args) {
 
     if (isFigure) {
 
-        if (_figure.size() > 0) {
+        for (int fIdx = 0; fIdx < nOfFigures(); fIdx++) {
 
-            _figure[figureIdx].yMin = 1.0E12;
-            _figure[figureIdx].yMax = -1.0E12;
+            _figure[fIdx].yMin = 1.0E12;
+            _figure[fIdx].yMax = -1.0E12;
 
-            _figure[figureIdx].plot.clear();
-            _figure[figureIdx].plotId = 0;
+            _figure[fIdx].plot.clear();
+            _figure[fIdx].plotId = 0;
         }
 
         if (autoDrawFeatures) {
@@ -1356,7 +1356,7 @@ void MoMa::SceneApp::draw(const Frame &frame) {
             //ofSetColor(DarkTurquoise, ofGetStyle().color.a);
             ofSpherePrimitive sphere;
 
-            sphere.setRadius(DefaultNodeSize / 2); // Set position and radius
+            sphere.setRadius(nodeSize / 2); // Set position and radius
             for (int s = 0; s < frame.nOfNodes(); s++) {
 
                 ofPushMatrix();

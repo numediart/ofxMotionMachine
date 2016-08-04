@@ -108,7 +108,7 @@ namespace MoMa {
         * @param pTrack ref to timedContainer (with the appropriate dimension) object to store the data.
         *
         */
-        bool getFeature( std::string featureName, MoMa::TimedCube &feat, std::string &trackName=std::string() );
+        bool getFeature( std::string featureName, MoMa::TimedCube &feat, std::string &trackName = std::string() );
         bool getFeature( std::string featureName, MoMa::TimedMat &feat, std::string &trackName = std::string() );
         bool getFeature( std::string featureName, MoMa::TimedVec &feat, std::string &trackName = std::string() );
         /**
