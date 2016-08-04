@@ -25,7 +25,7 @@ float Geometry::distance( const arma::vec &a, const arma::vec &b ) {
 
 vec Geometry::distance(const mat &a, const mat &b) {
 
-    return sqrt(sum(pow(a - b, 2)));
+    return sqrt(sum(pow(a - b, 2))).t();
 }
 
 TimedVec Geometry::distance(const TimedMat &a, const TimedMat &b) {
@@ -36,6 +36,7 @@ TimedVec Geometry::distance(const TimedMat &a, const TimedMat &b) {
     return ret;
 }
 
+//Distance of point d to plane defined by points a, b and c
 float Geometry::distanceToPlane( const arma::vec &a, const arma::vec &b, const arma::vec &c, const arma::vec &d ) {
     
     float dist;
@@ -55,6 +56,7 @@ float Geometry::distanceToPlane( const arma::vec &a, const arma::vec &b, const a
     return( dist );
 }
 
+//Distance between d and plane fixed in c and normal to vector a->b
 float Geometry::distanceToNPlane( const arma::vec &a, const arma::vec &b, const arma::vec &c, const arma::vec &d ) {
     
     float dist;
@@ -126,11 +128,75 @@ float Geometry::angleBtwVectors2D( const arma::vec &a, const arma::vec &b, const
     
     v1 = b - a;
     v2 = d - c;
-    float tmp = arma::dot(v1,v2);
-    tmp=norm(v1);
-    tmp = norm(v2);
-    tmp = arma::dot(v1,v2)/(norm(v1)*norm(v2));
+    //float tmp = arma::dot(v1,v2);
+    //tmp=norm(v1);
+    //tmp = norm(v2);
+    //tmp = arma::dot(v1,v2)/(norm(v1)*norm(v2));
     angle = acos(arma::dot(v1,v2)/(norm(v1)*norm(v2)));
     
     return( angle );
+}
+
+mat Geometry::projection(const mat &a, const mat &b, const mat &c, const mat &p, bool invert)
+{
+    mat v1, v2, v3, proj;
+
+    //Compute coordinate system
+    v1 = b - a;
+    v1 = normalise(v1);
+    v2.copy_size(v1);
+    v3.copy_size(v1);
+    proj.copy_size(v1);
+
+    for (int i = 0; i < v3.n_cols; ++i) {
+
+        v3.col(i) = cross(v1.col(i), c.col(i) - a.col(i)); //v3 normal to plan
+        v3.col(i) /= norm(v3.col(i)); 
+        v2.col(i) = cross(v3.col(i), v1.col(i));
+
+        //Compute projection matrix
+        mat projmat(3, 3);
+        projmat.col(0) = v1.col(i); projmat.col(1) = v2.col(i); projmat.col(2) = v3.col(i);
+
+        if (invert == 0)
+            //Compute projection
+            proj.col(i) = ((p.col(i) - a.col(i)).t()*projmat).t();
+
+        else {
+
+            if (projmat.is_finite()) {
+
+                //Compute inverse projection matrix
+                mat invprojmat = pinv(projmat);
+
+                //Compute inverse projection
+                proj.col(i) = (p.col(i).t()*invprojmat).t() + a.col(i);
+            }
+            else {
+
+                proj.col(i).fill(datum::nan);
+            }
+        }
+    }
+
+    return proj;
+}
+
+TimedMat Geometry::projection(const MoMa::TimedMat &a, const MoMa::TimedMat &b, const MoMa::TimedMat &c, const MoMa::TimedMat &p, bool invert)
+{
+    mat proj = projection(a.getData(), b.getData(), c.getData(), p.getData(), invert);
+    if (!p.isTimed())
+        return TimedMat(p.frameRate(), proj, p.initialTime());
+    else
+        return TimedMat(p.getTimeVec(), proj);
+}
+
+MoMa::Trace Geometry::projection(const MoMa::Trace &t1, const MoMa::Trace &t2, const MoMa::Trace &t3, const MoMa::Trace &p, bool invert)
+{    
+    TimedMat proj = projection(t1.position, t2.position, t3.position, p.position, invert);
+
+    Trace ret;
+    ret.setTimeFlag(p.hasTime());
+    ret.position = proj;
+    return ret;
 }
