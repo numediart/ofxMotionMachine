@@ -35,7 +35,7 @@ void MoMa::SceneApp::setup(ofEventArgs &args) {
     showCaptions(true);
     enableShortcuts();
 
-    setActiveMode(SCENE2D);
+    setActiveMode(SCENE3D);
     setPlaybackMode(PLAY);
 
     setAutoDrawLabelLists(true);
@@ -77,7 +77,7 @@ void MoMa::SceneApp::setup(ofEventArgs &args) {
 
     oscRcvPort = 7000;
     oscSndPort = 8000;
-
+    
     setup();
 
     _sender.setup("127.0.0.1", oscSndPort);
@@ -1679,6 +1679,7 @@ void MoMa::SceneApp::setFrameRate(float rate) {
 
     lowBound.setFrameRate(frameRate);
     highBound.setFrameRate(frameRate);
+    minBound.setFrameRate(frameRate);
     maxBound.setFrameRate(frameRate);
     appMoment.setFrameRate(frameRate);
 
