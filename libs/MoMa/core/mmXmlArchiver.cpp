@@ -344,9 +344,9 @@ void XmlArchiver::getTrack( Track& pTrack ,int index) {
     if( mTrackRoot ) {
         pTrack.clear();
         TiXmlElement* mProperties = mTrackRoot->FirstChildElement( "properties" );
-        pTrack.hasRotation = mProperties->Attribute( "BonesOrientation" );
+        pTrack.hasRotation = mProperties->Attribute( "BonesOrientation" ) == std::string("1");
         pTrack.hasGlobalCoordinate = mProperties->Attribute( "encoding" ) == std::string("Global");
-        rootPositionOnlyFlag = mProperties->Attribute( "RootPositionOnly" );
+        rootPositionOnlyFlag = mProperties->Attribute( "RootPositionOnly" ) == std::string( "1" );
 
         TiXmlElement* mSkeleton = mTrackRoot->FirstChildElement( "skeleton" );
         pTrack.nodeList = this->loadNodeList( mSkeleton->FirstChildElement( "nodes" ) );
