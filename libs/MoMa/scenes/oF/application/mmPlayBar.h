@@ -30,6 +30,7 @@ namespace MoMa {
         void update();
         void canvasEvent( ofxUIEventArgs &e );
         void initCanvas();
+        void pause();
 
     protected:
 
@@ -40,7 +41,9 @@ namespace MoMa {
         ofxUIImageButton *bt_play, *bt_stop, *bt_nextFrame, *bt_prevFrame;
         bool playingState;
         ofxUITextArea *txt_index, *txt_time;
+        ofxUIMinimalSlider *timeslider;// , *frslider;
         string libPath;
+        bool next, prev;
     };
 }
 
