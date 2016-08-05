@@ -53,6 +53,7 @@ namespace MoMa {
         Track(void); // Default constructor
         virtual ~Track(void); // Default destructor
         Track(Frame frame); // Construt a track containing one frame
+        Track(const Track &tr); //Copy constructor
         void init(void); // Initialize track
 
         // - Loading files -
@@ -91,7 +92,9 @@ namespace MoMa {
         inline Trace operator()(int index); // Short version of trace()
 
         inline arma::mat tracePosition(int index) const; // Query node trace by index in the track
+        inline arma::mat tracePosition(std::string name) const; // Query node trace by index in the track
         inline arma::mat traceRotation(int index) const; // Query node trace by index in the track
+        inline arma::mat traceRotation(std::string name) const; // Query node trace by index in the track
 
         // - Ringbuffer-related methods -
 
@@ -99,7 +102,7 @@ namespace MoMa {
         void subTrack(Track &subTr, int beg, int end); // Extract a subtrack (into another track)
         void cut(int beg, int end); // Cut track's data from beg to end
 
-        void copy(Track & tr);
+        void copy(Track & tr) const;
         inline const arma::mat &getRotationOffset() const { return (this->rotationOffset); };
 
         bool setJointOffsetRotation();
@@ -500,9 +503,19 @@ namespace MoMa {
         return(position.getData().tube(0, index, 2, index));
     }
 
+    arma::mat Track::tracePosition(std::string name) const {
+
+        return tracePosition(nodeList->index(name));
+    }
+
     arma::mat Track::traceRotation(int index) const {
 
         return(rotation.getData().tube(0, index, 2, index));
+    }
+
+    arma::mat Track::traceRotation(std::string name) const {
+
+        return traceRotation(nodeList->index(name));
     }
 
     double Track::maxTime(void) const {

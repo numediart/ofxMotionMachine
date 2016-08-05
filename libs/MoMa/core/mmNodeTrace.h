@@ -33,7 +33,7 @@ namespace MoMa {
         std::string name( void ) const{ return( _name ); } // Get name
         inline void setName( std::string n ) { _name = n; } // Set name
         
-        bool hasTime( void ) { return( position.isTimed() ); } // Flag
+        bool hasTime( void ) const { return( position.isTimed() ); } // Flag
         inline void setTimeFlag( bool tim ) { _hasTime = tim; } // Force it//TODO verify if it is necessary, a trace has necessarely a time, but not a timedstamp time scale.
         
         arma::mat matrix( void ) ;
