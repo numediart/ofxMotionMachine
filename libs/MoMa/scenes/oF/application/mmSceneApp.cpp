@@ -77,7 +77,7 @@ void MoMa::SceneApp::setup(ofEventArgs &args) {
 
     oscRcvPort = 7000;
     oscSndPort = 8000;
-    
+
     setup();
 
     _sender.setup("127.0.0.1", oscSndPort);
@@ -97,7 +97,8 @@ void MoMa::SceneApp::update(ofEventArgs &args) {
 
         case SCENE3D:
 
-            camera.enableMouseInput();
+            if(!isZoom) camera.enableMouseInput();
+            else camera.disableMouseInput();
 
             break;
 
@@ -583,6 +584,9 @@ void MoMa::SceneApp::keyPressed(ofKeyEventArgs &key) {
 
         }
 
+        if (key.key == 'z') isZoom = true; // 'z' like 'zoom'
+        if (key.key == 'u') showAll(); // 'u' like 'unzoom'
+
         switch (activeMode) {
 
         case SCENE3D:
@@ -591,8 +595,6 @@ void MoMa::SceneApp::keyPressed(ofKeyEventArgs &key) {
 
         case SCENE2D:
 
-            if (key.key == 'z') isZoom = true; // 'z' like 'zoom'
-            if (key.key == 'u') showAll(); // 'u' like 'unzoom'
 
             break;
 
@@ -600,8 +602,6 @@ void MoMa::SceneApp::keyPressed(ofKeyEventArgs &key) {
 
             if (!isEditing) {
 
-                if (key.key == 'z') isZoom = true; // 'z' like 'zoom'
-                if (key.key == 'u') showAll(); // 'u' like 'unzoom'
                 if (key.key == 'n') insertNewLabel = true;
             }
 
@@ -659,15 +659,16 @@ void MoMa::SceneApp::keyReleased(ofKeyEventArgs &key) {
             }
         }
 
+        if (key.key == 'z') isZoom = false;
+
         switch (activeMode) {
 
         case SCENE3D:
 
+            
             break;
 
         case SCENE2D:
-
-            if (key.key == 'z') isZoom = false;
 
             break;
 
@@ -675,7 +676,6 @@ void MoMa::SceneApp::keyReleased(ofKeyEventArgs &key) {
 
             if (!isEditing) {
 
-                if (key.key == 'z') isZoom = false;
                 if (key.key == 'n') insertNewLabel = false;
             }
 
@@ -742,6 +742,12 @@ void MoMa::SceneApp::mousePressed(ofMouseEventArgs &mouse) {
 
     if (!mouseEnabled) return;
 
+    if (isZoom) {
+
+        zoomLowBound = mouse.x;
+        zoomHighBound = mouse.x;
+    }
+
     switch (activeMode) {
 
     case SCENE3D:
@@ -750,21 +756,11 @@ void MoMa::SceneApp::mousePressed(ofMouseEventArgs &mouse) {
 
     case SCENE2D:
 
-        if (isZoom) {
-
-            zoomLowBound = mouse.x;
-            zoomHighBound = mouse.x;
-        }
+        
 
         break;
 
     case ANNOTATE:
-
-        if (isZoom) {
-
-            zoomLowBound = mouse.x;
-            zoomHighBound = mouse.x;
-        }
 
         if (hasMouseEventRegLabelList) {
 
@@ -810,62 +806,46 @@ void MoMa::SceneApp::mouseReleased(ofMouseEventArgs &mouse) {
 
     if (!mouseEnabled) return;
 
+    if (isZoom) {
+
+        zoomHighBound = mouse.x;
+
+        if (zoomHighBound >= ofGetWidth()) {
+
+            zoomHighBound = ofGetWidth();
+        }
+
+        if (zoomLowBound <= 0) {
+
+            zoomLowBound = 0;
+        }
+
+        if (zoomLowBound >= zoomHighBound) {
+
+            int tmp = zoomHighBound;
+            zoomHighBound = zoomLowBound;
+            zoomLowBound = tmp;
+        }
+
+        double newMin = ofMap(zoomLowBound, 0, ofGetWidth(), lowBound.time(), highBound.time());
+        double newMax = ofMap(zoomHighBound, 0, ofGetWidth(), lowBound.time(), highBound.time());
+
+        zoomLowBound = zoomHighBound = -1;
+        zoom(newMin, newMax);
+    }
+
     switch (activeMode) {
 
     case SCENE3D:
+
 
         break;
 
     case SCENE2D:
 
-        if (isZoom) {
-
-            zoomHighBound = mouse.x;
-
-            if (zoomHighBound >= ofGetWidth()) {
-
-                zoomHighBound = ofGetWidth();
-            }
-
-            if (zoomLowBound <= 0) {
-
-                zoomLowBound = 0;
-            }
-
-            if (zoomLowBound >= zoomHighBound) {
-
-                int tmp = zoomHighBound;
-                zoomHighBound = zoomLowBound;
-                zoomLowBound = zoomHighBound;
-            }
-
-            double newMin = ofMap(zoomLowBound, 0, ofGetWidth(), lowBound.time(), highBound.time());
-            double newMax = ofMap(zoomHighBound, 0, ofGetWidth(), lowBound.time(), highBound.time());
-
-            zoomLowBound = zoomHighBound = -1;
-            zoom(newMin, newMax);
-        }
-
         break;
 
     case ANNOTATE:
-
-        if (isZoom) {
-
-            zoomHighBound = mouse.x;
-
-            if (zoomLowBound >= zoomHighBound) {
-
-                zoomHighBound = zoomLowBound;
-                zoomLowBound = mouse.x;
-            }
-
-            double newMin = ofMap(zoomLowBound, 0, ofGetWidth(), lowBound.time(), highBound.time());
-            double newMax = ofMap(zoomHighBound, 0, ofGetWidth(), lowBound.time(), highBound.time());
-
-            zoomLowBound = zoomHighBound = -1;
-            zoom(newMin, newMax);
-        }
 
         break;
     }
@@ -878,27 +858,23 @@ void MoMa::SceneApp::mouseDragged(ofMouseEventArgs &mouse) {
 
     if (!mouseEnabled) return;
 
+    if (isZoom) {
+
+        zoomHighBound = mouse.x;
+    }
+
     switch (activeMode) {
 
     case SCENE3D:
 
+        
         break;
 
     case SCENE2D:
 
-        if (isZoom) {
-
-            zoomHighBound = mouse.x;
-        }
-
         break;
 
     case ANNOTATE:
-
-        if (isZoom) {
-
-            zoomHighBound = mouse.x;
-        }
 
         if (hasMouseEventRegLabelList && isLabelSelected) {
 
