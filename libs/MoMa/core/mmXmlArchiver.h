@@ -154,8 +154,8 @@ namespace MoMa {
         void clear();
     protected:
 
-        NodeList *loadNodeList( TiXmlElement * nodeRoot );
-        BoneList *loadBoneList( TiXmlElement * boneRoot );
+        std::shared_ptr<NodeList> loadNodeList( TiXmlElement * nodeRoot );
+        std::shared_ptr<BoneList> loadBoneList( TiXmlElement * boneRoot );
         void loadData( TiXmlElement * frameRoot, MoMa::Track &pTrack );
         TiXmlDocument mArchiver; 
         TiXmlElement* mRoot;

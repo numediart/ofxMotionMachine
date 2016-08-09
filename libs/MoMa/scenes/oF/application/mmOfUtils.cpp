@@ -49,7 +49,7 @@ namespace MoMa {
         if ( nID == -1 ) {
             std::cerr << "MoMa::getBoneID: '" << nodename << "' is not defined int this track!!!" << endl;
         } else {
-            vector< std::pair<int,int> > * bones = ( vector< std::pair<int,int> > * ) track.boneList;
+            vector< std::pair<int,int> > * bones = ( vector< std::pair<int,int> > * ) track.boneList.get();
             for ( vector< std::pair<int,int> >::iterator itb = bones->begin(); itb != bones->end(); itb++ ) {
                 if ( (*itb).second == nID ) return (*itb).first;
             }
@@ -61,7 +61,7 @@ namespace MoMa {
         vector< unsigned int > out;
         int nID = getNodeID( nodename, track );
         if ( nID != -1 ) {
-            vector< std::pair<int,int> > * bones = ( vector< std::pair<int,int> > * ) track.boneList;
+            vector< std::pair<int,int> > * bones = ( vector< std::pair<int,int> > * ) track.boneList.get();
             for ( vector< std::pair<int,int> >::iterator itb = bones->begin(); itb != bones->end(); itb++ ) {
                 if ( (*itb).first == nID ) out.push_back( (*itb).second );
             }

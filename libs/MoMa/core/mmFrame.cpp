@@ -72,13 +72,13 @@ void MoMa::Frame::setRotationData( arma::mat rotationData, arma::mat rotOffset )
     rotationOffset = rotOffset;
 }
 
-void MoMa::Frame::setNodeList( MoMa::NodeList *nList ) {
+void MoMa::Frame::setNodeList( std::shared_ptr<MoMa::NodeList> nList ) {
 
     hasNodeList = true;
     nodeList = nList;
 }
 
-void MoMa::Frame::setBoneList( MoMa::BoneList *bList ) {
+void MoMa::Frame::setBoneList( std::shared_ptr<MoMa::BoneList>bList ) {
 
     hasBoneList = true;
     boneList = bList;

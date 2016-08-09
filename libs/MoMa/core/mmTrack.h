@@ -14,6 +14,7 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <memory>
 
 #include <armadillo>
 #include "mmContainer.h"
@@ -149,10 +150,10 @@ namespace MoMa {
         bool hasGlobalCoordinate;//if true, coordinates are encoded in a global coordinate system. If false (rotation flag and skeleton necessary) coordinate of each segment are encoded in a local system link to the parent bone.
 
 
-        NodeList *nodeList; // List of node names
+        std::shared_ptr<NodeList> nodeList; // List of node names
         bool hasNodeList; // Has track nodeList?
 
-        BoneList *boneList; // List of bone links
+        std::shared_ptr<BoneList> boneList; // List of bone links
         bool hasBoneList; // Has track boneList?
 
         // SynoList *synoList; // List of synonyms?

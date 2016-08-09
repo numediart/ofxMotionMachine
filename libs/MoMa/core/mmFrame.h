@@ -32,8 +32,8 @@ namespace MoMa {
         void setPositionData( arma::mat cartesianData ); // Set data directly
         void setRotationData( arma::mat rotationData, arma::mat rotOffset );
         
-        void setNodeList( NodeList *nList ); // Set node list
-        void setBoneList( BoneList *bList ); // Set bone list
+        void setNodeList( std::shared_ptr<NodeList> nList ); // Set node list
+        void setBoneList( std::shared_ptr<BoneList> bList ); // Set bone list
         void setSynoList( SynoList *sList ); // Set syno list
         
         double time( void ) const { return( _time ); } // Get time
@@ -83,10 +83,10 @@ namespace MoMa {
             
         }; // Clear frame
         
-        NodeList *nodeList; // Node list
+        std::shared_ptr<NodeList> nodeList; // Node list
         bool hasNodeList; // Check if set
         
-        BoneList *boneList; // Bone list
+        std::shared_ptr<BoneList> boneList; // Bone list
         bool hasBoneList; // Check if set
         
 		bool hasGlobalCoordinate;//if true, coordinates are encoded in a global coordinate system. If false (rotation flag and skeleton necessary) coordinate of each segment are encoded in a local system link to the parent bone.

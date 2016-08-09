@@ -70,8 +70,8 @@ void C3dParser::load( string const &fileName, Track *track ) {
         return;
     }
 
-    NodeList *nodeList;
-    nodeList = new NodeList();
+    std::shared_ptr<NodeList> nodeList;
+    nodeList = std::make_shared<NodeList>();
     track->clear();
     track->nodeList = nodeList;
 

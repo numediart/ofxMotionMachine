@@ -14,7 +14,7 @@
 #include <fstream>
 #include <iostream>
 #include <cstring>
-
+#include <memory>
 #include "mmSynoList.h"
 
 namespace MoMa {

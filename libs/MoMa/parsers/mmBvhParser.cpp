@@ -9,8 +9,8 @@ namespace MoMa {
         vector<string> rawJoint;
         vector<int> axisIndex;
         
-        NodeList *nodeList;
-        nodeList = new NodeList();
+        std::shared_ptr<NodeList> nodeList;
+        nodeList = std::make_shared<NodeList>();
         
 #ifdef WIN32 // Added to manage special characters (accents for example) in file path (extended ASCII table)
         
@@ -119,7 +119,7 @@ namespace MoMa {
 			track->hasGlobalCoordinate = globalCoordinate;
 			
 
-			track->nodeList = new NodeList;
+			track->nodeList = std::make_shared<NodeList>();
 			track->hasNodeList = true;
 
 			for (unsigned int i = 0; i < nNodes; i++) {
@@ -128,11 +128,11 @@ namespace MoMa {
 				track->nodeList->insert(make_pair(parser.getNodeName(i), i));
 			}
 			if (track->boneList){
-				delete track->boneList;
+				//delete track->boneList;
 				track->boneList = NULL;
 			}
 
-			track->boneList = new BoneList;
+			track->boneList = std::make_shared<BoneList>();
 			std::vector<std::pair<int, std::vector<int> > > lBones = parser.getBonesIndices();
 			track->hasBoneList = true;
 			unsigned int nBones = lBones.size();

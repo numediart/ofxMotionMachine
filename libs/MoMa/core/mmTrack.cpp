@@ -24,10 +24,10 @@ Track::Track( Frame frame ) {
     push( frame );
 
     hasNodeList = frame.hasNodeList;
-    if( hasNodeList ) nodeList = new NodeList( *( frame.nodeList ) );
+    if( hasNodeList ) nodeList = std::make_shared<NodeList>( *( frame.nodeList ) );
 
     hasBoneList = frame.hasBoneList;
-    if( hasBoneList ) boneList = new BoneList( *( frame.boneList ) );
+    if( hasBoneList ) boneList = std::make_shared<BoneList>( *( frame.boneList ) );
 }
 
 MoMa::Track::Track(const Track & tr) : Track()
@@ -37,8 +37,10 @@ MoMa::Track::Track(const Track & tr) : Track()
 
 Track::~Track( void ) {
 
-    if( hasNodeList ) delete nodeList; // Deallocation
-    if( hasBoneList ) delete boneList; // Deallocation
+    if( hasNodeList ) //delete 
+        nodeList=0; // Deallocation
+    if( hasBoneList ) //delete 
+        boneList=0; // Deallocation
     // if( hasSynoList ) delete synoList; // Deallocation
 }
 
@@ -86,9 +88,9 @@ bool Track::synolist( string fileName ) {
 
 void Track::nodes( string fileName ) {
 
-    if( hasNodeList == true ) delete nodeList;
+   // if( hasNodeList == true ) delete nodeList;
 
-    nodeList = new NodeList( fileName );
+    nodeList = std::make_shared<NodeList>( fileName );
 
     if( nOfNodes() == 0 || nOfNodes() == nodeList->size() ) {
 
@@ -100,13 +102,15 @@ void Track::nodes( string fileName ) {
         cout << "Track: node number does not match frame size" << endl;
 
         hasNodeList = false;
-        delete nodeList;
+        nodeList = 0;
+       // delete nodeList;
     }
 }
 
 void Track::bones( string fileName ) {
 
-    if( hasBoneList == true ) delete boneList;
+    if( hasBoneList == true ) //delete 
+        boneList=0;
 
     ifstream bonFile(fileName.c_str());
 
@@ -117,7 +121,7 @@ void Track::bones( string fileName ) {
     else {
 
         bonFile.close();
-        boneList = new BoneList(fileName);
+        boneList = std::make_shared<BoneList>(fileName);
         hasBoneList = true;
     }
 }
@@ -385,10 +389,12 @@ void Track::setFrameRate( float rate ) {
 
 void Track::clear( void ) {
 
-    if( hasNodeList ) delete nodeList; // Deallocation
-    nodeList = NULL;
-    if( hasBoneList ) delete boneList; // Deallocation
-    boneList = NULL;
+    if( hasNodeList ) //delete 
+        nodeList=0; // Deallocation
+    //nodeList = NULL;
+    if( hasBoneList ) //delete 
+        boneList=0; // Deallocation
+    //boneList = NULL;
     rotationOffset.clear();
     rotation.clear();
     position.clear();
@@ -443,19 +449,22 @@ void Track::cut( int beg, int end ) {
 
 void Track::copy( Track &tr ) const {
 
-    if( tr.nodeList ) delete tr.nodeList;
-    if( tr.boneList ) delete tr.boneList;
+    if( tr.nodeList ) 
+        //delete tr.nodeList;
+        tr.nodeList=0;
+    if( tr.boneList ) //delete 
+        tr.boneList=0;
 
     tr = *this;
     //create independant nodelist and bonelist (to avoid conflicts when modifying/deleting tracks)
     if( hasNodeList ) {
 
-        tr.nodeList = new NodeList();
+        tr.nodeList = std::make_shared<NodeList>();
         *( tr.nodeList ) = *nodeList;
     }
     if( hasBoneList ) {
 
-        tr.boneList = new BoneList();
+        tr.boneList = std::make_shared<BoneList>();
         *( tr.boneList ) = *boneList;
     }
 }
@@ -466,7 +475,7 @@ void Track::subTrack( Track &subTr, int beg, int end ) {
 
     if( hasNodeList ) {
 
-        subTr.nodeList = new NodeList();
+        subTr.nodeList = std::make_shared<NodeList>();
         *( subTr.nodeList ) = *nodeList;
     }
 
@@ -474,7 +483,7 @@ void Track::subTrack( Track &subTr, int beg, int end ) {
 
     if( hasBoneList ) {
 
-        subTr.boneList = new BoneList();
+        subTr.boneList = std::make_shared<BoneList>();
         *( subTr.boneList ) = *boneList;
     }
 

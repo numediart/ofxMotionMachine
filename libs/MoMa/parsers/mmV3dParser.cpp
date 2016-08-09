@@ -52,7 +52,7 @@ void V3dParser::load( string const &fileName, Track *track ) {
     //track->clearData(); // Clear the track before
     track->clear(); // Clear the track before
 
-    nodeList = new NodeList(); // We create a nodeList,
+    nodeList = std::make_shared<NodeList>(); // We create a nodeList,
     track->nodeList = nodeList; // add it to the track
     track->hasNodeList = true; // and tell everybody
 

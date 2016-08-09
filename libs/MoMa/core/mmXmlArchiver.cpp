@@ -361,10 +361,10 @@ void XmlArchiver::getTrack( Track& pTrack ,int index) {
     }
 
 }
-NodeList *XmlArchiver::loadNodeList( TiXmlElement * nodeRoot) {
+std::shared_ptr<NodeList> XmlArchiver::loadNodeList( TiXmlElement * nodeRoot) {
     if( nodeRoot == 0 )
         return 0;
-    NodeList * ret = new NodeList;
+    std::shared_ptr<NodeList> ret = std::make_shared<NodeList>();
     for ( TiXmlElement *mHandle = nodeRoot->FirstChildElement( "node" ); mHandle; mHandle = mHandle->NextSiblingElement( "node" )) {
        
         ret->emplace( mHandle->Attribute( "label" ),atoi( mHandle->Attribute( "id" )));
@@ -373,10 +373,10 @@ NodeList *XmlArchiver::loadNodeList( TiXmlElement * nodeRoot) {
     return ret;
 }
 
-BoneList *XmlArchiver::loadBoneList( TiXmlElement * boneRoot ) {
+std::shared_ptr<BoneList> XmlArchiver::loadBoneList( TiXmlElement * boneRoot ) {
     if( boneRoot == 0 )
         return 0;
-    BoneList * ret = new BoneList;
+    std::shared_ptr<BoneList>  ret = std::make_shared<BoneList>();
     for( TiXmlElement *mHandle = boneRoot->FirstChildElement( "bone" ); mHandle; mHandle = mHandle->NextSiblingElement( "bone" ) ) {
         boneData lBone;
         TiXmlElement *mLoc = mHandle->FirstChildElement( "nodeParent" );

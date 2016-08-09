@@ -50,7 +50,8 @@ Parser::Parser( string const &fName, Track *tr ) {
             if( track->hasNodeList == true ) {
 
                 track->hasNodeList = false;
-                delete track->nodeList;
+                //delete 
+                track->nodeList=0;
             }
 
             //different number of
@@ -58,7 +59,8 @@ Parser::Parser( string const &fName, Track *tr ) {
             if( track->hasBoneList == true ) {
 
                 track->hasBoneList = false;
-                delete track->boneList;
+                //delete 
+                track->boneList=0;
             }
         }
     }
@@ -80,7 +82,8 @@ Parser::Parser( string const &fName, Track *tr ) {
                 // different number of
                 // markers => different skeleton
                 track->hasBoneList = false;
-                delete track->boneList;
+                //delete 
+                track->boneList=0;
         }
         if( track->hasBoneList == true )
             tr->boneList->updateBoneChildrenName();
@@ -104,7 +107,8 @@ Parser::Parser( string const &fName, Track *tr ) {
                 // different number of
                 // markers => different skeleton
                 track->hasBoneList = false;
-                delete track->boneList;
+                //delete 
+                track->boneList=0;
         }
     }
     
@@ -148,7 +152,8 @@ Parser::Parser( string const &fName, Track *tr ) {
             // different number of
             // markers => different skeleton
             track->hasBoneList = false;
-            delete track->boneList;
+            //delete 
+            track->boneList=0;
         }
 //        tr->setJointOffsetRotation(true);
 		
@@ -169,7 +174,8 @@ Parser::Parser( string const &fName, Track *tr ) {
             if( track->hasNodeList == true ) {
                 
                 track->hasNodeList = false;
-                delete track->nodeList;
+                //delete 
+                track->nodeList=0;
             }
             
             //different number of
@@ -177,7 +183,8 @@ Parser::Parser( string const &fName, Track *tr ) {
             if( track->hasBoneList == true ) {
                 
                 track->hasBoneList = false;
-                delete track->boneList;
+                //delete 
+                track->boneList=0;
             }
         }
         if( track->hasBoneList == true)
@@ -206,7 +213,8 @@ Parser::Parser( string const &fName, Track *tr ) {
             if( track->hasNodeList == true ) {
 
                 track->hasNodeList = false;
-                delete track->nodeList;
+                //delete 
+                track->nodeList=0;
             }
 
             //different number of
@@ -214,7 +222,8 @@ Parser::Parser( string const &fName, Track *tr ) {
             if( track->hasBoneList == true ) {
 
                 track->hasBoneList = false;
-                delete track->boneList;
+                //delete 
+                track->boneList=0;
             }
         }
     }

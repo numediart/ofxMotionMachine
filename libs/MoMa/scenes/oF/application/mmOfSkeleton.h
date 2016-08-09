@@ -29,8 +29,8 @@ namespace MoMa {
 	protected:
 		bool _isValid;
 		const MoMa::Track &track;
-		const MoMa::BoneList *boneList;
-		const MoMa::NodeList *nodeList;
+		const std::shared_ptr<MoMa::BoneList>boneList;
+		const std::shared_ptr<MoMa::NodeList> nodeList;
 		std::vector<MoMa::ofBone> bones;
         ofSpherePrimitive mNodeSphere;
         double mNodeSize;
