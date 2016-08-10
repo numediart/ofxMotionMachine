@@ -1,5 +1,6 @@
 #include "mmKinematics.h"
 #include "mmGeometry.h"
+#include "mmSignal.h"
 
 using namespace arma;
 using namespace std;

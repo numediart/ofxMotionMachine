@@ -73,9 +73,6 @@
     <Filter Include="MoMa\parsers">
       <UniqueIdentifier>{144654b7-f94e-4796-a97b-0c1545587eea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MoMa\features\Walloon">
-      <UniqueIdentifier>{8fc75490-6c8b-4687-a78b-2aba37abe8fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="oF\addons\ofxUI">
       <UniqueIdentifier>{236f1a91-0cd9-4454-903d-20893f3d2a94}</UniqueIdentifier>
     </Filter>
@@ -787,6 +784,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\MoMa\features\Kinematics\mmKinematics.h">
       <Filter>MoMa\features\Kinematics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\features\MoMaFeatures.h">
+      <Filter>MoMa\features</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

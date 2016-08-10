@@ -12,5 +12,6 @@
 #include "mmKinematics.h"
 #include "mmGeometry.h"
 #include "mmSignal.h"
+#include "mmBoundingBox.h"
 
 #endif

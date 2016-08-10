@@ -3,45 +3,8 @@
 using namespace arma;
 using namespace MoMa;
 
-float Signal::mean( vec feature ) {
-    
-    float mean = 0.0f;
-    
-    for( int t=0; t<feature.n_rows; t++ ) {
-        
-        mean += feature(t);
-    }
-    
-    mean /= (float)( feature.n_rows );
-    
-    return( mean );
-}
 
-float Signal::min( vec feature ) {
-    
-    float min = 1e9;
-    
-    for( int t=0; t<feature.n_rows; t++ ) {
-        
-        if( feature(t) < min ) min = feature(t);
-    }
-    
-    return( min );
-}
-
-float Signal::max( vec feature ) {
-    
-    float max = -1e9;
-    
-    for( int t=0; t<feature.n_rows; t++ ) {
-        
-        if( feature(t) > max ) max = feature(t);
-    }
-    
-    return( max );
-}
-
-vec Signal::thresh( vec feature, float high, float low, float min, float max ) {
+vec MoMa::thresh( vec feature, float high, float low, float min, float max ) {
     
     vec thresh;
     
@@ -73,7 +36,7 @@ vec Signal::thresh( vec feature, float high, float low, float min, float max ) {
     return( thresh );
 }
 
-vec Signal::peaks( vec feature, float width ) {
+vec MoMa::peaks( vec feature, float width ) {
     
     vec dx = feature.rows( 1, feature.n_rows-1 ) - feature.rows( 0, feature.n_rows-2 );
     
@@ -142,7 +105,7 @@ vec Signal::peaks( vec feature, float width ) {
     return( kk );
 }
 
-arma::vec Signal::hann(size_t s)
+arma::vec MoMa::hann(size_t s)
 {
     int k, N, M, half;
 
@@ -176,4 +139,210 @@ arma::vec Signal::hann(size_t s)
     }
 
     return win;
+}
+
+
+double MoMa::nanmean(arma::vec v) {
+
+    arma::vec tmp = v.elem(find_finite(v));
+    return arma::mean(tmp);
+}
+
+double MoMa::nanstd(arma::vec v) {
+
+    arma::vec tmp = v.elem(find_finite(v));
+    return arma::stddev(tmp);
+}
+
+arma::vec MoMa::nanmean(arma::mat v, int dim) {
+
+    //arma::mat tmp = v.elem(find_finite(v)); // treats v as a long vector
+    arma::rowvec tmpvec = sum(v);
+    arma::mat tmp = v.cols(find_finite(tmpvec));
+    if (dim == 0)
+        return arma::mean(tmp, 0);
+    else
+        return arma::mean(tmp, 1);
+}
+
+arma::vec MoMa::nanstd(arma::mat v, int dim) {
+
+    //arma::mat tmp = v.elem(find_finite(v)); // treats v as a long vector
+    arma::rowvec tmpvec = sum(v);
+    arma::mat tmp = v.cols(find_finite(tmpvec));
+    if (dim == 0)
+        return arma::stddev(tmp, 0, 1);
+    else
+        return arma::stddev(tmp, 0, 1);
+}
+
+
+arma::vec MoMa::medfilter(const arma::vec & v, int windowSize)
+{
+    vec ret(v.size());
+    int n = windowSize;
+
+    if (windowSize < 2) return ret;
+
+    int n_left = floor(n / 2);
+    int n_right = n - n_left - 1;
+    int left, right;
+    for (int i = 0; i < v.n_elem; i++) {
+
+        left = std::max(0, i - n_left);
+        right = std::min(i + n_right, (int)v.n_elem - 1);
+        ret(i) = median(v(span(left, right)));
+    }
+
+    return ret;
+}
+
+mat MoMa::medfilter(const mat &m, int windowSize) {
+
+    mat ret = m.t();
+
+    for (int i = 0; i < ret.n_cols; i++) {
+
+        ret.col(i) = medfilter((vec)ret.col(i), windowSize);
+    }
+    return ret.t();
+}
+
+TimedVec MoMa::medfilter(const TimedVec &V, int windowSize) {
+
+    vec data = V.getData();
+
+    vec filtered = medfilter(data, windowSize);
+
+    if (!V.isTimed())
+        return TimedVec(V.frameRate(), filtered, V.initialTime());
+    else
+        return TimedVec(V.getTimeVec(), filtered);
+}
+
+TimedMat MoMa::medfilter(const TimedMat &M, int windowSize) {
+
+    mat data = M.getData();
+
+    mat filtered = medfilter(data, windowSize);
+
+    if (!M.isTimed())
+        return TimedMat(M.frameRate(), filtered, M.initialTime());
+    else
+        return TimedMat(M.getTimeVec(), filtered);
+}
+
+MoMa::Track MoMa::medfilter(const MoMa::Track & tr, int windowSize, bool filterRotation)
+{
+    Track ret = tr;
+
+    for (int i = 0; i < tr.nOfNodes(); i++) {
+        for (int j = 0; j < 3; j++) {
+
+            ret.position.getRefData().tube(j, i) = medfilter((vec)ret.position.getRefData().tube(j, i), windowSize);
+        }
+    }
+
+    if (filterRotation) {
+
+        for (int i = 0; i < tr.rotation.nOfRows(); i++) {
+            for (int j = 0; j < tr.rotation.nOfCols(); j++) {
+
+                ret.rotation.getRefData().tube(j, i) = medfilter((vec)ret.rotation.getRefData().tube(j, i), windowSize);
+            }
+        }
+    }
+
+    return ret;
+}
+
+
+arma::vec MoMa::meanfilter(const arma::vec & v, int windowSize)
+{
+    vec ret = v;
+    int n = windowSize;
+
+    if (windowSize < 2) return ret;
+
+    int n_left = floor(n / 2);
+    int n_right = n - n_left - 1;
+    int left, right;
+
+    //Avoid beginning and ending (as it change a lot derivative)
+    /*for (int i = n_left; i < v.n_elem - n_right; i++) {
+
+    ret(i) = mean(v(span(i - n_left, i + n_right)));
+    }*/
+
+
+    //Complete filtering
+    for (int i = 0; i < v.n_elem; i++) {
+
+        left = std::max(0, i - n_left);
+        right = std::min(i + n_right, (int)v.n_elem - 1);
+        ret(i) = nanmean((vec)v(span(left, right)));
+    }
+
+    return ret;
+}
+
+
+mat MoMa::meanfilter(const mat &m, int windowSize) {
+
+    mat ret = m.t();
+
+    for (int i = 0; i < ret.n_cols; i++) {
+
+        ret.col(i) = meanfilter((vec)ret.col(i), windowSize);
+    }
+    return ret.t();
+}
+
+TimedVec MoMa::meanfilter(const TimedVec &V, int windowSize) {
+
+    vec data = V.getData();
+
+    vec filtered = meanfilter(data, windowSize);
+
+    if (!V.isTimed())
+        return TimedVec(V.frameRate(), filtered, V.initialTime());
+    else
+        return TimedVec(V.getTimeVec(), filtered);
+}
+
+TimedMat MoMa::meanfilter(const TimedMat &M, int windowSize) {
+
+    mat data = M.getData();
+
+    mat filtered = meanfilter(data, windowSize);
+
+    if (!M.isTimed())
+        return TimedMat(M.frameRate(), filtered, M.initialTime());
+    else
+        return TimedMat(M.getTimeVec(), filtered);
+}
+
+MoMa::Track MoMa::meanfilter(const MoMa::Track & tr, int windowSize, bool filterRotation)
+{
+    Track ret = tr;
+
+    for (int i = 0; i < tr.nOfNodes(); i++) {
+        for (int j = 0; j < 3; j++) {
+
+            ret.position.getRefData().tube(j, i) = meanfilter((vec)ret.position.getRefData().tube(j, i), windowSize);            
+        }
+    }
+
+    if (filterRotation) {
+
+        for (int i = 0; i < tr.rotation.nOfRows(); i++) {
+            for (int j = 0; j < tr.rotation.nOfCols(); j++) {
+
+                ret.rotation.getRefData().tube(j, i) = meanfilter((vec)ret.rotation.getRefData().tube(j, i), windowSize);
+            }
+        }
+    }
+
+
+    return ret;
 }

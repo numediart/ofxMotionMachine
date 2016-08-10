@@ -49,31 +49,7 @@ namespace MoMa {
     //std::string checkFilePath( std::string const &path ); //check if the file path exists; if not, tries to correct the path with correctPath(...)
     //std::string checkDirectoryPath( std::string const &path ); //check if the directory path exists; if not, tries to correct the path with correctPath(...)
     
-    double nanmean(arma::vec v);
-
-    double nanstd(arma::vec v);
-
-    arma::vec nanmean(arma::mat v, int dim = 0);
-
-    arma::vec nanstd(arma::mat v, int dim = 0);
-
-    /*template<typename Type> double nanmean(Type v, int dim = 0);
-
-    template<typename Type> double nanstd(Type v, int dim = 0);
-
-    template<typename Type> arma::vec nanmean(Type v, int dim = 0);
-
-    template<typename Type> arma::vec nanstd(Type v, int dim = 0);*/
-
-    /*template<typename Type, typename Type2> void nanmean(Type v, Type2 ret, int dim = 0);
-
-    template<typename Type, typename Type2> void nanstd(Type v, Type2 ret, int dim = 0);*/
-
-    /*template<typename Type, typename Type2> void nanmean(Type v, Type2 ret, int dim = 0) {
-
-        Type tmp = v.elem(find_finite(v));
-        ret = arma::mean(tmp, dim);
-    }*/
+    
 }
 
 #endif

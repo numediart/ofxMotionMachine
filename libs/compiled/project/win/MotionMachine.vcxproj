@@ -144,6 +144,7 @@
     <ClInclude Include="..\..\..\MoMa\features\BoundingBox\mmBoundingBox.h" />
     <ClInclude Include="..\..\..\MoMa\features\Geometry\mmGeometry.h" />
     <ClInclude Include="..\..\..\MoMa\features\Kinematics\mmKinematics.h" />
+    <ClInclude Include="..\..\..\MoMa\features\MoMaFeatures.h" />
     <ClInclude Include="..\..\..\MoMa\features\Signal\mmSignal.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\BvhParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmBvhParser.h" />

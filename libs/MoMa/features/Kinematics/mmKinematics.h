@@ -14,6 +14,7 @@
 #include "mmNodeTrace.h"
 #include "mmContainer.h"
 
+
 namespace MoMa {    
     
     arma::mat derivate(const arma::mat &data, double frameRate, int type = 0); //type : 0 for five-point derivation, 1 for asymmetric derivation, 2 for symmetric derivation
