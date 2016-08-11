@@ -32,14 +32,15 @@ void FlatParser::load( string const &fileName, Track *track ) {
             curStrm.clear();
             curStrm << curLine;
             if (nbFrames==0){
-                while( curStrm.good() ) {
+                nbNodes=std::count( curLine.begin(), curLine.end(), ' ' )/3;
+/*                while( curStrm.good() ) {
 
                     string value[3];
                     curStrm >> value[0];
                     curStrm >> value[1];
                     curStrm >> value[2];
                     nbNodes++;
-                }
+                }*/
             }
             nbFrames++;
         }
@@ -89,8 +90,10 @@ void FlatParser::load( string const &fileName, Track *track ) {
                     positionData(Y,cptNodes,cptFrames) = atof( value[1].c_str() );
                     positionData(Z,cptNodes,cptFrames) = atof( value[2].c_str() );
                     cptNodes++;
-                }
 
+                }
+                if( cptNodes >= nbNodes )
+                    break;
             }
             cptFrames++;
             //            track->push( oneFrame );

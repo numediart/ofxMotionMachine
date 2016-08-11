@@ -18,6 +18,7 @@ MoMa::Frame::Frame( void ) {
     
     hasNodeList = false; nodeList = NULL;
     hasBoneList = false; boneList = NULL;
+    hasGlobalCoordinate = true;
     // hasSynoList = false; synoList = NULL;
 }
 
