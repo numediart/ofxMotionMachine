@@ -386,7 +386,8 @@ float MoMa::meanSizeToArm(const Track &tr) {
                 + (Geometry::distance(sliceT.unsafe_col(LHip), sliceT.unsafe_col(Thorax)) + Geometry::distance(sliceT.unsafe_col(RHip), sliceT.unsafe_col(Thorax))) / 2.0f //trunk1
                 + Geometry::distance(sliceT.unsafe_col(Neck), sliceT.unsafe_col(Thorax)) //trunk2
                 + (Geometry::distance(sliceT.unsafe_col(Neck), sliceT.unsafe_col(LShoulder)) + Geometry::distance(sliceT.unsafe_col(Neck), sliceT.unsafe_col(RShoulder))) / 2.0f //scapula
-                + (Geometry::distance(sliceT.unsafe_col(LElbow), sliceT.unsafe_col(LShoulder)) + Geometry::distance(sliceT.unsafe_col(RElbow), sliceT.unsafe_col(RShoulder))) / 2.0f; //forearm
+                + (Geometry::distance(sliceT.unsafe_col(LElbow), sliceT.unsafe_col(LShoulder)) + Geometry::distance(sliceT.unsafe_col(RElbow), sliceT.unsafe_col(RShoulder))) / 2.0f //arm
+                + (Geometry::distance(sliceT.unsafe_col(LElbow), sliceT.unsafe_col(LWrist)) + Geometry::distance(sliceT.unsafe_col(RElbow), sliceT.unsafe_col(RWrist))) / 2.0f; //forearm
         }
     }
     else {
@@ -396,6 +397,399 @@ float MoMa::meanSizeToArm(const Track &tr) {
     }
 
     return(nanmean(sizePerFrame));
+}
+
+float MoMa::meanArmSize(const Track &tr) {
+
+    vec sizePerFrame;
+    const cube &data = tr.position.getData();
+
+
+    if (tr.hasNodeList) {
+       
+        int LShoulder = tr.nodeList->index("LShoulder");
+        int RShoulder = tr.nodeList->index("RShoulder");
+        int LElbow = tr.nodeList->index("LElbow");
+        int RElbow = tr.nodeList->index("RElbow");
+        int LWrist = tr.nodeList->index("LWrist");
+        int RWrist = tr.nodeList->index("RWrist");
+
+        //No need to process all frames!
+        int hop = data.n_slices / 100;
+        hop = max(hop, 1);
+
+        int j = 0;
+
+        for (int t = 0; t < data.n_slices; t = t + hop) {
+
+            ++j;
+
+            sizePerFrame.resize(j + 1);
+
+            const mat sliceT = data.slice(t);
+
+            sizePerFrame(j) = (Geometry::distance(sliceT.unsafe_col(LElbow), sliceT.unsafe_col(LShoulder)) + Geometry::distance(sliceT.unsafe_col(RElbow), sliceT.unsafe_col(RShoulder))) / 2.0f //arm
+                + (Geometry::distance(sliceT.unsafe_col(LElbow), sliceT.unsafe_col(LWrist)) + Geometry::distance(sliceT.unsafe_col(RElbow), sliceT.unsafe_col(RWrist))) / 2.0f; //forearm
+        }
+    }
+    else {
+
+        cout << "WARNING (MoMa::meanArmSize): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        return arma::datum::nan;
+    }
+
+    return(nanmean(sizePerFrame));
+}
+
+float MoMa::meanTrunkSize(const Track &tr) {
+
+    vec sizePerFrame;
+    const cube &data = tr.position.getData();
+
+
+    if (tr.hasNodeList) {
+
+        int Pelvis = tr.nodeList->index("Pelvis");
+        int Thorax = tr.nodeList->index("Thorax");
+        int Neck = tr.nodeList->index("Neck");
+
+        //No need to process all frames!
+        int hop = data.n_slices / 100;
+        hop = max(hop, 1);
+
+        int j = 0;
+
+        for (int t = 0; t < data.n_slices; t = t + hop) {
+
+            ++j;
+
+            sizePerFrame.resize(j + 1);
+
+            const mat sliceT = data.slice(t);
+
+            sizePerFrame(j) = Geometry::distance(sliceT.unsafe_col(Pelvis), sliceT.unsafe_col(Thorax)) //trunk1
+                + Geometry::distance(sliceT.unsafe_col(Neck), sliceT.unsafe_col(Thorax)); //trunk2
+        }
+    }
+    else {
+
+        cout << "WARNING (MoMa::meanTrunkSize): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        return arma::datum::nan;
+    }
+
+    return(nanmean(sizePerFrame));
+}
+
+float MoMa::meanLegSize(const Track &tr) {
+
+    vec sizePerFrame;
+    const cube &data = tr.position.getData();
+
+
+    if (tr.hasNodeList) {
+
+        int LHip = tr.nodeList->index("LHip");
+        int RHip = tr.nodeList->index("RHip");
+        int LKnee = tr.nodeList->index("LKnee");
+        int RKnee = tr.nodeList->index("RKnee");
+        int LAnkle = tr.nodeList->index("LAnkle");
+        int RAnkle = tr.nodeList->index("RAnkle");
+
+        //No need to process all frames!
+        int hop = data.n_slices / 100;
+        hop = max(hop, 1);
+
+        int j = 0;
+
+        for (int t = 0; t < data.n_slices; t = t + hop) {
+
+            ++j;
+
+            sizePerFrame.resize(j + 1);
+
+            const mat sliceT = data.slice(t);
+
+            sizePerFrame(j) = (Geometry::distance(sliceT.unsafe_col(LHip), sliceT.unsafe_col(LKnee)) + Geometry::distance(sliceT.unsafe_col(RHip), sliceT.unsafe_col(RKnee))) / 2.0f //thigh
+                + (Geometry::distance(sliceT.unsafe_col(LAnkle), sliceT.unsafe_col(LKnee)) + Geometry::distance(sliceT.unsafe_col(RAnkle), sliceT.unsafe_col(RKnee))) / 2.0f; //shank
+        }
+    }
+    else {
+
+        cout << "WARNING (MoMa::meanLegSize): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        return arma::datum::nan;
+    }
+
+    return(nanmean(sizePerFrame));
+}
+
+float MoMa::meanFootSize(const Track &tr) {
+
+    vec sizePerFrame;
+    const cube &data = tr.position.getData();
+
+
+    if (tr.hasNodeList) {
+
+        int LAnkle = tr.nodeList->index("LAnkle");
+        int RAnkle = tr.nodeList->index("RAnkle");
+        int LFoot = tr.nodeList->index("LFoot");
+        int RFoot = tr.nodeList->index("RFoot");
+
+        //No need to process all frames!
+        int hop = data.n_slices / 100;
+        hop = max(hop, 1);
+
+        int j = 0;
+
+        for (int t = 0; t < data.n_slices; t = t + hop) {
+
+            ++j;
+
+            sizePerFrame.resize(j + 1);
+
+            const mat sliceT = data.slice(t);
+
+            sizePerFrame(j) = (Geometry::distance(sliceT.unsafe_col(LAnkle), sliceT.unsafe_col(LFoot)) + Geometry::distance(sliceT.unsafe_col(RAnkle), sliceT.unsafe_col(RFoot))) / 2.0f; //foot
+        }
+    }
+    else {
+
+        cout << "WARNING (MoMa::meanSizeToArm): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        return arma::datum::nan;
+    }
+
+    return(nanmean(sizePerFrame));
+}
+
+float MoMa::meanHumerusLength(const Track &tr) {
+
+    vec sizePerFrame;
+    const cube &data = tr.position.getData();
+
+
+    if (tr.hasNodeList) {
+
+        int LShoulder = tr.nodeList->index("LShoulder");
+        int RShoulder = tr.nodeList->index("RShoulder");
+        int LElbow = tr.nodeList->index("LElbow");
+        int RElbow = tr.nodeList->index("RElbow");
+
+        //No need to process all frames!
+        int hop = data.n_slices / 100;
+        hop = max(hop, 1);
+
+        int j = 0;
+
+        for (int t = 0; t < data.n_slices; t = t + hop) {
+
+            ++j;
+
+            sizePerFrame.resize(j + 1);
+
+            const mat sliceT = data.slice(t);
+
+            sizePerFrame(j) = (Geometry::distance(sliceT.unsafe_col(LElbow), sliceT.unsafe_col(LShoulder)) + Geometry::distance(sliceT.unsafe_col(RElbow), sliceT.unsafe_col(RShoulder))) / 2.0f;
+        }
+    }
+    else {
+
+        cout << "WARNING (MoMa::meanHumerusLength): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        return arma::datum::nan;
+    }
+
+    return(nanmean(sizePerFrame));
+}
+
+float MoMa::meanShoulderWidth(const Track &tr) {
+
+    vec sizePerFrame;
+    const cube &data = tr.position.getData();
+
+
+    if (tr.hasNodeList) {
+
+        int LShoulder = tr.nodeList->index("LShoulder");
+        int RShoulder = tr.nodeList->index("RShoulder");
+
+        //No need to process all frames!
+        int hop = data.n_slices / 100;
+        hop = max(hop, 1);
+
+        int j = 0;
+
+        for (int t = 0; t < data.n_slices; t = t + hop) {
+
+            ++j;
+
+            sizePerFrame.resize(j + 1);
+
+            const mat sliceT = data.slice(t);
+
+            sizePerFrame(j) = Geometry::distance(sliceT.unsafe_col(RShoulder), sliceT.unsafe_col(LShoulder));
+        }
+    }
+    else {
+
+        cout << "WARNING (MoMa::meanShoulderWidth): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        return arma::datum::nan;
+    }
+
+    return(nanmean(sizePerFrame));
+}
+
+float MoMa::meanHipWidth(const Track &tr) {
+
+    vec sizePerFrame;
+    const cube &data = tr.position.getData();
+
+
+    if (tr.hasNodeList) {
+
+        int LHip = tr.nodeList->index("LHip");
+        int RHip = tr.nodeList->index("RHip");
+
+        //No need to process all frames!
+        int hop = data.n_slices / 100;
+        hop = max(hop, 1);
+
+        int j = 0;
+
+        for (int t = 0; t < data.n_slices; t = t + hop) {
+
+            ++j;
+
+            sizePerFrame.resize(j + 1);
+
+            const mat sliceT = data.slice(t);
+
+            sizePerFrame(j) = Geometry::distance(sliceT.unsafe_col(RHip), sliceT.unsafe_col(LHip));
+        }
+    }
+    else {
+
+        cout << "WARNING (MoMa::meanHipWidth): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        return arma::datum::nan;
+    }
+
+    return(nanmean(sizePerFrame));
+}
+
+float MoMa::meanForearmLength(const Track &tr) {
+
+    vec sizePerFrame;
+    const cube &data = tr.position.getData();
+
+
+    if (tr.hasNodeList) {
+
+        int LWrist = tr.nodeList->index("LWrist");
+        int RWrist = tr.nodeList->index("RWrist");
+        int LElbow = tr.nodeList->index("LElbow");
+        int RElbow = tr.nodeList->index("RElbow");
+
+        //No need to process all frames!
+        int hop = data.n_slices / 100;
+        hop = max(hop, 1);
+
+        int j = 0;
+
+        for (int t = 0; t < data.n_slices; t = t + hop) {
+
+            ++j;
+
+            sizePerFrame.resize(j + 1);
+
+            const mat sliceT = data.slice(t);
+
+            sizePerFrame(j) = (Geometry::distance(sliceT.unsafe_col(LElbow), sliceT.unsafe_col(LWrist)) + Geometry::distance(sliceT.unsafe_col(RElbow), sliceT.unsafe_col(RWrist))) / 2.0f;
+        }
+    }
+    else {
+
+        cout << "WARNING (MoMa::meanForearmLength): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        return arma::datum::nan;
+    }
+
+    return(nanmean(sizePerFrame));
+
+}
+
+float MoMa::meanShankLength(const Track &tr) {
+
+    vec sizePerFrame;
+    const cube &data = tr.position.getData();
+
+
+    if (tr.hasNodeList) {
+
+        int LAnkle = tr.nodeList->index("LAnkle");
+        int RAnkle = tr.nodeList->index("RAnkle");
+        int LKnee = tr.nodeList->index("LKnee");
+        int RKnee = tr.nodeList->index("RKnee");
+
+        //No need to process all frames!
+        int hop = data.n_slices / 100;
+        hop = max(hop, 1);
+
+        int j = 0;
+
+        for (int t = 0; t < data.n_slices; t = t + hop) {
+
+            ++j;
+
+            sizePerFrame.resize(j + 1);
+
+            const mat sliceT = data.slice(t);
+
+            sizePerFrame(j) = (Geometry::distance(sliceT.unsafe_col(LAnkle), sliceT.unsafe_col(LKnee)) + Geometry::distance(sliceT.unsafe_col(RAnkle), sliceT.unsafe_col(RKnee))) / 2.0f;
+        }
+    }
+    else {
+
+        cout << "WARNING (MoMa::meanShankLength): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        return arma::datum::nan;
+    }
+
+    return(nanmean(sizePerFrame));
+
+}
+
+float MoMa::meanHeadHeight(const Track &tr) {
+
+    vec sizePerFrame;
+    const cube &data = tr.position.getData();
+
+
+    if (tr.hasNodeList) {
+
+        int Neck = tr.nodeList->index("Neck");
+        int Head = tr.nodeList->index("Head");
+
+        //No need to process all frames!
+        int hop = data.n_slices / 100;
+        hop = max(hop, 1);
+
+        int j = 0;
+
+        for (int t = 0; t < data.n_slices; t = t + hop) {
+
+            ++j;
+
+            sizePerFrame.resize(j + 1);
+
+            const mat sliceT = data.slice(t);
+
+            sizePerFrame(j) = Geometry::distance(sliceT.unsafe_col(Neck), sliceT.unsafe_col(Head));
+        }
+    }
+    else {
+
+        cout << "WARNING (MoMa::meanHeadHeight): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        return arma::datum::nan;
+    }
+
+    return(nanmean(sizePerFrame));
+
 }
 
 float MoMa::meanSize(const Track &tr) {

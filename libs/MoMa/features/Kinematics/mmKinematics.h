@@ -55,6 +55,16 @@ namespace MoMa {
     //Scaling values
 
     float meanFemurLength(const MoMa::Track &tr);
+    float meanHumerusLength(const MoMa::Track &tr);
+    float meanArmSize(const MoMa::Track &tr);
+    float meanLegSize(const MoMa::Track &tr);
+    float meanTrunkSize(const MoMa::Track &tr);
+    float meanFootSize(const MoMa::Track &tr);
+    float meanForearmLength(const MoMa::Track &tr);
+    float meanShankLength(const MoMa::Track &tr);
+    float meanHeadHeight(const MoMa::Track &tr);
+    float meanShoulderWidth(const MoMa::Track &tr);
+    float meanHipWidth(const MoMa::Track &tr);
     float meanSizeToArm(const MoMa::Track &tr);
     float meanSize(const MoMa::Track &tr);
 
