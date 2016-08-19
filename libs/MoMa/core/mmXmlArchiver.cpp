@@ -470,6 +470,12 @@ void XmlArchiver::loadData( TiXmlElement * frameRoot, MoMa::Track &pTrack) {
     pTrack.setJointOffsetRotation();
 }
 
+bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedCube &feat ) {
+
+    std::string name;
+    return this->getFeature( featureName, feat, name );
+}
+
 bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedCube &feat, std::string &trackName ) {
 
     TiXmlElement* featRoot = mRoot->FirstChildElement( "features" );
@@ -529,6 +535,12 @@ bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedCube &feat, st
     return true;
 }
 
+bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedMat &feat ) {
+
+    std::string name;
+    return this->getFeature( featureName, feat, name );
+}
+
 bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedMat &feat, std::string &trackName ) {
 
     TiXmlElement* featRoot = mRoot->FirstChildElement( "features" );
@@ -586,6 +598,12 @@ bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedMat &feat, std
         feat.setData( frameRate, featData );
 
     return true;
+}
+
+bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedVec &feat ) {
+
+    std::string name;
+    return this->getFeature( featureName, feat, name );
 }
 
 bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedVec &feat, std::string &trackName ) {
@@ -650,6 +668,12 @@ bool XmlArchiver::getFeature( std::string featureName, MoMa::TimedVec &feat, std
         feat.setData( frameRate, featData );
 
     return true;
+}
+
+bool XmlArchiver::getLabel( std::string labelName,LabelList &pLabelList ) {
+
+    std::string name;
+    return this->getLabel( labelName, pLabelList, name);
 }
 
 bool XmlArchiver::getLabel( std::string labelName,LabelList &pLabelList, std::string &trackName  ) {
