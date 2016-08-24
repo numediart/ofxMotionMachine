@@ -3,9 +3,6 @@
 
 #include <iostream>
 #include <armadillo>
-#ifdef WIN32 
-#define round(a) (a < 0.0 ? ceil(a - 0.5) : floor(a + 0.5))
-#endif
 inline unsigned int umin(unsigned int a, unsigned int b) { return a<b ? a : b; }
 inline unsigned int umax(unsigned int a, unsigned int b) { return a>b ? a : b; }
 namespace MoMa {
