@@ -3,17 +3,20 @@
 
 using namespace MoMa;
 
-ofPlot::ofPlot( const MoMa::SceneApp* pApp) : app(pApp)
+ofPlot::ofPlot( const MoMa::SceneApp* pApp, int figureId ) : app(pApp)
 {
     _figure.yMin = -1.0f;
     _figure.yMax = 1.0f;
 
     _figure.plot.clear();
     _figure.plotId = 0;
-    _figure.yBot = 0;
+    _figure.yTop = (float)0;
+    _figure.yBot = (float)ofGetHeight();
     curLowBoundTime = 0;
     curHighBoundTime = 0;
     curWidth = 0;
+    mFigureId = figureId;
+    nofFigure = 1;
 }
 
 
@@ -23,8 +26,14 @@ ofPlot::~ofPlot()
 }
 
 void ofPlot::update() {
-    _figure.yTop = 0.f;
-    _figure.yBot = (float)ofGetHeight();
+
+    float figWidth = (float)ofGetHeight() / (float)(nofFigure);
+    {
+
+        _figure.yTop = (float)mFigureId * figWidth;
+        _figure.yBot = (float)( mFigureId + 1 ) * figWidth;
+    }
+
     curLowBoundTime = app->getLowBoundTime();
     curHighBoundTime = app->getHighBoundTime();
     curWidth = ofGetWidth();
@@ -45,22 +54,23 @@ void ofPlot::update() {
 
 
 void ofPlot::draw() {
-    if( fabs(_figure.yBot -(float)ofGetHeight())>1E-6 )
-        this->update();
-    else
+    if( mFigureId >= nofFigure )
+        return;
+    float figWidth = (float)ofGetHeight() / (float)nofFigure;
 
-    if( abs( curLowBoundTime - app->getLowBoundTime() )>1E-6 )
+    if(fabs( _figure.yBot - (float)( mFigureId + 1 ) * figWidth)>1E-6)
         this->update();
     else
-    if( abs( curHighBoundTime - app->getHighBoundTime() )>1E-6 )
+    if( fabs( curLowBoundTime - app->getLowBoundTime() )>1E-6 )
+        this->update();
+    else
+    if( fabs( curHighBoundTime - app->getHighBoundTime() )>1E-6 )
         this->update();
     else
     if( curWidth != ofGetWidth() )
         this->update();
 
 
-    _figure.yTop = (float)0;
-    _figure.yBot = (float)ofGetHeight();
     float shift; // Values
     bool lowTextLoc = false;
     float nIndex = 23; // Names

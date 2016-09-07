@@ -414,7 +414,9 @@
     <ClCompile Include="..\..\..\MoMa\features\Kinematics\mmKinematics.cpp">
       <Filter>MoMa\features\Kinematics</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOfPlot.cpp" />
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOfPlot.cpp">
+      <Filter>MoMa\scenes\oF\application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\MoMa\core\mmBoneList.h">
@@ -789,7 +791,9 @@
     <ClInclude Include="..\..\..\MoMa\features\MoMaFeatures.h">
       <Filter>MoMa\features</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOfPlot.h" />
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOfPlot.h">
+      <Filter>MoMa\scenes\oF\application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

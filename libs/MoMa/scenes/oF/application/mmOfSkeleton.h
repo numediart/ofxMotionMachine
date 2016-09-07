@@ -1,3 +1,11 @@
+/**
+*
+*  @file mmOfSkeleton.h
+ * @brief Utilitary functions to use MoMa in OF.
+*  @copyright Numediart Institute, UMONS (c) 2014-2016
+*
+*/
+
 #ifndef __mmOfSkeleton__
 #define __mmOfSkeleton__
 namespace MoMa { class ofSkeleton; }
@@ -16,6 +24,10 @@ namespace MoMa { class ofSkeleton; }
 namespace MoMa {
     class ofSkeleton
     {
+        /**
+        * A class that provides a way to display a skeleton in a MotionMachine OFX windows
+        *
+        */
     public:
         ofSkeleton( const MoMa::Track &pTrack );
         ~ofSkeleton();
