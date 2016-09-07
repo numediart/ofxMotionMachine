@@ -525,6 +525,19 @@ void FloatingObject::_draw(ofEventArgs & args) {
 //--------------------------------------------------------------
 void FloatingObject::_update(ofEventArgs &args) {
 
+    //Check that object size if not bigger than application window size
+    int ww = ofGetWindowWidth();
+    int wh = ofGetWindowHeight();
+
+    if (wh > 20) {
+        
+        if (x >= ww - 5) x = max(0, ww - width);
+        if (y >= wh - 5) y = max(0, wh - height);
+        if(x + width > ww - 5) width = ww - x - 10;
+        if (y + height > wh - 5) height = wh - y - 10;
+    }
+   
+
     update();
 }
 //--------------------------------------------------------------
