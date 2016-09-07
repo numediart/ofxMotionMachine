@@ -261,8 +261,10 @@ namespace MoMa {
         
         void setPlayerSize( unsigned int nOfFrames ); // Define size
         void setPlayerSize( double minTime,double maxTime); // Define size in sec
-        unsigned int getAppIndex( void ); // Query app index
-        double getAppTime( void ); // Query app time
+        unsigned int getAppIndex( void ) const ; // Query app index
+        double getAppTime( void ) const; // Query app time
+        double getLowBoundTime( void ) const; 
+        double getHighBoundTime( void ) const; 
         
         void zoom( double tMin, double tMax ); // Zoom
         void showAll( void ); // Back to fullsize

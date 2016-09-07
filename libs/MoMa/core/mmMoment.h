@@ -14,10 +14,10 @@ namespace MoMa {
         Moment( unsigned int idx, double frameRate );
         Moment( double time , unsigned int idx );
         
-        inline double time( void ) { return( _time ); }
-        inline unsigned int index( void ) { return( _index ); }
+        inline double time( void ) const { return( _time ); }
+        inline unsigned int index( void ) const { return( _index ); }
         
-        double frameRate( void ) { return( _frameRate ); }
+        double frameRate( void ) const { return( _frameRate ); }
         void setFrameRate( double frameRate );
         
         void setTime( double time, double frameRate );

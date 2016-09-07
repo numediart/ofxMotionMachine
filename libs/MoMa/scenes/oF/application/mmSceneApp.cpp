@@ -1694,14 +1694,23 @@ void MoMa::SceneApp::setPlayerSize(double minTime, double maxTime) {
     // setPlayerSize( getIndexFromTime( time ) );
 }
 
-unsigned int MoMa::SceneApp::getAppIndex(void) {
+unsigned int MoMa::SceneApp::getAppIndex(void) const{
 
     return(appMoment.index());
 }
 
-double MoMa::SceneApp::getAppTime(void) {
+double MoMa::SceneApp::getAppTime(void) const  {
 
     return(appMoment.time());
+}
+
+double MoMa::SceneApp::getLowBoundTime( void ) const {
+
+    return( lowBound.time() );
+}
+double MoMa::SceneApp::getHighBoundTime( void ) const {
+
+    return( highBound.time() );
 }
 
 void MoMa::SceneApp::play(void) {

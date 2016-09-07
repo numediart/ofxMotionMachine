@@ -7,6 +7,7 @@
 //
 
 #include "mmContainer.h"
+#include <cmath>
 
 namespace MoMa {
         
@@ -16,7 +17,7 @@ namespace MoMa {
 		arma::uword ltemp;
 		arma::abs(pVec-pValue).min(ltemp);
 		lIndex1=(unsigned int)ltemp;
-        if ( std::abs(pVec(lIndex1)-pValue ) <= 1E-6 ){
+        if ( fabs(pVec(lIndex1)-pValue ) <= 1E-6 ){
             index1=lIndex1;
             index2=lIndex1;
             weight1=1.0;
@@ -333,7 +334,7 @@ namespace MoMa {
 			arma::uword ltemp;
 			arma::abs(this->mTimeVec - pTime).min(ltemp);
 			index=(unsigned int)ltemp;
-			if ( std::abs(this->mTimeVec(index)-pTime ) <= 1E-6 ){
+			if ( fabs(this->mTimeVec(index)-pTime ) <= 1E-6 ){
 				mData(index)=pData;
 				return true;
 			}
@@ -349,7 +350,7 @@ namespace MoMa {
             double lTime=pTime-mInitialTime;
             if (lTime<0.0)
                 return false;
-            if( std::abs( (lTime-mFrameRate*round(lTime/mFrameRate)) ) <= 1E-6 ) {
+            if( fabs( (lTime-mFrameRate*round(lTime/mFrameRate)) ) <= 1E-6 ) {
                 
                 if( (int)round(lTime/mFrameRate) < mData.n_elem ) {
                     
@@ -761,7 +762,7 @@ namespace MoMa {
 			arma::uword ltemp;
 			arma::abs(this->mTimeVec - pTime).min(ltemp);
 			index=(unsigned int)ltemp;
-			if ( std::abs(this->mTimeVec(index)-pTime ) <= 1E-6 ){
+			if ( fabs(this->mTimeVec(index)-pTime ) <= 1E-6 ){
 				mData.col(index)=pData;
 				return true;
 			}
@@ -778,7 +779,7 @@ namespace MoMa {
             double lTime=pTime-mInitialTime;
             if (lTime<0.0)
                 return false;
-            if( std::abs( lTime-mFrameRate*round(lTime/mFrameRate) ) <= 1E-6 ) {
+            if( fabs( lTime-mFrameRate*round(lTime/mFrameRate) ) <= 1E-6 ) {
                 
                 if( (int)round(lTime/mFrameRate) < mData.n_cols ) {
                     
@@ -1212,7 +1213,7 @@ namespace MoMa {
 			arma::uword ltemp;
 			arma::abs(this->mTimeVec - pTime).min(ltemp);
 			index=(unsigned int)ltemp;
-			if ( std::abs(this->mTimeVec(index)-pTime ) <= 1E-6 ){
+			if ( fabs(this->mTimeVec(index)-pTime ) <= 1E-6 ){
 				mData.slice(index)=pData;
 				return true;
 			}
@@ -1229,7 +1230,7 @@ namespace MoMa {
             double lTime=pTime-mInitialTime;
             if (lTime<0.0)
                 return false;
-            if( std::abs( lTime-this->mFrameRate*round( lTime/mFrameRate ) ) <= 1E-6 ) {
+            if( fabs( lTime-this->mFrameRate*round( lTime/mFrameRate ) ) <= 1E-6 ) {
                 
                 if( (int)round( lTime/mFrameRate ) < mData.n_slices ) {
                     

@@ -51,6 +51,7 @@
     <ClCompile Include="..\..\..\MoMa\parsers\mmXmlParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmFloatingObject.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmMenuView.cpp" />
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOfPlot.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOfSkeleton.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOptionsView.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmPlayBar.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="..\..\..\MoMa\parsers\mmXmlParser.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmFloatingObject.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmMenuView.h" />
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOfPlot.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOfSkeleton.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOptionsView.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmPlayBar.h" />
