@@ -32,9 +32,9 @@ namespace MoMa {
         void add( const Trace &trace ); // Trace
         void add( const BoneTrace &boneTrace ); // BoneTrace
 
-        void add( const arma::vec &data, float frameRate, int hue, std::string name = "" );
-        void add( const arma::vec &data, float frameRate, std::string name = "" ); // Vec
-        void add( const arma::mat &data, float frameRate, string name = "" ); // and Mat
+        void add( const arma::vec &data, int hue, std::string name = "" );
+        void add( const arma::vec &data, std::string name = "" ); // Vec
+        void add( const arma::mat &data, string name = "" ); // and Mat
 
         void clean();
     protected:

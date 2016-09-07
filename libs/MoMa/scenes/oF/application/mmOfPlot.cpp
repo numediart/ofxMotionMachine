@@ -197,22 +197,23 @@ void ofPlot::add( const BoneTrace &trace ) {
     }
 } // BoneTrace
 
-void ofPlot::add( const arma::vec &data, float frameRate, int hue, std::string name ) {
+void ofPlot::add( const arma::vec &data,  int hue, std::string name ) {
     TimedVec tvec;
 
-    tvec.setData( frameRate, data );
+    tvec.setData( app->frameRate, data );
     add( tvec, hue, name );
 }
-void ofPlot::add( const arma::vec &data, float frameRate, std::string name ) {
+void ofPlot::add( const arma::vec &data, std::string name ) {
     TimedVec tvec;
 
-    tvec.setData( frameRate, data );
+    tvec.setData( app->frameRate, data );
     add( tvec, name );
 } // Vec
-void ofPlot::add( const arma::mat &data, float frameRate, string name ) {
+void ofPlot::add( const arma::mat &data, string name ) {
+
     TimedMat tmat;
 
-    tmat.setData( frameRate, data );
+    tmat.setData( app->frameRate, data );
     add( tmat, name );
 } // and Mat
 
