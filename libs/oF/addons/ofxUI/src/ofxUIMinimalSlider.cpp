@@ -88,6 +88,8 @@ void ofxUIMinimalSlider::init(string _name, float _min, float _max, float *_valu
     increment = fabs(max - min) / 10.0;
     bRoundedToNearestInt = false;
     bClampValue = false;
+    bSticky = false;
+    stickyValue = MAX(10.0*ceil(increment), 1.0);
 }
 
 void ofxUIMinimalSlider::drawFill()
