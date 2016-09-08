@@ -1356,9 +1356,11 @@ void MoMa::SceneApp::draw(const Frame &frame) {
     }
     else {
 
-        if (frame.hasBoneList == false || frame.hasRotation() == false)
+        if (frame.hasBoneList == false || frame.hasRotation() == false) {
+
             cout << "impossible to have local system data without a correct oriented bonelist" << endl;
-        throw std::runtime_error("impossible to have local system data without a correct oriented bonelist");
+            throw std::runtime_error("impossible to have local system data without a correct oriented bonelist");
+        }
 
         for (int i = 0; i < frame.boneList->rootIt.size(); i++)
             boneLocalDraw(frame, frame.boneList->rootIt[i]);
