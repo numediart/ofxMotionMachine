@@ -1412,9 +1412,8 @@ void MoMa::SceneApp::setNumOfTracks(int nOfTracks) {
 
 void MoMa::SceneApp::addNewTrack(std::string name, bool isShown) {
 
-    _Track _tr;
+    _Track _tr(name, isShown);
 
-    _tr.isShown = isShown;
     _tr.track = new Track();
     _tr.track->setName(name);
 
@@ -1427,7 +1426,7 @@ MoMa::Track &MoMa::SceneApp::track(std::string name) {
 
     for (int k = 0; k < _track.size(); k++) {
 
-        if (_track[k].track->easyName == name) {
+        if (_track[k].name == name) {
 
             isFound = true;
             kFound = k;

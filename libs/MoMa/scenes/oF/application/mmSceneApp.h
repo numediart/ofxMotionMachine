@@ -89,10 +89,11 @@ namespace MoMa {
     
     struct _Track { // Container for built-in track
         
-        _Track( void ) { isShown = true; } // Show by def
-        
+        //_Track( void ) { isShown = true; } // Show by def
+        _Track(std::string trackName = "", bool shown = true) { isShown = shown; name = trackName; }
         Track *track; // Pointer to dynamically-created track
         bool isShown; // Is that track shown in 3D scene?
+        std::string name;
     };
     
     struct Listener { // Container for OSC-exposed track
