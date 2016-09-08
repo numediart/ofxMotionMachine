@@ -953,9 +953,9 @@ void MoMa::SceneApp::dragged(ofDragInfo &drag) {
 
             string trackFileName = drag.files[k];
             string ext = trackFileName.substr(trackFileName.find_last_of(".") + 1);
-
+            transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
             // Load data files first to avoid invalidity of nodes/bones
-            if (ext == "txt" || ext == "v3d" || ext == "c3d" || ext == "bvh") {
+            if (ext == "txt" || ext == "v3d" || ext == "c3d" || ext == "bvh" || ext == "cmp" || ext == "kin" || ext == "xml") {
 
                 trackFileNames.push_front(trackFileName);
 
