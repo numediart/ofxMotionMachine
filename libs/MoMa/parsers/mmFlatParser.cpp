@@ -18,7 +18,8 @@ void FlatParser::load( string const &fileName, Track *track ) {
         return; // We alert on stdout and quit if no file!
     }
 
-    track->clear();
+    track->clearData();
+
     unsigned int nbFrames=0,nbNodes=0;
     while ( datFile.good() ) {
 
@@ -47,6 +48,8 @@ void FlatParser::load( string const &fileName, Track *track ) {
     }
     datFile.clear() ;
     datFile.seekg(0, ios::beg) ;
+    
+    
     arma::cube positionData(3,nbNodes,nbFrames);
     unsigned int cptFrames=0;
     while ( datFile.good() ) {
@@ -100,7 +103,8 @@ void FlatParser::load( string const &fileName, Track *track ) {
         }
     }
 
-    track->setFrameRate( 177 );
+    track->setFrameRate( 100 );
+    cout << "Note: default framerate for a flat file is set at 100 fps. Do not forget to set the right framerate in your track." << endl;
     track->position.setData( track->frameRate(), positionData );
 
     datFile.close();

@@ -261,6 +261,7 @@ void V3dParser::load( string const &fileName, Track *track ) {
     }
     
     track->setFrameRate( 179 ); // TODO to define to look for it somewhere
+    cout << "Note: default framerate for a V3D file is set at 179 fps. Do not forget to set the right framerate in your track." << endl;
 //    track->hasOrigNodeRot_as_boneRot=true;
 
     v3dFile.close();
