@@ -167,6 +167,11 @@ void MoMa::SceneApp::update(ofEventArgs &args) {
                     isBegin = false;
                 }
 
+                if (appMoment.time() < lowBound.time()) {
+
+                    appMoment.setTime(lowBound.time(), frameRate);
+                }
+
                 if (appMoment.time() > highBound.time()) {
 
                     // appAtPos.time = highBound.time; // Set to max first
