@@ -335,8 +335,8 @@ MoMa::Track MoMa::meanfilter(const MoMa::Track & tr, int windowSize, bool filter
 
     if (filterRotation) {
 
-        for (int i = 0; i < tr.rotation.nOfRows(); i++) {
-            for (int j = 0; j < tr.rotation.nOfCols(); j++) {
+        for (int i = 0; i < tr.rotation.nOfCols(); i++) {
+            for (int j = 0; j < tr.rotation.nOfRows(); j++) {
 
                 ret.rotation.getRefData().tube(j, i) = meanfilter((vec)ret.rotation.getRefData().tube(j, i), windowSize);
             }
