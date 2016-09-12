@@ -62,6 +62,7 @@ namespace MoMa {
 
         void clean();
         void setNofFigure( int noff ) { nofFigure = noff; };
+        void setFigureId( int id ) { mFigureId = id; };
     protected:
         const MoMa::SceneApp* app;
         Figure _figure;
