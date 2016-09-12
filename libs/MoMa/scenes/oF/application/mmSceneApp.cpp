@@ -167,6 +167,11 @@ void MoMa::SceneApp::update(ofEventArgs &args) {
                     isBegin = false;
                 }
 
+                if (appMoment.time() < lowBound.time()) {
+
+                    appMoment.setTime(lowBound.time(), frameRate);
+                }
+
                 if (appMoment.time() > highBound.time()) {
 
                     // appAtPos.time = highBound.time; // Set to max first
@@ -953,14 +958,13 @@ void MoMa::SceneApp::dragged(ofDragInfo &drag) {
 
             string trackFileName = drag.files[k];
             string ext = trackFileName.substr(trackFileName.find_last_of(".") + 1);
-
-            // Load data files first to avoid invalidity of nodes/bones
-            if (ext == "txt" || ext == "v3d" || ext == "c3d" || ext == "bvh") {
+            transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+            // Load nodes/bones files first
+            if (ext == "nodes" || ext == "bones") {
 
                 trackFileNames.push_front(trackFileName);
-
             }
-            else if (ext == "nodes" || ext == "bones") {
+            else if(ext == "txt" || ext == "v3d" || ext == "c3d" || ext == "bvh" || ext == "cmp" || ext == "kin" || ext == "xml"){
 
                 trackFileNames.push_back(trackFileName);
             }
@@ -1356,9 +1360,11 @@ void MoMa::SceneApp::draw(const Frame &frame) {
     }
     else {
 
-        if (frame.hasBoneList == false || frame.hasRotation() == false)
+        if (frame.hasBoneList == false || frame.hasRotation() == false) {
+
             cout << "impossible to have local system data without a correct oriented bonelist" << endl;
-        throw std::runtime_error("impossible to have local system data without a correct oriented bonelist");
+            throw std::runtime_error("impossible to have local system data without a correct oriented bonelist");
+        }
 
         for (int i = 0; i < frame.boneList->rootIt.size(); i++)
             boneLocalDraw(frame, frame.boneList->rootIt[i]);
@@ -1410,9 +1416,8 @@ void MoMa::SceneApp::setNumOfTracks(int nOfTracks) {
 
 void MoMa::SceneApp::addNewTrack(std::string name, bool isShown) {
 
-    _Track _tr;
+    _Track _tr(name, isShown);
 
-    _tr.isShown = isShown;
     _tr.track = new Track();
     _tr.track->setName(name);
 
@@ -1425,7 +1430,7 @@ MoMa::Track &MoMa::SceneApp::track(std::string name) {
 
     for (int k = 0; k < _track.size(); k++) {
 
-        if (_track[k].track->easyName == name) {
+        if (_track[k].name == name) {
 
             isFound = true;
             kFound = k;

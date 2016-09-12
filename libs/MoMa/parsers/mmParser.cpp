@@ -4,244 +4,168 @@ using namespace std;
 using namespace MoMa;
 
 
-Parser::Parser( string const &fName, Track *tr ) {
+Parser::Parser(string const &fName, Track *tr) {
 
-    track = tr;
     fileName = fName;
 
-/*#ifdef _WIN32
-    fileName = checkFileName( fileName );
-#endif*/
-
-    checkFilePath( fileName );
-
-    //set trackName
-    /*string shortFName;
-    char* tmp = new char[fileName.size()+1];
-    strncpy(tmp, fileName.c_str(),fileName.size());
-    tmp[fileName.size()]=NULL;
-    char* tmpName;
-    _splitpath(tmp,NULL,NULL,tmpName,NULL);
-    shortFName=string(tmpName);
-    track->setTrackName(shortFName);*/
+    checkFilePath(fileName);
 
     size_t sep = fileName.find_last_of("\\/");
     size_t dot = fileName.find_last_of(".");
 
-    int previousSize = track->nOfNodes();
-    extension = fileName.substr( dot + 1) ;
-    transform( extension.begin(), extension.end(), extension.begin(), ::tolower );
-	tr->hasGlobalCoordinate = true;//value by default
-    if( extension == "txt" ) {        
+    extension = fileName.substr(dot + 1);
+    transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+    tr->hasGlobalCoordinate = true;//value by default
 
-        track->type = FLAT;
-        track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
+    if (extension == "bones") {
 
-        FlatParser flatParser( fileName,track );
-		 tr->position.SetValidParam();
-		 if (tr->hasRotation)
-			 tr->rotation.SetValidParam();
-
-        // Check validity of lists of bones and nodes
-        if( track->nOfNodes() != previousSize && previousSize != 0 ) {
-
-            // different number of
-            // markers => different labels
-            if( track->hasNodeList == true ) {
-
-                track->hasNodeList = false;
-                //delete 
-                track->nodeList=0;
-            }
-
-            //different number of
-            // markers => different skeleton
-            if( track->hasBoneList == true ) {
-
-                track->hasBoneList = false;
-                //delete 
-                track->boneList=0;
-            }
-        }
-    }
-
-    else if( extension == "v3d" ) {
-
-        track->type = V3D;
-        track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
-
-        V3dParser v3dParser( fileName, track );
-		 tr->position.SetValidParam();
-		 if (tr->hasRotation)
-			 tr->rotation.SetValidParam();
-
-        // Check validity of list of bones
-        if( track->nOfNodes() != previousSize &&
-            previousSize != 0 && track->hasBoneList == true ) {
-
-                // different number of
-                // markers => different skeleton
-                track->hasBoneList = false;
-                //delete 
-                track->boneList=0;
-        }
-        if( track->hasBoneList == true )
+        tr->clearData();
+        tr->bones(fileName);
+        if (tr->hasBoneList == true)
             tr->boneList->updateBoneChildrenName();
         tr->setJointOffsetRotation();
     }
 
-    else if( extension == "c3d" ) {
+    else if (extension == "nodes") {
 
-        track->type = C3D;
-        track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
-
-        C3dParser c3dParser( fileName, track );
-		 tr->position.SetValidParam();
-		 if (tr->hasRotation)
-			 tr->rotation.SetValidParam();
-
-        // Check validity of list of bones
-        if( track->nOfNodes() != previousSize &&
-            previousSize !=0 && track->hasBoneList == true ) {
-
-                // different number of
-                // markers => different skeleton
-                track->hasBoneList = false;
-                //delete 
-                track->boneList=0;
-        }
+        tr->clearData();
+        tr->nodes(fileName);
+        if (tr->hasBoneList == true)
+            tr->boneList->updateBoneChildrenName();
+        tr->setJointOffsetRotation();
     }
-    
-    else if( extension == "bvh" ) {
-        track->clear();
-        track->init();
-        track->type = BVH;
-        track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
-        
-        BvhParser::load( fileName, track,true,false );
-		 tr->position.SetValidParam();
-		 if (tr->hasRotation)
-			 tr->rotation.SetValidParam();
-		 tr->boneList->updateBoneChildrenName();
-        // Check validity of list of bones
-        if( track->nOfNodes() != previousSize &&
-           previousSize !=0 && track->hasBoneList == true ) {
-            
-            // different number of
-            // markers => different skeleton
-            //track->hasBoneList = false;
-            //delete track->boneList;
+
+    else if (extension == "txt") {
+
+        tr->clearData();
+        tr->type = FLAT;
+        tr->setFileName(fileName.substr(sep + 1, dot - sep - 1));
+
+        FlatParser flatParser(fileName, tr);
+
+        if (!tr->hasNodeList) {
+
+            cout << "Warning (flat txt file parsing): you should load a nodelist before the data." << endl;
         }
+
+        if (!tr->hasBoneList) {
+
+            cout << "Warning (flat txt file parsing): you should load a bonelist before the data." << endl;
+        }
+
+        if (tr->hasNodeList && tr->nodeList->size() != tr->nOfNodes()) {
+
+            cout << "Warning (FlatParser): the number of nodes in the data does not correponds with the number of nodes in the nodelist. You should load a corresponding nodelist before the data." << endl;
+        }
+
+        tr->position.SetValidParam();
+        if (tr->hasRotation)
+            tr->rotation.SetValidParam();
+    }
+
+    else if (extension == "v3d") {
+        tr->clear();
+        tr->init();
+        tr->type = V3D;
+        tr->setFileName(fileName.substr(sep + 1, dot - sep - 1));
+
+        V3dParser v3dParser(fileName, tr);
+        tr->position.SetValidParam();
+        if (tr->hasRotation)
+            tr->rotation.SetValidParam();
+
+        tr->boneList->updateBoneChildrenName();
+        tr->setJointOffsetRotation();
+    }
+
+    else if (extension == "c3d") {
+
+        tr->clearData();
+        tr->type = C3D;
+        tr->setFileName(fileName.substr(sep + 1, dot - sep - 1));
+
+        C3dParser c3dParser(fileName, tr);
+
+        if (!tr->hasBoneList) {
+
+            cout << "Warning (c3d file parsing): you should load a bonelist before the data." << endl;
+        }
+
+        tr->position.SetValidParam();
+        if (tr->hasRotation)
+            tr->rotation.SetValidParam();
+    }
+
+    else if (extension == "bvh") {
+        tr->clear();
+        tr->init();
+        tr->type = BVH;
+        tr->setFileName(fileName.substr(sep + 1, dot - sep - 1));
+
+        BvhParser::load(fileName, tr, true, false);
+        tr->position.SetValidParam();
+        if (tr->hasRotation)
+            tr->rotation.SetValidParam();
+        tr->boneList->updateBoneChildrenName();
         tr->setJointOffsetRotation();
 
     }
-    else if( extension == "cmp" ) {
-        
-        track->type = CMP;
-        track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
-        
+    else if (extension == "cmp") {
+
+        tr->type = CMP;
+        tr->setFileName(fileName.substr(sep + 1, dot - sep - 1));
+
         CmpParser Parser;
-        Parser.load( fileName, track );
-		 tr->position.SetValidParam();
-		 if (tr->hasRotation)
-			 tr->rotation.SetValidParam();
-        // Check validity of list of bones
-        if( track->nOfNodes() != previousSize &&
-           previousSize !=0 && track->hasBoneList == true ) {
-            
-            // different number of
-            // markers => different skeleton
-            track->hasBoneList = false;
-            //delete 
-            track->boneList=0;
-        }
-//        tr->setJointOffsetRotation(true);
-		
+        Parser.load(fileName, tr);
+        tr->position.SetValidParam();
+        if (tr->hasRotation)
+            tr->rotation.SetValidParam();
+        //        tr->setJointOffsetRotation(true);
+
     }
-    else if( extension == "kin" ) {
+    else if (extension == "kin") {
+
+        tr->clearData();
+        tr->type = KIN;
+        tr->setFileName(fileName.substr(sep + 1, dot - sep - 1));
+        KinParser kinParser(fileName, tr);
         
-        track->type = KIN;
-        track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
-        KinParser kinParser( fileName, track );
-        // Check validity of lists of bones and nodes
-		 tr->position.SetValidParam();
-		 if (tr->hasRotation)
-			 tr->rotation.SetValidParam();
-        if( track->nOfNodes() != previousSize && previousSize != 0 ) {
-            
-            // different number of
-            // markers => different labels
-            if( track->hasNodeList == true ) {
-                
-                track->hasNodeList = false;
-                //delete 
-                track->nodeList=0;
-            }
-            
-            //different number of
-            // markers => different skeleton
-            if( track->hasBoneList == true ) {
-                
-                track->hasBoneList = false;
-                //delete 
-                track->boneList=0;
-            }
+        if (!tr->hasNodeList) {
+
+            cout << "Warning (flat txt file parsing): you should load a nodelist before the data." << endl;
         }
-        if( track->hasBoneList == true)
-            tr->boneList->updateBoneChildrenName();
-         tr->setJointOffsetRotation();
-         tr->setFrameRate( 30 );
-    }
 
-	else if( extension == "xml" ) {        
+        if (!tr->hasBoneList) {
 
-        track->type = XML;
-        track->setFileName( fileName.substr( sep + 1, dot-sep-1 ) );
-
-        XmlParser xmlParser( fileName,track );
-		 tr->position.SetValidParam();
-         if( tr->hasRotation ) {
-             tr->rotation.SetValidParam();
-             tr->setJointOffsetRotation();
-         }
-
-        // Check validity of lists of bones and nodes
-        if( track->nOfNodes() != previousSize && previousSize != 0 ) {
-
-            // different number of
-            // markers => different labels
-            if( track->hasNodeList == true ) {
-
-                track->hasNodeList = false;
-                //delete 
-                track->nodeList=0;
-            }
-
-            //different number of
-            // markers => different skeleton
-            if( track->hasBoneList == true ) {
-
-                track->hasBoneList = false;
-                //delete 
-                track->boneList=0;
-            }
+            cout << "Warning (flat txt file parsing): you should load a bonelist before the data." << endl;
         }
-    }
-    else if( extension == "bones" ) {
-        track->bones( fileName );
-        if( track->hasBoneList == true )
+
+        if (tr->hasNodeList && tr->nodeList->size() != tr->nOfNodes()) {
+
+            cout << "Warning (FlatParser): the number of nodes in the data does not correponds with the number of nodes in the nodelist. You should load a corresponding nodelist before the data." << endl;
+        }
+
+        tr->position.SetValidParam();
+        if (tr->hasRotation)
+            tr->rotation.SetValidParam();        
+        if (tr->hasBoneList == true)
             tr->boneList->updateBoneChildrenName();
         tr->setJointOffsetRotation();
-
+        tr->setFrameRate(30);
     }
 
-    else if( extension == "nodes" ) { 
-        track->nodes( fileName );
-        if( track->hasBoneList == true )
-            tr->boneList->updateBoneChildrenName();
-        tr->setJointOffsetRotation();
+    else if (extension == "xml") {
 
-    }
+        tr->type = XML;
+        tr->setFileName(fileName.substr(sep + 1, dot - sep - 1));
+
+        XmlParser xmlParser(fileName, tr);
+        tr->position.SetValidParam();
+        if (tr->hasRotation) {
+            tr->rotation.SetValidParam();
+            tr->setJointOffsetRotation();
+        }
+    }    
 
     else cout << "Invalid file format" << endl;
 }
