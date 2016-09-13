@@ -38,7 +38,7 @@ libs/compiled/project/win/obj/*
 # Exclude any app but examples
 
 apps/*
-!apps/examples/*
+!apps/examples
 
 # Exclude openFrameworks bits
 
