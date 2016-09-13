@@ -114,7 +114,7 @@ In brief, the calling order of main methods is:
 setup, update, scene3d, scene2d, annotate, update, scene3d, scene2d, annotate, update, ...
 This order can be interrupted at any time by event methods (keypressed, mousemoved, etc.).
 
-As a final word, we can summurize by telling that the power of the MotionMachine framework arises in the combination of openFrameworks 
+As a final word, we can summarize by telling that the power of the MotionMachine framework arises in the combination of openFrameworks 
 and armadillo functionalities, extended with new data types, and new interaction possibilities, dedicated to motion data visualization
 and processing.
 */
