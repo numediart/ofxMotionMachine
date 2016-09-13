@@ -338,7 +338,7 @@ void ofApp::keyPressed(int key) {
         XmlArchiver myArchive; //Available if you include "mmXmlArchiver.h" (see beginning of the file)
         myArchive.addTrack(myTrack);
         myArchive.addFeature(myFeature, featureName, myTrack.fileName);
-        myArchive.save(getDataPath() + "myArchive"); //You can then load this archive in any other MoMa application
+        myArchive.save(getDataPath() + "myArchive.xml"); //You can then load this archive in any other MoMa application
     }
 }
 void ofApp::keyReleased(int key) {
