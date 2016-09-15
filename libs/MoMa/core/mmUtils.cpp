@@ -252,11 +252,11 @@ string MoMa::getName(string filePath) {
 
     size_t sep = filePath.find_last_of("\\/");
     size_t dot = filePath.find_last_of(".");
-    return filePath.substr(sep + 1, dot - sep - 1);
+    return filePath.substr(sep + 1, dot - sep - 1); //length of dot - sep - 1
 }
 
 string MoMa::getFolder(string filePath) {
 
     size_t sep = filePath.find_last_of("\\/");
-    return filePath.substr(0,sep);
+    return filePath.substr(0,sep+1); //length of sep+1
 }
