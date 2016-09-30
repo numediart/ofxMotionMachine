@@ -32,7 +32,7 @@ TimedVec Geometry::distance(const TimedMat &a, const TimedMat &b) {
 
     vec tmp = sqrt(sum(pow(a.getData() - b.getData(), 2)).t());
     TimedVec ret;
-    ret.setData(a.frameRate(), tmp);
+    ret.setData(a.frameRate(), tmp, a.initialTime());
     return ret;
 }
 
