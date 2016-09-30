@@ -157,23 +157,36 @@ double MoMa::nanstd(arma::vec v) {
 arma::vec MoMa::nanmean(arma::mat v, int dim) {
 
     //arma::mat tmp = v.elem(find_finite(v)); // treats v as a long vector
-    arma::rowvec tmpvec = sum(v);
-    arma::mat tmp = v.cols(find_finite(tmpvec));
-    if (dim == 0)
+    
+    if (dim == 0) {
+        arma::vec tmpvec = sum(v, 1);
+        arma::mat tmp = v.rows(find_finite(tmpvec));
+        if (tmp.n_rows <= 0) return arma::datum::nan*ones(v.n_cols);
         return arma::mean(tmp, 0);
-    else
+    }
+    else {
+        arma::rowvec tmpvec = sum(v);
+        arma::mat tmp = v.cols(find_finite(tmpvec));
+        if (tmp.n_cols <= 0) return arma::datum::nan*ones(v.n_rows);
         return arma::mean(tmp, 1);
+    }
 }
 
 arma::vec MoMa::nanstd(arma::mat v, int dim) {
 
     //arma::mat tmp = v.elem(find_finite(v)); // treats v as a long vector
-    arma::rowvec tmpvec = sum(v);
-    arma::mat tmp = v.cols(find_finite(tmpvec));
-    if (dim == 0)
+    if (dim == 0) {
+        arma::vec tmpvec = sum(v, 1);
+        arma::mat tmp = v.rows(find_finite(tmpvec));
+        if (tmp.n_rows <= 0) return arma::datum::nan*ones(v.n_cols);
+        return arma::stddev(tmp, 0, 0);
+    }
+    else {
+        arma::rowvec tmpvec = sum(v);
+        arma::mat tmp = v.cols(find_finite(tmpvec));
+        if (tmp.n_cols <= 0) return arma::datum::nan*ones(v.n_rows);
         return arma::stddev(tmp, 0, 1);
-    else
-        return arma::stddev(tmp, 0, 1);
+    }
 }
 
 
