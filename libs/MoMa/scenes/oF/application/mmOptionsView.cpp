@@ -22,6 +22,7 @@ Options::Options( SceneApp *_app, MoMa::Position position, MoMa::Position alignm
         toggleFigure = addToggle( "Show 2D Figures", app->isFigure );
         toggleCaption = addToggle( "Show Captions", app->isCaptions );
         toggleTimeline = addToggle( "Show Timeline", app->isTimeline );
+        toggleShortcuts = addToggle("Show Shortcuts", app->shortcutDisplayed);
 
         //addLabelButton( "RESET OSC", false);
 
@@ -56,6 +57,7 @@ void Options::canvasEvent( ofxUIEventArgs &e ) {
         else if( name == "Show 2D Figures" ) app->showFigures( toggle->getValue() );
         else if( name == "Show Captions" ) app->showCaptions( toggle->getValue() );
         else if( name == "Show Timeline" ) app->showTimeline( toggle->getValue() );
+        else if (name == "Show Shortcuts") app->displayShortcuts(toggle->getValue());
     }
 
 
@@ -78,4 +80,5 @@ void Options::update() {
     toggleFigure->setValue(app->isFigure );
     toggleCaption->setValue(app->isCaptions );
     toggleTimeline->setValue(app->isTimeline );
+    toggleShortcuts->setValue(app->shortcutDisplayed);
 }

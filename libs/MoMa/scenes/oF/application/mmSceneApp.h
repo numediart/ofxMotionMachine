@@ -319,7 +319,8 @@ namespace MoMa {
 
         void enableShortcuts( void ); // Enable shortcuts
         void disableShortcuts( void ); // Disable shortcuts
-        
+        void displayShortcuts(bool display); // Display or not shortcuts commands
+
         // - Misc methods -
         
         //std::string getAppPath( void ); // App path
@@ -341,7 +342,8 @@ namespace MoMa {
         void disableKeyControl();			// call this if object doesn't need to receive key events
         void enableResizeControl();				// call this if object should receive resize events (default)
         void disableResizeControl();			// call this if object doesn't need to receive resize events
-    
+
+
       //protected:
         
         // TODO make the protected protected again
@@ -461,7 +463,8 @@ namespace MoMa {
         // - Shortcuts control -
         
         bool isShortcut; // Shortcuts enabled?
-        
+        bool shortcutDisplayed; // Are shortcuts command displayed
+
         bool isExit;
 
         // - Callbacks control -

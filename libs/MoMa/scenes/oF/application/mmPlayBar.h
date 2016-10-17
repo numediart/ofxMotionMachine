@@ -40,8 +40,9 @@ namespace MoMa {
         ofxUIImageToggle *bt_scrub;
         ofxUIImageButton *bt_play, *bt_stop, *bt_nextFrame, *bt_prevFrame, *bt_nextSpeed, *bt_prevSpeed;
         bool playingState, enteringFrame, enteringSpeed;
-        ofxUITextArea *txt_index, *txt_time;
-        ofxUITextInput *frameinput, *speedinput;
+        ofxUITextArea *txt_index, *txt_time, *textarea;
+        ofxUILabel *textlabel;
+        ofxUITextInput *timeinput, *speedinput;
         ofxUIMinimalSlider *timeslider;// , *frslider;
         string libPath;
         bool next, prev, nextspeed, prevspeed;

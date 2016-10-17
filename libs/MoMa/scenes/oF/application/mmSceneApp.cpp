@@ -34,6 +34,7 @@ void MoMa::SceneApp::setup(ofEventArgs &args) {
     showTimeTags(false);
     showCaptions(true);
     enableShortcuts();
+    displayShortcuts(true);
 
     setActiveMode(SCENE3D);
     setPlaybackMode(PLAY);
@@ -520,6 +521,24 @@ void MoMa::SceneApp::draw(ofEventArgs &args) {
         ofLine(absPlaybackPos, ofGetHeight() - 82,
             absPlaybackPos, ofGetHeight() - 8);
 
+        ofPopStyle();
+    }
+
+    if (isShortcut && shortcutDisplayed) {
+
+        string text1, text2, text3;
+        if (playbackMode == MoMa::SCRUB) text1 = "Press p for playback mode. ";
+        else text1 = "Press s for scrub mode. ";
+        if (activeMode == MoMa::SCENE3D) text2 = "Press 2/a for 2D/annotation focus. ";
+        else if (activeMode == MoMa::SCENE2D) text2 = "Press 3/a for 3D/annotation focus. ";
+        else if (activeMode == MoMa::ANNOTATE) text2 = "Press 2/3 for 2D/3D focus. ";
+        if (lowBound.time() == minBound.time() && highBound.time() == maxBound.time()) text3 = "Hold z to zoom.";
+        else text3 = "Press u to unzoom.";
+        ofPushStyle();
+        ofSetColor(Turquoise, 128);
+        ofDrawBitmapString(text1, 20, ofGetWindowHeight() - 60);
+        ofDrawBitmapString(text2, 20, ofGetWindowHeight() - 40);
+        ofDrawBitmapString(text3, 20, ofGetWindowHeight() - 20);
         ofPopStyle();
     }
 
@@ -1898,6 +1917,11 @@ void MoMa::SceneApp::enableShortcuts(void) {
 void MoMa::SceneApp::disableShortcuts(void) {
 
     isShortcut = false;
+}
+
+void MoMa::SceneApp::displayShortcuts(bool display) {
+
+    shortcutDisplayed = display;
 }
 
 void MoMa::SceneApp::addMenuView(void) {
