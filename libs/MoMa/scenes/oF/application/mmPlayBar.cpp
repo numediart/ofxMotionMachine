@@ -4,7 +4,7 @@ using namespace MoMa;
 
 PlayBar::PlayBar(SceneApp *_app, MoMa::Position position, MoMa::Position alignment, MoMa::Canvas *parentUI, int group, bool minified) :
     app(_app),
-    Canvas(_app, "Player Bar", position, alignment, NULL, parentUI, group, minified) {
+    Canvas(_app, "Player", position, alignment, NULL, parentUI, group, minified) {
 
     /*vector<string> buttons;
     //buttons.push_back( "PREV.");
@@ -15,7 +15,7 @@ PlayBar::PlayBar(SceneApp *_app, MoMa::Position position, MoMa::Position alignme
     playRadio = addRadio("Bar",buttons,OFX_UI_ORIENTATION_HORIZONTAL,OFX_UI_FONT_SMALL );*/
 
     libPath = getAbsoluteResPath();
-
+    //cout << "playbar width" << getRect()->getWidth() << endl;
     //txt_index = addTextArea("index", "Index : 0" );
     setWidgetPosition(OFX_UI_WIDGET_POSITION_RIGHT);
     //txt_time = addTextArea("time", "Time : 0", OFX_UI_FONT_SMALL );
@@ -29,15 +29,29 @@ PlayBar::PlayBar(SceneApp *_app, MoMa::Position position, MoMa::Position alignme
     bt_scrub = addImageToggle("scrub", libPath + "GUI/bt_scrub.png", false);
     //bt_recordVideo = addImageToggle("record", ofFilePath::getCurrentExeDir() + app->getAppPath() + "data/resources/GUI/bt_recordvideo.png", false);
     //bt_snapshot = addImageButton("snap", ofFilePath::getCurrentExeDir() + app->getAppPath() + "data/resources/GUI/bt_snapshot.png", false);
+
+    addLabel("   ");
     bt_prevFrame = addImageButton("prev", libPath + "GUI/bt_previousframe.png", false);
+    frameinput = addTextInput("frame", "0", bt_prevFrame->getRect()->getWidth(), bt_prevFrame->getRect()->getHeight());
     bt_nextFrame = addImageButton("next", libPath + "GUI/bt_nextframe.png", false);
+
+    addLabel("   ");
+    bt_prevSpeed = addImageButton("speed-", libPath + "GUI/bt_previousframe.png", false);
+    speedinput = addTextInput("speed", "1.0", bt_prevSpeed->getRect()->getWidth(), bt_prevSpeed->getRect()->getHeight());
+    bt_nextSpeed = addImageButton("speed+", libPath + "GUI/bt_nextframe.png", false);
 
     setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);
 
-    timeslider = addMinimalSlider("time", app->lowBound.time(), app->highBound.time(), app->getAppTime());
+    //cout << "playbar width" << getRect()->getWidth() << endl;
+
+    timeslider = addMinimalSlider("time", app->lowBound.time(), app->highBound.time(), app->getAppTime());// , getRect()->getWidth() + 20);
     timeslider->setShowValue(false);
-    timeslider->getRect()->setWidth(getRect()->getWidth() + 20); //Set slider width to canvas width
+    mywidth = bt_nextSpeed->getRect()->getMaxX() - getRect()->getX() - 10;
+    timeslider->getRect()->setWidth(mywidth); //Set slider width to canvas width
+    timeslider->getRect()->setX(getRect()->getX() + 5);
     timeslider->setColorFill(Gray);
+
+    
 
     //frslider = addMinimalSlider("framerate", 0.1, 1000, app->frameRate);
     //frslider->setShowValue(false);
@@ -46,15 +60,44 @@ PlayBar::PlayBar(SceneApp *_app, MoMa::Position position, MoMa::Position alignme
 
     next = false;
     prev = false;
-
+    nextspeed = false;
+    prevspeed = false;
+    enteringFrame = false;
+    enteringSpeed = false;
     playingState = app->isPlayback;
     setVisible(true);
     initCanvas();
+
+    string title1 = "Frame";
+    string title2 = "Speed";
+    int title1width = canvasTitle->getStringWidth(title1);
+    int framepos = frameinput->getRect()->getX(false);
+    int framewidth = frameinput->getRect()->getWidth();
+    int title1pos = framepos + (double)framewidth / 2 - (double)title1width / 2;
+    int title2width = canvasTitle->getStringWidth(title2);
+    int speedpos = speedinput->getRect()->getX(false);
+    int speedwidth = speedinput->getRect()->getWidth();
+    int title2pos = speedpos + (double)speedwidth / 2 - (double)title2width / 2;
+    
+    ofxUILabel *canvasTitle1 = new ofxUILabel(title1pos, canvasTitle->getRect()->getY(false), title1width+10, title1, title1, canvasTitle->getSize());
+    ofxUILabel *canvasTitle2 = new ofxUILabel(title2pos, canvasTitle->getRect()->getY(false), title2width+10, title2, title2, canvasTitle->getSize());
+    addWidget(canvasTitle1);
+    addWidget(canvasTitle2);
+
+    /*cout << "canvas title: " << canvasTitle->getRect()->getX(false) << endl;
+    cout << canvasTitle->getRect()->getY(false) << endl;
+    cout <<  canvasTitle->getRect()->getWidth() << endl;
+    cout << "canvas title1: " << canvasTitle1->getRect()->getX(false) << endl;
+    cout << canvasTitle1->getRect()->getY(false) << endl;
+    cout << canvasTitle1->getRect()->getWidth() << endl;
+    cout << "canvas title2: " << canvasTitle2->getRect()->getX(false) << endl;
+    cout << canvasTitle2->getRect()->getY(false) << endl;
+    cout << canvasTitle2->getRect()->getWidth() << endl;*/
 }
 
 void PlayBar::initCanvas() {
 
-    getCanvasTitle()->setVisible(false);
+    //getCanvasTitle()->setVisible(false);
     autoSizeToFitWidgets();
     setMinified(false);
     setPosition(round(ofGetWidth() / 2 - getRect()->getHalfWidth()), round(ofGetHeight() - 20 - getRect()->getHeight()));
@@ -113,6 +156,70 @@ void PlayBar::canvasEvent(ofxUIEventArgs &e) {
         pause();
         next = true;
     }
+
+    else if (name == "frame") {
+
+        if (!enteringFrame) { //Beginning typing
+
+            pause();
+            enteringFrame = true;
+            frameinput->setTextString("");
+        }
+
+        if (!frameinput->isFocused()) { //Releasing
+
+            enteringFrame = false;
+            int myframe;
+
+            try {
+                myframe = stoi(frameinput->getTextString());
+                app->appMoment.setIndex(myframe);
+            }
+            catch (const std::invalid_argument& ia) {
+                std::cerr << "Invalid frame number: " << frameinput->getTextString() << '\n';
+                frameinput->setTextString(to_string(app->appMoment.index()));
+            }
+        }
+    }
+
+    else if (name == "speed-" && bt_prevSpeed->getValue()) {
+
+        app->setPlaybackMode(MoMa::PLAY);
+        prevspeed = true; 
+    }
+
+    else if (name == "speed+" && bt_nextSpeed->getValue()) {
+
+        nextspeed = true;
+        app->setPlaybackMode(MoMa::PLAY);
+    }
+
+    else if (name == "speed") {
+
+        if (!enteringSpeed) { //Beginning typing
+
+            app->setPlaybackMode(MoMa::PLAY);
+            enteringSpeed = true;
+            speedinput->setTextString("");
+        }
+
+        if (!speedinput->isFocused()) { //Releasing
+
+            enteringSpeed = false;            
+            double myspeed;
+
+            try {
+                myspeed = stod(speedinput->getTextString());
+                app->playSpeed = max(myspeed, 0.1);
+                app->playSpeed = min(app->playSpeed, 100.0);
+            }
+            catch (const std::invalid_argument& ia) {
+                std::cerr << "Invalid player speed: " << speedinput->getTextString() << '\n';
+                speedinput->setTextString(to_string(app->playSpeed));
+            }
+        }
+    }
+
     else if (name == "time") {
 
         pause();
@@ -132,6 +239,8 @@ void PlayBar::canvasEvent(ofxUIEventArgs &e) {
 
         next = false;
         prev = false;
+        nextspeed = false;
+        prevspeed = false;
     }
 }
 
@@ -141,6 +250,8 @@ void PlayBar::update() {
     /*if( app->isPlaying() ) playRadio->activateToggle( "PLAY" );
     else if( app->getAppIndex()>0 ) playRadio->activateToggle( "PAUSE" );
     else playRadio->activateToggle( "STOP" );*/
+
+
 
     if (playingState != app->isPlaying()) {
 
@@ -159,19 +270,17 @@ void PlayBar::update() {
     timeslider->setMax(app->highBound.time());
     timeslider->setValue(app->getAppTime());
 
-    string timestring = ofToString(app->getAppTime());
-    size_t dot = timestring.find_last_of(".");
-    size_t newsize = min(dot + 3, timestring.size());
-    timestring.resize(newsize); //2 decimal precision
-    int space = 20 - timestring.size();
-    string spacestring(space,' '); // a string composed of spaces
-    /*for (int i = 0; i < space; i++) {
+    // note : bt_nextspeed->getRect()->getMaxX() is in local x (from beginning of superCanvas),
+    //but bt_nextspeed->getRect()->getX() is in global. bt_nextspeed->getRect()->getX(false) would be in local
+    mywidth = timeslider->getRect()->getWidth();    
+    string sliderstring = ofxUIToString(app->getAppTime(),2) + " s - frame " + ofToString(app->getAppIndex());//2 decimal precision
+    int stringsize = timeslider->getLabelWidget()->getStringWidth(sliderstring);
+    int space = (mywidth - stringsize) / 2;
+    timeslider->getLabelWidget()->getRect()->setX(space);    
 
-        spacestring.push_back(' ');
-    }*/
-
-
-    timeslider->getLabelWidget()->setLabel(spacestring + timestring + " s - frame " + ofToString(app->getAppIndex()));
+    timeslider->getLabelWidget()->setLabel(sliderstring);
+    if(!enteringSpeed) speedinput->setTextString(ofxUIToString(app->playSpeed,1));
+    if(!enteringFrame) frameinput->setTextString(to_string(app->appMoment.index()));
 
     /*if (app->frameRate > frslider->getMax()) frslider->setMax(1.5*app->frameRate);
     frslider->setValue(app->frameRate);
@@ -185,6 +294,14 @@ void PlayBar::update() {
     else if (prev) {
 
         app->previousIndex();
+    }
+    if (nextspeed) {
+
+        app->playSpeed = min(app->playSpeed + 0.1, 100.0);
+    }
+    else if (prevspeed) {
+
+        app->playSpeed = max(app->playSpeed - 0.1, 0.1);
     }
 }
 

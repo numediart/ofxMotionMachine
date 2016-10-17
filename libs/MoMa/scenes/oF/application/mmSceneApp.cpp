@@ -49,6 +49,7 @@ void MoMa::SceneApp::setup(ofEventArgs &args) {
     isPlayback = false;
     frameRate = 100.0f;
     isBegin = true;
+    playSpeed = 1.0f;
 
     lowBound.setIndex(0, frameRate);
     highBound.setIndex(1, frameRate);
@@ -152,7 +153,7 @@ void MoMa::SceneApp::update(ofEventArgs &args) {
 
         if (ofGetElapsedTimef() > 3.0f) {
 
-            double timeStep = 1.0f / ofGetFrameRate();
+            double timeStep = playSpeed / ofGetFrameRate();
 
             if (isPlayback) {
 

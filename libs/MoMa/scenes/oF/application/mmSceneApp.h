@@ -422,6 +422,7 @@ namespace MoMa {
         MoMa::Moment appMoment; // Current app moment
         float fAppMomentIndex; // Float moment index
         bool isBegin; // Is begin?
+        double playSpeed; // Speed of the player time (default : 1.0)
         
         // - Video recorder -
         

@@ -38,12 +38,14 @@ namespace MoMa {
         ofxUIRadio *playRadio;
         //ofxUIImageToggle *bt_play, *bt_pause;
         ofxUIImageToggle *bt_scrub;
-        ofxUIImageButton *bt_play, *bt_stop, *bt_nextFrame, *bt_prevFrame;
-        bool playingState;
+        ofxUIImageButton *bt_play, *bt_stop, *bt_nextFrame, *bt_prevFrame, *bt_nextSpeed, *bt_prevSpeed;
+        bool playingState, enteringFrame, enteringSpeed;
         ofxUITextArea *txt_index, *txt_time;
+        ofxUITextInput *frameinput, *speedinput;
         ofxUIMinimalSlider *timeslider;// , *frslider;
         string libPath;
-        bool next, prev;
+        bool next, prev, nextspeed, prevspeed;
+        double mywidth;
     };
 }
 
