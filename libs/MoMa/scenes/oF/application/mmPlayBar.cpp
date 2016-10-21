@@ -47,9 +47,9 @@ PlayBar::PlayBar(SceneApp *_app, MoMa::Position position, MoMa::Position alignme
     timeslider = addMinimalSlider("slider", app->lowBound.time(), app->highBound.time(), app->getAppTime());// , getRect()->getWidth() + 20);
     timeslider->setShowValue(false);
     mywidth = bt_nextSpeed->getRect()->getMaxX() - 10;
-    cout << "bt_nextSpeed->getRect()->getMaxX(): " << bt_nextSpeed->getRect()->getMaxX() << endl;
+    /*cout << "bt_nextSpeed->getRect()->getMaxX(): " << bt_nextSpeed->getRect()->getMaxX() << endl;
     cout << "getRect()->getX(): " << getRect()->getX() << endl;
-    cout << "getRect()->getWidth(): " << getRect()->getWidth() << endl;
+    cout << "getRect()->getWidth(): " << getRect()->getWidth() << endl;*/
     timeslider->getRect()->setWidth(mywidth); //Set slider width to canvas width
     timeslider->getRect()->setX(getRect()->getX() + 5);
     timeslider->setColorFill(Gray);
