@@ -434,7 +434,7 @@ float MoMa::meanArmSize(const Track &tr) {
     }
     else {
 
-        cout << "WARNING (MoMa::meanArmSize): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        cout << "WARNING (MoMa::meanArmSize): The Track needs a nodeList containing the necessary nodes to compute mean arm size." << endl;
         return arma::datum::nan;
     }
 
@@ -473,7 +473,7 @@ float MoMa::meanTrunkSize(const Track &tr) {
     }
     else {
 
-        cout << "WARNING (MoMa::meanTrunkSize): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        cout << "WARNING (MoMa::meanTrunkSize): The Track needs a nodeList containing the necessary nodes to compute mean trunk size." << endl;
         return arma::datum::nan;
     }
 
@@ -515,7 +515,7 @@ float MoMa::meanLegSize(const Track &tr) {
     }
     else {
 
-        cout << "WARNING (MoMa::meanLegSize): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        cout << "WARNING (MoMa::meanLegSize): The Track needs a nodeList containing the necessary nodes to compute mean leg size." << endl;
         return arma::datum::nan;
     }
 
@@ -554,7 +554,7 @@ float MoMa::meanFootSize(const Track &tr) {
     }
     else {
 
-        cout << "WARNING (MoMa::meanSizeToArm): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        cout << "WARNING (MoMa::meanFootSize): The Track needs a nodeList containing the necessary nodes to compute mean foot size." << endl;
         return arma::datum::nan;
     }
 
@@ -593,7 +593,7 @@ float MoMa::meanHumerusLength(const Track &tr) {
     }
     else {
 
-        cout << "WARNING (MoMa::meanHumerusLength): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        cout << "WARNING (MoMa::meanHumerusLength): The Track needs a nodeList containing the necessary nodes to compute mean humerus length." << endl;
         return arma::datum::nan;
     }
 
@@ -630,7 +630,7 @@ float MoMa::meanShoulderWidth(const Track &tr) {
     }
     else {
 
-        cout << "WARNING (MoMa::meanShoulderWidth): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        cout << "WARNING (MoMa::meanShoulderWidth): The Track needs a nodeList containing the necessary nodes to compute mean shoulder width." << endl;
         return arma::datum::nan;
     }
 
@@ -667,7 +667,7 @@ float MoMa::meanHipWidth(const Track &tr) {
     }
     else {
 
-        cout << "WARNING (MoMa::meanHipWidth): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        cout << "WARNING (MoMa::meanHipWidth): The Track needs a nodeList containing the necessary nodes to compute hip width." << endl;
         return arma::datum::nan;
     }
 
@@ -706,7 +706,7 @@ float MoMa::meanForearmLength(const Track &tr) {
     }
     else {
 
-        cout << "WARNING (MoMa::meanForearmLength): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        cout << "WARNING (MoMa::meanForearmLength): The Track needs a nodeList containing the necessary nodes to compute mean forearm length." << endl;
         return arma::datum::nan;
     }
 
@@ -746,7 +746,7 @@ float MoMa::meanShankLength(const Track &tr) {
     }
     else {
 
-        cout << "WARNING (MoMa::meanShankLength): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        cout << "WARNING (MoMa::meanShankLength): The Track needs a nodeList containing the necessary nodes to compute mean shank length." << endl;
         return arma::datum::nan;
     }
 
@@ -784,7 +784,7 @@ float MoMa::meanHeadHeight(const Track &tr) {
     }
     else {
 
-        cout << "WARNING (MoMa::meanHeadHeight): The Track needs a nodeList containing the necessary nodes to compute mean size to arm." << endl;
+        cout << "WARNING (MoMa::meanHeadHeight): The Track needs a nodeList containing the necessary nodes to compute mean head height." << endl;
         return arma::datum::nan;
     }
 
