@@ -17,6 +17,8 @@ ofPlot::ofPlot( const MoMa::SceneApp* pApp, int figureId ) : app(pApp)
     curWidth = 0;
     mFigureId = figureId;
     nofFigure = 1;
+	mLineWidth =1.5f;
+
 }
 
 
@@ -94,7 +96,7 @@ void ofPlot::draw() {
 
     ofPushStyle();
 
-    ofSetLineWidth( 1.5f );
+    ofSetLineWidth(mLineWidth);
     ofSetColor( 160, 160, 160, 128 );
     float zLn = ofMap( 0, _figure.yMin, _figure.yMax, _figure.yBot - 5, _figure.yTop + 5 );
     ofLine( 0, zLn, ofGetWidth(), zLn );
@@ -117,7 +119,7 @@ void ofPlot::draw() {
 
         ofPushStyle();
 
-        ofSetLineWidth( 1.5f );
+        ofSetLineWidth(mLineWidth);
         ofSetColor( _figure.plot[f].color ); 
         _figure.plot[f].line.draw();
 
@@ -131,7 +133,7 @@ void ofPlot::draw() {
     double appAtTime = app->getAppTime(); // Sync fig time reading with application time
     float appTimeX = ofMap( appAtTime, app->getLowBoundTime(), app->getHighBoundTime(), 0, ofGetWidth(), true );
 
-    ofSetLineWidth( 1.5f ); ofSetColor( 160, 160, 160, 128 ); // Draw PB time line
+    ofSetLineWidth(mLineWidth); ofSetColor( 160, 160, 160, 128 ); // Draw PB time line
     ofLine( appTimeX, 0, appTimeX, ofGetHeight() ); // horizontal line & value @ bottom
     ofDrawBitmapString( ofToString( appAtTime ), appTimeX + 6, _figure.yBot - 5 );
 
@@ -150,7 +152,7 @@ void ofPlot::draw() {
 
         ofPushStyle();
 
-        ofSetColor( _figure.plot[f].color ); ofSetLineWidth( 1.5f );
+        ofSetColor( _figure.plot[f].color ); ofSetLineWidth(mLineWidth);
         ofDrawBitmapString( ofToString( value ), pnt.x + 6, pnt.y + shift );
         ofNoFill(); ofCircle( pnt, 5 ); // Bubble and text
 

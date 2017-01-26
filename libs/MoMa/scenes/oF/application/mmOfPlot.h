@@ -63,6 +63,7 @@ namespace MoMa {
         void clean();
         void setNofFigure( int noff ) { nofFigure = noff; };
         void setFigureId( int id ) { mFigureId = id; };
+		void setLineWidth(float lineWidth) { mLineWidth = lineWidth; };
     protected:
         const MoMa::SceneApp* app;
         Figure _figure;
@@ -71,6 +72,7 @@ namespace MoMa {
         int curWidth;
         int nofFigure;
         int mFigureId;
+		float mLineWidth;
     };
 }
 #endif//__mmOfPlot__
