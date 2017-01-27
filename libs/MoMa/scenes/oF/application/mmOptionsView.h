@@ -24,7 +24,7 @@ namespace MoMa {
 
     public:
 
-        Options( SceneApp *app, MoMa::Position position = DEFAULT, MoMa::Position alignment = MoMa::DEFAULT, MoMa::Canvas *parentUI = NULL, int group = 1, bool minified = false );
+        Options( SceneApp *app, MoMa::Position position = DEFAULT, MoMa::Position alignment = MoMa::DEFAULT, MoMa::Canvas *parentUI = NULL, int group = 0, bool minified = false );
 
 
         void update();

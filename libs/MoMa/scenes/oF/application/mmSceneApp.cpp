@@ -71,8 +71,9 @@ void MoMa::SceneApp::setup(ofEventArgs &args) {
     menuView = NULL;
     playBar = NULL;
     optionsView = NULL;
+	labelEditor = new TextDialog(this);
     addMenuView();
-    labelEditor = new TextDialog(this);
+    
 
     hasDragEventRegTrack = false;
     hasMouseEventRegLabelList = false;
@@ -1928,7 +1929,7 @@ void MoMa::SceneApp::addMenuView(void) {
 
     if (!menuView) {
 
-        menuView = new MenuView(this);
+        menuView = new MenuView(this, RIGHTSIDE, TOP);
         if (playBar) playBar->remove();
         playBar = new PlayBar(this, DEFAULT, DEFAULT, menuView, 1);
         if (optionsView) optionsView->remove();

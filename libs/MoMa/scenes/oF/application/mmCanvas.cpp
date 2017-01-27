@@ -118,12 +118,20 @@ void Canvas::initCanvas() {
         }
         else relative = mainCanvas[_index - 1]; //Main canvas placed relative to previous canvas
 
+		//temporary for placement
+		bool tmpminified = relative->_minified;
+		relative->setMinified(false); 
+		//relative->initCanvas();
+
         float H = getRect()->getHeight();
         float W = getRect()->getWidth();
         float relativeX = relative->getRect()->getX();
         float relativeY = relative->getRect()->getY();
         float relativeH = relative->getRect()->getHeight();
         float relativeW = relative->getRect()->getWidth();
+
+		relative->setMinified(tmpminified);
+		relative->initCanvas();
 
         if (relativeY + relativeH + 10 + H < ofGetHeight() && _limit < 1) { // test window bottom limit
 
@@ -162,8 +170,12 @@ void Canvas::initCanvas() {
         }
     }
 
+	
+
     setPos(position, alignment, relative);
     setMinified(_minified);
+
+
 
     _isInitialized = true;
 }
@@ -187,10 +199,16 @@ void Canvas::setPos(Position position, Position alignment, Canvas *relative) {
 
     else { // Set relative positions
 
+		   //temporary for placement
+		bool tmpminified = relative->_minified;
+		relative->setMinified(false);
+
         float relativeX = relative->getRect()->getX();
         float relativeY = relative->getRect()->getY();
         float relativeH = relative->getRect()->getHeight();
         float relativeW = relative->getRect()->getWidth();
+		relative->setMinified(tmpminified);
+		relative->initCanvas();
 
         // Default: Below, right edges aligned
         xPos = relativeX + relativeW - W;

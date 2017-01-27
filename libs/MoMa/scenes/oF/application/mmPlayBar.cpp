@@ -37,7 +37,7 @@ PlayBar::PlayBar(SceneApp *_app, MoMa::Position position, MoMa::Position alignme
 
     addLabel("   ");
     bt_prevSpeed = addImageButton("speed-", libPath + "GUI/bt_previousframe.png", false);
-    speedinput = addTextInput("speed", "1.0", bt_prevSpeed->getRect()->getWidth(), bt_prevSpeed->getRect()->getHeight());
+    speedinput = addTextInput("speed", to_string(app->playSpeed), bt_prevSpeed->getRect()->getWidth(), bt_prevSpeed->getRect()->getHeight());
     bt_nextSpeed = addImageButton("speed+", libPath + "GUI/bt_nextframe.png", false);
 
     setWidgetPosition(OFX_UI_WIDGET_POSITION_DOWN);

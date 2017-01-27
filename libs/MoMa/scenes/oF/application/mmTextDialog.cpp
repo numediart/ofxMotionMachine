@@ -5,7 +5,7 @@ using namespace std;
 
 TextDialog::TextDialog(SceneApp *_app) :
     app(_app),
-    Canvas(_app, "Text Dialog") {
+    Canvas(_app, "Text Dialog", NULL, 1) {
     
     addSpacer();
     txtInput = addTextInput("Text Input", "", OFX_UI_FONT_SMALL);
