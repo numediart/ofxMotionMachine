@@ -31,8 +31,14 @@ float angleBtwVectors( const arma::vec &a, const arma::vec &b, const arma::vec &
 float angleBtwVectors2D( const arma::vec &a, const arma::vec &b, const arma::vec &c, const arma::vec &d );
 
 arma::mat projection(const arma::mat & a, const arma::mat & b, const arma::mat & c, const arma::mat & p, bool invert = 0);
+arma::mat quatprojection(const arma::mat & a, const arma::mat & b, const arma::mat & c, const arma::mat & q, bool invert = 0);
 MoMa::TimedMat projection(const MoMa::TimedMat & a, const MoMa::TimedMat & b, const MoMa::TimedMat & c, const MoMa::TimedMat & p, bool invert = 0);
+MoMa::TimedMat quatprojection(const MoMa::TimedMat & a, const MoMa::TimedMat & b, const MoMa::TimedMat & c, const MoMa::TimedMat & q, bool invert = 0);
+//Project only positions (TODO on orientations)
 MoMa::Trace projection(const MoMa::Trace & a, const MoMa::Trace & b, const MoMa::Trace & c, const MoMa::Trace & p, bool invert = 0);
+
+//Project only positions (TODO on orientations)
+MoMa::Track projection(const MoMa::Trace & a, const MoMa::Trace & b, const MoMa::Trace & c, const MoMa::Track & tr, bool invert = 0);
 
 void translate(MoMa::TimedCube & pos, double x, double y, double z);
 void translate(MoMa::TimedMat & pos, double x, double y, double z);
