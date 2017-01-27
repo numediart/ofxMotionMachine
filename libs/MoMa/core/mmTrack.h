@@ -452,16 +452,16 @@ namespace MoMa {
                 if (rotation.isTimed()) {
 
                     if (rotation.isRealTime())
-                        oneTrace.rotation.setRealTimeMode(rotation.getBufferSize(), 3);
-                    oneTrace.setRotation(rotation.getData().tube(0, index, 2, index), position.getTimeVec());
+                        oneTrace.rotation.setRealTimeMode(rotation.getBufferSize(), 4);
+                    oneTrace.setRotation(rotation.getData().tube(0, index, 3, index), position.getTimeVec());
                     oneTrace.setRotationOffset(rotationOffset.col(index));
 
                 }
                 else {
 
                     if (rotation.isRealTime())
-                        oneTrace.rotation.setRealTimeMode(rotation.getBufferSize(), rotation.frameRate(), 3);
-                    oneTrace.setRotation(rotation.getData().tube(0, index, 2, index), rotation.frameRate(), position.initialTime());
+                        oneTrace.rotation.setRealTimeMode(rotation.getBufferSize(), rotation.frameRate(), 4);
+                    oneTrace.setRotation(rotation.getData()(arma::span::all,arma::span(index),arma::span::all), rotation.frameRate(), position.initialTime());
                     oneTrace.setRotationOffset(rotationOffset.col(index));
                 }
             }

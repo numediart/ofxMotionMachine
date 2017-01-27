@@ -466,6 +466,7 @@ void Track::copy( Track &tr ) const {
 
         tr.boneList = std::make_shared<BoneList>();
         *( tr.boneList ) = *boneList;
+		tr.boneList->updateBoneChildrenName();
     }
 }
 
