@@ -23,7 +23,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)$(MM_ROOT)\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"</Command>
+      <Command>xcopy /e /i /y "$(MM_ROOT)\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Platform)'=='x64'">
@@ -42,7 +42,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)$(MM_ROOT)\libs\armadillo\lib\x64\*.dll" "$(ProjectDir)bin"</Command>
+      <Command>xcopy /e /i /y "$(MM_ROOT)\libs\armadillo\lib\x64\*.dll" "$(ProjectDir)bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup />
