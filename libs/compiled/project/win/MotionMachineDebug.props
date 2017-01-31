@@ -20,7 +20,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)$(MM_ROOT)\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"</Command>
+      <Command>xcopy /e /i /y "$(MM_ROOT)\libs\armadillo\lib\win32\*.dll" "$(ProjectDir)bin"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalLibraryDirectories>$(MM_ROOT)\libs\armadillo\lib\win32;$(MM_ROOT)\libs\compiled\lib\$(Platform)\;$(OF_ROOT)\libs\glut\lib\vs\Win32;$(OF_ROOT)\libs\glfw\lib\vs\Win32;$(OF_ROOT)\libs\rtAudio\lib\vs\Win32;$(OF_ROOT)\libs\FreeImage\lib\vs\Win32;$(OF_ROOT)\libs\freetype\lib\vs\Win32;$(OF_ROOT)\libs\quicktime\lib\vs\Win32;$(OF_ROOT)\libs\fmodex\lib\vs\Win32;$(OF_ROOT)\libs\videoInput\lib\vs\Win32;$(OF_ROOT)\libs\cairo\lib\vs\Win32;$(OF_ROOT)\libs\glew\lib\vs\Win32;$(OF_ROOT)\libs\glu\lib\vs\Win32;$(OF_ROOT)\libs\openssl\lib\vs\Win32;$(OF_ROOT)\libs\Poco\lib\vs\Win32;$(OF_ROOT)\libs\tess2\lib\vs\Win32;$(OF_ROOT)\libs\boost\lib\vs\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -46,7 +46,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Lib>
     <PostBuildEvent>
-      <Command>xcopy /e /i /y "$(ProjectDir)$(MM_ROOT)\libs\armadillo\lib\x64\*.dll" "$(ProjectDir)bin"</Command>
+      <Command>xcopy /e /i /y "$(MM_ROOT)\libs\armadillo\lib\x64\*.dll" "$(ProjectDir)bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup />
