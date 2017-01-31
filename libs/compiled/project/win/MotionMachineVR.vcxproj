@@ -81,7 +81,12 @@
     <Import Project="ofxOpenVR.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(MM_ROOT)libs\compiled\lib\$(Platform)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(MM_ROOT)libs\compiled\lib\$(Platform)\</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>
@@ -142,8 +147,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\apps\MoMaProjects\MoMaVr\src\mmSceneVR.h" />
-    <ClInclude Include="..\..\..\..\apps\MoMaProjects\MoMaVr\src\ofxOpenVRExtended.h" />
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\vr\mmSceneVR.h" />
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\vr\ofxOpenVRExtended.h" />
     <ClInclude Include="..\..\..\oF\addons\ofxOpenVR\libs\OpenVR\headers\openvr.h" />
     <ClInclude Include="..\..\..\oF\addons\ofxOpenVR\libs\OpenVR\headers\openvr_capi.h" />
     <ClInclude Include="..\..\..\oF\addons\ofxOpenVR\libs\OpenVR\headers\openvr_driver.h" />
@@ -275,8 +280,8 @@
     <ClInclude Include="..\..\..\oF\addons\ofxOpenVR\src\ofxOpenVR.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\apps\MoMaProjects\MoMaVr\src\mmSceneVR.cpp" />
-    <ClCompile Include="..\..\..\..\apps\MoMaProjects\MoMaVr\src\ofxOpenVRExtended.cpp" />
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\vr\mmSceneVR.cpp" />
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\vr\ofxOpenVRExtended.cpp" />
     <ClCompile Include="..\..\..\oF\addons\ofxOpenVR\src\CGLRenderModel.cpp" />
     <ClCompile Include="..\..\..\oF\addons\ofxOpenVR\src\ofxOpenVR.cpp" />
   </ItemGroup>

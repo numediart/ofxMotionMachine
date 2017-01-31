@@ -1,3 +1,4 @@
+
 #include "mmSceneVR.h"
 
 // Thanks to @num3ric for sharing this:
@@ -5,7 +6,7 @@
 
 
 using namespace MoMa;
-#define NoHMD
+//#define NoHMD
 //--------------------------------------------------------------
 void SceneVR::setup(ofEventArgs &args) {
 
@@ -15,8 +16,12 @@ void SceneVR::setup(ofEventArgs &args) {
 	// Controllers
 	controllerLabelHolder.set(.022, 0.001, 36, 1);
 	controllerLabelHolder.enableColors();
+	controllerImage.load("play.png");
+	//cout << controllerImage.getWidth() << " " <<  controllerImage.getHeight() << endl;
+	controllerFbo.allocate(controllerImage.getWidth(), controllerImage.getHeight());
+	
 	labelHolderMat.rotate(4.8, 1.0, 0.0, 0.0);
-	labelHolderMat.translate(0.0, 0.0075, 0.049);
+	labelHolderMat.translate(0.0, 0.01, 0.049);
 	showControllerShader = true;
 
 	// We need to pass the method we want ofxOpenVR to call when rending the scene
@@ -140,6 +145,9 @@ void SceneVR::update(ofEventArgs &args) {
 		fbo.end();
 		this->is2D = false;
 	}
+	controllerFbo.begin();
+	controllerImage.draw(0, 0);
+	controllerFbo.end();
 	//ofEnableDepthTest();
 	SceneApp::update(args);
 }
@@ -182,11 +190,9 @@ void SceneVR::draw(ofEventArgs &args) {
 	cam.end();
 	ofSetBackgroundColor(100);
 
-	ofPushMatrix();
-	ofRotateZ(90);
-	ofDrawGridPlane(.25, 10);
-	//ofDrawGrid(0.25, 10, false, false, true, false);
-	ofPopMatrix();
+
+	ofDrawGrid(0.25, 10, false, false, true, false);
+
 	if (Scene2DDisplayFlag) {
 		ofPushMatrix();
 		ofTranslate(0.5, 1.5, -ofGetWidth() / 2000.f);
@@ -271,7 +277,9 @@ void  SceneVR::render(vr::Hmd_Eye nEye) {
 	ofPushMatrix();
 	ofRotateX(-90);
 	ofScale(0.001, 0.001, 0.001);
+	ofPushStyle();
 	scene3d();
+	ofPopStyle();
 	ofPopMatrix();
 
 	ofPopMatrix();
@@ -285,7 +293,10 @@ void  SceneVR::render(vr::Hmd_Eye nEye) {
 		ofMultMatrix(locMat);
 		ofMultMatrix(labelHolderMat);
 		//controllerLabelHolder.drawWireframe();
-		controllerLabelHolder.drawFaces();
+		//controllerLabelHolder.drawFaces();
+		ofPushStyle();
+		controllerFbo.draw(0, 0, 0.05, 0.05);
+		ofPopStyle();
 		ofPopMatrix();
 		//_controllersShader.end();
 	}

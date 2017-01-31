@@ -447,10 +447,10 @@
     <ClInclude Include="..\..\..\oF\addons\ofxOpenVR\src\glm\simd\vector_relational.h">
       <Filter>of\addons\ofxOpenVR\src\glm\simd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\apps\MoMaProjects\MoMaVr\src\ofxOpenVRExtended.h">
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\vr\ofxOpenVRExtended.h">
       <Filter>MoMa\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\apps\MoMaProjects\MoMaVr\src\mmSceneVR.h">
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\vr\mmSceneVR.h">
       <Filter>MoMa\Scene</Filter>
     </ClInclude>
   </ItemGroup>
@@ -461,10 +461,10 @@
     <ClCompile Include="..\..\..\oF\addons\ofxOpenVR\src\ofxOpenVR.cpp">
       <Filter>of\addons\ofxOpenVR\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\apps\MoMaProjects\MoMaVr\src\ofxOpenVRExtended.cpp">
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\vr\ofxOpenVRExtended.cpp">
       <Filter>MoMa\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\apps\MoMaProjects\MoMaVr\src\mmSceneVR.cpp">
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\vr\mmSceneVR.cpp">
       <Filter>MoMa\Scene</Filter>
     </ClCompile>
   </ItemGroup>

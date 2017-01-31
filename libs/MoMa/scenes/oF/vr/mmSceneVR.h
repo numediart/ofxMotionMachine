@@ -1,3 +1,5 @@
+
+
 #pragma once
 #include "mmSceneApp.h"
 
@@ -63,6 +65,8 @@ namespace MoMa {
 
 
 		ofCylinderPrimitive controllerLabelHolder;
+		ofFbo controllerFbo;
+		ofImage controllerImage;
 		ofMatrix4x4 labelHolderMat;
 		bool showControllerShader;
 

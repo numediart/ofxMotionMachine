@@ -1,3 +1,4 @@
+
 #pragma once
 #include "ofxOpenVR.h"
 
@@ -34,4 +35,3 @@ public:
 
 	void updateControllerAnalogData(ControllerState &controller);
 };
-
