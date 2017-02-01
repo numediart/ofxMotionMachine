@@ -60,25 +60,25 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\oF\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
     <Import Project="MotionMachineDebug.props" />
-    <Import Project="ofxOpenVR.props" />
+    <Import Project="..\..\..\oF\addons\ofxOpenVR\ofxOpenVR.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\oF\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
     <Import Project="MotionMachineRelease.props" />
-    <Import Project="ofxOpenVR.props" />
+    <Import Project="..\..\..\oF\addons\ofxOpenVR\ofxOpenVR.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\oF\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
     <Import Project="MotionMachineDebug.props" />
-    <Import Project="ofxOpenVR.props" />
+    <Import Project="..\..\..\oF\addons\ofxOpenVR\ofxOpenVR.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\oF\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
     <Import Project="MotionMachineRelease.props" />
-    <Import Project="ofxOpenVR.props" />
+    <Import Project="..\..\..\oF\addons\ofxOpenVR\ofxOpenVR.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -98,6 +98,12 @@
     <Link>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>robocopy "$(OF_ROOT)/export/vs/Win32/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
+if errorlevel 1 echo Copy successful else exit %errorlevel%
+robocopy "$(OF_ROOT)/addons/ofxOpenVR/libs/OpenVR/bin/win32/" "$(SolutionDir)bin/" "*.dll" /njs /njh /np /fp /bytes
+      if errorlevel 1 exit 0 else exit %errorlevel%</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -106,6 +112,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(OF_ROOT)\addons\ofxOpenVR\src;$(OF_ROOT)\addons\ofxOpenVR\libs\OpenVR\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -132,6 +139,12 @@ robocopy "$(OF_ROOT)/addons/ofxOpenVR/libs/OpenVR/bin/win64/" "$(SolutionDir)bin
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <PostBuildEvent>
+      <Command>robocopy "$(OF_ROOT)/export/vs/Win32/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
+if errorlevel 1 echo Copy successful else exit %errorlevel%
+robocopy "$(OF_ROOT)/addons/ofxOpenVR/libs/OpenVR/bin/win32/" "$(SolutionDir)bin/" "*.dll" /njs /njh /np /fp /bytes
+      if errorlevel 1 exit 0 else exit %errorlevel%</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -142,6 +155,7 @@ robocopy "$(OF_ROOT)/addons/ofxOpenVR/libs/OpenVR/bin/win64/" "$(SolutionDir)bin
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(OF_ROOT)\addons\ofxOpenVR\src;$(OF_ROOT)\addons\ofxOpenVR\libs\OpenVR\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -159,6 +173,7 @@ robocopy "$(OF_ROOT)/addons/ofxOpenVR/libs/OpenVR/bin/win64/" "$(SolutionDir)bin
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\vr\mmCanvasVR.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\vr\mmSceneVR.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\vr\ofxOpenVRExtended.h" />
     <ClInclude Include="..\..\..\oF\addons\ofxOpenVR\libs\OpenVR\headers\openvr.h" />
@@ -292,6 +307,7 @@ robocopy "$(OF_ROOT)/addons/ofxOpenVR/libs/OpenVR/bin/win64/" "$(SolutionDir)bin
     <ClInclude Include="..\..\..\oF\addons\ofxOpenVR\src\ofxOpenVR.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\vr\mmCanvasVR.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\vr\mmSceneVR.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\vr\ofxOpenVRExtended.cpp" />
     <ClCompile Include="..\..\..\oF\addons\ofxOpenVR\src\CGLRenderModel.cpp" />
