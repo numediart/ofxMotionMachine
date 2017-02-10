@@ -37,6 +37,7 @@ namespace MoMa {
     std::string getLibPath( void ); //get the path to the MoMa libraries
     std::string getAbsoluteLibPath( void ); //get the absolute path to the MoMa libraries
     std::string getDataPath( void ); //get the data path
+	std::string getExampleDataPath(void); //get the example data path
     std::string getAbsoluteDataPath( void ); //get the absolute path to the directory containing the data
     //std::string getResPath( void ); // get resources path
     std::string getAbsoluteResPath( void ); // get absolute resources path

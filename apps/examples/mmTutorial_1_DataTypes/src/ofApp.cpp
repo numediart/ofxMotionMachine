@@ -134,14 +134,14 @@ void ofApp::setup(void) { //setup() is called at the beginning of the applicatio
 
     //Some noisy example (flat text file from kinect data)
 
-    myTrack.load(getDataPath() + "kinect2.nodes"); //load corresponding nodelist (it must have the same number 
+    myTrack.load(getExampleDataPath() + "kinect2.nodes"); //load corresponding nodelist (it must have the same number 
     //of markers (or nodes) as in the raw data text file)
 
-    myTrack.load(getDataPath() + "kinect2.bones"); //load corresponding bonelist, describing the links between 
+    myTrack.load(getExampleDataPath() + "kinect2.bones"); //load corresponding bonelist, describing the links between 
     //nodes, for drawing, and for local coordinate representation
 
-    myTrack.load(getDataPath() + "kinect2.txt"); //load raw data from a flat text file (one line = a frame; 
-    //one line has 3 x m values, 3 for x,y,z directions, and m for m markers (or nodes) )    
+    myTrack.load(getExampleDataPath() + "kinect2.txt"); //load raw data from a flat text file (one line = a frame; 
+    //one line has 3 x m values, 3 for x,y,z directions, and m for m markers (or nodes) )
 
     myTrack.setFrameRate(30); //This file is recorded from a kinect has thus a framerate around 30fps
     //Filter these noisy data:
