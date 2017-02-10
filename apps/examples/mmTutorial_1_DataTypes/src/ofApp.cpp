@@ -136,6 +136,8 @@ void ofApp::setup(void) { //setup() is called at the beginning of the applicatio
 
     myTrack.load(getExampleDataPath() + "kinect2.nodes"); //load corresponding nodelist (it must have the same number 
     //of markers (or nodes) as in the raw data text file)
+	//Same as: 
+	//myTrack.load(getAppPath() + "../../ExampleData/kinect2.nodes");
 
     myTrack.load(getExampleDataPath() + "kinect2.bones"); //load corresponding bonelist, describing the links between 
     //nodes, for drawing, and for local coordinate representation
