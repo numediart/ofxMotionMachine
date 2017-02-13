@@ -6,7 +6,7 @@
 
 
 using namespace MoMa;
-#define NoHMD
+//#define NoHMD
 //--------------------------------------------------------------
 void SceneVR::setup(ofEventArgs &args) {
 
@@ -46,7 +46,13 @@ void SceneVR::setup(ofEventArgs &args) {
 	bShowHelp = true;
 	floatingSceneFlag = false;
 	floatingTranslSceneFlag = -1;
-	sceneMat.makeIdentityMatrix();
+	
+	
+	initSceneMat.makeIdentityMatrix();
+	initSceneMat.translate(0, 0, -2);
+
+	sceneMat = initSceneMat;
+
 	sceneScale = 1;
 	floatingSceneScale = 1;
 
@@ -240,7 +246,7 @@ void  SceneVR::render(vr::Hmd_Eye nEye) {
 	ofSetColor(150);
 	ofPushMatrix();
 	ofRotateX(90);
-	ofDrawPlane(5, 5);
+	ofDrawPlane(3, 3);
 	ofPopMatrix();
 	ofPushMatrix();
 	//ofMultMatrix(floatingSceneMat);
@@ -342,7 +348,7 @@ void SceneVR::controllerEvent(ofxOpenVRControllerEventArgs& args) {
 			else if (args.eventType == EventType::ButtonUnpress) {
 
 				if (ofGetElapsedTimef() - controllers[controllerId].menuPressedStartTime  > 1) {
-					sceneMat.makeIdentityMatrix();
+					sceneMat = initSceneMat;
 					floatingSceneMat.makeIdentityMatrix();
 					sceneScale = 1;
 					floatingSceneScale = 1;

@@ -79,7 +79,7 @@ namespace MoMa {
 
 		ControllerState controllers[2];
 		ofMatrix4x4 controllersMatrix[2];
-		ofMatrix4x4 sceneMat;
+		ofMatrix4x4 sceneMat,initSceneMat;
 		float sceneScale;
 		ofMatrix4x4 floatingSceneMat;
 		float floatingSceneScale;
