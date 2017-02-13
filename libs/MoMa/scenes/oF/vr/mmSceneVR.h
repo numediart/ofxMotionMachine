@@ -1,10 +1,15 @@
 
 
-#pragma once
+
+
+#ifndef __mmSceneVR__
+#define __mmSceneVR__
+
+namespace MoMa {
+	class SceneVR;
+}
+
 #include "mmSceneApp.h"
-
-#pragma once
-
 #include "ofMain.h"
 #include "ofxOpenVRExtended.h"
 
@@ -12,6 +17,11 @@
 #include "MoMaUI.h"
 #include "ofMain.h"
 #include "mmOfSkeleton.h"
+
+//#include "mmCanvasVR.h"
+#include "mmPlayerControlVR.h"
+
+
 
 namespace MoMa {
 
@@ -64,11 +74,7 @@ namespace MoMa {
 		virtual void exit(ofEventArgs &args);
 
 
-		ofCylinderPrimitive controllerLabelHolder;
-		ofFbo controllerFbo;
-		ofImage controllerImage;
-		ofMatrix4x4 labelHolderMat;
-		bool showControllerShader;
+		PlayerControlVR *playerControl;
 
 		ControllerState controllers[2];
 		ofMatrix4x4 controllersMatrix[2];
@@ -80,8 +86,8 @@ namespace MoMa {
 		int floatingTranslSceneFlag;
 		bool Scene2DDisplayFlag;
 		int scrubControllerIndex;
-
-
 	};
 
 };
+
+#endif

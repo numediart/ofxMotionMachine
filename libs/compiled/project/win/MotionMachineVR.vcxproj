@@ -100,6 +100,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(OF_ROOT)\addons\ofxOpenVR\src;$(OF_ROOT)\addons\ofxOpenVR\libs\OpenVR\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -139,6 +140,7 @@ robocopy "$(OF_ROOT)/addons/ofxOpenVR/libs/OpenVR/bin/win64/" "$(SolutionDir)bin
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(OF_ROOT)\addons\ofxOpenVR\src;$(OF_ROOT)\addons\ofxOpenVR\libs\OpenVR\headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -180,6 +182,7 @@ robocopy "$(OF_ROOT)/addons/ofxOpenVR/libs/OpenVR/bin/win64/" "$(SolutionDir)bin
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\MoMa\scenes\oF\vr\mmCanvasVR.h" />
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\vr\mmPlayerControlVR.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\vr\mmSceneVR.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\vr\ofxOpenVRExtended.h" />
     <ClInclude Include="..\..\..\oF\addons\ofxOpenVR\libs\OpenVR\headers\openvr.h" />
@@ -314,6 +317,7 @@ robocopy "$(OF_ROOT)/addons/ofxOpenVR/libs/OpenVR/bin/win64/" "$(SolutionDir)bin
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\MoMa\scenes\oF\vr\mmCanvasVR.cpp" />
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\vr\mmPlayerControlVR.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\vr\mmSceneVR.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\vr\ofxOpenVRExtended.cpp" />
     <ClCompile Include="..\..\..\oF\addons\ofxOpenVR\src\CGLRenderModel.cpp" />

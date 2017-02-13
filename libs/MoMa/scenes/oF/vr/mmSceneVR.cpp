@@ -13,28 +13,19 @@ void SceneVR::setup(ofEventArgs &args) {
 	ofSetVerticalSync(true);
 	ofDisableArbTex();
 
-	// Controllers
-	controllerLabelHolder.set(.022, 0.001, 36, 1);
-	controllerLabelHolder.enableColors();
-	controllerImage.load("play.png");
-	//cout << controllerImage.getWidth() << " " <<  controllerImage.getHeight() << endl;
-	controllerFbo.allocate(controllerImage.getWidth(), controllerImage.getHeight());
-	
-	labelHolderMat.rotate(4.8, 1.0, 0.0, 0.0);
-	labelHolderMat.translate(0.0, 0.01, 0.049);
-	showControllerShader = true;
-
 	// We need to pass the method we want ofxOpenVR to call when rending the scene
 #ifndef NoHMD
 	openVR.setup(std::bind(&SceneVR::render, this, std::placeholders::_1));
 
 	openVR.setRenderModelForTrackedDevices(true);
-
-	// controller event callback
-	ofAddListener(openVR.ofxOpenVRControllerEvent, this, &SceneVR::controllerEvent);
-
+	
 	controllers[0].role = ControllerRole::Right;
 	controllers[1].role = ControllerRole::Left;
+	playerControl = new PlayerControlVR(this, &controllers[0]);
+	// controller event callback
+	ofAddListener(openVR.ofxOpenVRControllerEvent, this, &SceneVR::controllerEvent);
+	ofAddListener(openVR.ofxOpenVRControllerEvent, playerControl, &PlayerControlVR::controllerEvent);
+
 #else
 	cam.setGlobalPosition(-5, 1, 0);
 	cam.lookAt(ofVec3f(0, 1, 0), ofVec3f(0, 1, 0));
@@ -71,6 +62,7 @@ void SceneVR::setup(ofEventArgs &args) {
 
 //--------------------------------------------------------------
 void SceneVR::exit(ofEventArgs &args) {
+	delete playerControl;
 	SceneApp::exit(args);
 #ifndef NoHMD
 	openVR.exit();
@@ -81,17 +73,7 @@ void SceneVR::exit(ofEventArgs &args) {
 void SceneVR::update(ofEventArgs &args) {
 #ifndef NoHMD
 	openVR.update();
-
-	// update touchpad and trigger data for each controller if new is available
-	/*for (int i = 0; i < 2; i++) {
-	openVR.updateControllerAnalogData(controllers[i]);
-	}*/
-
-	if (playbackMode == MoMa::SCRUB && controllers[scrubControllerIndex].touchpadTouched) {
-		openVR.updateControllerAnalogData(controllers[scrubControllerIndex]);
-		appMoment.setTime(ofMap(controllers[scrubControllerIndex].touchpadCoordLast.x, -0.8, 0.8,
-			lowBound.time(), highBound.time(), true), frameRate);
-	}
+	playerControl->update();
 
 	if (floatingTranslSceneFlag >= 0) {
 
@@ -145,9 +127,7 @@ void SceneVR::update(ofEventArgs &args) {
 		fbo.end();
 		this->is2D = false;
 	}
-	controllerFbo.begin();
-	controllerImage.draw(0, 0);
-	controllerFbo.end();
+
 	//ofEnableDepthTest();
 	SceneApp::update(args);
 }
@@ -169,6 +149,7 @@ void SceneVR::draw(ofEventArgs &args) {
 		_strHelp << "Toggle OpenVR mirror window (press: m)." << endl;
 		ofDrawBitmapStringHighlight(_strHelp.str(), ofPoint(10.0f, 20.0f), ofColor(ofColor::black, 100.0f));
 	}
+
 #else
 	ofPushView();
 
@@ -222,8 +203,6 @@ void SceneVR::draw(ofEventArgs &args) {
 
 //--------------------------------------------------------------
 void  SceneVR::render(vr::Hmd_Eye nEye) {
-
-
 
 	ofPushView();
 	ofSetMatrixMode(OF_MATRIX_PROJECTION);
@@ -284,40 +263,8 @@ void  SceneVR::render(vr::Hmd_Eye nEye) {
 
 	ofPopMatrix();
 	ofPopMatrix();
-	// Left controller
-	if (openVR.isControllerConnected(vr::TrackedControllerRole_LeftHand) && showControllerShader) {
-		//glm::mat4x4 leftControllerPoseMat = currentViewProjectionMatrix * _openVR.getControllerPose(vr::TrackedControllerRole_LeftHand);
-		ofMatrix4x4 locMat = &openVR.getControllerPose(vr::TrackedControllerRole_LeftHand)[0][0];
-		//_controllersShader.setUniformMatrix4f("matrix", _openVR.convertGlmMatrixToofMatrix(leftControllerPoseMat), 1);
-		ofPushMatrix();
-		ofMultMatrix(locMat);
-		ofMultMatrix(labelHolderMat);
-		//controllerLabelHolder.drawWireframe();
-		//controllerLabelHolder.drawFaces();
-		ofPushStyle();
-		controllerFbo.draw(0, 0, 0.05, 0.05);
-		ofPopStyle();
-		ofPopMatrix();
-		//_controllersShader.end();
-	}
-
-	// Right controller
-	if (openVR.isControllerConnected(vr::TrackedControllerRole_RightHand) && showControllerShader) {
-		//glm::mat4x4 rightControllerPoseMat = currentViewProjectionMatrix * _openVR.getControllerPose(vr::TrackedControllerRole_RightHand);
-		ofMatrix4x4 locMat = &openVR.getControllerPose(vr::TrackedControllerRole_RightHand)[0][0];
-
-		//_controllersShader.begin();
-		//_controllersShader.setUniformMatrix4f("matrix", _openVR.convertGlmMatrixToofMatrix(rightControllerPoseMat), 1);
-		ofPushMatrix();
-		//ofTranslate(locMat.getTranslation());
-		ofMultMatrix(locMat);
-		ofMultMatrix(labelHolderMat);
-		//ofLoadMatrix(locMat);
-		//controllerLabelHolder.drawWireframe();
-		controllerLabelHolder.drawFaces();
-		ofPopMatrix();
-		//_controllersShader.end();
-	}
+	
+	playerControl->draw();
 
 	light.disable();
 	light2.disable();
@@ -376,93 +323,6 @@ void SceneVR::controllerEvent(ofxOpenVRControllerEventArgs& args) {
 				controllers[controllerId].triggerPressed = false;
 				float timePressed = ofGetElapsedTimef() - controllers[controllerId].triggerPressedStartTime;
 				//cout << "controller " << controllerId << ", trigger pressed for " << timePressed << "seconds" << endl;
-			}
-		}
-		// Button Touchpad
-		else if (args.buttonType == ButtonType::ButtonTouchpad) {
-			if (args.eventType == EventType::ButtonPress) {
-				controllers[controllerId].touchpadPressed = true;
-				controllers[controllerId].touchpadPressedStartTime = ofGetElapsedTimef();
-				controllers[controllerId].touchpadCoordOrg.x = args.analogInput_xAxis;
-				controllers[controllerId].touchpadCoordOrg.y = args.analogInput_yAxis;
-			}
-			else if (args.eventType == EventType::ButtonUnpress) {
-				controllers[controllerId].touchpadPressed = false;
-				float timePressed = ofGetElapsedTimef() - controllers[controllerId].touchpadPressedStartTime;
-
-				if (playbackMode == MoMa::PLAY) {
-					float xcoord = controllers[controllerId].touchpadCoordOrg.x;
-					if (timePressed < 0.6) {
-						// short press on the center of the touchpad -> play / pause
-						if (xcoord > -0.5 && xcoord < 0.5) {
-							if (isPlaying()) {
-								pause();
-							}
-							else {
-								play();
-							}
-						}
-						else {
-							// short press on the left / right border of the pad -> prev / next
-							double targetTime = appMoment.time();
-							if (xcoord > 0.75) {
-								pause();
-								targetTime += 0.05;
-								if (targetTime > highBound.time()) targetTime = highBound.time();
-								appMoment.setTime(targetTime);
-								//cout << "next" << endl;
-							}
-							else if (xcoord < -0.75) {
-								pause();
-								targetTime -= 0.05;
-								if (targetTime < lowBound.time()) targetTime = lowBound.time();
-								appMoment.setTime(targetTime);
-								//cout << "previous" << endl;
-							}
-
-						}
-					}
-					// long press on the center -> stop
-					else if (xcoord > -0.5 && xcoord < 0.5) {
-						stop();
-					}
-				}
-			}
-			else if (args.eventType == EventType::ButtonTouch) {
-				controllers[controllerId].touchpadTouched = true;
-				controllers[controllerId].touchpadTouchedStartTime = ofGetElapsedTimef();
-				controllers[controllerId].touchpadCoordOrg.x = args.analogInput_xAxis;
-				controllers[controllerId].touchpadCoordOrg.y = args.analogInput_yAxis;
-				//cout << "touch init at " << controllers[controllerId].touchpadCoordOrg << endl;
-			}
-			else if (args.eventType == EventType::ButtonUntouch) {
-				controllers[controllerId].touchpadTouched = false;
-				float timePressed = ofGetElapsedTimef() - controllers[controllerId].touchpadTouchedStartTime;
-				ofVec2f delta = controllers[controllerId].touchpadCoordLast - controllers[controllerId].touchpadCoordOrg;
-				//cout << "controller " << controllerId << ", touchpad touched for " << timePressed
-				//	<< "seconds with a deplacement of " << delta << endl;
-			}
-		}
-		// Grip
-		else if (args.buttonType == ButtonType::ButtonGrip) {
-			if (args.eventType == EventType::ButtonPress) {
-				controllers[controllerId].gripPressed = true;
-				controllers[controllerId].gripPressedStartTime = ofGetElapsedTimef();
-			}
-			else if (args.eventType == EventType::ButtonUnpress) {
-				controllers[controllerId].gripPressed = false;
-				float timePressed = ofGetElapsedTimef() - controllers[controllerId].gripPressedStartTime;
-				//cout << "controller " << controllerId << ", grip pressed for " << timePressed << "seconds" << endl;
-				pause();
-				if (playbackMode == MoMa::SCRUB) {
-					setPlaybackMode(MoMa::PLAY);
-				}
-				else {
-					pause();
-					setPlaybackMode(MoMa::SCRUB);
-					scrubControllerIndex = controllerId;
-					cout << "scrubControllerIndex " << scrubControllerIndex << endl;
-				}
 			}
 		}
 

@@ -1,7 +1,11 @@
 
-#pragma once
-#include "ofxOpenVR.h"
 
+
+#ifndef __ofxOpenVRExtended__
+#define __ofxOpenVRExtended__
+
+
+#include "ofxOpenVR.h"
 
 struct ControllerState {
 	ControllerState::ControllerState() :
@@ -12,6 +16,7 @@ struct ControllerState {
 		gripPressed(false) {};
 
 	ControllerRole role;
+
 	bool triggerPressed;
 	float triggerValue;
 	float triggerPressedStartTime;
@@ -35,3 +40,4 @@ public:
 
 	void updateControllerAnalogData(ControllerState &controller);
 };
+#endif

@@ -1,28 +1,12 @@
 #include "mmCanvasVR.h"
 
 
-using namespace MoMa;
-
-CanvasVR::CanvasVR()
-{
-}
+namespace MoMa {
 
 
-CanvasVR::~CanvasVR()
-{
-}
-
-void CanvasVR::attachToController(ControllerRole controller)
-{
-	if (controller == ControllerRole::Left || controller == ControllerRole::Right)
+	CanvasVR::~CanvasVR()
 	{
-		attachedToController = true;
-		attachedTo = controller;
 	}
-}
 
-void CanvasVR::detachFromController()
-{
-	attachedToController = false;
-	attachedTo = ControllerRole::Unknown;
+
 }

@@ -1,4 +1,4 @@
-#pragma once
+
 	/**
 	*
 	*  @file mmNode.h

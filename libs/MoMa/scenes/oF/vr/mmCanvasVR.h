@@ -1,30 +1,31 @@
-#pragma once
 
-#include "ofMain.h"
+
+
+#ifndef __mmCanvasVR__
+#define __mmCanvasVR__
+
 #include "ofxOpenVRExtended.h"
+#include "ofMain.h"
 
 namespace MoMa {
 	class CanvasVR
 	{
 	public:
-		CanvasVR();
+		CanvasVR() {};
 		virtual ~CanvasVR();
 
 		virtual void setup() {};
 		virtual void update() {};
 		virtual void draw() {};
 
-		void attachToController(ControllerRole controller);
-		void detachFromController();
-
 	protected:
+
 		ofFbo fbo;
 		ofMatrix4x4 fboMatrix;
-
-		bool attachedToController;
-		ControllerRole attachedTo;
 
 		bool selected;
 	};
 }
+
+#endif
 

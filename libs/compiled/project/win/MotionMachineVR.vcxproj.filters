@@ -456,6 +456,9 @@
     <ClInclude Include="..\..\..\MoMa\scenes\oF\vr\mmCanvasVR.h">
       <Filter>MoMa\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\vr\mmPlayerControlVR.h">
+      <Filter>MoMa\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\oF\addons\ofxOpenVR\src\CGLRenderModel.cpp">
@@ -471,6 +474,9 @@
       <Filter>MoMa\Scene</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\MoMa\scenes\oF\vr\mmCanvasVR.cpp">
+      <Filter>MoMa\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\vr\mmPlayerControlVR.cpp">
       <Filter>MoMa\Scene</Filter>
     </ClCompile>
   </ItemGroup>
