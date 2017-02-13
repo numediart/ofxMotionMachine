@@ -43,6 +43,7 @@ namespace MoMa {
 		virtual void exit() {};
 		virtual void scene2d() {};
 		virtual void scene3d() {};
+		virtual void draw3d() {};//draw an 3D element not linked to the MoMaScene
 
 		void keyPressed(int key);
 		void keyReleased(int key);

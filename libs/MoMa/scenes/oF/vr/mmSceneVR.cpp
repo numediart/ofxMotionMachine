@@ -6,7 +6,7 @@
 
 
 using namespace MoMa;
-//#define NoHMD
+#define NoHMD
 //--------------------------------------------------------------
 void SceneVR::setup(ofEventArgs &args) {
 
@@ -39,10 +39,10 @@ void SceneVR::setup(ofEventArgs &args) {
 	ofSetSmoothLighting(true);
 	light.setDiffuseColor(ofFloatColor(.85, .85, .55));
 	light.setSpecularColor(ofFloatColor(1.f, 1.f, 1.f));
-	light.setPosition(1, 2, -1);
+	light.setPosition(2, 2, -2);
 	light2.setDiffuseColor(ofFloatColor(.85, .85, .55));
 	light2.setSpecularColor(ofFloatColor(1.f, 1.f, 1.f));
-	light2.setPosition(-1, 2, 1);
+	light2.setPosition(-2, 2, 2);
 	bShowHelp = true;
 	floatingSceneFlag = false;
 	floatingTranslSceneFlag = -1;
@@ -192,7 +192,12 @@ void SceneVR::draw(ofEventArgs &args) {
 	scene3d();
 
 	ofPopMatrix();
+	ofPushMatrix();
+	ofTranslate(0, 1, 0);
 
+	ofDrawAxis(1.0);
+	ofPopMatrix();
+	draw3d();
 	light.disable();
 	light2.disable();
 	ofDisableLighting();
@@ -263,7 +268,7 @@ void  SceneVR::render(vr::Hmd_Eye nEye) {
 
 	ofPopMatrix();
 	ofPopMatrix();
-	
+	draw3d();
 	playerControl->draw();
 
 	light.disable();
