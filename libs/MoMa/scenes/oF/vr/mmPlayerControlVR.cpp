@@ -72,14 +72,56 @@ namespace MoMa {
 
 	void PlayerControlVR::update()
 	{
-		if (app->playbackMode == MoMa::SCRUB && attachedTo->touchpadTouched) {
-			app->openVR.updateControllerAnalogData(*attachedTo);
-			app->appMoment.setTime(ofMap(attachedTo->touchpadCoordLast.x, -0.8, 0.8,
-				app->lowBound.time(), app->highBound.time(), true), app->frameRate);
+		if (attachedTo->touchpadTouched) {
+			vr::VRControllerState_t pControllerState;
+			switch (attachedTo->role)
+			{
+			case ControllerRole::Left:
+				vr::VRSystem()->GetControllerState(vr::TrackedControllerRole_LeftHand, &pControllerState, sizeof(pControllerState));
+				break;
+			case ControllerRole::Right:
+				vr::VRSystem()->GetControllerState(vr::TrackedControllerRole_RightHand, &pControllerState, sizeof(pControllerState));
+				break;
+			default:
+				break;
+			}
+			if ( true /*pControllerState.ulButtonTouched == ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad)*/) {
+				float xcoord = pControllerState.rAxis->x;
+				if (app->playbackMode == MoMa::PLAY) {
+					if (xcoord > -0.5 && xcoord < 0.5) {
+						if (app->isPlaying())
+							currentVisual = VisualIdentifier::PAUSE_010;
+						else
+							currentVisual = VisualIdentifier::PLAY_010;
+					}
+					else {
+						if (xcoord > 0.75) {
+							if (app->isPlaying())
+								currentVisual = VisualIdentifier::PAUSE_001;
+							else
+								currentVisual = VisualIdentifier::PLAY_001;
+						}
+						else if (xcoord < -0.75) {
+							if (app->isPlaying())
+								currentVisual = VisualIdentifier::PAUSE_100;
+							else
+								currentVisual = VisualIdentifier::PLAY_100;
+						}
+					}
+				}
+				else if (app->playbackMode == MoMa::SCRUB) {
+					app->appMoment.setTime(ofMap(xcoord, -0.8, 0.8,
+						app->lowBound.time(), app->highBound.time(), true), app->frameRate);
+					currentVisual = VisualIdentifier::SCRUB_1;
+				}
+			}
 		}
-
-		if (app->playbackMode == MoMa::PLAY && attachedTo->touchpadTouched) {
-			currentVisual = VisualIdentifier::PLAY_010;
+		if (app->playbackMode == MoMa::PLAY 
+				&& attachedTo->touchpadPressed
+				&& ofGetElapsedTimef() - attachedTo->touchpadPressedStartTime > 0.6
+				&& attachedTo->touchpadCoordOrg.x > -0.5
+				&& attachedTo->touchpadCoordOrg.x < 0.5) {
+			currentVisual = VisualIdentifier::STOP_2;
 		}
 		
 		fbo.begin();
@@ -112,6 +154,30 @@ namespace MoMa {
 					attachedTo->touchpadPressedStartTime = ofGetElapsedTimef();
 					attachedTo->touchpadCoordOrg.x = args.analogInput_xAxis;
 					attachedTo->touchpadCoordOrg.y = args.analogInput_yAxis;
+					
+					float xcoord = args.analogInput_xAxis;
+					if (app->playbackMode == MoMa::PLAY) {
+						if (xcoord > -0.5 && xcoord < 0.5) {
+							if (app->isPlaying())
+								currentVisual = VisualIdentifier::PAUSE_020;
+							else
+								currentVisual = VisualIdentifier::PLAY_020;
+						}
+						else {
+							if (xcoord > 0.75) {
+								if (app->isPlaying())
+									currentVisual = VisualIdentifier::PAUSE_002;
+								else
+									currentVisual = VisualIdentifier::PLAY_002;
+							}
+							else if (xcoord < -0.75) {
+								if (app->isPlaying())
+									currentVisual = VisualIdentifier::PAUSE_200;
+								else
+									currentVisual = VisualIdentifier::PLAY_200;
+							}
+						}
+					}
 				}
 				else if (args.eventType == EventType::ButtonUnpress) {
 					attachedTo->touchpadPressed = false;
@@ -146,13 +212,17 @@ namespace MoMa {
 									app->appMoment.setTime(targetTime);
 									//cout << "previous" << endl;
 								}
-
 							}
 						}
 						// long press on the center -> stop
 						else if (xcoord > -0.5 && xcoord < 0.5) {
 							app->stop();
 						}
+						// update visual
+						if (app->isPlaying())
+							currentVisual = VisualIdentifier::PAUSE_000;
+						else
+							currentVisual = VisualIdentifier::PLAY_000;
 					}
 				}
 				else if (args.eventType == EventType::ButtonTouch) {
@@ -164,10 +234,19 @@ namespace MoMa {
 				}
 				else if (args.eventType == EventType::ButtonUntouch) {
 					attachedTo->touchpadTouched = false;
-					float timePressed = ofGetElapsedTimef() - attachedTo->touchpadTouchedStartTime;
-					ofVec2f delta = attachedTo->touchpadCoordLast - attachedTo->touchpadCoordOrg;
+					//float timePressed = ofGetElapsedTimef() - attachedTo->touchpadTouchedStartTime;
+					//ofVec2f delta = attachedTo->touchpadCoordLast - attachedTo->touchpadCoordOrg;
 					//cout << "controller " << controllerId << ", touchpad touched for " << timePressed
 					//	<< "seconds with a deplacement of " << delta << endl;
+					if (app->playbackMode == MoMa::PLAY) {
+						if (app->isPlaying())
+							currentVisual = VisualIdentifier::PAUSE_000;
+						else
+							currentVisual = VisualIdentifier::PLAY_000;
+					}
+					else if (app->playbackMode == MoMa::SCRUB) {
+						currentVisual = VisualIdentifier::SCRUB_0;
+					}
 				}
 			}
 			// Grip
@@ -183,10 +262,12 @@ namespace MoMa {
 					app->pause();
 					if (app->playbackMode == MoMa::SCRUB) {
 						app->setPlaybackMode(MoMa::PLAY);
+						currentVisual = VisualIdentifier::PLAY_000;
 					}
 					else {
 						app->pause();
 						app->setPlaybackMode(MoMa::SCRUB);
+						currentVisual = VisualIdentifier::SCRUB_0;
 					}
 				}
 			}

@@ -237,12 +237,11 @@ void  SceneVR::render(vr::Hmd_Eye nEye) {
 
 	ofSetBackgroundColor(20);
 
-	ofSetColor(80);
+	ofSetColor(150);
 	ofPushMatrix();
 	ofRotateX(90);
 	ofDrawPlane(5, 5);
 	ofPopMatrix();
-	ofSetColor(128);
 	ofPushMatrix();
 	//ofMultMatrix(floatingSceneMat);
 	ofMatrix4x4 appliedMatrix = sceneMat*floatingSceneMat;
@@ -252,7 +251,10 @@ void  SceneVR::render(vr::Hmd_Eye nEye) {
 
 	ofPushMatrix();
 	ofRotateZ(90);
+	ofPushStyle();
+	ofSetColor(50);
 	ofDrawGridPlane(.25, 10);
+	ofPopStyle();
 	ofPopMatrix();
 	//ofDrawGrid(0.25, 10, false, false, true, false);
 	ofPushMatrix();

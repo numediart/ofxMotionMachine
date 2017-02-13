@@ -25,7 +25,7 @@ void ofxOpenVRExtended::updateControllerAnalogData(ControllerState &controller)
 	}
 	if (pControllerState.ulButtonTouched == ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad)) {
 		controller.touchpadCoordLast = ofVec2f(pControllerState.rAxis->x, pControllerState.rAxis->y);
-		cout << controller.touchpadCoordLast << endl;
+		//cout << controller.touchpadCoordLast << endl;
 	}
 	/*if (pControllerState.ulButtonTouched == ButtonMaskFromId(vr::k_EButton_SteamVR_Trigger)) {
 		controller.triggerValue = pControllerState.rAxis[1].x;
