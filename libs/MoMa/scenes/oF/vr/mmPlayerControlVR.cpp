@@ -45,7 +45,6 @@ namespace MoMa {
 		attachedToController = true;
 		attachedTo = controller;
 
-		vr::VRControllerState_t pControllerState;
 		switch (controller->role)
 		{
 		case ControllerRole::Left:
