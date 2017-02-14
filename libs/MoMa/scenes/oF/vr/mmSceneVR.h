@@ -26,7 +26,7 @@ namespace MoMa {
 namespace MoMa {
 
 	class SceneVR : public  MoMa::SceneApp {
-
+	protected:
 		typedef shared_ptr<MoMa::Track> trackPtr;
 		typedef shared_ptr<MoMa::ofSkeleton> ofSkeletonPtr;
 	public:
