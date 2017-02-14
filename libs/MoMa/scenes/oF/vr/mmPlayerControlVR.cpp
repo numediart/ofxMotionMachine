@@ -72,50 +72,40 @@ namespace MoMa {
 
 	void PlayerControlVR::update()
 	{
+		// just touched -> highlight touched icon on visual
 		if (attachedTo->touchpadTouched) {
-			vr::VRControllerState_t pControllerState;
-			switch (attachedTo->role)
-			{
-			case ControllerRole::Left:
-				vr::VRSystem()->GetControllerState(vr::TrackedControllerRole_LeftHand, &pControllerState, sizeof(pControllerState));
-				break;
-			case ControllerRole::Right:
-				vr::VRSystem()->GetControllerState(vr::TrackedControllerRole_RightHand, &pControllerState, sizeof(pControllerState));
-				break;
-			default:
-				break;
-			}
-			if ( true /*pControllerState.ulButtonTouched == ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad)*/) {
-				float xcoord = pControllerState.rAxis->x;
-				if (app->playbackMode == MoMa::PLAY) {
-					if (xcoord > -0.5 && xcoord < 0.5) {
+			app->openVR.updateControllerAnalogData(*attachedTo);
+			float xcoord = attachedTo->touchpadCoordLast.x;
+			if (app->playbackMode == MoMa::PLAY) {
+				if (xcoord > -0.5 && xcoord < 0.5) {
+					if (app->isPlaying())
+						currentVisual = VisualIdentifier::PAUSE_010;
+					else
+						currentVisual = VisualIdentifier::PLAY_010;
+				}
+				else {
+					if (xcoord > 0.75) {
 						if (app->isPlaying())
-							currentVisual = VisualIdentifier::PAUSE_010;
+							currentVisual = VisualIdentifier::PAUSE_001;
 						else
-							currentVisual = VisualIdentifier::PLAY_010;
+							currentVisual = VisualIdentifier::PLAY_001;
 					}
-					else {
-						if (xcoord > 0.75) {
-							if (app->isPlaying())
-								currentVisual = VisualIdentifier::PAUSE_001;
-							else
-								currentVisual = VisualIdentifier::PLAY_001;
-						}
-						else if (xcoord < -0.75) {
-							if (app->isPlaying())
-								currentVisual = VisualIdentifier::PAUSE_100;
-							else
-								currentVisual = VisualIdentifier::PLAY_100;
-						}
+					else if (xcoord < -0.75) {
+						if (app->isPlaying())
+							currentVisual = VisualIdentifier::PAUSE_100;
+						else
+							currentVisual = VisualIdentifier::PLAY_100;
 					}
 				}
-				else if (app->playbackMode == MoMa::SCRUB) {
-					app->appMoment.setTime(ofMap(xcoord, -0.8, 0.8,
-						app->lowBound.time(), app->highBound.time(), true), app->frameRate);
-					currentVisual = VisualIdentifier::SCRUB_1;
-				}
+			}
+			else if (app->playbackMode == MoMa::SCRUB) {
+				// update scrub value at the same time
+				app->appMoment.setTime(ofMap(xcoord, -0.8, 0.8,
+					app->lowBound.time(), app->highBound.time(), true), app->frameRate);
+				currentVisual = VisualIdentifier::SCRUB_1;
 			}
 		}
+		// long press in the center -> visual = stop
 		if (app->playbackMode == MoMa::PLAY 
 				&& attachedTo->touchpadPressed
 				&& ofGetElapsedTimef() - attachedTo->touchpadPressedStartTime > 0.6

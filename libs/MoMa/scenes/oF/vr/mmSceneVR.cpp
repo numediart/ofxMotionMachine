@@ -150,8 +150,7 @@ void SceneVR::draw(ofEventArgs &args) {
 	if (bShowHelp) {
 		_strHelp.str("");
 		_strHelp.clear();
-		_strHelp << "HELP (press h to toggle): " << endl;
-		_strHelp << "Drag and drop a 360 spherical (equirectangular) image to load it in the player. " << endl;
+		//_strHelp << "HELP (press h to toggle): " << endl;
 		_strHelp << "Toggle OpenVR mirror window (press: m)." << endl;
 		ofDrawBitmapStringHighlight(_strHelp.str(), ofPoint(10.0f, 20.0f), ofColor(ofColor::black, 100.0f));
 	}

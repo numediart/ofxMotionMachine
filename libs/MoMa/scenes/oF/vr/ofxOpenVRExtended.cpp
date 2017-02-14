@@ -11,21 +11,29 @@ ofxOpenVRExtended::~ofxOpenVRExtended()
 //--------------------------------------------------------------
 void ofxOpenVRExtended::updateControllerAnalogData(ControllerState &controller)
 {
-	vr::VRControllerState_t pControllerState;
-	switch (controller.role)
+	// find device ID for this crontroller
+	vr::ETrackedControllerRole vrRole = vr::TrackedControllerRole_Invalid;
+	if (controller.role == ControllerRole::Left)
 	{
-	case ControllerRole::Left:
-		vr::VRSystem()->GetControllerState(vr::TrackedControllerRole_LeftHand, &pControllerState, sizeof(pControllerState));
-		break;
-	case ControllerRole::Right:
-		vr::VRSystem()->GetControllerState(vr::TrackedControllerRole_RightHand, &pControllerState, sizeof(pControllerState));
-		break;
-	default:
-		break;
+		vrRole = vr::TrackedControllerRole_LeftHand;
 	}
+	if (controller.role == ControllerRole::Right)
+	{
+		vrRole = vr::TrackedControllerRole_RightHand;
+	}
+	int nDevice = 0;
+	for (int i = 0; i < vr::k_unMaxTrackedDeviceCount; i++)
+	{
+		if (_pHMD->GetControllerRoleForTrackedDeviceIndex(i) == vrRole)
+		{
+			nDevice = i;
+		}
+	}
+	// update data
+	vr::VRControllerState_t pControllerState;
+	vr::VRSystem()->GetControllerState(nDevice, &pControllerState, sizeof(pControllerState));
 	if (pControllerState.ulButtonTouched == ButtonMaskFromId(vr::k_EButton_SteamVR_Touchpad)) {
 		controller.touchpadCoordLast = ofVec2f(pControllerState.rAxis->x, pControllerState.rAxis->y);
-		//cout << controller.touchpadCoordLast << endl;
 	}
 	/*if (pControllerState.ulButtonTouched == ButtonMaskFromId(vr::k_EButton_SteamVR_Trigger)) {
 		controller.triggerValue = pControllerState.rAxis[1].x;
