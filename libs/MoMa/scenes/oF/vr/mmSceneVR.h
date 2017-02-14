@@ -65,6 +65,7 @@ namespace MoMa {
 		ofImage image;
 		//ofShader shader;
 		ofLight light, light2;
+		ofLight iconLight;
 		ofEasyCam cam;
 		ofFbo fbo;
 	protected:

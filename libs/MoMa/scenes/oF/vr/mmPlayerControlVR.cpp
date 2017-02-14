@@ -64,8 +64,8 @@ namespace MoMa {
 		fbo.allocate(visuals[0].getWidth(), visuals[0].getHeight());
 		currentVisual = VisualIdentifier::PLAY_000;
 
-		fboMatrix.rotate(274.8, 1.0, 0.0, 0.0);
-		fboMatrix.translate(-0.023, 0.009, 0.070);
+		fboMatrix.rotate(94.8, 1.0, 0.0, 0.0);
+		fboMatrix.translate(-0.023, 0.015, 0.024);
 
 	}
 

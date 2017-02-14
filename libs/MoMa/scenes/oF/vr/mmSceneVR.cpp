@@ -46,7 +46,10 @@ void SceneVR::setup(ofEventArgs &args) {
 	bShowHelp = true;
 	floatingSceneFlag = false;
 	floatingTranslSceneFlag = -1;
-	
+
+	iconLight.setDiffuseColor(ofFloatColor(1.f, 1.f, 1.f));
+	iconLight.setSpecularColor(ofFloatColor(1.f, 1.f, 1.f));
+	iconLight.setPosition(0, 0, 0);
 	
 	initSceneMat.makeIdentityMatrix();
 	initSceneMat.translate(0, 0, -2);
@@ -276,8 +279,9 @@ void  SceneVR::render(vr::Hmd_Eye nEye) {
 	ofPopMatrix();
 	ofPopMatrix();
 	draw3d();
+	iconLight.enable();
 	playerControl->draw();
-
+	iconLight.disable();
 	light.disable();
 	light2.disable();
 	ofDisableLighting();
