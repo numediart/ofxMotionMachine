@@ -71,9 +71,9 @@ void SceneVR::setup(ofEventArgs &args) {
 
 //--------------------------------------------------------------
 void SceneVR::exit(ofEventArgs &args) {
-	delete playerControl;
 	SceneApp::exit(args);
 #ifndef NoHMD
+	delete playerControl;
 	openVR.exit();
 #endif
 }
