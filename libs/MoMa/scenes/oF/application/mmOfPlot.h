@@ -46,7 +46,8 @@ namespace MoMa {
     public:
         ofPlot( const MoMa::SceneApp* pApp ,int figureId=0 );
         ~ofPlot();
-        void update();
+		void update();
+		void updatePlot();
         void draw(  );
 
         void add( const TimedVec &tvec, int hue, std::string name = "" ); // TimedVec

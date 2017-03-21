@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+  </PropertyGroup>
+  <ItemGroup>
+    <Filter Include="mmAddons">
+      <UniqueIdentifier>{3d42243e-2760-4533-a3b2-7cf1041ee61d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mmAddons\mmKinect">
+      <UniqueIdentifier>{685dcc1a-ddeb-4591-9c09-643c169b3190}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MM_ROOT)\libs\mmAddons\mmKinect\src\KinectV2.cpp" >
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MM_ROOT)\libs\mmAddons\mmKinect\src\mmKinectWrapper.cpp" >
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClInclude Include="$(MM_ROOT)\libs\mmAddons\mmKinect\src\KinectV2.h" >
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MM_ROOT)\libs\mmAddons\mmKinect\src\mmKinectWrapper.h" >
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'"> 
+	<ClCompile>
+      <AdditionalIncludeDirectories>$(MM_ROOT)\libs\mmAddons\mmKinect\src;$(KINECTSDK20_DIR)\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>Kinect20.lib;Kinect20.Face.lib;Kinect20.Fusion.lib;Kinect20.VisualGestureBuilder.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(KINECTSDK20_DIR)\Lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+    <Link>
+      <AdditionalLibraryDirectories>$(KINECTSDK20_DIR)\Lib\x86\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies Condition="'$(Configuration)'=='Debug'">Kinect20.lib;Kinect20.Face.lib;Kinect20.Fusion.lib;Kinect20.VisualGestureBuilder.lib;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)'=='Release'">Kinect20.lib;Kinect20.Face.lib;Kinect20.Fusion.lib;Kinect20.VisualGestureBuilder.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>robocopy "$(KINECTSDK20_DIR)/bin/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
+if errorlevel 1 echo Copy successful else exit %errorlevel%
+robocopy "$(KINECTSDK20_DIR)/bin/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
+      if errorlevel 1 exit 0 else exit %errorlevel%</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Platform)'=='x64'">
+	<ClCompile>
+      <AdditionalIncludeDirectories>$(MM_ROOT)\libs\mmAddons\mmKinect\src;$(KINECTSDK20_DIR)\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>Kinect20.lib;Kinect20.Face.lib;Kinect20.Fusion.lib;Kinect20.VisualGestureBuilder.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(KINECTSDK20_DIR)\Lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+    <Link>
+      <AdditionalLibraryDirectories>$(KINECTSDK20_DIR)\Lib\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies Condition="'$(Configuration)'=='Debug'">Kinect20.lib;Kinect20.Face.lib;Kinect20.Fusion.lib;Kinect20.VisualGestureBuilder.lib;%(AdditionalDependencies)</AdditionalDependencies>
+	  <AdditionalDependencies Condition="'$(Configuration)'=='Release'">Kinect20.lib;Kinect20.Face.lib;Kinect20.Fusion.lib;Kinect20.VisualGestureBuilder.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>robocopy "$(KINECTSDK20_DIR)/bin/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
+if errorlevel 1 echo Copy successful else exit %errorlevel%
+robocopy "$(KINECTSDK20_DIR)/bin/" "$(ProjectDir)bin/" "*.dll" /njs /njh /np /fp /bytes
+      if errorlevel 1 exit 0 else exit %errorlevel%</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>

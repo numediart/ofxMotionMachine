@@ -145,13 +145,13 @@ void Track::setRingBufferSize( int size, bool pHasRotation, bool pTimed ) {
 
     if( pHasRotation ) {
         if( pTimed )
-            rotation.setRealTimeMode( size, 4u, nodeList->size() );
+            rotation.setRealTimeMode( size, 4u, boneList->size() );
         else
-            rotation.setRealTimeMode( size, _frameRate, 4u, nodeList->size() );
+            rotation.setRealTimeMode( size, _frameRate, 4u, boneList->size() );
 
         hasRotation = true;
         //this->hasOrigNodeRot_as_boneRot=false;
-        this->setJointOffsetRotation();
+        this->initJointOffsetRotation();
     };
     ringSize = size;
     isRing = true;
@@ -674,4 +674,20 @@ bool Track::setJointOffsetRotation() {
         }*/
 
     return true;
+}
+
+bool Track::initJointOffsetRotation() {
+
+	if (this->hasBoneList == false || this->hasNodeList == false || !this->hasRotation)
+		return false;
+
+	if (this->rotation.getData().size() == 0)
+		throw std::runtime_error("Track::setJointOffsetRotation : empty rotation matrix with a rotation true flag");
+	bool debug = false;
+
+	this->rotationOffset.resize(4, this->nOfNodes());//for each mocap format, the orientation offset is stored in the destination node of the bone
+	this->rotationOffset.zeros();
+	this->rotationOffset.row(3).ones();
+
+	return true;
 }

@@ -31,6 +31,7 @@ namespace MoMa {
     public:
         ofSkeleton( const MoMa::Track &pTrack );
         ~ofSkeleton();
+		void init(void);
         void draw( unsigned int index );
         void draw( double time );
 
@@ -40,6 +41,7 @@ namespace MoMa {
         inline void setNodeSize( double nodeSize ) { mNodeSize = nodeSize; };
 	protected:
 		bool _isValid;
+		bool _initiated;
 		const MoMa::Track &track;
 		const std::shared_ptr<MoMa::BoneList>boneList;
 		const std::shared_ptr<MoMa::NodeList> nodeList;

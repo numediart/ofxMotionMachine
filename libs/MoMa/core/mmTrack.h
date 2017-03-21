@@ -107,6 +107,7 @@ namespace MoMa {
         inline const arma::mat &getRotationOffset() const { return (this->rotationOffset); };
 
         bool setJointOffsetRotation();
+		bool initJointOffsetRotation();
 
         void pushPosition(arma::mat frame); // Add frame + checking if ringbuffer
      //   void popPosition( void ) { position.pop(); } // Remove frame
@@ -133,6 +134,7 @@ namespace MoMa {
         inline double minTime(void) const; // Get the max time
         inline unsigned int nOfFrames(void) const; // Get # frames
         inline unsigned int nOfNodes(void) const; // Get # nodes
+		inline unsigned int nOfBones(void) const;
         void clear(void); // Clear the track
         void clearData(void);
         // protected:
@@ -536,11 +538,18 @@ namespace MoMa {
         else return(position.nOfFrames()); // Make a robust version of this return
     }
 
-    unsigned int Track::nOfNodes(void) const {
+	unsigned int Track::nOfNodes(void) const {
 
-        if (hasRotation) return(std::max(rotation.nOfCols(), position.nOfCols()));
-        else return(position.nOfCols()); // Make a robust version of this return
-    }
+		if (nodeList)
+			return(nodeList->size());
+		return(position.nOfCols()); // Make a robust version of this return
+	}
+	unsigned int Track::nOfBones(void) const {
+
+		if (boneList&& hasRotation)
+			return(boneList->size());
+		else return(position.nOfCols()); // Make a robust version of this return
+	}
 }
 
 #endif
