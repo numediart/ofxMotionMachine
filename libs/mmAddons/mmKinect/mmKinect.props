@@ -16,7 +16,13 @@
     <ClCompile Include="$(MM_ROOT)\libs\mmAddons\mmKinect\src\KinectV2.cpp" >
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="$(MM_ROOT)\libs\mmAddons\mmKinect\src\mmKinectWrapper.cpp" >
+      <Filter>src</Filter>
+    </ClCompile>
     <ClInclude Include="$(MM_ROOT)\libs\mmAddons\mmKinect\src\KinectV2.h" >
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MM_ROOT)\libs\mmAddons\mmKinect\src\mmKinectWrapper.h" >
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
