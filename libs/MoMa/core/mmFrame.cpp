@@ -24,7 +24,7 @@ MoMa::Frame::Frame( void ) {
 
 MoMa::Frame::Frame( arma::mat cartesianData, arma::mat rotationData, arma::mat rotOffset ) {
     
-    _hasRotation = false;
+    _hasRotation = true;
     _hasTime = false; _time = 0.0f;
     
     hasNodeList = false; nodeList = NULL;
@@ -38,7 +38,7 @@ MoMa::Frame::Frame( arma::mat cartesianData, arma::mat rotationData, arma::mat r
 
 MoMa::Frame::Frame( arma::mat cartesianData, arma::mat rotationData ) {
     
-    _hasRotation = false;
+    _hasRotation = true;
     _hasTime = false; _time = 0.0f;
     
     hasNodeList = false; nodeList = NULL;

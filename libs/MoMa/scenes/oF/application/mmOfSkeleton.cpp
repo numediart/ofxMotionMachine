@@ -3,6 +3,7 @@ using namespace MoMa;
 ofSkeleton::ofSkeleton(const MoMa::Track &pTrack) :
 	track(pTrack), boneList(pTrack.boneList), nodeList(pTrack.nodeList)
 {
+	_initiated=false;
 
     this->_isValid = true;
 	if (track.hasNodeList == false)
@@ -15,35 +16,44 @@ ofSkeleton::ofSkeleton(const MoMa::Track &pTrack) :
 		this->_isValid = false;
 	if (this->_isValid == false)
 		return;
-	bones.resize(nodeList->size());
-	arma::mat offset = track.getRotationOffset();
-	MoMa::Frame frame = track.frame(0u);
-	for (boneMapType::const_iterator it = boneList->begin(); it != boneList->end(); it++) {
-		for (int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++) {
-			arma::colvec lOffRot = offset.col(it->second.jointChildren[bEnd]);
-			if (lOffRot.is_finite()) {
-				float s;
-				if (track.hasGlobalCoordinate)
-					s = arma::norm(frame.getPosition().col(it->second.jointParent) - frame.getPosition().col(it->second.jointChildren[bEnd]));
-				else	
-					s = arma::norm(frame.getPosition().col(it->second.jointChildren[bEnd]));
-				bones[(it->second.jointChildren[bEnd])].setOrientation(toQuaternion(offset.col(it->second.jointChildren[bEnd])));//																											   //	bone.setOrientation(toQuaternion(frame.getRotationOffset().col(frame.boneList->at(b).second[bEnd])) *toQuaternion(frame.getRotation().col(frame.boneList->at(b).second[bEnd])));//
-				bones[(it->second.jointChildren[bEnd])].setScale(s, 1, 1);//Rigid Skeleton
-			}
-		}
-	}
-    mNodeSize = DefaultNodeSize;
-    mNodeSphere.setRadius( mNodeSize / 2 );
-
 
 }
 
+void ofSkeleton::init(void) {
+	if (track.nOfFrames() > 0) {
+		bones.resize(nodeList->size());
+		arma::mat offset = track.getRotationOffset();
+		MoMa::Frame frame = track.frame(0u);
+
+		for (boneMapType::const_iterator it = boneList->begin(); it != boneList->end(); it++) {
+			for (int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++) {
+				arma::colvec lOffRot = offset.col(it->second.jointChildren[bEnd]);
+				if (lOffRot.is_finite()) {
+					float s;
+					if (track.hasGlobalCoordinate)
+						s = arma::norm(frame.getPosition().col(it->second.jointParent) - frame.getPosition().col(it->second.jointChildren[bEnd]));
+					else
+						s = arma::norm(frame.getPosition().col(it->second.jointChildren[bEnd]));
+					bones[(it->second.jointChildren[bEnd])].setOrientation(toQuaternion(offset.col(it->second.jointChildren[bEnd])));//																											   //	bone.setOrientation(toQuaternion(frame.getRotationOffset().col(frame.boneList->at(b).second[bEnd])) *toQuaternion(frame.getRotation().col(frame.boneList->at(b).second[bEnd])));//
+					bones[(it->second.jointChildren[bEnd])].setScale(s, 1, 1);//Rigid Skeleton
+				}
+			}
+		}
+		mNodeSize = DefaultNodeSize;
+		mNodeSphere.setRadius(mNodeSize / 2);
+		_initiated == true;
+	}
+
+}
 
 ofSkeleton::~ofSkeleton()
 {
 }
 
 void ofSkeleton::draw(unsigned int index){
+	if (_initiated==false) {
+		this->init();
+	}
 	if (index < track.nOfFrames() && track.hasNodeList && track.hasBoneList) {
         if( track.hasRotation ) {
             const arma::mat & lRotation = track.rotation.getData().slice( index );
@@ -160,7 +170,10 @@ void ofSkeleton::boneLocalDraw(const arma::mat &rotation, const arma::mat &posit
 }
 void ofSkeleton::draw(double time) {
 
-    if( (time < track.maxTime()) && time > track.minTime() && track.hasNodeList && track.hasBoneList ) {
+	if (_initiated == false) {
+		this->init();
+	}
+    if( (time <= track.maxTime()) && time >= track.minTime() && track.hasNodeList && track.hasBoneList ) {
         if( track.hasRotation ) {
             const arma::mat & lRotation = track.rotation.get(time);
             const arma::mat & lPosition = track.position.get(time);
