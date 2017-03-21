@@ -116,3 +116,5 @@ obj
 *SandBox*
 *Sandbox*
 *SANDBOX*
+*.tlog
+*.log
