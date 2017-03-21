@@ -104,13 +104,34 @@ namespace MoMa {
 				currentVisual = VisualIdentifier::SCRUB_1;
 			}
 		}
-		// long press in the center -> visual = stop
-		if (app->playbackMode == MoMa::PLAY 
-				&& attachedTo->touchpadPressed
-				&& ofGetElapsedTimef() - attachedTo->touchpadPressedStartTime > 0.6
-				&& attachedTo->touchpadCoordOrg.x > -0.5
+		// long press
+		float timePressed = ofGetElapsedTimef() - attachedTo->touchpadPressedStartTime;
+		if (app->playbackMode == MoMa::PLAY
+			&& attachedTo->touchpadPressed
+			&& timePressed > longPressTime) {
+			// in the center -> visual = stop
+			if (attachedTo->touchpadCoordOrg.x > -0.5
 				&& attachedTo->touchpadCoordOrg.x < 0.5) {
-			currentVisual = VisualIdentifier::STOP_2;
+				currentVisual = VisualIdentifier::STOP_2;
+			}
+			// on the right -> next frame (quick)
+			double targetTime = app->appMoment.time();
+			float momentIncrement = (timePressed - longPressTime) * 0.05;
+			if (momentIncrement > 0.2) momentIncrement = 0.2;
+			if (attachedTo->touchpadCoordOrg.x > 0.75) {
+				app->pause();
+				targetTime += momentIncrement;
+				if (targetTime > app->highBound.time()) targetTime = app->highBound.time();
+				app->appMoment.setTime(targetTime);
+			}
+			// on the left -> previous frame (quick)
+			else if (attachedTo->touchpadCoordOrg.x < -0.75) {
+				app->pause();
+				targetTime -= momentIncrement;
+				if (targetTime < app->lowBound.time()) targetTime = app->lowBound.time();
+				app->appMoment.setTime(targetTime);
+			}
+			
 		}
 		
 		fbo.begin();
@@ -174,7 +195,7 @@ namespace MoMa {
 
 					if (app->playbackMode == MoMa::PLAY) {
 						float xcoord = attachedTo->touchpadCoordOrg.x;
-						if (timePressed < 0.6) {
+						if (timePressed < longPressTime) {
 							// short press on the center of the touchpad -> play / pause
 							if (xcoord > -0.5 && xcoord < 0.5) {
 								if (app->isPlaying()) {

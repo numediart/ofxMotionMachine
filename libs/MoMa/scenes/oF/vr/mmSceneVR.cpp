@@ -43,7 +43,7 @@ void SceneVR::setup(ofEventArgs &args) {
 	light2.setDiffuseColor(ofFloatColor(.85, .85, .55));
 	light2.setSpecularColor(ofFloatColor(1.f, 1.f, 1.f));
 	light2.setPosition(-2, 2, 2);
-	bShowHelp = true;
+	bShowHelp = false;
 	floatingSceneFlag = false;
 	floatingTranslSceneFlag = -1;
 
@@ -67,6 +67,7 @@ void SceneVR::setup(ofEventArgs &args) {
 	Scene2DDisplayFlag = true;
 	ofSetFrameRate(1000);
 #endif
+	debugInfoFlag = false;
 }
 
 //--------------------------------------------------------------
@@ -146,8 +147,8 @@ void SceneVR::draw(ofEventArgs &args) {
 #ifndef NoHMD
 	openVR.render();
 	openVR.renderDistortion();
-
-	openVR.drawDebugInfo(10.0f, 500.0f);
+	if (debugInfoFlag)
+		openVR.drawDebugInfo(10.0f, 500.0f);
 
 	// Help
 	if (bShowHelp) {

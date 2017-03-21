@@ -59,7 +59,7 @@ namespace MoMa {
 
 		ofxOpenVRExtended openVR;
 
-		bool bShowHelp;
+		bool bShowHelp, debugInfoFlag;
 		std::ostringstream _strHelp;
 
 		ofImage image;

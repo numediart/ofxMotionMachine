@@ -61,6 +61,7 @@ namespace MoMa {
 
 		vector<ofImage> visuals;
 		VisualIdentifier currentVisual;
+		float longPressTime = 0.6;
 	};
 }
 
