@@ -10,20 +10,25 @@ namespace MoMa {
 	class kinectWrapper {
 		typedef shared_ptr<MoMa::ofSkeleton> ofSkeletonPtr;
 	public:
-		kinectWrapper(MoMa::Track &track);
+		kinectWrapper(MoMa::Track &track, int bufferSize=120);
 		~kinectWrapper();
 		void setup();
-		void update();
+		bool update();//return true if a new frame is acquired
 		void drawSkeleton(unsigned int frameIndex);
 		void drawSkeleton(double frametime);
+		void drawSkeleton();
 		void drawPlane();
+		void calib(arma::vec pLeftHand, arma::vec pRightHand);// , arma::vec pHead);
 	protected:
 		ofMatrix4x4 getLocalSystem();
+		arma::mat mLocMatrix;
 		KINECTV2::KinectV2 kin;
 		ofVec3f groundVec;
 		float groundDist;
 		MoMa::Track &mTrack;
 		ofSkeletonPtr mSkeleton;
+		float mRot;
+		ofVec3f mTrans;
 	};
 };
 

@@ -251,6 +251,10 @@ void  SceneVR::render(vr::Hmd_Eye nEye) {
 	ofRotateX(90);
 	ofDrawPlane(3, 3);
 	ofPopMatrix();
+
+	ofSetLineWidth(2);
+	ofDrawAxis(1);
+
 	ofPushMatrix();
 	//ofMultMatrix(floatingSceneMat);
 	ofMatrix4x4 appliedMatrix = sceneMat*floatingSceneMat;
@@ -279,6 +283,7 @@ void  SceneVR::render(vr::Hmd_Eye nEye) {
 
 	ofPopMatrix();
 	ofPopMatrix();
+
 	draw3d();
 	iconLight.enable();
 	playerControl->draw();
