@@ -209,7 +209,7 @@ arma::mat MoMa::Geometry::quatprojection(const arma::mat & a, const arma::mat & 
 		projmat.col(0) = vec1; projmat.col(1) = vec2; projmat.col(2) = vec3; projmat.col(3) = vec4;
 
 		//Compute quaternion matrix
-		quaternion quat = q.col(i);
+		quaternion quat = (vec)q.col(i);
 		mat matrix(4, 4);
 		quat.get(matrix);
 
