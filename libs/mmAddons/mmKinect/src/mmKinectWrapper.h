@@ -17,10 +17,12 @@ namespace MoMa {
 		void drawSkeleton(unsigned int frameIndex);
 		void drawSkeleton(double frametime);
 		void drawSkeleton();
+		void drawKinectBox();
 		void drawPlane();
 		void calib(arma::vec pLeftHand, arma::vec pRightHand);// , arma::vec pHead);
 	protected:
 		ofMatrix4x4 getLocalSystem();
+		ofMatrix4x4 mOfLocMatrix;
 		arma::mat mLocMatrix;
 		KINECTV2::KinectV2 kin;
 		ofVec3f groundVec;

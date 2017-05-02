@@ -27,8 +27,8 @@ namespace MoMa {
 			arma::mat cartData(3,mTrack.nOfNodes());
 			arma::mat rotData(4,mTrack.nOfBones());
 			if (mLocMatrix.n_elem == 0) {
-				ofMatrix4x4 locOfMat = this->getLocalSystem();
-				mLocMatrix = arma::conv_to<arma::mat>::from(arma::fmat(locOfMat.getPtr(), 4, 4));
+				mOfLocMatrix = this->getLocalSystem();
+				mLocMatrix = arma::conv_to<arma::mat>::from(arma::fmat(mOfLocMatrix.getPtr(), 4, 4));
 			}
 			arma::mat transfMat = mLocMatrix;
 			//arma::fmat transfMat(locOfMat.getPtr(),4,4);
@@ -87,8 +87,24 @@ namespace MoMa {
 		//ofTranslate(0, 0, groundDist * 1000);
 		//ofMultMatrix(getLocalSystem());
 		ofRotateZ(mRot);
-		//ofTranslate(mTrans);
+		ofTranslate(mTrans);
 		mSkeleton->draw(frameIndex);
+		ofPopMatrix();
+	};
+	void kinectWrapper::drawKinectBox() {
+		ofPushMatrix();
+		//ofTranslate(0, 0, groundDist * 1000);
+		//ofMultMatrix(getLocalSystem());
+		ofBoxPrimitive kinectBox(50, 300, 50);
+		ofRotateZ(mRot);
+		ofTranslate(mTrans);
+		ofMultMatrix(mOfLocMatrix);
+		//ofTranslate(mTrans);
+		ofPushStyle();
+		ofSetColor(0, 0, 0);
+		kinectBox.draw();
+		ofPopStyle();
+
 		ofPopMatrix();
 	};
 	void kinectWrapper::drawSkeleton(double frameTime) {
