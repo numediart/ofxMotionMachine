@@ -433,6 +433,8 @@ namespace MoMa {
 		 bool push(const arma::cube &pData,const arma::vec &pTime);
 		 bool push(const arma::cube &pData);
 
+		 
+		TimedCube sub(double pBegTime, double pEndTime) const;
         TimedCube sub( int pBegIndex, int pEndIndex ) const; // Chop by index
         TimedCube getOfflineData( ) const;
         TimedMat row( unsigned int pIndex ); // Row getter by index

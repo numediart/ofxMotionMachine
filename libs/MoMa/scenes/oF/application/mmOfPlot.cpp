@@ -28,9 +28,11 @@ ofPlot::~ofPlot()
 }
 
 void ofPlot::update() {
+
+	if (curLowBoundTime != app->getLowBoundTime() || curHighBoundTime != app->getHighBoundTime() || curWidth != ofGetWidth())
+		this->updatePlot();
 }
 void ofPlot::updatePlot() {
-
     float figWidth = (float)ofGetHeight() / (float)(nofFigure);
     {
 
