@@ -30,7 +30,7 @@ public:
 };*/
 namespace MoMa{
 
-class quaternion : public arma::colvec {
+class quaternion : public arma::colvec4 {
 public:
 
     

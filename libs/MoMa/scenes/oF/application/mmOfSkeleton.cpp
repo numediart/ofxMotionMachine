@@ -41,7 +41,7 @@ void ofSkeleton::init(void) {
 		}
 		mNodeSize = DefaultNodeSize;
 		mNodeSphere.setRadius(mNodeSize / 2);
-		_initiated == true;
+		_initiated = true;
 	}
 
 }
