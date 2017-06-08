@@ -212,3 +212,11 @@ void ofSkeleton::draw(double time) {
         }
     }
 }
+
+void ofSkeleton::displayNameListBone() const {
+
+	for (BoneList::const_iterator it = boneList->begin(); it != boneList->end(); it++) {
+		std::cout << it->first << std::endl;
+	}
+
+}

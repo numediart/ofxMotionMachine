@@ -53,33 +53,20 @@
 #include <armadillo>
 #include "mmQuaternion.h"
 namespace MoMa {
-	struct boneData;
-	typedef std::map< std::string, boneData> boneMapType;
-	struct boneData {
-		boneData() {};
-		boneData(int a, int b, std::vector<int> c){
+	struct BoneData;
+	typedef std::map< std::string, BoneData> boneMapType;
+	struct BoneData {
+		BoneData() {};
+		BoneData(int a, int b, std::vector<int> c){
 			boneId = a;
 			jointParent = b;
 			jointChildren = c;
-			visible = true;
-			preScale << 1 << 1 << 1 << arma::endr;
-			defaultColor = true;
-			frameDelay = 0;
 		};
 		int boneId;
 		int jointParent;
 		std::vector<int> jointChildren;
 		std::vector<boneMapType::iterator> boneChildrenIt;
 
-		quaternion preRot;
-		arma::vec3 preTransl;
-		arma::vec3 preScale;
-		arma::vec4 color;
-
-		bool defaultColor;
-		bool visible;
-
-		int frameDelay;
 	} ;
 
 

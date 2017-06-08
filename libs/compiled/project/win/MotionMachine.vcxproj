@@ -27,6 +27,7 @@
     <ClCompile Include="..\..\..\MoMa\core\mmFrame.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmLabelList.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmMoment.cpp" />
+    <ClCompile Include="..\..\..\MoMa\core\mmMutatedBoneList.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmNode.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmNodeList.cpp" />
     <ClCompile Include="..\..\..\MoMa\core\mmNodeTrace.cpp" />
@@ -51,7 +52,7 @@
     <ClCompile Include="..\..\..\MoMa\parsers\mmXmlParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmFloatingObject.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmMenuView.cpp" />
-    <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOfMutedSkeleton.cpp" />
+    <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOfMutatedSkeleton.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOfPlot.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOfSkeleton.cpp" />
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOptionsView.cpp" />
@@ -133,6 +134,7 @@
     <ClInclude Include="..\..\..\MoMa\core\mmFrame.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmLabelList.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmMoment.h" />
+    <ClInclude Include="..\..\..\MoMa\core\mmMutatedBoneList.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmNode.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmNodeList.h" />
     <ClInclude Include="..\..\..\MoMa\core\mmNodeTrace.h" />
@@ -159,7 +161,7 @@
     <ClInclude Include="..\..\..\MoMa\parsers\mmXmlParser.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmFloatingObject.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmMenuView.h" />
-    <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOfMutedSkeleton.h" />
+    <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOfMutatedSkeleton.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOfPlot.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOfSkeleton.h" />
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOptionsView.h" />

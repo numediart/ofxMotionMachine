@@ -39,6 +39,7 @@ namespace MoMa {
         void boneGlobalDraw( const arma::mat &rotation, const arma::mat &position, boneMapType::iterator it );
         inline bool isValid() const { return _isValid; };
         inline void setNodeSize( double nodeSize ) { mNodeSize = nodeSize; };
+		void displayNameListBone() const;
 	protected:
 		bool _isValid;
 		bool _initiated;
