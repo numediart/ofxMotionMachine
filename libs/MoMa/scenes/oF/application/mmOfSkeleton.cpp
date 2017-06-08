@@ -41,7 +41,7 @@ void ofSkeleton::init(void) {
 		}
 		mNodeSize = DefaultNodeSize;
 		mNodeSphere.setRadius(mNodeSize / 2);
-		_initiated == true;
+		_initiated = true;
 	}
 
 }
@@ -211,4 +211,12 @@ void ofSkeleton::draw(double time) {
             }
         }
     }
+}
+
+void ofSkeleton::displayNameListBone() const {
+
+	for (BoneList::const_iterator it = boneList->begin(); it != boneList->end(); it++) {
+		std::cout << it->first << std::endl;
+	}
+
 }

@@ -137,7 +137,7 @@ namespace MoMa {
 			track->hasBoneList = true;
 			unsigned int nBones = lBones.size();
 			for (unsigned int i = 0; i < nBones; i++) {
-				track->boneList->emplace(parser.getNodeName(lBones[i].first), boneData(i, lBones[i].first, lBones[i].second));//By convention for BVH, bone name is the name of the origin node 
+				track->boneList->emplace(parser.getNodeName(lBones[i].first), BoneData(i, lBones[i].first, lBones[i].second));//By convention for BVH, bone name is the name of the origin node 
 			}
 			//        track->hasSynoList=false;
 //        track->hasOrigNodeRot_as_boneRot=true;

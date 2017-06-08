@@ -192,7 +192,7 @@ namespace MoMa {
 		mIsFilled=true;
         return true;
     }
-	
+
     TimedVec TimedVec::sub( int pBegIndex, int pEndIndex ) const{
     
         TimedVec oneVec;
@@ -1037,7 +1037,11 @@ namespace MoMa {
 		mInitialTime=0.0;
 		return true;
 	}
-	
+
+	TimedCube TimedCube::sub(double pBegTime, double pEndTime) const {
+		return this->sub((int)this->nearestIndex(pBegTime), (int)this->nearestIndex(pEndTime));
+
+	}
     TimedCube TimedCube::sub( int pBegIndex, int pEndIndex ) const {
         
         TimedCube oneCube;

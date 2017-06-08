@@ -29,6 +29,12 @@ namespace MoMa{
             mesh->addIndex((i*4)+indices[i][1]);
             mesh->addIndex((i*4)+indices[i][2]);
         }
-        
+
+		defaultColor = mesh->getColors();
+		mesh->clearColors();
+		this->setDefaultColor();
     };
+	void ofBone::setDefaultColor() {
+		mesh->addColors(&(defaultColor[0]), 16);
+	}
 };

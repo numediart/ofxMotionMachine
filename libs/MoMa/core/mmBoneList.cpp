@@ -42,7 +42,7 @@ bool MoMa::BoneList::load( string fileName ) {
             curStrm >> begIdx; curStrm >> endIdx;
 			std::vector<int> lVec;
 			lVec.push_back(endIdx);
-			boneData lBone(boneId, begIdx, lVec);
+			BoneData lBone(boneId, begIdx, lVec);
             (*this)[boneName]= lBone;
 			boneId++;
         }
@@ -86,4 +86,12 @@ void MoMa::BoneList::updateBoneChildrenName() {
 		if (rootFlag)
 			rootIt.push_back( it );
 	}
+}
+std::string MoMa::BoneList::getParentBoneName(int NodeId) {
+	for (boneMapType::iterator it = this->begin(); it != this->end(); it++) {
+		for (std::vector<int>::iterator it2 = it->second.jointChildren.begin(); it2 != it->second.jointChildren.end(); it2++)
+			if ((*it2) == NodeId)
+				return (it->first);
+	}
+	return ("");
 }

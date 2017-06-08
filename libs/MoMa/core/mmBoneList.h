@@ -50,13 +50,14 @@
 #include <sstream>
 #include <iostream>
 #include <fstream>
-
+#include <armadillo>
+#include "mmQuaternion.h"
 namespace MoMa {
-	struct boneData;
-	typedef std::map< std::string, boneData> boneMapType;
-	struct boneData {
-		boneData() {};
-		boneData(int a, int b, std::vector<int> c){
+	struct BoneData;
+	typedef std::map< std::string, BoneData> boneMapType;
+	struct BoneData {
+		BoneData() {};
+		BoneData(int a, int b, std::vector<int> c){
 			boneId = a;
 			jointParent = b;
 			jointChildren = c;
@@ -65,6 +66,7 @@ namespace MoMa {
 		int jointParent;
 		std::vector<int> jointChildren;
 		std::vector<boneMapType::iterator> boneChildrenIt;
+
 	} ;
 
 
@@ -74,14 +76,16 @@ namespace MoMa {
         
       public:
         
-        BoneList( void ) : boneMapType() {hasOrigNodeRot_as_boneRot=true;} // Constructor
+        BoneList( void ) : boneMapType() {//hasOrigNodeRot_as_boneRot=true;
+		} // Constructor
         BoneList( std::string fileName ); // Create object from text file
         bool load( std::string fileName ); // Load bones from text file
         void print( void ); // Print the list of bones
-        bool hasOrigNodeRot_as_boneRot;//difference between V3D BVH skel and kinect
+        //bool hasOrigNodeRot_as_boneRot;//difference between V3D BVH skel and kinect
         // TODO add a push function
 		int getParentNode(std::string boneName) { return (this->find(boneName)!=this->end() ? this->at(boneName).jointParent : -1); }
 		std::vector<int> getChildrenNodes(std::string boneName) { return (this->find(boneName) != this->end() ? this->at(boneName).jointChildren : std::vector<int>()); }
+		std::string getParentBoneName(int NodeId);
 		int getBoneId(std::string boneName) { return (this->find(boneName) != this->end() ? this->at(boneName).boneId : -1); };
 		std::string getName(int boneId) 
 		{

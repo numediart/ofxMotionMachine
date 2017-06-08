@@ -378,7 +378,7 @@ std::shared_ptr<BoneList> XmlArchiver::loadBoneList( TiXmlElement * boneRoot ) {
         return 0;
     std::shared_ptr<BoneList>  ret = std::make_shared<BoneList>();
     for( TiXmlElement *mHandle = boneRoot->FirstChildElement( "bone" ); mHandle; mHandle = mHandle->NextSiblingElement( "bone" ) ) {
-        boneData lBone;
+        BoneData lBone;
         TiXmlElement *mLoc = mHandle->FirstChildElement( "nodeParent" );
         int nodeParent;
 

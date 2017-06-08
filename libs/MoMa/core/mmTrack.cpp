@@ -219,7 +219,7 @@ void Track::localToGlobal( boneMapType::iterator it ){
                 continue;
             arma::mat lMat, lMat2;
             lQuat.get( lMat );
-            lQuat.clear();
+            //lQuat.clear();
             lQuat.set( lMat );
             lMat.submat( 0, 3, 2, 3 ) = position.getData().slice( idFrame ).col( it->second.jointParent );//last column is the translation column
 
@@ -240,7 +240,7 @@ void Track::localToGlobal( boneMapType::iterator it ){
             }
             arma::mat lMat, lMat2;
             lQuat.get( lMat );
-            lQuat.clear();
+            //lQuat.clear();
             lQuat.set( lMat );
             lMat.submat( 0, 3, 2, 3 ) = position.getData().slice( idFrame ).col( it->second.jointParent );//last column is the translation column
             

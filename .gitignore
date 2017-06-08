@@ -4,6 +4,7 @@
 *.slo
 *.lo
 *.o
+*.idb
 
 # Fortran module files
 

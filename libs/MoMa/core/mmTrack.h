@@ -513,12 +513,12 @@ namespace MoMa {
 
     arma::mat Track::traceRotation(int index) const {
 
-        return(rotation.getData().tube(0, index, 2, index));
+        return(rotation.getData().tube(0, index, 3, index));
     }
 
     arma::mat Track::traceRotation(std::string name) const {
 
-        return traceRotation(nodeList->index(name));
+        return traceRotation(boneList->getBoneId(name));
     }
 
     double Track::maxTime(void) const {

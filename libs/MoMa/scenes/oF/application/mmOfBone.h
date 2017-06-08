@@ -16,6 +16,9 @@ namespace MoMa{
     class ofBone: public of3dPrimitive{
     public:
         ofBone();
+		void setDefaultColor();
+	protected:
+		std::vector<ofFloatColor> defaultColor;
         
     };
 }
