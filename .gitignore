@@ -118,3 +118,4 @@ obj
 *SANDBOX*
 *.tlog
 *.log
+libs/compiled/project/win/Debug/MotionMachineVR.idb
