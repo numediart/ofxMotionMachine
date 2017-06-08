@@ -252,8 +252,8 @@ void  SceneVR::render(vr::Hmd_Eye nEye) {
 	ofDrawPlane(3, 3);
 	ofPopMatrix();
 
-	ofSetLineWidth(2);
-	ofDrawAxis(1);
+	//ofSetLineWidth(2);
+	//ofDrawAxis(1);
 
 	ofPushMatrix();
 	//ofMultMatrix(floatingSceneMat);
