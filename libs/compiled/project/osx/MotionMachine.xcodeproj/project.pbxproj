@@ -196,10 +196,6 @@
 		9F661DE41E606C9400A65DD0 /* mmKinematics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F661DE11E606C9400A65DD0 /* mmKinematics.cpp */; };
 		9F661DE51E606C9400A65DD0 /* mmKinematics.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F661DE21E606C9400A65DD0 /* mmKinematics.h */; };
 		9F661DE61E606C9400A65DD0 /* MoMaFeatures.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F661DE31E606C9400A65DD0 /* MoMaFeatures.h */; };
-		9F661DEC1E606D0B00A65DD0 /* ofxVideoRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F661DEA1E606D0B00A65DD0 /* ofxVideoRecorder.cpp */; };
-		9F661DED1E606D0B00A65DD0 /* ofxVideoRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F661DEB1E606D0B00A65DD0 /* ofxVideoRecorder.h */; };
-		9F661DF01E606D1700A65DD0 /* mmVideoRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F661DEE1E606D1700A65DD0 /* mmVideoRecorder.cpp */; };
-		9F661DF11E606D1700A65DD0 /* mmVideoRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F661DEF1E606D1700A65DD0 /* mmVideoRecorder.h */; };
 		9F7CE7E61C7252A600568462 /* mmUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9F7CE7E41C7252A600568462 /* mmUtils.cpp */; };
 		9F7CE7E71C7252A600568462 /* mmUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F7CE7E51C7252A600568462 /* mmUtils.h */; };
 		9FA83F171B9888D0004221CE /* mmOptionsView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9FA83F151B9888D0004221CE /* mmOptionsView.cpp */; };
@@ -426,11 +422,6 @@
 		9F661DE11E606C9400A65DD0 /* mmKinematics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mmKinematics.cpp; sourceTree = "<group>"; };
 		9F661DE21E606C9400A65DD0 /* mmKinematics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mmKinematics.h; sourceTree = "<group>"; };
 		9F661DE31E606C9400A65DD0 /* MoMaFeatures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MoMaFeatures.h; path = ../../../MoMa/features/MoMaFeatures.h; sourceTree = "<group>"; };
-		9F661DE81E606D0B00A65DD0 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		9F661DEA1E606D0B00A65DD0 /* ofxVideoRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxVideoRecorder.cpp; sourceTree = "<group>"; };
-		9F661DEB1E606D0B00A65DD0 /* ofxVideoRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoRecorder.h; sourceTree = "<group>"; };
-		9F661DEE1E606D1700A65DD0 /* mmVideoRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mmVideoRecorder.cpp; sourceTree = "<group>"; };
-		9F661DEF1E606D1700A65DD0 /* mmVideoRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mmVideoRecorder.h; sourceTree = "<group>"; };
 		9F7CE7E41C7252A600568462 /* mmUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mmUtils.cpp; path = ../../../MoMa/core/mmUtils.cpp; sourceTree = "<group>"; };
 		9F7CE7E51C7252A600568462 /* mmUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mmUtils.h; path = ../../../MoMa/core/mmUtils.h; sourceTree = "<group>"; };
 		9FA83F151B9888D0004221CE /* mmOptionsView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mmOptionsView.cpp; sourceTree = "<group>"; };
@@ -615,8 +606,6 @@
 		9F2E1BFC1B76645000DB082C /* Application */ = {
 			isa = PBXGroup;
 			children = (
-				9F661DEE1E606D1700A65DD0 /* mmVideoRecorder.cpp */,
-				9F661DEF1E606D1700A65DD0 /* mmVideoRecorder.h */,
 				E8A4458A1D882D4500E897AD /* mmOfPlot.cpp */,
 				E8A4458B1D882D4500E897AD /* mmOfPlot.h */,
 				E8A445861D882D3800E897AD /* mmOfSkeleton.cpp */,
@@ -660,7 +649,6 @@
 		9F2E1ECD1B7664B800DB082C /* Addons */ = {
 			isa = PBXGroup;
 			children = (
-				9F661DE71E606D0B00A65DD0 /* ofxVideoRecorder */,
 				9F2E1F591B7664B800DB082C /* ofxXmlSettings */,
 				9F2E1ECE1B7664B800DB082C /* ofxOsc */,
 				9F2E1EF91B7664B800DB082C /* ofxUI */,
@@ -912,25 +900,6 @@
 			path = ../../../MoMa/features/Kinematics;
 			sourceTree = "<group>";
 		};
-		9F661DE71E606D0B00A65DD0 /* ofxVideoRecorder */ = {
-			isa = PBXGroup;
-			children = (
-				9F661DE81E606D0B00A65DD0 /* .gitignore */,
-				9F661DE91E606D0B00A65DD0 /* src */,
-			);
-			name = ofxVideoRecorder;
-			path = ../../../../../Library/openFrameworks/of_v0.9.8_osx_release/addons/ofxVideoRecorder;
-			sourceTree = "<group>";
-		};
-		9F661DE91E606D0B00A65DD0 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				9F661DEA1E606D0B00A65DD0 /* ofxVideoRecorder.cpp */,
-				9F661DEB1E606D0B00A65DD0 /* ofxVideoRecorder.h */,
-			);
-			path = src;
-			sourceTree = "<group>";
-		};
 		E868E6AA1AC5C23900B1B2A2 /* Parsers */ = {
 			isa = PBXGroup;
 			children = (
@@ -965,7 +934,6 @@
 			files = (
 				9F2E1FDD1B7664B800DB082C /* ofxUIWidget.h in Headers */,
 				E8A4458D1D882D4500E897AD /* mmOfPlot.h in Headers */,
-				9F661DED1E606D0B00A65DD0 /* ofxVideoRecorder.h in Headers */,
 				9F2E1F7B1B7664B800DB082C /* ofxOscBundle.h in Headers */,
 				9F2E1FC41B7664B800DB082C /* ofxUISlider.h in Headers */,
 				9F2E1F641B7664B800DB082C /* NetworkingUtils.h in Headers */,
@@ -993,7 +961,6 @@
 				E87713311B8B1943003C2FEF /* mmMenuView.h in Headers */,
 				9FEF33F21B8C559E00C40B2A /* mmMoment.h in Headers */,
 				9F2E1FBC1B7664B800DB082C /* ofxUIRangeSlider.h in Headers */,
-				9F661DF11E606D1700A65DD0 /* mmVideoRecorder.h in Headers */,
 				9F00DC7B1A9C8A580022A309 /* mmGeometry.h in Headers */,
 				9F2E1F9F1B7664B800DB082C /* ofxUIImage.h in Headers */,
 				9F2E1F781B7664B800DB082C /* ofxOsc.h in Headers */,
@@ -1176,7 +1143,6 @@
 				9F2E1F8D1B7664B800DB082C /* ofxUIButton.cpp in Sources */,
 				9F2E1F7E1B7664B800DB082C /* ofxOscParameterSync.cpp in Sources */,
 				9F2E1F8B1B7664B800DB082C /* ofxUIBiLabelSlider.cpp in Sources */,
-				9F661DEC1E606D0B00A65DD0 /* ofxVideoRecorder.cpp in Sources */,
 				9F2E1FB41B7664B800DB082C /* ofxUIMultiImageToggle.cpp in Sources */,
 				9F497BE61AC752E700F4DE3D /* mmC3dParser.cpp in Sources */,
 				9F7CE7E61C7252A600568462 /* mmUtils.cpp in Sources */,
@@ -1227,7 +1193,6 @@
 				E88F98EE1B84B64300CEB63F /* mmKinParser.cpp in Sources */,
 				9F00DC621A9C8A1F0022A309 /* mmNode.cpp in Sources */,
 				9FEF33F11B8C559E00C40B2A /* mmMoment.cpp in Sources */,
-				9F661DF01E606D1700A65DD0 /* mmVideoRecorder.cpp in Sources */,
 				9F2E1F721B7664B800DB082C /* OscPrintReceivedElements.cpp in Sources */,
 				9F2E1F961B7664B800DB082C /* ofxUIDropDownList.cpp in Sources */,
 				9F2E1F761B7664B800DB082C /* OscTypes.cpp in Sources */,
