@@ -275,8 +275,8 @@ namespace MoMa {
         void stop( void ); // Stop the sequence
         void previousIndex( void ); // Move backward of one index
         void nextIndex( void ); // Move Forward of one index
-        bool isPlaying( void ); // Is playing?
-        
+		bool isPlaying(void); // Is playing?
+
         // - Screencasting-related methods -
         
         /*
@@ -369,6 +369,9 @@ namespace MoMa {
         
 
 		void boneLocalDraw(const Frame &frame, boneMapType::iterator it);
+
+		void saveRender(std::string prefix, int frameRate, std::string outFileName="output");
+
         // - Protected methods -
         
         void render2d( void );

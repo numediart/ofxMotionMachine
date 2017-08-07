@@ -2007,3 +2007,95 @@ void MoMa::SceneApp::disableKeyControl() {
 
     keyEnabled = false;
 }
+
+void MoMa::SceneApp::saveRender(std::string prefix, int frameRate, std::string outFileName) {
+	
+			
+	ofFbo fbo;
+	fbo.clear();
+	fbo.allocate(1.5*ofGetWidth(), 1.5*ofGetHeight(), GL_RGBA,4);
+
+	this->stop();
+
+	std::string stringCommand = "ffmpeg -framerate " + ofToString(frameRate) + " -i " + getDataPath() + prefix + "%04d.png " + getDataPath() + outFileName+".mp4";
+
+	stringCommand = "del " + getDataPath() + prefix + "*.png";
+	while (stringCommand.find('/') != std::string::npos)
+		stringCommand[stringCommand.find('/')] = '\\';
+	stringCommand = stringCommand + " /Q";
+
+	system(stringCommand.c_str());
+
+	stringCommand = "ffmpeg -framerate " + ofToString(frameRate) + " -i " + getDataPath() + prefix + "%04d.png " + getDataPath() + outFileName + ".mp4";
+
+	int counter = 0;
+	double ltime = this->getLowBoundTime();
+	while (ltime <= this->getHighBoundTime())
+	//if (recorder.myMutex.try_lock())
+	{
+		this->appMoment.setTime(ltime);
+		fbo.begin();
+		//ofPushView();
+		ofBackground(255);
+		//ofClear(255);
+		ofSetColor(255, 255, 255);
+		//ofRect(0, 0, ofGetWidth(), ofGetHeight());
+
+		ofDrawBitmapString("frame rate:" + ofToString(ofGetFrameRate()) + " fps", 10, 10);
+		ofSetMatrixMode(OF_MATRIX_PROJECTION);
+		ofLoadMatrix(camera.getProjectionMatrix());
+		ofSetMatrixMode(OF_MATRIX_MODELVIEW);
+		ofMatrix4x4 currentViewMatrixInvertY = camera.getModelViewMatrix();
+		currentViewMatrixInvertY.scale(1.0f, -1.0f, 1.0f);
+		ofLoadViewMatrix(currentViewMatrixInvertY);
+		ofEnableDepthTest();
+		ofEnableLighting();
+		light.enable();
+		ofSetBackgroundColor(100);
+
+
+		//ofDrawGrid(0.25, 10, false, false, true, false);
+
+		//ofPushMatrix();
+		//ofRotateY(180);
+
+		//ofRotateX(-90);
+		//ofScale(0.001, 0.001, 0.001);
+		//*******************
+		ofPushStyle();
+		ofSetLineWidth(1);
+		ofSetColor(210, 210, 210);
+		ofPushMatrix(); ofRotate(90, 0, 1, 0);
+
+		if (OF_VERSION_MINOR == 9) ofDrawGridPlane(gridSize, 30);
+		else ofDrawGridPlane(4000, 40); // They changed it in 0.9
+
+		ofPopMatrix();
+		ofPopStyle();
+		this->scene3d();
+		//ofPopMatrix();
+		//ofPopView();
+		fbo.end();
+		ofPixels imageToSave;
+		fbo.readToPixels(imageToSave);
+		//recorder.addFrame(tempPixels);
+		//recorder.myMutex.unlock();  
+		string fileName = prefix + ofToString(counter, 4, '0') + ".png";
+		std::cout << fileName + " saved" << std::endl;
+
+		ofSaveImage(imageToSave, fileName);
+
+		ltime += 1.0 / frameRate;
+		counter++;
+	}
+#ifdef TARGET_WIN32
+	system(stringCommand.c_str()); 
+
+	stringCommand = "del " + getDataPath() + prefix + "*.png";
+	while (stringCommand.find('/') != std::string::npos)
+		stringCommand[stringCommand.find('/')] = '\\';
+	stringCommand = stringCommand + " /Q";
+
+	system(stringCommand.c_str());
+#endif//TARGET_WIN32
+}
