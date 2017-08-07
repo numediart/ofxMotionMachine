@@ -261,3 +261,98 @@ bool ofMutatedSkeleton::showAll() {
 		it->second.visible = true;
 	return true;
 }
+
+bool ofMutatedSkeleton::save(std::string fileName) {
+
+	TiXmlDocument lArchiver;
+	TiXmlElement* lRoot;
+
+	lArchiver.LinkEndChild(new TiXmlDeclaration("1.0", "UTF-8", ""));
+	lRoot = new TiXmlElement("MutatedBone");
+	lArchiver.LinkEndChild(lRoot);
+
+
+	TiXmlElement* lTracks = new TiXmlElement("tracks");
+	lRoot->LinkEndChild(lTracks);
+
+	for (int i = 0; i < this->trackContainer.size(); i++){
+		TiXmlElement* lTrack = new TiXmlElement("track");
+		lTracks->LinkEndChild(lTrack);
+		lTrack->SetAttribute("name", this->trackContainer[i]->fileName);
+		lTrack->SetAttribute("path", this->trackContainer[i]->pathfileName);
+	}
+	
+
+
+	TiXmlElement* lBones = new TiXmlElement("MutatedBones");
+	lRoot->LinkEndChild(lBones);
+
+	for (int i = 0; i < this->mutatedBoneList.rootIt.size(); i++) {
+		addBoneToSave(lBones, this->mutatedBoneList.rootIt[i]);
+		TiXmlElement* lBone = new TiXmlElement("Bone");
+		lBones->LinkEndChild(lBone);
+	}
+
+
+	lArchiver.SaveFile(fileName);
+	return true;
+}
+bool ofMutatedSkeleton::addBoneToSave(TiXmlElement* lParent, MutatedBoneMapType::iterator bone) {
+
+	TiXmlElement* lBone = new TiXmlElement("Bone");
+	lParent->LinkEndChild(lBone);
+	lBone->SetAttribute("name", bone->first);
+	lBone->SetAttribute("boneId", bone->second.boneId);
+	lBone->SetAttribute("trackId", bone->second.trackIndex);
+	TiXmlElement* lKeys = new TiXmlElement("Keys");
+	lBone->LinkEndChild(lKeys);
+	TiXmlElement* lKey = new TiXmlElement("Key");
+	lKeys->LinkEndChild(lKey);
+	lKey->SetAttribute("frameId", 0);
+	TiXmlElement* lProp = new TiXmlElement("frameDelay");
+	lKey->LinkEndChild(lProp);
+	lProp->InsertEndChild(TiXmlText(std::to_string(bone->second.frameDelay)));
+	lProp = new TiXmlElement("shown");
+	lKey->LinkEndChild(lProp);
+	lProp->InsertEndChild(TiXmlText(std::to_string(bone->second.visible)));
+
+	TiXmlElement* lScale = new TiXmlElement("Scale");
+	lKey->LinkEndChild(lScale);
+	for (int i = 0; i < 3; i++) {
+		lScale->InsertEndChild(TiXmlText(std::to_string(bone->second.preScale(i))));
+		if (i < 2)
+			lScale->InsertEndChild(TiXmlText(" "));
+	}
+	TiXmlElement* lTransl = new TiXmlElement("Translation");
+	lKey->LinkEndChild(lTransl);
+	for (int i = 0; i < 3; i++) {
+		lTransl->InsertEndChild(TiXmlText(std::to_string(bone->second.preTransl(i))));
+		if (i < 2)
+			lTransl->InsertEndChild(TiXmlText(" "));
+	}
+	TiXmlElement* lRot = new TiXmlElement("Rotation");
+	lKey->LinkEndChild(lRot);
+	for (int i = 0; i < 4; i++) {
+		lRot->InsertEndChild(TiXmlText(std::to_string(bone->second.preRot(i))));
+		if (i < 3)
+			lRot->InsertEndChild(TiXmlText(" "));
+	}
+
+	TiXmlElement* lChildren = new TiXmlElement("Children");
+	lBone->LinkEndChild(lChildren);
+	for (int i = 0; i < bone->second.boneChildrenIt.size(); i++)
+		ofMutatedSkeleton::addBoneToSave(lChildren, bone->second.boneChildrenIt[i]);
+	return true;
+}
+
+bool ofMutatedSkeleton::load(std::string fileName, std::vector<MoMa::Track> &Tracks, ofMutatedSkeletonPtr &mySkel) {
+	TiXmlDocument lArchiver;
+	TiXmlElement* lRoot;
+	lArchiver.Clear();
+	if (!lArchiver.LoadFile(fileName))
+		throw std::runtime_error("XmlArchiver::load failed to open this file");
+	lRoot = lArchiver.FirstChildElement("MoMaArchive");
+	if (lRoot == 0)
+		throw std::runtime_error("XmlArchiver::load : This file doesn't contain a MoMa archive");
+	return true;
+}

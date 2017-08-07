@@ -3,7 +3,10 @@
 #define __mmOfMutatedSkeleton__
 #include "mmOfSkeleton.h"
 #include "mmMutatedBoneList.h"
+#include "tinyxml.h"
 namespace MoMa {
+	class ofMutatedSkeleton;
+	typedef shared_ptr<MoMa::ofMutatedSkeleton> ofMutatedSkeletonPtr;
 	class ofMutatedSkeleton : public ofSkeleton
 	{
 		/**
@@ -39,11 +42,15 @@ namespace MoMa {
 		bool hideAll();
 		bool showBone(std::string boneName);
 		bool showAll();
+		bool save(std::string fileName);
+		static bool load(std::string fileName, std::vector<MoMa::Track> &Tracks, ofMutatedSkeletonPtr &mySkel);
+
 	protected:
 		MutatedBoneList mutatedBoneList;//We will store the mutated bone list in a BoneList with a unique name for each bone
 		bool checkBoneName(std::string boneName);
 		void boneLocalDraw(int index, MutatedBoneMapType::iterator it);
 		std::vector<const MoMa::Track*> trackContainer;
+		bool addBoneToSave(TiXmlElement* lParent, MutatedBoneMapType::iterator bone);
 		 
 	};
 }

@@ -124,7 +124,10 @@ namespace MoMa {
         void globalToLocal(boneMapType::iterator it);
 
         void setName(std::string name); // Define track name
-        void setFileName(std::string name); // Define track name
+		void setFileName(std::string name); // Define track name
+		void setPathFileName(std::string name) {
+			pathfileName = name;
+		} // Define track path + name
         int index(std::string name); // Get index from name
 
         void setFrameRate(float rate); // Set/get frame rate
@@ -142,7 +145,8 @@ namespace MoMa {
         // TODO Re-protect this
 
         std::string easyName; // Track name
-        std::string fileName; // Track file name
+		std::string fileName; // Track file name
+		std::string pathfileName; // Track file name
         TrackType type;
 
         TimedCube position; // Position frames

@@ -220,3 +220,61 @@ void ofSkeleton::displayNameListBone() const {
 	}
 
 }
+
+bool ofSkeleton::save(std::string fileName) {
+
+	if (track.nOfFrames() > 0) {
+		bones.resize(nodeList->size());
+		arma::mat offset = track.getRotationOffset();
+		MoMa::Frame frame = track.frame(0u);
+
+		TiXmlDocument lArchiver;
+		TiXmlElement* lRoot;
+
+		lArchiver.LinkEndChild(new TiXmlDeclaration("1.0", "UTF-8", ""));
+		lRoot = new TiXmlElement("Skeleton");
+		lArchiver.LinkEndChild(lRoot);
+
+
+		TiXmlElement* lBones = new TiXmlElement("Bones");
+		lRoot->LinkEndChild(lBones);
+
+
+		for (MoMa::BoneList::iterator it = this->boneList->begin(); it != this->boneList->end(); it++) {
+			TiXmlElement* lBone = new TiXmlElement("Bone");
+			lBones->LinkEndChild(lBone);
+			lBone->SetAttribute("name", it->first);
+			{
+				arma::colvec3 position = frame.getPosition().col(it->second.jointParent);
+				lBone->SetAttribute("X", position(1)-65);
+				lBone->SetAttribute("Y", position(2)-1039); 
+				lBone->SetAttribute("Z", position(0)+400);
+			}
+			for (int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++) {
+				TiXmlElement* lChild = new TiXmlElement("children");
+				lBone->LinkEndChild(lChild);
+				if (bEnd < it->second.boneChildrenIt.size()) {
+					lChild->SetAttribute("name", it->second.boneChildrenIt[bEnd]->first);
+				}
+				else
+				{
+					lChild->SetAttribute("name","EndOfSite");
+				}
+					arma::colvec3 position = frame.getPosition().col(it->second.jointChildren[bEnd]);
+					lChild->SetAttribute("X", position(1)-65);
+					lChild->SetAttribute("Y", position(2)-1039);
+					lChild->SetAttribute("Z", position(0)+400);
+				float s;
+				if (track.hasGlobalCoordinate)
+					s = arma::norm(frame.getPosition().col(it->second.jointParent) - frame.getPosition().col(it->second.jointChildren[bEnd]));
+				else
+					s = arma::norm(frame.getPosition().col(it->second.jointChildren[bEnd]));
+				lChild->SetAttribute("length", s);
+			}
+		}
+		lArchiver.SaveFile(fileName);
+		return true;
+	}
+	else 
+		return false;
+}

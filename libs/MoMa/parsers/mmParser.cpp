@@ -1,4 +1,5 @@
 #include "mmParser.h"
+#include "mmXmlArchiver.h"
 
 using namespace std;
 using namespace MoMa;
@@ -16,7 +17,7 @@ Parser::Parser(string const &fName, Track *tr) {
     extension = fileName.substr(dot + 1);
     transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
     tr->hasGlobalCoordinate = true;//value by default
-
+	tr->setPathFileName(fName);
     if (extension == "bones") {
 
         tr->clearData();
@@ -158,9 +159,13 @@ Parser::Parser(string const &fName, Track *tr) {
 
         tr->type = XML;
         tr->setFileName(fileName.substr(sep + 1, dot - sep - 1));
+		XmlArchiver myArchiver;
+		myArchiver.load(fileName);
 
-        XmlParser xmlParser(fileName, tr);
-        tr->position.SetValidParam();
+        //XmlParser xmlParser(fileName, tr);
+        
+		myArchiver.getTrack(*tr);
+		tr->position.SetValidParam();
         if (tr->hasRotation) {
             tr->rotation.SetValidParam();
             tr->setJointOffsetRotation();

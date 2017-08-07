@@ -40,6 +40,7 @@ namespace MoMa {
         inline bool isValid() const { return _isValid; };
         inline void setNodeSize( double nodeSize ) { mNodeSize = nodeSize; };
 		void displayNameListBone() const;
+		bool save(std::string fileName);
 	protected:
 		bool _isValid;
 		bool _initiated;

@@ -204,8 +204,7 @@ bool Track::localToGlobal() {
     for( int i = 0; i < boneList->rootIt.size(); i++)
         localToGlobal( boneList->rootIt[i] );
     hasGlobalCoordinate = true;
-    this->setJointOffsetRotation();
-    return true;
+	return this->setJointOffsetRotation();
 }
 
 void Track::localToGlobal( boneMapType::iterator it ){
@@ -550,7 +549,6 @@ bool Track::setJointOffsetRotation() {
 
     this->rotationOffset.resize( 4, this->nOfNodes() );//for each mocap format, the orientation offset is stored in the destination node of the bone
     Frame frame0 = this->frame( (unsigned int)0 );
-
     if( this->hasGlobalCoordinate == false ) {
         for( boneMapType::iterator it = this->boneList->begin(); it != this->boneList->end(); it++ ) {
             for( int j = 0; j < it->second.jointChildren.size(); j++ ) {//loop on the ids of the destination joints of the current bone.
@@ -577,6 +575,8 @@ bool Track::setJointOffsetRotation() {
         }
         return true;
     }
+	if (frame0.getPosition().n_elem == 0)
+		return false;
     arma::colvec frontalAxis;
     arma::colvec longAxis;
     arma::colvec tempVec;
