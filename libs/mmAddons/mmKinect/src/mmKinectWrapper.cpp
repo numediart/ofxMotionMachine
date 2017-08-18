@@ -10,58 +10,149 @@ namespace MoMa {
 		mTrack.setRingBufferSize(bufferSize, true);
 		mSkeleton = std::make_shared<ofSkeleton>(track);
 		mRot = 0;
+		mTrans = ofVec3f(0, 0, 0);
+		mBodyId = -1;
+		numBodies = 0;
 	};
 	kinectWrapper::~kinectWrapper() {
 		kin.Finalize();
 	};
+	bool kinectWrapper::checkUserId(arma::vec head) {
+		//HRESULT result = kin.Update();
+		if (kin.getUsersTrackedCount() > 0) {
+			KINECTV2::BODY_STRUCT * bodies = kin.GetBodies();
+			if (mBodyId >= kin.GetBodiesSize())
+				return false;//need catch new mBodyId
+			arma::mat cartData(3, mTrack.nOfNodes());
+			arma::mat rotData(4, mTrack.nOfBones());
+
+			arma::mat rotMat(4, 4);
+			double rot = DEG_TO_RAD*mRot;
+			rotMat << cos(rot) << -sin(rot) << 0 << 0 << arma::endr
+				<< sin(rot) << cos(rot) << 0 << 0 << arma::endr
+				<< 0 << 0 << 1 << 0 << arma::endr
+				<< 0 << 0 << 0 << 1;
+			arma::mat transMat(4, 4);
+			transMat << 1 << 0 << 0 << mTrans.x << arma::endr
+				<< 0 << 1 << 0 << mTrans.y << arma::endr
+				<< 0 << 0 << 1 << mTrans.z << arma::endr
+				<< 0 << 0 << 0 << 1;
+
+			arma::mat transfMat = mLocMatrix;
+			//arma::mat transfMat = rotMat*transMat*mLocMatrix;
+
+			unsigned int headId = mTrack.nodeList->index("Head");
+			arma::vec lDist(kin.GetBodiesSize());
+
+			for (int i = 0; i < kin.GetBodiesSize(); i++) {
+				if (bodies[i].IsTracked) {
+					arma::vec lVec(4);
+					lVec << -bodies[i].Joints[headId].Joint.Z * 1000
+						<< -bodies[i].Joints[headId].Joint.X * 1000
+						<< bodies[i].Joints[headId].Joint.Y * 1000
+						<< 1.0;
+					//std::cout << lVec << std::endl;
+					lVec = rotMat*transMat*transfMat*lVec;
+					//std::cout << lVec.subvec(0, 2) / lVec(3) << std::endl;
+					lDist(i) = arma::norm(lVec.subvec(0, 2) / lVec(3) - head);
+				}
+				else
+					lDist(i) = arma::datum::inf;
+			}
+			arma::uword lTempId;
+			if (lDist.min(lTempId))
+			{
+				mBodyId = lTempId;
+				std::cout << "mBodyId" << mBodyId << std::endl;
+				return true;
+			}
+			else {
+				mBodyId = -1;
+				return false;
+			}
+
+		}
+		else
+			return false;
+	}
 	void kinectWrapper::setup() {};
 	bool kinectWrapper::update() {
 		HRESULT result = kin.Update();
+		if (numBodies != kin.getUsersTrackedCount()) {
+			numBodies = kin.getUsersTrackedCount();
+			std::cout << "numBody:"<< numBodies << std::endl;
+		}
+
 		//std::cout << "istracked:"<< kin.getUsersTrackedCount() << std::endl;
 		if (SUCCEEDED(result)&& kin.getUsersTrackedCount()) {
 			KINECTV2::BODY_STRUCT * bodies = kin.GetBodies();
-			int bodyId = -1;
-			for (int i = 0; i < kin.GetBodiesSize(); i++)
-				if (bodies[i].IsTracked)
-					bodyId = i;
+			//int mBodyId = -1;
+			if (mBodyId==-1)
+				for (int i = 0; i < kin.GetBodiesSize(); i++)
+					if (bodies[i].IsTracked)
+						mBodyId = i;
+			if (mBodyId >= kin.GetBodiesSize())
+				return false;//need catch new mBodyId
+			if (bodies[mBodyId].IsTracked == false)
+				return false;
 			arma::mat cartData(3,mTrack.nOfNodes());
 			arma::mat rotData(4,mTrack.nOfBones());
 			if (mLocMatrix.n_elem == 0) {
 				mOfLocMatrix = this->getLocalSystem();
-				mLocMatrix = arma::conv_to<arma::mat>::from(arma::fmat(mOfLocMatrix.getPtr(), 4, 4));
+				mLocMatrix = arma::conv_to<arma::mat>::from(arma::fmat(mOfLocMatrix.getPtr(), 4, 4).t());//pay attention: memory management is not in the same between ofMat and arma::mat (then we use t())
+				std::cout << mOfLocMatrix << std::endl;
+				std::cout << mLocMatrix << std::endl;
+
 			}
+			arma::mat rotMat(4, 4);
+			double rot = DEG_TO_RAD*mRot;
+			rotMat << cos(rot) << -sin(rot) << 0 << 0 << arma::endr
+				<< sin(rot) << cos(rot) << 0 << 0 << arma::endr
+				<< 0 << 0 << 1 << 0 << arma::endr
+				<< 0 << 0 << 0 << 1;
+			arma::mat transMat(4, 4);
+			transMat << 1<< 0 << 0 << mTrans.x << arma::endr
+				<< 0 << 1 << 0 << mTrans.y << arma::endr
+				<< 0 << 0 << 1 << mTrans.z << arma::endr
+				<< 0 << 0 << 0 << 1;
+
 			arma::mat transfMat = mLocMatrix;
+			//arma::mat transfMat = rotMat*transMat*mLocMatrix;
+			//arma::mat transfMat = mLocMatrix*rotMat*transMat;
+
 			//arma::fmat transfMat(locOfMat.getPtr(),4,4);
 			//std::cout << locOfMat << std::endl;
 			//std::cout << transfMat << std::endl;
 
 			for (std::map<std::string, int>::iterator it= mTrack.nodeList->begin();it!= mTrack.nodeList->end();it++){
 				arma::vec lVec(4);
-				lVec << -bodies[bodyId].Joints[it->second].Joint.Z * 1000
-					<< -bodies[bodyId].Joints[it->second].Joint.X * 1000
-					<< bodies[bodyId].Joints[it->second].Joint.Y * 1000
+				lVec << -bodies[mBodyId].Joints[it->second].Joint.Z * 1000
+					<< -bodies[mBodyId].Joints[it->second].Joint.X * 1000
+					<< bodies[mBodyId].Joints[it->second].Joint.Y * 1000
 					<< 1.0;
 				//std::cout << lVec << std::endl;
+				//lVec = rotMat*transMat*transfMat*lVec;
 				lVec = transfMat*lVec;
 				//std::cout << lVec.subvec(0, 2) / lVec(3) << std::endl;
 				cartData.col(it->second) = lVec.subvec(0, 2)/lVec(3);
-				/*cartData(0, it->second) = -bodies[bodyId].Joints[it->second].Joint.Z*1000;
-				cartData(1, it->second) = -bodies[bodyId].Joints[it->second].Joint.X*1000;
-				cartData(2, it->second) = bodies[bodyId].Joints[it->second].Joint.Y*1000;*/
+				/*cartData(0, it->second) = -bodies[mBodyId].Joints[it->second].Joint.Z*1000;
+				cartData(1, it->second) = -bodies[mBodyId].Joints[it->second].Joint.X*1000;
+				cartData(2, it->second) = bodies[mBodyId].Joints[it->second].Joint.Y*1000;*/
 			}
 			if (mTrack.hasRotation) {
 				for (boneMapType::iterator it = mTrack.boneList->begin(); it != mTrack.boneList->end(); it++) {
 					MoMa::quaternion lQuat = quaternion(
-						-bodies[bodyId].Joints[it->second.jointChildren[0]].JointOrientation.z,
-						-bodies[bodyId].Joints[it->second.jointChildren[0]].JointOrientation.x,
-						bodies[bodyId].Joints[it->second.jointChildren[0]].JointOrientation.y,
-						bodies[bodyId].Joints[it->second.jointChildren[0]].JointOrientation.w);
-					rotData(0, it->second.boneId) = -bodies[bodyId].Joints[it->second.jointChildren[0]].JointOrientation.z;
-					rotData(1, it->second.boneId) = -bodies[bodyId].Joints[it->second.jointChildren[0]].JointOrientation.x;
-					rotData(2, it->second.boneId) = bodies[bodyId].Joints[it->second.jointChildren[0]].JointOrientation.y;
-					rotData(3, it->second.boneId) = bodies[bodyId].Joints[it->second.jointChildren[0]].JointOrientation.w;
+						-bodies[mBodyId].Joints[it->second.jointChildren[0]].JointOrientation.z,
+						-bodies[mBodyId].Joints[it->second.jointChildren[0]].JointOrientation.x,
+						bodies[mBodyId].Joints[it->second.jointChildren[0]].JointOrientation.y,
+						bodies[mBodyId].Joints[it->second.jointChildren[0]].JointOrientation.w);
+					rotData(0, it->second.boneId) = -bodies[mBodyId].Joints[it->second.jointChildren[0]].JointOrientation.z;
+					rotData(1, it->second.boneId) = -bodies[mBodyId].Joints[it->second.jointChildren[0]].JointOrientation.x;
+					rotData(2, it->second.boneId) = bodies[mBodyId].Joints[it->second.jointChildren[0]].JointOrientation.y;
+					rotData(3, it->second.boneId) = bodies[mBodyId].Joints[it->second.jointChildren[0]].JointOrientation.w;
 					arma::mat lMat;
 					lQuat.get(lMat);
+					//lMat = rotMat*transMat*(transfMat*lMat*arma::inv(transfMat));
 					lMat = (transfMat*lMat*arma::inv(transfMat));
 					lQuat.set(lMat);
 					rotData.col(it->second.boneId) = lQuat;
@@ -80,7 +171,7 @@ namespace MoMa {
 			return true;
 
 		}
-		return false;
+		return true;
 	};
 	void kinectWrapper::drawSkeleton(unsigned int frameIndex) {
 		ofPushMatrix();
@@ -124,6 +215,7 @@ namespace MoMa {
 		//ofMultMatrix(getLocalSystem());
 		ofRotateZ(mRot);
 		ofTranslate(mTrans);
+		ofDrawAxis(100);
 		mSkeleton->draw(mTrack.maxTime());
 		ofPopMatrix();
 	};
@@ -131,7 +223,7 @@ namespace MoMa {
 		if (mTrack.nOfFrames() == 0)
 			return;
 		ofMatrix4x4 locOfMat = this->getLocalSystem();
-		mLocMatrix = arma::conv_to<arma::mat>::from(arma::fmat(locOfMat.getPtr(), 4, 4));
+		mLocMatrix = arma::conv_to<arma::mat>::from(arma::fmat(locOfMat.getPtr(), 4, 4).t());//pay attention: memory management is not in the same between ofMat and arma::mat (then we use t())
 		mTrack.setJointOffsetRotation();
 		//unsigned int headId = mTrack.nodeList->index("Head");
 		unsigned int rHandId = mTrack.nodeList->index("RWrist");
@@ -139,6 +231,46 @@ namespace MoMa {
 		//arma::vec kinHead = mTrack.position.getLast().col(headId);
 		arma::vec kinRHand = mTrack.position.getLast().col(rHandId);
 		arma::vec kinLHand = mTrack.position.getLast().col(lHandId);
+		{
+			arma::mat transfMat = mLocMatrix;
+			KINECTV2::BODY_STRUCT * bodies = kin.GetBodies();
+			//arma::mat transfMat = rotMat*transMat*mLocMatrix;
+
+			unsigned int rHandId = mTrack.nodeList->index("RWrist");
+			unsigned int lHandId = mTrack.nodeList->index("LWrist");
+			arma::vec lHeight(kin.GetBodiesSize());
+
+			for (int i = 0; i < kin.GetBodiesSize(); i++) {
+				if (bodies[i].IsTracked) {
+					arma::vec lVec(4),rVec(4);
+					lVec << -bodies[i].Joints[lHandId].Joint.Z * 1000
+						<< -bodies[i].Joints[lHandId].Joint.X * 1000
+						<< bodies[i].Joints[lHandId].Joint.Y * 1000
+						<< 1.0;
+					rVec << -bodies[i].Joints[rHandId].Joint.Z * 1000
+						<< -bodies[i].Joints[rHandId].Joint.X * 1000
+						<< bodies[i].Joints[rHandId].Joint.Y * 1000
+						<< 1.0;
+					//std::cout << lVec << std::endl;
+					lVec = transfMat*lVec;
+					rVec = transfMat*rVec;
+					//std::cout << lVec.subvec(0, 2) / lVec(3) << std::endl;
+					lHeight(i) = (lVec(2) + rVec(2)) / 2.0;
+				}
+				else
+					lHeight(i) = 0;
+
+			}
+
+			arma::uword lTempId;
+			
+			if (lHeight.max(lTempId) == 0) {
+				mBodyId = -1;
+				return;
+			}
+			mBodyId = lTempId;
+			std::cout << "mBodyId" << mBodyId << std::endl;
+		}
 		arma::vec kinDir = kinRHand - kinLHand;
 		kinDir(2) = 0;
 		kinDir = arma::normalise(kinDir);
@@ -174,6 +306,7 @@ namespace MoMa {
 		//mLocMatrix = rotMat*mLocMatrix;
 		//mLocMatrix = transMat*mLocMatrix;
 
+		mSkeleton = std::make_shared<ofSkeleton>(mTrack);
 
 	}
 
@@ -204,18 +337,18 @@ namespace MoMa {
 
 		ofVec3f xVec = yVec.getCrossed(groundVec).normalized();
 		planeMatrix(0, 0) = xVec.x;
-		planeMatrix(1, 0) = xVec.y;
-		planeMatrix(2, 0) = xVec.z;
-		planeMatrix(0, 1) = yVec.x;
+		planeMatrix(0, 1) = xVec.y;
+		planeMatrix(0, 2) = xVec.z;
+		planeMatrix(1, 0) = yVec.x;
 		planeMatrix(1, 1) = yVec.y;
-		planeMatrix(2, 1) = yVec.z;
-		planeMatrix(0, 2) = groundVec.x;
-		planeMatrix(1, 2) = groundVec.y;
+		planeMatrix(1, 2) = yVec.z;
+		planeMatrix(2, 0) = groundVec.x;
+		planeMatrix(2, 1) = groundVec.y;
 		planeMatrix(2, 2) = groundVec.z;
 		//ofTranslate(0, 0, groundDist * 1000);
 		//planeMatrix(0, 3) = 0;
 		//planeMatrix(1, 3) = 0;
-		planeMatrix(3, 2) = groundDist * 1000;
+		planeMatrix(2, 3) = groundDist * 1000;
 		return planeMatrix;
 	}
 	void kinectWrapper::drawPlane() {

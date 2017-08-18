@@ -13,6 +13,7 @@ namespace MoMa {
 		kinectWrapper(MoMa::Track &track, int bufferSize=120);
 		~kinectWrapper();
 		void setup();
+		bool checkUserId(arma::vec head);
 		bool update();//return true if a new frame is acquired
 		void drawSkeleton(unsigned int frameIndex);
 		void drawSkeleton(double frametime);
@@ -31,6 +32,8 @@ namespace MoMa {
 		ofSkeletonPtr mSkeleton;
 		float mRot;
 		ofVec3f mTrans;
+		int mBodyId ;
+		int numBodies;
 	};
 };
 
