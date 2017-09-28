@@ -348,8 +348,12 @@ void MoMa::Geometry::translate(MoMa::Track & tr, double x, double y, double z)
 
 void MoMa::Geometry::placeOnOrigin(MoMa::Track & tr, std::string Pelvis, std::string LHip, std::string RHip)
 {
-	bool isglobal = tr.hasGlobalCoordinate;
-	tr.localToGlobal();
+	bool isLocal = false;
+	if (!tr.hasGlobalCoordinate) {
+
+		isLocal = true;
+		tr.localToGlobal();
+	}
 
 	//Move coordinate system to initial (i.e. first frame) frontal plane, origin on LHip
 	Trace a;
@@ -376,15 +380,18 @@ void MoMa::Geometry::placeOnOrigin(MoMa::Track & tr, std::string Pelvis, std::st
 	//Translate (translate track to place pelvis at first frame to 0,0,0)
 	Geometry::translate(tr, -tr(Pelvis)[0u].position(0), -tr(Pelvis)[0u].position(1), -tr(Pelvis)[0u].position(2));
 
-	if (!isglobal) {
+	if (isLocal)
 		tr.globalToLocal();
-	}
 }
 
 void  MoMa::Geometry::stickToOrigin(MoMa::Track & tr, std::string LHip, std::string RHip)
 {
-	bool isglobal = tr.hasGlobalCoordinate;
-	tr.localToGlobal();
+	bool isLocal = false;
+	if (!tr.hasGlobalCoordinate) {
+
+		isLocal = true;
+		tr.localToGlobal();
+	}
 
 	//Move coordinate system to frontal plane, origin between LHip and RHip
 	Trace a = tr(RHip);
@@ -404,16 +411,20 @@ void  MoMa::Geometry::stickToOrigin(MoMa::Track & tr, std::string LHip, std::str
 	c.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
 	tr = Geometry::projection(a, b, c, tr);
 
-	if (!isglobal) {
+	if (isLocal)
 		tr.globalToLocal();
-	}
 }
 
 void  MoMa::Geometry::stickToOriginLoose(MoMa::Track & tr, std::string Pelvis, std::string LHip, std::string RHip)
 {
 	placeOnOrigin(tr, Pelvis, LHip, RHip);
-	bool isglobal = tr.hasGlobalCoordinate;
-	tr.localToGlobal();
+
+	bool isLocal = false;
+	if (!tr.hasGlobalCoordinate) {
+
+		isLocal = true;
+		tr.localToGlobal();
+	}
 
 	//Move origin to Pelvis (at each frame), but do not change orientation of coordinate system
 	Trace a = tr(Pelvis);
@@ -433,9 +444,8 @@ void  MoMa::Geometry::stickToOriginLoose(MoMa::Track & tr, std::string Pelvis, s
 	c.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
 	tr = Geometry::projection(a, b, c, tr);
 
-	if (!isglobal) {
+	if (isLocal)
 		tr.globalToLocal();
-	}
 }
 
 void  MoMa::Geometry::scaleSkeleton(MoMa::Track & tr, float newsize)
