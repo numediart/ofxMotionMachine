@@ -30,7 +30,7 @@ namespace MoMa {
         
         std::string name( unsigned int idx ); // Get name string from index
         int index( std::string name ); // Get index from name string
-        
+		void rename(std::string oldname, std::string newname);
         void print( void ); // Print the list of nodes
         
       protected:
