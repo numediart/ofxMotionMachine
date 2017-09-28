@@ -1,5 +1,6 @@
 #include "mmGeometry.h"
 #include "mmKinematics.h"
+#include "mmSignal.h"
 using namespace arma;
 using namespace MoMa;
 
@@ -346,6 +347,14 @@ void MoMa::Geometry::translate(MoMa::Track & tr, double x, double y, double z)
 		tr.globalToLocal();
 }
 
+void MoMa::Geometry::translate(MoMa::Track & tr, arma::mat translation)
+{
+	for (uint i = 0; i < tr.nOfNodes(); i++)
+	{
+		tr.position.getRefData()(arma::span::all, arma::span(i), arma::span::all) -= translation;
+	}
+}
+
 void MoMa::Geometry::placeOnOrigin(MoMa::Track & tr, std::string Pelvis, std::string LHip, std::string RHip)
 {
 	bool isLocal = false;
@@ -384,6 +393,64 @@ void MoMa::Geometry::placeOnOrigin(MoMa::Track & tr, std::string Pelvis, std::st
 		tr.globalToLocal();
 }
 
+arma::mat MoMa::Geometry::centerOfMassmat(MoMa::Track & tr) {
+
+	bool isLocal = false;
+	if (!tr.hasGlobalCoordinate) {
+
+		isLocal = true;
+		tr.localToGlobal();
+	}
+
+	mat center;
+	center.zeros(3, tr.nOfFrames());
+
+	//avoid nans on each frame
+	for (uint f = 0; f < tr.nOfFrames(); f++) {
+
+		center.col(f) = nanmean(tr.framePosition(f), 1);
+	}
+
+	if (isLocal)
+		tr.globalToLocal();
+
+	return center;
+}
+
+MoMa::TimedMat MoMa::Geometry::centerOfMass(MoMa::Track & tr) {
+
+	mat center = centerOfMassmat(tr);
+	if (!tr.position.isTimed())
+		return TimedMat(tr.position.frameRate(), center, tr.position.initialTime());
+	else
+		return TimedMat(tr.position.getTimeVec(), center);
+}
+
+MoMa::Trace MoMa::Geometry::centerOfMassTrace(MoMa::Track & tr) {
+	
+	Trace ret;
+	ret.setTimeFlag(tr.position.isTimed());
+	ret.position = centerOfMass(tr);
+	return ret;
+}
+
+void MoMa::Geometry::COMToOrigin(MoMa::Track & tr)
+{
+
+	bool isLocal = false;
+	if (!tr.hasGlobalCoordinate) {
+
+		isLocal = true;
+		tr.localToGlobal();
+	}
+
+	mat center = centerOfMassmat(tr);
+	translate(tr, center);
+
+	if (isLocal)
+		tr.globalToLocal();
+}
+
 void  MoMa::Geometry::stickToOrigin(MoMa::Track & tr, std::string LHip, std::string RHip)
 {
 	bool isLocal = false;
@@ -415,9 +482,9 @@ void  MoMa::Geometry::stickToOrigin(MoMa::Track & tr, std::string LHip, std::str
 		tr.globalToLocal();
 }
 
-void  MoMa::Geometry::stickToOriginLoose(MoMa::Track & tr, std::string Pelvis, std::string LHip, std::string RHip)
+void  MoMa::Geometry::stickToOriginLoose(MoMa::Track & tr, std::string rootnodename)
 {
-	placeOnOrigin(tr, Pelvis, LHip, RHip);
+	//placeOnOrigin(tr, Pelvis, LHip, RHip);
 
 	bool isLocal = false;
 	if (!tr.hasGlobalCoordinate) {
@@ -426,23 +493,8 @@ void  MoMa::Geometry::stickToOriginLoose(MoMa::Track & tr, std::string Pelvis, s
 		tr.localToGlobal();
 	}
 
-	//Move origin to Pelvis (at each frame), but do not change orientation of coordinate system
-	Trace a = tr(Pelvis);
-	Trace b = a;
-	b.position.getRefData().row(2) += 1000;//Above pelvis
-	Trace c = a;
-	c.position.getRefData().row(1) += 1000;// Right to pelvis
-	tr = Geometry::projection(a, b, c, tr);
-
-	//Reorient global axes correctly
-	vec tmp;
-	tmp << 0 << 0 << 0;
-	a.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
-	tmp << 0 << 0 << -1;
-	b.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
-	tmp << 0 << 1 << 0;
-	c.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
-	tr = Geometry::projection(a, b, c, tr);
+	mat origin = tr.position.getRefData()(arma::span::all, arma::span(tr.nodeList->index(rootnodename)), arma::span::all);
+	translate(tr, origin);
 
 	if (isLocal)
 		tr.globalToLocal();
@@ -451,8 +503,8 @@ void  MoMa::Geometry::stickToOriginLoose(MoMa::Track & tr, std::string Pelvis, s
 void  MoMa::Geometry::scaleSkeleton(MoMa::Track & tr, float newsize)
 {
 
-		float meansize = meanSize(tr);
-		tr.position.getRefData() /= meansize;
-		tr.position.getRefData() *= newsize;
+	float meansize = meanSize(tr);
+	tr.position.getRefData() /= meansize;
+	tr.position.getRefData() *= newsize;
 
 }

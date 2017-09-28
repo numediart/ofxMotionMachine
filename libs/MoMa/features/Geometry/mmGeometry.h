@@ -44,16 +44,28 @@ void translate(MoMa::TimedCube & pos, double x, double y, double z);
 void translate(MoMa::TimedMat & pos, double x, double y, double z);
 void translate(MoMa::Track &tr, double x, double y, double z);
 
+//Translate at each frame (i.e. define new origin)
+void translate(MoMa::Track &tr, arma::mat translation);
+
 //Experimental
 
 //Move coordinate system to initial frontal plane (i.e. first frame of the track), origin on LHip
 void placeOnOrigin(MoMa::Track & tr, std::string Pelvis = "Pelvis", std::string LHip = "LHip", std::string RHip = "RHip");
 
+arma::mat centerOfMassmat(MoMa::Track & tr);
+
+MoMa::TimedMat centerOfMass(MoMa::Track & tr);
+
+MoMa::Trace centerOfMassTrace(MoMa::Track & tr);
+
+//Move origin to COM (at each frame)
+void COMToOrigin(MoMa::Track & tr);
+
 //Move coordinate system to frontal plane, origin between LHip and RHip
 void stickToOrigin(MoMa::Track & tr, std::string LHip = "LHip", std::string RHip = "RHip");
 
 //Move origin to Pelvis (at each frame), but do not change orientation of coordinate system
-void stickToOriginLoose(MoMa::Track & tr, std::string Pelvis = "Pelvis", std::string LHip = "LHip", std::string RHip = "RHip");
+void stickToOriginLoose(MoMa::Track & tr, std::string rootnodename = "Pelvis");
 
 //Scale track data (resize skeleton)
 void scaleSkeleton(MoMa::Track & tr, float newsize = 1710); //1710mm = Belgian mean size (we are patriot and are proud of our chocolate)
