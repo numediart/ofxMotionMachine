@@ -1,5 +1,5 @@
 #include "mmGeometry.h"
-
+#include "mmKinematics.h"
 using namespace arma;
 using namespace MoMa;
 
@@ -288,7 +288,7 @@ MoMa::Track MoMa::Geometry::projection(const MoMa::Trace & a, const MoMa::Trace 
 		TimedMat nodetracen = ret.position.col(n);
 		nodetracen = projection(a.position, b.position, c.position, nodetracen);
 		ret.position.getRefData()(span::all, span(n), span::all) = nodetracen.getData();
-		
+
 	}
 	if (ret.hasRotation) {
 
@@ -346,4 +346,103 @@ void MoMa::Geometry::translate(MoMa::Track & tr, double x, double y, double z)
 		tr.globalToLocal();
 }
 
+void MoMa::Geometry::placeOnOrigin(MoMa::Track & tr, std::string Pelvis, std::string LHip, std::string RHip)
+{
+	bool isglobal = tr.hasGlobalCoordinate;
+	tr.localToGlobal();
 
+	//Move coordinate system to initial (i.e. first frame) frontal plane, origin on LHip
+	Trace a;
+	vec tmp = tr(RHip)[0u].position;
+	a.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	Trace b;
+	tmp = tr(RHip)[0u].position;
+	tmp(2) = tmp(2) + 1000;
+	b.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	Trace c;
+	c.setPosition(repmat(tr(LHip)[0u].position, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+
+	tr = Geometry::projection(a, b, c, tr);
+
+	//Reorient global axes correctly
+	tmp << 0 << 0 << 0;
+	a.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	tmp << 0 << 0 << -1;
+	b.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	tmp << 0 << 1 << 0;
+	c.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	tr = Geometry::projection(a, b, c, tr);
+
+	//Translate (translate track to place pelvis at first frame to 0,0,0)
+	Geometry::translate(tr, -tr(Pelvis)[0u].position(0), -tr(Pelvis)[0u].position(1), -tr(Pelvis)[0u].position(2));
+
+	if (!isglobal) {
+		tr.globalToLocal();
+	}
+}
+
+void  MoMa::Geometry::stickToOrigin(MoMa::Track & tr, std::string LHip, std::string RHip)
+{
+	bool isglobal = tr.hasGlobalCoordinate;
+	tr.localToGlobal();
+
+	//Move coordinate system to frontal plane, origin between LHip and RHip
+	Trace a = tr(RHip);
+	Trace c = tr(LHip);
+	a.position.getRefData() = (a.position.getData() + c.position.getData()) / 2; //Origin between LHip and RHip
+	Trace b = a;
+	b.position.getRefData().row(2) += 1000; //Frontal plane!
+	tr = Geometry::projection(a, b, c, tr);
+
+	//Reorient global axes correctly
+	vec tmp;
+	tmp << 0 << 0 << 0;
+	a.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	tmp << 0 << 0 << -1;
+	b.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	tmp << 0 << 1 << 0;
+	c.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	tr = Geometry::projection(a, b, c, tr);
+
+	if (!isglobal) {
+		tr.globalToLocal();
+	}
+}
+
+void  MoMa::Geometry::stickToOriginLoose(MoMa::Track & tr, std::string Pelvis, std::string LHip, std::string RHip)
+{
+	placeOnOrigin(tr, Pelvis, LHip, RHip);
+	bool isglobal = tr.hasGlobalCoordinate;
+	tr.localToGlobal();
+
+	//Move origin to Pelvis (at each frame), but do not change orientation of coordinate system
+	Trace a = tr(Pelvis);
+	Trace b = a;
+	b.position.getRefData().row(2) += 1000;//Above pelvis
+	Trace c = a;
+	c.position.getRefData().row(1) += 1000;// Right to pelvis
+	tr = Geometry::projection(a, b, c, tr);
+
+	//Reorient global axes correctly
+	vec tmp;
+	tmp << 0 << 0 << 0;
+	a.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	tmp << 0 << 0 << -1;
+	b.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	tmp << 0 << 1 << 0;
+	c.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	tr = Geometry::projection(a, b, c, tr);
+
+	if (!isglobal) {
+		tr.globalToLocal();
+	}
+}
+
+void  MoMa::Geometry::scaleSkeleton(MoMa::Track & tr, float newsize)
+{
+
+		float meansize = meanSize(tr);
+		tr.position.getRefData() /= meansize;
+		tr.position.getRefData() *= newsize;
+
+}

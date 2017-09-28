@@ -43,6 +43,20 @@ MoMa::Track projection(const MoMa::Trace & a, const MoMa::Trace & b, const MoMa:
 void translate(MoMa::TimedCube & pos, double x, double y, double z);
 void translate(MoMa::TimedMat & pos, double x, double y, double z);
 void translate(MoMa::Track &tr, double x, double y, double z);
+
+//Experimental
+
+//Move coordinate system to initial frontal plane (i.e. first frame of the track), origin on LHip
+void placeOnOrigin(MoMa::Track & tr, std::string Pelvis = "Pelvis", std::string LHip = "LHip", std::string RHip = "RHip");
+
+//Move coordinate system to frontal plane, origin between LHip and RHip
+void stickToOrigin(MoMa::Track & tr, std::string LHip = "LHip", std::string RHip = "RHip");
+
+//Move origin to Pelvis (at each frame), but do not change orientation of coordinate system
+void stickToOriginLoose(MoMa::Track & tr, std::string Pelvis = "Pelvis", std::string LHip = "LHip", std::string RHip = "RHip");
+
+//Scale track data (resize skeleton)
+void scaleSkeleton(MoMa::Track & tr, float newsize = 1710); //1710mm = Belgian mean size (we are patriot and are proud of our chocolate)
 }
 }
 
