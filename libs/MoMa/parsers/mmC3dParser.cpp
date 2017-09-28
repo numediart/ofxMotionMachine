@@ -70,9 +70,14 @@ void C3dParser::load( string const &fileName, Track *track ) {
         return;
     }
 
+	/// Clear everything except bones and create a new nodeList ///
     std::shared_ptr<NodeList> nodeList;
     nodeList = std::make_shared<NodeList>();
-    track->clear();
+    track->clearData();
+	if (track->hasNodeList) {
+		track->nodeList = 0;
+	}
+	(track->rotationOffset).clear();
     track->nodeList = nodeList;
 
     fres = fread( &NrecordFirstParameterblock, sizeof(int8), 1, fid ); // Reading record number of parameter section
