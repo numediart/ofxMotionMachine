@@ -80,7 +80,7 @@ libs/oF/addons/ofxOpenVR
 **/xcuserdata/*
 xcuserdata
 
-# Exclude Visual Studio 2012 bits
+# Exclude Visual Studio bits
 
 *.sdf
 *.suo
@@ -90,6 +90,7 @@ xcuserdata
 *.pdb
 *.cache
 *.user
+*.db
 obj
 
 # Avoid excluding Armadillo lib files
@@ -120,3 +121,4 @@ obj
 *.tlog
 *.log
 libs/compiled/project/win/Debug/MotionMachineVR.idb
+
