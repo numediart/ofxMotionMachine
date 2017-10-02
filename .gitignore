@@ -36,6 +36,7 @@ libs/compiled/project/win/obj/*
 libs/compiled/project/win/x64
 **.build/*
 */build/*
+.vs/*
 
 # Exclude any app but examples
 
