@@ -30,6 +30,8 @@ public:
 };*/
 namespace MoMa{
 
+	double mmRadToDeg(double radians);
+	double mmDegToRad(double degrees);
 class quaternion : public arma::colvec4 {
 public:
 
@@ -58,7 +60,9 @@ public:
     //to encode Orientation Matrix.
     
     void set(const arma::mat& matrix);
-    void get(arma::mat& matrix) const;
+	void get(arma::mat& matrix) const;
+	void get(arma::mat44& matrix) const;
+	void get(arma::mat33& matrix) const;
     
    // inline double& operator [](int i);
     //inline double operator [](int i) const;

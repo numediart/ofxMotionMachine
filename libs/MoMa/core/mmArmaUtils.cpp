@@ -85,6 +85,16 @@ arma::mat coordMat(double a1,double a2,double a3,rotationOrder order){
         
     }
 
+	arma::mat translMat(arma::vec3 pVec) {
+		arma::mat  ret(4, 4);
+		ret	<< 1 << 0 << 0 << pVec(0) << arma::endr
+			<< 0 << 1 << 0 << pVec(1) << arma::endr
+			<< 0 << 0 << 1 << pVec(2) << arma::endr
+			<< 0 << 0 << 0 << 1;
+		return ret;
+	}
+
+
 	arma::mat quat2ExpMap(arma::mat pMat) {
 		arma::rowvec sinhalftheta =arma::sqrt(arma::sum(pMat.rows(0, 2) % pMat.rows(0, 2), 0));
 		arma::rowvec coshalftheta = pMat.row(3);

@@ -17,7 +17,8 @@ namespace MoMa {
     };
     
     arma::mat coordMat( double a1, double a2, double a3, rotationOrder order );
-    arma::mat rotMat( double angle, unsigned int axisId );
+	arma::mat rotMat(double angle, unsigned int axisId);
+	arma::mat translMat(arma::vec3 pVec);
 	arma::mat quat2ExpMap(arma::mat pMat);
 	arma::cube quat2ExpMap(arma::cube pCube);
 

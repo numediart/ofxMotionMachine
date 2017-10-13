@@ -75,7 +75,19 @@ void quaternion::set(const arma::mat& _matrix) {
 }
 
 void quaternion::get(arma::mat& _matrix) const {
-    _matrix=arma::eye(4,4);
+	arma::mat44 temp;
+	this->get(temp);
+	_matrix = temp;
+}
+void quaternion::get(arma::mat44& _matrix) const {
+	arma::mat33 tempMatrix;
+	this->get(tempMatrix);
+
+	_matrix = arma::eye(4, 4);
+	_matrix.submat(0, 2, 0, 2);
+}
+void quaternion::get(arma::mat33& _matrix) const {
+    _matrix=arma::eye(3,3);
     double QX=(*this)(0);
     double QY=(*this)(1);
     double QZ=(*this)(2);
