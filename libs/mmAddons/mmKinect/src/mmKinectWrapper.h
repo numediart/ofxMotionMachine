@@ -14,6 +14,8 @@ namespace MoMa {
 		~kinectWrapper();
 		void setup();
 		bool checkUserId(arma::vec head);
+		arma::vec camSpaceVecToMoMa(const CameraSpacePoint pVec);
+		arma::vec kinectWrapper::camSpaceQuatToMoMa(const Vector4 pVec);
 		bool update();//return true if a new frame is acquired
 		void drawSkeleton(unsigned int frameIndex);
 		void drawSkeleton(double frametime);
@@ -33,7 +35,6 @@ namespace MoMa {
 		float mRot;
 		ofVec3f mTrans;
 		int mBodyId ;
-		int numBodies;
 	};
 };
 
