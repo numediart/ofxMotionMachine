@@ -423,6 +423,12 @@
     <ClCompile Include="..\..\..\MoMa\scenes\oF\application\mmOfMutatedSkeleton.cpp">
       <Filter>MoMa\scenes\oF\application</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\parsers\mmFaceCsvParser.cpp">
+      <Filter>MoMa\parsers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\MoMa\parsers\mmFaceTxtParser.cpp">
+      <Filter>MoMa\parsers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\MoMa\core\mmBoneList.h">
@@ -805,6 +811,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\MoMa\scenes\oF\application\mmOfMutatedSkeleton.h">
       <Filter>MoMa\scenes\oF\application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\parsers\mmFaceCsvParser.h">
+      <Filter>MoMa\parsers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\MoMa\parsers\mmFaceTxtParser.h">
+      <Filter>MoMa\parsers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -45,6 +45,8 @@
     <ClCompile Include="..\..\..\MoMa\parsers\mmBvhParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmC3dParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmCmpParser.cpp" />
+    <ClCompile Include="..\..\..\MoMa\parsers\mmFaceCsvParser.cpp" />
+    <ClCompile Include="..\..\..\MoMa\parsers\mmFaceTxtParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmFlatParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmKinParser.cpp" />
     <ClCompile Include="..\..\..\MoMa\parsers\mmParser.cpp" />
@@ -154,6 +156,8 @@
     <ClInclude Include="..\..\..\MoMa\parsers\mmBvhParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmC3dParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmCmpParser.h" />
+    <ClInclude Include="..\..\..\MoMa\parsers\mmFaceCsvParser.h" />
+    <ClInclude Include="..\..\..\MoMa\parsers\mmFaceTxtParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmFlatParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmKinParser.h" />
     <ClInclude Include="..\..\..\MoMa\parsers\mmParser.h" />
@@ -264,7 +268,7 @@
     <ProjectGuid>{ACAC230C-E514-4F4E-A999-25001921C785}</ProjectGuid>
     <RootNamespace>MotionMachine</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
