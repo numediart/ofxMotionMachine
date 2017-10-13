@@ -157,6 +157,7 @@ void SceneVR::draw(ofEventArgs &args) {
 		//_strHelp << "HELP (press h to toggle): " << endl;
 		_strHelp << "Toggle OpenVR mirror window (press: m)." << endl;
 		ofDrawBitmapStringHighlight(_strHelp.str(), ofPoint(10.0f, 20.0f), ofColor(ofColor::black, 100.0f));
+		ofDrawBitmapString("frame rate:" + ofToString(ofGetFrameRate()) + " fps", 10, 10);
 	}
 
 #else
