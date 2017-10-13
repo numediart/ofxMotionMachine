@@ -358,6 +358,7 @@ namespace MoMa {
 
             oneTrace.setTimeFlag(true);
             //oneTrace.setRotationFlag( hasRotation );
+            if (hasNodeList)
             oneTrace.setName(nodeList->name(index));
 
             if (position.isTimed()) {

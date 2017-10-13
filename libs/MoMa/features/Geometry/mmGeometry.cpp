@@ -1,5 +1,6 @@
 #include "mmGeometry.h"
-
+#include "mmKinematics.h"
+#include "mmSignal.h"
 using namespace arma;
 using namespace MoMa;
 
@@ -288,7 +289,7 @@ MoMa::Track MoMa::Geometry::projection(const MoMa::Trace & a, const MoMa::Trace 
 		TimedMat nodetracen = ret.position.col(n);
 		nodetracen = projection(a.position, b.position, c.position, nodetracen);
 		ret.position.getRefData()(span::all, span(n), span::all) = nodetracen.getData();
-		
+
 	}
 	if (ret.hasRotation) {
 
@@ -346,4 +347,164 @@ void MoMa::Geometry::translate(MoMa::Track & tr, double x, double y, double z)
 		tr.globalToLocal();
 }
 
+void MoMa::Geometry::translate(MoMa::Track & tr, arma::mat translation)
+{
+	for (uint i = 0; i < tr.nOfNodes(); i++)
+	{
+		tr.position.getRefData()(arma::span::all, arma::span(i), arma::span::all) -= translation;
+	}
+}
 
+void MoMa::Geometry::placeOnOrigin(MoMa::Track & tr, std::string Pelvis, std::string LHip, std::string RHip)
+{
+	bool isLocal = false;
+	if (!tr.hasGlobalCoordinate) {
+
+		isLocal = true;
+		tr.localToGlobal();
+	}
+
+	//Move coordinate system to initial (i.e. first frame) frontal plane, origin on LHip
+	Trace a;
+	vec tmp = tr(RHip)[0u].position;
+	a.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	Trace b;
+	tmp = tr(RHip)[0u].position;
+	tmp(2) = tmp(2) + 1000;
+	b.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	Trace c;
+	c.setPosition(repmat(tr(LHip)[0u].position, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+
+	tr = Geometry::projection(a, b, c, tr);
+
+	//Reorient global axes correctly
+	tmp << 0 << 0 << 0;
+	a.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	tmp << 0 << 0 << -1;
+	b.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	tmp << 0 << 1 << 0;
+	c.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	tr = Geometry::projection(a, b, c, tr);
+
+	//Translate (translate track to place pelvis at first frame to 0,0,0)
+	Geometry::translate(tr, -tr(Pelvis)[0u].position(0), -tr(Pelvis)[0u].position(1), -tr(Pelvis)[0u].position(2));
+
+	if (isLocal)
+		tr.globalToLocal();
+}
+
+arma::mat MoMa::Geometry::centerOfMassmat(MoMa::Track & tr) {
+
+	bool isLocal = false;
+	if (!tr.hasGlobalCoordinate) {
+
+		isLocal = true;
+		tr.localToGlobal();
+	}
+
+	mat center;
+	center.zeros(3, tr.nOfFrames());
+
+	//avoid nans on each frame
+	for (uint f = 0; f < tr.nOfFrames(); f++) {
+
+		center.col(f) = nanmean(tr.framePosition(f), 1);
+	}
+
+	if (isLocal)
+		tr.globalToLocal();
+
+	return center;
+}
+
+MoMa::TimedMat MoMa::Geometry::centerOfMass(MoMa::Track & tr) {
+
+	mat center = centerOfMassmat(tr);
+	if (!tr.position.isTimed())
+		return TimedMat(tr.position.frameRate(), center, tr.position.initialTime());
+	else
+		return TimedMat(tr.position.getTimeVec(), center);
+}
+
+MoMa::Trace MoMa::Geometry::centerOfMassTrace(MoMa::Track & tr) {
+	
+	Trace ret;
+	ret.setTimeFlag(tr.position.isTimed());
+	ret.position = centerOfMass(tr);
+	return ret;
+}
+
+void MoMa::Geometry::COMToOrigin(MoMa::Track & tr)
+{
+
+	bool isLocal = false;
+	if (!tr.hasGlobalCoordinate) {
+
+		isLocal = true;
+		tr.localToGlobal();
+	}
+
+	mat center = centerOfMassmat(tr);
+	translate(tr, center);
+
+	if (isLocal)
+		tr.globalToLocal();
+}
+
+void  MoMa::Geometry::stickToOrigin(MoMa::Track & tr, std::string LHip, std::string RHip)
+{
+	bool isLocal = false;
+	if (!tr.hasGlobalCoordinate) {
+
+		isLocal = true;
+		tr.localToGlobal();
+	}
+
+	//Move coordinate system to frontal plane, origin between LHip and RHip
+	Trace a = tr(RHip);
+	Trace c = tr(LHip);
+	a.position.getRefData() = (a.position.getData() + c.position.getData()) / 2; //Origin between LHip and RHip
+	Trace b = a;
+	b.position.getRefData().row(2) += 1000; //Frontal plane!
+	tr = Geometry::projection(a, b, c, tr);
+
+	//Reorient global axes correctly
+	vec tmp;
+	tmp << 0 << 0 << 0;
+	a.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	tmp << 0 << 0 << -1;
+	b.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	tmp << 0 << 1 << 0;
+	c.setPosition(repmat(tmp, 1, tr.nOfFrames()), tr.frameRate(), tr.position.initialTime());
+	tr = Geometry::projection(a, b, c, tr);
+
+	if (isLocal)
+		tr.globalToLocal();
+}
+
+void  MoMa::Geometry::stickToOriginLoose(MoMa::Track & tr, std::string rootnodename)
+{
+	//placeOnOrigin(tr, Pelvis, LHip, RHip);
+
+	bool isLocal = false;
+	if (!tr.hasGlobalCoordinate) {
+
+		isLocal = true;
+		tr.localToGlobal();
+	}
+
+	mat origin = tr.position.getRefData()(arma::span::all, arma::span(tr.nodeList->index(rootnodename)), arma::span::all);
+	translate(tr, origin);
+
+	if (isLocal)
+		tr.globalToLocal();
+}
+
+void  MoMa::Geometry::scaleSkeleton(MoMa::Track & tr, float newsize)
+{
+
+	float meansize = meanSize(tr);
+	tr.position.getRefData() /= meansize;
+	tr.position.getRefData() *= newsize;
+
+}

@@ -162,6 +162,12 @@ int NodeList::index( std::string name ) {
     return( nIdx );
 }
 
+void NodeList::rename(std::string oldname, std::string newname) {
+
+	this->operator[](newname) = this->index(oldname);
+	this->erase(oldname);
+}
+
 void NodeList::print( void ) {
     
     map<string,int>::const_iterator it = this->begin();
