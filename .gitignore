@@ -92,6 +92,10 @@ xcuserdata
 *.cache
 *.user
 *.db
+*.ipch
+*.db-wal
+*.opendb
+*.db-shm
 obj
 
 # Avoid excluding Armadillo lib files
