@@ -1,6 +1,6 @@
 {
 	"advancedMode": true,
-	"defaultOfPath": "D:\\Documents\\digistorm\\development\\of_v0.9.8_vs_release",
+	"defaultOfPath": "..\\..\\..",
 	"defaultPlatform": "vs",
 	"defaultRelativeProjectPath": "apps/myApps",
 	"showConsole": false,
