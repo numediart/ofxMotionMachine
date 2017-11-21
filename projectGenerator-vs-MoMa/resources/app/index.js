@@ -528,7 +528,6 @@ ipc.on('getRandomSketchName', function(event, arg) {
 });
 
 ipc.on('update', function(event, arg) {
-
     var update = arg;
     var exec = require('child_process').exec;
     var pathTemp = require('path');
@@ -661,7 +660,7 @@ ipc.on('generate', function(event, arg) {
 	
     var wholeString = pgApp + " " + verboseString + " " + pathString + " " + addonString + " " + templateString + " " + platformString + " " + projectString;
 
-    exec(wholeString, function callback(error, stdout, stderr) {
+    exec(wholeString, {maxBuffer : 500 * 1024}, function callback(error, stdout, stderr) {
 
         var wasError = false;
         var text = stdout; //Big text with many line breaks
