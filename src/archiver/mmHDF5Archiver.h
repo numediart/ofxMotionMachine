@@ -1,3 +1,5 @@
+#ifdef HDF5Support
+
 #ifndef mmHDF5Archiver_H
 #include "mmTrack.h"
 
@@ -15,4 +17,6 @@ namespace MoMa{
 };
 
 #endif//mmHDF5Archiver_H
+#ifdef HDF5Support
+
 

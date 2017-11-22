@@ -1,0 +1,4 @@
+ofxMotionMachine
+ofxOsc
+ofxUI
+ofxXmlSettings

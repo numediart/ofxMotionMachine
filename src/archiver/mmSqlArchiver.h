@@ -1,4 +1,4 @@
-
+#ifdef SQLSupport
 #ifndef __sqlArchiver__
 #define __sqlArchiver__
 
@@ -34,4 +34,5 @@ protected:
 	int mFrameCpt;
 };
 
+#endif
 #endif

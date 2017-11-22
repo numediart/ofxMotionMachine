@@ -1,3 +1,4 @@
+#ifdef SQLSupport
 
 #include "mmSqlArchiver.h"
 #include <windows.h>
@@ -353,3 +354,4 @@ void sqlArchiver::getFrameData(double** data0, int &dataSize0, double** data1, i
 }
 void sqlArchiver::destroyDataBase() {
 }
+#endif

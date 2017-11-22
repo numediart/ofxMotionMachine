@@ -52,7 +52,6 @@ common:
 	# in the src folders in libs and the root of the addon. if your addon needs
 	# to include files in different places or a different set of files per platform
 	# they can be specified here
-	#ADDON_SOURCES = template
 	
 	# some addons need resources to be copied to the bin/data folder of the project
 	# specify here any files that need to be copied, you can use wildcards like * and ?
@@ -61,7 +60,6 @@ common:
 	# when parsing the file system looking for libraries exclude this for all or
 	# a specific platform
 	# ADDON_LIBS_EXCLUDE =
-	#ADDON_DLLS_TO_COPY = libs\armadillo\dll
 linux64:
 	# binary libraries, these will be usually parsed from the file system but some 
 	# libraries need to passed to the linker in a specific order/
@@ -73,6 +71,11 @@ linux64:
 	# ADDON_LIBS += libs/opencv/lib/linuxarmv6l/libopencv_calib3d.a
 	# ...
 linux:
+vs:
+	ADDON_DLLS_TO_COPY = dll/blas_win32_MT.dll
+	ADDON_DLLS_TO_COPY += dll/lapack_win32_MT.dll
+	ADDON_DLLS_TO_COPY = dll/blas_win64_MT.dll
+	ADDON_DLLS_TO_COPY += dll/lapack_win64_MT.dll
 win_cb:
 linuxarmv6l:
 linuxarmv7l:

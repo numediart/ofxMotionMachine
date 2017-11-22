@@ -126,4 +126,4 @@ obj
 *.tlog
 *.log
 libs/compiled/project/win/Debug/MotionMachineVR.idb
-
+projectGenerator-vs-MoMa/resources/app/settings.json

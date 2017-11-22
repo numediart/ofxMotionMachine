@@ -143,7 +143,7 @@ string MoMa::getDataPath( void ) {
 string MoMa::getExampleDataPath(void) {
 
 	string appDir = getAppPath();
-	return(appDir + "../../ExampleData/");
+	return(appDir + "../../mmExampleData/");
 }
 
 string MoMa::getAbsoluteDataPath( void ) {

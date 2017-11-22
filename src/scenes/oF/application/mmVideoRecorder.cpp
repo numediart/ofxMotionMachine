@@ -1,3 +1,4 @@
+#ifdef __decprecated__
 #include "mmVideoRecorder.h"
 
 #ifndef TARGET_LINUX
@@ -72,4 +73,5 @@ bool MoMa::VideoRecorder::isRecording( void ) {
     return( isVideoRecord );
 }
 
+#endif
 #endif

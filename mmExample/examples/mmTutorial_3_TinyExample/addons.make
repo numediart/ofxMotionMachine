@@ -1,4 +1,0 @@
-ofxOsc
-ofxUI
-ofxXmlSettings
-ofxMoMa

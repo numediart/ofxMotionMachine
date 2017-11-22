@@ -1,3 +1,4 @@
+#ifdef __decprecated__
 #ifndef __mmVideoRecorder__
 #define __mmVideoRecorder__
 
@@ -43,4 +44,5 @@ namespace MoMa {
 
 #endif
 
+#endif
 #endif

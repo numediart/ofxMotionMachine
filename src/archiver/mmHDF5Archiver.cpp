@@ -1,3 +1,5 @@
+#ifdef HDF5Support
+
 #include "mmHDF5Archiver.h"
 #include <chrono>
 #include <thread>
@@ -182,3 +184,5 @@ namespace MoMa {
 	{
 	}
 }
+
+#endif
