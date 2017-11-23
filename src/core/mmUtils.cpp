@@ -166,13 +166,13 @@ string MoMa::getAbsoluteDataPath( void ) {
 
 string MoMa::getAbsoluteResPath( void ) {
 
-#ifdef NDEBUG
+/*#ifdef NDEBUG*/
     string appDir = getAbsoluteAppPath();
     return( appDir + "data/resources/" );
-#else
+/*#else
     string libDir = getAbsoluteLibPath();
     return( libDir + "resources/" );
-#endif
+#endif*/
 }
 
 void MoMa::correctPath( string &path, bool invert ) {
