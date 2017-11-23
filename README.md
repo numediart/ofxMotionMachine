@@ -3,7 +3,7 @@
 MotionMachine is a C++ software toolkit for rapid prototyping of motion feature extraction and motion-based interaction design. It encapsulates the complexity of motion capture data processing into an intuitive and easy-to-use set of APIs, associated with the openFrameworks environment for visualisation. MotionMachine is a new framework designed for “sense-making”, i.e. enabling the exploration of motion-related data so as to develop new kinds of analysis pipelines and/or interactive applications.
 
 # How to install ?
-ofxMotionMachine is a openfrmaeworks addon. 
+ofxMotionMachine is an openframeworks addon. 
 1. Download version of OpenFrameworks from official website http://www.openframeworks.cc. The last version of MotionMachine works with 0.9.8 OF version, others might not work.
 2. Clone MotionMachine repository on your computer, or download the zip and unzip it in folder addons of openframeworks.
 3. you can generate a motionMachine project with the app:
