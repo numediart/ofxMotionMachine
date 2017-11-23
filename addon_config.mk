@@ -74,7 +74,7 @@ linux:
 vs:
 	ADDON_DLLS_TO_COPY = dll/blas_win32_MT.dll
 	ADDON_DLLS_TO_COPY += dll/lapack_win32_MT.dll
-	ADDON_DLLS_TO_COPY = dll/blas_win64_MT.dll
+	ADDON_DLLS_TO_COPY += dll/blas_win64_MT.dll
 	ADDON_DLLS_TO_COPY += dll/lapack_win64_MT.dll
 win_cb:
 linuxarmv6l:
