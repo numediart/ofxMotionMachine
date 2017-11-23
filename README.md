@@ -3,6 +3,25 @@
 MotionMachine is a C++ software toolkit for rapid prototyping of motion feature extraction and motion-based interaction design. It encapsulates the complexity of motion capture data processing into an intuitive and easy-to-use set of APIs, associated with the openFrameworks environment for visualisation. MotionMachine is a new framework designed for “sense-making”, i.e. enabling the exploration of motion-related data so as to develop new kinds of analysis pipelines and/or interactive applications.
 
 # How to install ?
+ofxMotionMachine is a openfrmaeworks addon. 
+1. Download version of OpenFrameworks from official website http://www.openframeworks.cc. The last version of MotionMachine works with 0.9.8 OF version, others might not work.
+2. Clone MotionMachine repository on your computer, or download the zip and unzip it in folder addons of openframeworks.
+3. you can generate a motionMachine project with the app:
+		of_v0.9.8_vs_release\addons\ofxMotionMachine\projectGenerator-*-MoMa\projectGenerator
+	This generator is a customized version of the OF project generator. It selects the appropriate addons and copy the good template for new project.
+	
+
+
+# Tutorials
+
+Work in progress...
+
+You can find a series of tutorials for installation and first use of MotionMachine here:
+
+[![MotionMachine Tutorials](http://i.imgur.com/7NVZphS.png)](https://youtu.be/-00fcnDebVE?list=PLBdzvc6iEN7WqJqM1oi1nwyGaLZHu_QB3 "MotionMachine Tutorials")
+
+
+Old version of MotionMachine (deprecated)
 
 Mac OS (Xcode)
 --------
@@ -30,11 +49,3 @@ Installing MotionMachine has been tested on Ubuntu 14.04 and 16.04. Note that on
 1. Clone MotionMachine repository on your computer, or download the zip.
 2. Go to ./MotionMachine/libs/compiled/project/linux/ and follow the instructions in README.md
 
-
-# Tutorials
-
-Work in progress...
-
-You can find a series of tutorials for installation and first use of MotionMachine here:
-
-[![MotionMachine Tutorials](http://i.imgur.com/7NVZphS.png)](https://youtu.be/-00fcnDebVE?list=PLBdzvc6iEN7WqJqM1oi1nwyGaLZHu_QB3 "MotionMachine Tutorials")
