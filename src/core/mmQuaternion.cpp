@@ -84,7 +84,7 @@ void quaternion::get(arma::mat44& _matrix) const {
 	this->get(tempMatrix);
 
 	_matrix = arma::eye(4, 4);
-	_matrix.submat(0, 2, 0, 2);
+	_matrix.submat(0, 0, 2, 2)=tempMatrix;
 }
 void quaternion::get(arma::mat33& _matrix) const {
     _matrix=arma::eye(3,3);
