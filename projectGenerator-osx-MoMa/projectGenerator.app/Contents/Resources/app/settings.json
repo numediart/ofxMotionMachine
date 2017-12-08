@@ -1,10 +1,9 @@
 {
 	"advancedMode": false,
-	"defaultOfPath": "
 	"defaultOfPath": "../../..",
 	"defaultPlatform": "osx",
 	"defaultRelativeProjectPath": "apps/myApps",
 	"showConsole": false,
 	"showDeveloperTools": false,
-	"useDictionaryNameGenerator": true
+	"useDictionaryNameGenerator": false
 }
