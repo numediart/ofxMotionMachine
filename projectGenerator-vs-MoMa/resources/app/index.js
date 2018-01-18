@@ -632,8 +632,6 @@ ipc.on('generate', function(event, arg) {
     if (generate['ofPath'] !== null) {
         pathString = "-o\"" + generate['ofPath'] + "\"";
     }
-
-	templateString = "-t\"\\..\\..\\addons\\ofxMotionMachine\\template\"";
 	
     if (generate['verbose'] === true) {
         verboseString = "-v";
@@ -650,6 +648,15 @@ ipc.on('generate', function(event, arg) {
     }else{
         pgApp = pathTemp.normalize(pathTemp.join(pathTemp.join(__dirname, "app"), "projectGenerator"));
     }
+		
+	if (fs.existsSync(projectString.substring(1, projectString.length-1)+"\\src") == false) {
+		console.log("template used");
+		templateString = "-t\"\\..\\..\\addons\\ofxMotionMachine\\template\"";
+	}
+	else {
+		console.log("template not used");
+		templateString= "";
+	}
 
 	
     if( arg.platform == 'osx' || arg.platform == 'linux' || arg.platform == 'linux64' ){
