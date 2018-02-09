@@ -1,0 +1,20 @@
+Head RHE BHead
+Neck RTA
+Thorax RPVP Spine
+LShoulder LeftShoulder ShoulderLeft ShoulderL LAR L_Clavicle
+RShoulder RightShoulder ShoulderRight ShoulderR RAR R_Clavicle
+LElbow LeftElbow ElbowLeft ElbowL LFA LeftForeArm
+RElbow RightElbow ElbowRight ElbowR RFA RightForeArm
+LWrist LeftWrist WristLeft WristL LHAP
+RWrist RightWrist WristRight WristR RHAP
+LHand LeftHand HandLeft HandL LHAD
+RHand RightHand HandRight HandR RHAD
+Pelvis RPVD Hips
+LHip LeftHip HipLeft HipL LTH LeftUpLeg
+RHip RightHip HipRight HipR RTH RightUpLeg
+LKnee LeftKnee KneeLeft KneeL LSK LeftLeg
+RKnee RightKnee KneeRight KneeR RSK RightLeg
+LAnkle LeftAnkle AnkleLeft AnkleL LFTP
+RAnkle RightAnkle AnkleRight AnkleR RFTP
+LFoot LeftFoot FootLeft FootL LFTD
+RFoot RightFoot FootRight FootR RFTD

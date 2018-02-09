@@ -1,0 +1,2031 @@
+<?xml version="1.0"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup>
+		<ClCompile Include="src\ofApp.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\main.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\archiver\mmHDF5Archiver.cpp">
+			<Filter>addons\ofxMotionMachine\src\archiver</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\archiver\mmSqlArchiver.cpp">
+			<Filter>addons\ofxMotionMachine\src\archiver</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmArmaUtils.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmBone.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmBoneList.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmBoneTrace.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmContainer.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmFrame.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmLabelList.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmMoment.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmMutatedBoneList.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmNode.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmNodeList.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmNodeTrace.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmQuaternion.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmSkeleton.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmSynoList.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmTrack.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmUtils.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\core\mmXmlArchiver.cpp">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\features\BoundingBox\mmBoundingBox.cpp">
+			<Filter>addons\ofxMotionMachine\src\features\BoundingBox</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\features\Geometry\mmGeometry.cpp">
+			<Filter>addons\ofxMotionMachine\src\features\Geometry</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\features\Kinematics\mmKinematics.cpp">
+			<Filter>addons\ofxMotionMachine\src\features\Kinematics</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\features\Signal\mmSignal.cpp">
+			<Filter>addons\ofxMotionMachine\src\features\Signal</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\parsers\BvhParser.cpp">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmBvhParser.cpp">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmC3dParser.cpp">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmCmpParser.cpp">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmFaceCsvParser.cpp">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmFaceTxtParser.cpp">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmFlatParser.cpp">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmKinParser.cpp">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmParser.cpp">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmV3dParser.cpp">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmXmlParser.cpp">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmCam.cpp">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmCanvas.cpp">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmFloatingObject.cpp">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmMenuView.cpp">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmOfBone.cpp">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmOfMutatedSkeleton.cpp">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmOfPlot.cpp">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmOfSkeleton.cpp">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmOfUtils.cpp">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmOptionsView.cpp">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmPlayBar.cpp">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmSceneApp.cpp">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmTextDialog.cpp">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmVideoRecorder.cpp">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\features\mmBoundingBoxUI.cpp">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\features</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUI2DGraph.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUI2DPad.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIBaseDraws.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIBiLabelSlider.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIButton.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUICanvas.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUICircleSlider.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIDragableLabelButton.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIDropDownList.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIEventArgs.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIFPS.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIFPSSlider.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIImage.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIImageButton.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIImageSampler.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIImageSlider.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIImageToggle.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUILabel.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUILabelButton.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUILabelToggle.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIMinimalSlider.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIMovingGraph.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIMultiImageButton.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIMultiImageToggle.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUINumberDialer.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIRadio.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIRangeSlider.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIRectangle.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIRotarySlider.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIScrollableCanvas.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUISlider.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUISortableList.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUISpacer.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUISpectrum.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUISuperCanvas.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUITabBar.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUITextArea.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUITextInput.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIToggle.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIToggleMatrix.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIValuePlotter.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIWaveform.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIWidget.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIWidgetWithLabel.cpp">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscBundle.cpp">
+			<Filter>addons\ofxOsc\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscMessage.cpp">
+			<Filter>addons\ofxOsc\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.cpp">
+			<Filter>addons\ofxOsc\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.cpp">
+			<Filter>addons\ofxOsc\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscSender.cpp">
+			<Filter>addons\ofxOsc\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp">
+			<Filter>addons\ofxOsc\libs\oscpack\src\ip</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtils.cpp">
+			<Filter>addons\ofxOsc\libs\oscpack\src\ip\win32</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocket.cpp">
+			<Filter>addons\ofxOsc\libs\oscpack\src\ip\win32</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.cpp">
+			<Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.cpp">
+			<Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.cpp">
+			<Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.cpp">
+			<Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp">
+			<Filter>addons\ofxXmlSettings\src</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp">
+			<Filter>addons\ofxXmlSettings\libs</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp">
+			<Filter>addons\ofxXmlSettings\libs</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
+			<Filter>addons\ofxXmlSettings\libs</Filter>
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<Filter Include="src">
+			<UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons">
+			<UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine">
+			<UniqueIdentifier>{B921D8BB-D5C8-3876-7604-DFB1}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\src">
+			<UniqueIdentifier>{2B699FB5-B55E-F657-268D-7DB0}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\src\archiver">
+			<UniqueIdentifier>{4FE19112-87ED-91E4-709E-11DB}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\src\core">
+			<UniqueIdentifier>{B12A2976-1341-D6DA-DE2F-D723}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\src\features">
+			<UniqueIdentifier>{C3B5A1B3-239D-6AA3-3A13-FFAB}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\src\features\BoundingBox">
+			<UniqueIdentifier>{83B2F281-39D0-8128-BB49-4614}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\src\features\Geometry">
+			<UniqueIdentifier>{2355568F-D980-54F0-9295-BBB4}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\src\features\Kinematics">
+			<UniqueIdentifier>{51A5AF67-1324-7959-0DBA-E2CE}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\src\features\Signal">
+			<UniqueIdentifier>{B758258B-0CBE-9224-D1A3-50DF}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\src\parsers">
+			<UniqueIdentifier>{B2F0B803-16B0-6B36-7B42-9E22}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\src\scenes">
+			<UniqueIdentifier>{6BC81EF1-DD83-ABF2-6742-9D1C}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\src\scenes\oF">
+			<UniqueIdentifier>{2FDACBA7-B317-5F38-4574-251F}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\src\scenes\oF\application">
+			<UniqueIdentifier>{F6B9327B-6E89-95D6-8BED-521D}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\src\scenes\oF\features">
+			<UniqueIdentifier>{068BF146-307E-5D99-BA37-63FC}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\libs">
+			<UniqueIdentifier>{35FC2BAD-6B30-26FA-E4AF-1134}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\libs\armadillo">
+			<UniqueIdentifier>{FE1861CB-DB99-8BB7-6645-C4CA}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\libs\armadillo\include">
+			<UniqueIdentifier>{D602BA71-C6AA-23A6-40C9-825E}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits">
+			<UniqueIdentifier>{0B4FF28B-C822-31B0-170E-DA86}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\libs\ofxUI">
+			<UniqueIdentifier>{300D2A4D-819F-DE89-6301-753F}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxMotionMachine\libs\ofxUI\src">
+			<UniqueIdentifier>{4AD53390-C2A5-CDB7-4DEE-A927}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxOsc">
+			<UniqueIdentifier>{D91DCA33-6E5D-4481-2AEC-9FBB}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxOsc\src">
+			<UniqueIdentifier>{B9DD339A-D93D-92A1-0A2F-4B41}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxOsc\libs">
+			<UniqueIdentifier>{99ECA1D9-873F-4622-8FC0-FC7B}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxOsc\libs\oscpack">
+			<UniqueIdentifier>{D3A98534-1602-4FEF-57A6-6593}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxOsc\libs\oscpack\src">
+			<UniqueIdentifier>{BFB5BB47-98C8-BBCB-3066-1046}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxOsc\libs\oscpack\src\ip">
+			<UniqueIdentifier>{5A029128-EB41-95C5-CBC0-CDED}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxOsc\libs\oscpack\src\ip\win32">
+			<UniqueIdentifier>{79DFDFE2-400B-8654-3675-01A3}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxOsc\libs\oscpack\src\osc">
+			<UniqueIdentifier>{EDACB89C-9768-9551-4D41-B590}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxXmlSettings">
+			<UniqueIdentifier>{877F005D-13E6-0592-1D97-F2E3}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxXmlSettings\src">
+			<UniqueIdentifier>{CCB2AC63-49D2-977C-CFE8-AEAD}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="addons\ofxXmlSettings\libs">
+			<UniqueIdentifier>{687714A8-1662-FA1C-261F-50F0}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="src\ofApp.h">
+			<Filter>src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\archiver\mmHDF5Archiver.h">
+			<Filter>addons\ofxMotionMachine\src\archiver</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\archiver\mmSqlArchiver.h">
+			<Filter>addons\ofxMotionMachine\src\archiver</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmArmaUtils.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmBone.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmBoneList.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmBoneTrace.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmContainer.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmFrame.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmLabelList.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmMoment.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmMutatedBoneList.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmNode.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmNodeList.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmNodeTrace.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmQuaternion.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmSkeleton.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmSynoList.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmTrack.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmUtils.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\mmXmlArchiver.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\core\MoMa.h">
+			<Filter>addons\ofxMotionMachine\src\core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\features\BoundingBox\mmBoundingBox.h">
+			<Filter>addons\ofxMotionMachine\src\features\BoundingBox</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\features\Geometry\mmGeometry.h">
+			<Filter>addons\ofxMotionMachine\src\features\Geometry</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\features\Kinematics\mmKinematics.h">
+			<Filter>addons\ofxMotionMachine\src\features\Kinematics</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\features\MoMaFeatures.h">
+			<Filter>addons\ofxMotionMachine\src\features</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\features\Signal\mmSignal.h">
+			<Filter>addons\ofxMotionMachine\src\features\Signal</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\parsers\BvhParser.h">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmBvhParser.h">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmC3dParser.h">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmCmpParser.h">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmFaceCsvParser.h">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmFaceTxtParser.h">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmFlatParser.h">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmKinParser.h">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmParser.h">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmV3dParser.h">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmXmlParser.h">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmCam.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmCanvas.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmFloatingObject.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmMenuView.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmOfBone.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmOfMutatedSkeleton.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmOfPlot.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmOfSkeleton.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmOfUtils.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmOptionsView.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmPlayBar.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmSceneApp.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmTextDialog.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\mmVideoRecorder.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\application\MoMaUI.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\application</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\scenes\oF\features\mmBoundingBoxUI.h">
+			<Filter>addons\ofxMotionMachine\src\scenes\oF\features</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\access.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\arma_boost.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\arma_cmath.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\arma_config.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\arma_ostream_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\arma_ostream_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\arma_rng.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\arma_rng_cxx11.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\arma_rng_cxx98.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\arma_static_check.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\arma_version.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\arpack_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\arpack_wrapper.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\arrayops_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\arrayops_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\atlas_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\atlas_wrapper.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\auxlib_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\auxlib_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\BaseCube_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\BaseCube_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Base_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Base_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\blas_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\blas_wrapper.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Col_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Col_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\compiler_setup.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\compiler_setup_post.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\cond_rel_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\cond_rel_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\config.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\constants.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\constants_compat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Cube_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Cube_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\debug.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\diagmat_proxy.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\diagview_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\diagview_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\diskio_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\diskio_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\distr_param.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\eGlueCube_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\eGlueCube_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\eGlue_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\eglue_core_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\eglue_core_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\eGlue_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\eOpCube_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\eOpCube_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\eop_aux.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\eOp_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\eop_core_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\eop_core_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\eOp_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fft_engine.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\field_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\field_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_accu.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_all.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_any.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_as_scalar.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_chol.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_clamp.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_cond.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_conv.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_conv_to.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_cor.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_cov.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_cross.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_cumsum.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_det.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_diagmat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_diagvec.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_dot.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_eigs_gen.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_eigs_sym.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_eig_gen.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_eig_pair.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_eig_sym.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_elem.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_eps.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_eye.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_fft.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_fft2.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_find.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_flip.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_hist.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_histc.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_inplace_strans.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_inplace_trans.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_inv.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_join.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_kron.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_log_det.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_lu.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_max.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_mean.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_median.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_min.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_misc.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_norm.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_normalise.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_norm_sparse.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_numel.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_n_unique.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_ones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_pinv.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_princomp.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_prod.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_qr.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_randi.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_randn.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_randu.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_rank.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_repmat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_reshape.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_resize.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_shuffle.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_size.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_solve.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_sort.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_sort_index.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_speye.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_spones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_sprandn.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_sprandu.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_stddev.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_strans.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_sum.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_svd.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_syl_lyap.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_symmat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_toeplitz.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_trace.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_trans.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_trig.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_trimat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_trunc_exp.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_trunc_log.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_unique.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_var.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_vectorise.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\fn_zeros.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\forward_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\GenCube_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\GenCube_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Gen_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Gen_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\GlueCube_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\GlueCube_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Glue_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_conv_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_conv_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_cor_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_cor_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_cov_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_cov_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_cross_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_cross_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_histc_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_histc_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_hist_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_hist_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_join_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_join_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_kron_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_kron_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_max_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_max_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Glue_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_min_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_min_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_mixed_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_mixed_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_relational_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_relational_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_solve_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_solve_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_times_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_times_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_toeplitz_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\glue_toeplitz_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\gmm_diag_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\gmm_diag_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\gmm_misc_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\gmm_misc_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\hdf5_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\hdf5_misc.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\include_atlas.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\injector_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\injector_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\lapack_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\lapack_wrapper.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Mat_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Mat_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\memory.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\mtGlueCube_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\mtGlueCube_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\mtGlue_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\mtGlue_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\mtOpCube_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\mtOpCube_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\mtOp_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\mtOp_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\mtSpOp_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\mtSpOp_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\mul_gemm.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\mul_gemm_mixed.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\mul_gemv.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\mul_herk.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\mul_syrk.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\OpCube_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\OpCube_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\operator_cube_div.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\operator_cube_minus.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\operator_cube_plus.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\operator_cube_relational.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\operator_cube_schur.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\operator_cube_times.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\operator_div.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\operator_minus.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\operator_ostream.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\operator_plus.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\operator_relational.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\operator_schur.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\operator_times.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_all_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_all_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_any_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_any_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Op_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_chol_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_chol_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_clamp_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_clamp_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_cor_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_cor_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_cov_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_cov_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_cumsum_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_cumsum_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_cx_scalar_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_cx_scalar_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_diagmat_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_diagmat_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_diagvec_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_diagvec_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_dotext_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_dotext_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_dot_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_dot_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_fft_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_fft_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_find_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_find_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_flip_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_flip_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_hist_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_hist_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_htrans_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_htrans_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_inv_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_inv_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_max_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_max_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_mean_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_mean_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Op_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_median_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_median_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_min_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_min_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_misc_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_misc_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_normalise_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_normalise_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_pinv_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_pinv_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_princomp_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_princomp_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_prod_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_prod_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_relational_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_relational_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_repmat_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_repmat_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_reshape_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_reshape_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_resize_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_resize_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_shuffle_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_shuffle_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_sort_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_sort_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_stddev_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_stddev_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_strans_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_strans_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_sum_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_sum_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_symmat_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_symmat_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_toeplitz_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_toeplitz_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_trimat_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_trimat_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_unique_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_unique_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_var_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_var_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_vectorise_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\op_vectorise_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\podarray_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\podarray_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\promote_type.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Proxy.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\ProxyCube.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\restrictors.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Row_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\Row_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\running_stat_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\running_stat_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\running_stat_vec_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\running_stat_vec_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SizeCube_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SizeCube_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SizeMat_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SizeMat_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\span.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpBase_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpBase_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpCol_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpCol_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpGlue_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpGlue_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spglue_minus_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spglue_minus_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spglue_plus_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spglue_plus_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spglue_times_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spglue_times_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpMat_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpMat_iterators_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpMat_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpOp_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_htrans_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_htrans_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_max_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_max_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_mean_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_mean_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpOp_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_min_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_min_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_misc_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_misc_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_strans_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_strans_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_sum_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_sum_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_var_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\spop_var_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpProxy.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpRow_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpRow_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpSubview_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpSubview_iterators_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpSubview_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpValProxy_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\SpValProxy_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\sp_auxlib_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\sp_auxlib_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\strip.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\subview_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\subview_cube_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\subview_cube_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\subview_each_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\subview_each_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\subview_elem1_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\subview_elem1_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\subview_elem2_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\subview_elem2_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\subview_field_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\subview_field_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\subview_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\traits.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\typedef_elem.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\typedef_elem_check.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\typedef_mat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\typedef_mat_fixed.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\unwrap.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\unwrap_cube.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\unwrap_spmat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\upgrade_val.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\wall_clock_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\wall_clock_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\xtrans_mat_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\xtrans_mat_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\xvec_htrans_bones.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits\xvec_htrans_meat.hpp">
+			<Filter>addons\ofxMotionMachine\libs\armadillo\include\armadillo_bits</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUI.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUI2DGraph.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUI2DPad.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIBaseDraws.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIBiLabelSlider.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIButton.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUICanvas.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUICircleSlider.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIDefines.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIDragableLabelButton.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIDropDownList.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIEventArgs.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIFPS.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIFPSSlider.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIImage.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIImageButton.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIImageSampler.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIImageSlider.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIImageToggle.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUILabel.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUILabelButton.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUILabelToggle.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIMinimalSlider.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIMovingGraph.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIMultiImageButton.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIMultiImageToggle.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUINumberDialer.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIOFWrapper.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIRadio.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIRangeSlider.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIRectangle.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIRotarySlider.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIScrollableCanvas.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUISlider.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUISortableList.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUISpacer.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUISpectrum.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUISuperCanvas.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUITabBar.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUITextArea.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUITextInput.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIToggle.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIToggleMatrix.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIUtils.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIValuePlotter.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIWaveform.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIWidget.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIWidgets.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIWidgetWithLabel.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\libs\ofxUI\src\ofxUIWrapper.h">
+			<Filter>addons\ofxMotionMachine\libs\ofxUI\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOsc.h">
+			<Filter>addons\ofxOsc\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscArg.h">
+			<Filter>addons\ofxOsc\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscBundle.h">
+			<Filter>addons\ofxOsc\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscMessage.h">
+			<Filter>addons\ofxOsc\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.h">
+			<Filter>addons\ofxOsc\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.h">
+			<Filter>addons\ofxOsc\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscSender.h">
+			<Filter>addons\ofxOsc\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h">
+			<Filter>addons\ofxOsc\libs\oscpack\src\ip</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h">
+			<Filter>addons\ofxOsc\libs\oscpack\src\ip</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\PacketListener.h">
+			<Filter>addons\ofxOsc\libs\oscpack\src\ip</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\TimerListener.h">
+			<Filter>addons\ofxOsc\libs\oscpack\src\ip</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\UdpSocket.h">
+			<Filter>addons\ofxOsc\libs\oscpack\src\ip</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\MessageMappingOscPacketListener.h">
+			<Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscException.h">
+			<Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscHostEndianness.h">
+			<Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.h">
+			<Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPacketListener.h">
+			<Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.h">
+			<Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.h">
+			<Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.h">
+			<Filter>addons\ofxOsc\libs\oscpack\src\osc</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h">
+			<Filter>addons\ofxXmlSettings\src</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h">
+			<Filter>addons\ofxXmlSettings\libs</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ResourceCompile Include="icon.rc" />
+	</ItemGroup>
+</Project>
