@@ -617,7 +617,7 @@ ipc.on('generate', function(event, arg) {
     var addonString = "";
     var platformString = "";
     var verboseString = "";
-
+    var templateString = "";
 
 
     if (generate['platformList'] !== null) {
@@ -626,9 +626,9 @@ ipc.on('generate', function(event, arg) {
 
     if (generate['addonList'] !== null &&
         generate['addonList'].length > 0) {
-        addonString = "-a\"" + generate['addonList'].join(",") + "\"";
+        addonString = "-a\"ofxMotionMachine,ofxOsc,ofxXmlSettings," + generate['addonList'].join(",") + "\"";
     } else {
-        addonString = "-a\" \"";
+        addonString = "-a\"ofxMotionMachine,ofxOsc,ofxXmlSettings\"";
     }
 
     if (generate['ofPath'] !== null) {
@@ -650,6 +650,15 @@ ipc.on('generate', function(event, arg) {
     }else{
         pgApp = pathTemp.normalize(pathTemp.join(pathTemp.join(__dirname, "app"), "projectGenerator"));
     }
+    console.log(projectString);
+    if (fs.existsSync(projectString.substring(1, projectString.length-1)+"/src") == false) {
+	console.log("template used");
+	templateString = "-t\"../../addons/ofxMotionMachine/template\"";
+    }
+    else {
+        console.log("template not used");
+	templateString= "";
+    }
 
     if( arg.platform == 'osx' || arg.platform == 'linux' || arg.platform == 'linux64' ){
         pgApp = pgApp.replace(/ /g, '\\ ');
@@ -657,7 +666,7 @@ ipc.on('generate', function(event, arg) {
         pgApp = pgApp = "\"" + pgApp + "\"";
     }
 
-    var wholeString = pgApp + " " + verboseString + " " + pathString + " " + addonString + " " + platformString + " " + projectString;
+    var wholeString = pgApp + " " + verboseString + " " + pathString + " " + addonString + " " + templateString + " " + platformString + " " + projectString;
 
     exec(wholeString, function callback(error, stdout, stderr) {
 
