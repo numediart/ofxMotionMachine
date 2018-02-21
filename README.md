@@ -9,8 +9,11 @@ ofxMotionMachine is an openframeworks addon.
 3. you can generate a motionMachine project with the app:
 		of_v0.9.8_vs_release\addons\ofxMotionMachine\projectGenerator-*-MoMa\projectGenerator
 	This generator is a customized version of the OF project generator. It selects the appropriate addons and copy the good template for new project.
-	
 
+Dependencies:	
+We add in this ofAddon the following modified libraries:
+Armadillo C++ Linear Algebra Library version 4.450 http://arma.sourceforge.net/
+ofxUi https://github.com/rezaali/ofxUI (deprecated library)
 
 # Tutorials
 
@@ -21,7 +24,13 @@ You can find a series of tutorials for installation and first use of MotionMachi
 [![MotionMachine Tutorials](http://i.imgur.com/7NVZphS.png)](https://youtu.be/-00fcnDebVE?list=PLBdzvc6iEN7WqJqM1oi1nwyGaLZHu_QB3 "MotionMachine Tutorials")
 
 
-Old version of MotionMachine (deprecated)
+
+Old version of MotionMachine (the followig explanation are deprecated)
+----------------------------------------------------------------------
+
+
+
+
 
 Mac OS (Xcode)
 --------
