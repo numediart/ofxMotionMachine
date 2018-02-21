@@ -626,9 +626,9 @@ ipc.on('generate', function(event, arg) {
 
     if (generate['addonList'] !== null &&
         generate['addonList'].length > 0) {
-        addonString = "-a\"ofxMotionMachine,ofxOsc,ofxUI,ofxXmlSettings," + generate['addonList'].join(",") + "\"";
+        addonString = "-a\"ofxMotionMachine,ofxOsc,ofxXmlSettings," + generate['addonList'].join(",") + "\"";
     } else {
-        addonString = "-a\"ofxMotionMachine,ofxOsc,ofxUI,ofxXmlSettings\"";
+        addonString = "-a\"ofxMotionMachine,ofxOsc,ofxXmlSettings\"";
     }
 
     if (generate['ofPath'] !== null) {
@@ -651,6 +651,15 @@ ipc.on('generate', function(event, arg) {
         pgApp = "projectGenerator";
     }else{
         pgApp = pathTemp.normalize(pathTemp.join(pathTemp.join(__dirname, "app"), "projectGenerator"));
+    }
+
+    if (fs.existsSync(projectString.substring(1, projectString.length-1)+"/src") == false) {
+	    console.log("template used");
+	    templateString = "-t\"../../addons/ofxMotionMachine/template\"";
+    }
+    else {
+        console.log("template not used");
+	    templateString= "";
     }
 
     if( arg.platform == 'osx' || arg.platform == 'linux' || arg.platform == 'linux64' ){
