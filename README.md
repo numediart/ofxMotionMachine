@@ -25,7 +25,7 @@ You can find a series of tutorials for installation and first use of MotionMachi
 
 
 
-Old version of MotionMachine (the followig explanation are deprecated)
+Old version of MotionMachine (the following explanations are deprecated)
 ----------------------------------------------------------------------
 
 
