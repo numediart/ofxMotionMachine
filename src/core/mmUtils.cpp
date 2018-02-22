@@ -81,8 +81,9 @@ string MoMa::getAbsoluteAppPath( void ) {
         // printf( "My working directory is %s.\n", cwd );
         
         string str( cwd );
+#ifdef  __APPLE__
         str = str + "/../../../";
-        
+#endif        
         return str;
         
     } else {
@@ -104,7 +105,9 @@ string MoMa::getAppPath( void ) {
 #ifdef _WIN32
     return "";
 #else
+#ifdef  __APPLE__
     return"../../../";
+#endif
 #endif
 }
 
@@ -114,10 +117,10 @@ string MoMa::getLibPath( void ) {
 #ifdef NDEBUG
     cout << "Warning : you should not use getLibPath nor getAbsoluteLibPath in Release mode. If the bin folder is moved, the relative path to the libs will be incorrect." << endl;
 #endif
-#ifdef _WIN32
-    return( appDir + "../../../../libs/MoMa/" );
-#else
+#ifdef  __APPLE__
     return( appDir +  "../../../../../../../libs/MoMa/" );
+#else
+    return( appDir + "../../../../libs/MoMa/" );
 #endif
 }
 
@@ -127,10 +130,10 @@ string MoMa::getAbsoluteLibPath( void ) {
 #ifdef NDEBUG
     cout << "Warning : you should not use getLibPath nor getAbsoluteLibPath in Release mode. If the bin folder is moved, the relative path to the libs will be incorrect." << endl;
 #endif
-#ifdef _WIN32
-    return( appDir + "../../../../libs/MoMa/" );
-#else
+#ifdef  __APPLE__
     return( appDir +  "../../../../libs/MoMa/" );
+#else
+    return( appDir + "../../../../libs/MoMa/" );
 #endif
 }
 
@@ -142,8 +145,8 @@ string MoMa::getDataPath( void ) {
 
 string MoMa::getExampleDataPath(void) {
 
-	string appDir = getAppPath();
-	return(appDir + "../../mmExampleData/");
+	string appDir = getAbsoluteAppPath();
+	return(appDir + "../../../../addons/ofxMotionMachine/mmExampleData/");
 }
 
 string MoMa::getAbsoluteDataPath( void ) {
