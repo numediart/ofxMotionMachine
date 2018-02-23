@@ -1,4 +1,3 @@
 ofxMotionMachine
 ofxOsc
-ofxUI
 ofxXmlSettings
