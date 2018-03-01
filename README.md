@@ -21,12 +21,14 @@ Work in progress...
 
 You can find a series of tutorials for installation and first use of MotionMachine here:
 
-[![MotionMachine Tutorials](http://i.imgur.com/7NVZphS.png)](https://youtu.be/-00fcnDebVE?list=PLBdzvc6iEN7WqJqM1oi1nwyGaLZHu_QB3 "MotionMachine Tutorials")
-
 
 
 Old version of MotionMachine (the following explanations are deprecated)
 ----------------------------------------------------------------------
+
+
+[![MotionMachine Tutorials](http://i.imgur.com/7NVZphS.png)](https://youtu.be/-00fcnDebVE?list=PLBdzvc6iEN7WqJqM1oi1nwyGaLZHu_QB3 "MotionMachine Tutorials")
+
 
 
 
