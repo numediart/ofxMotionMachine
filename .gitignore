@@ -90,7 +90,6 @@ xcuserdata
 *.bsc
 *.pdb
 *.cache
-*.user
 *.db
 *.ipch
 *.db-wal
