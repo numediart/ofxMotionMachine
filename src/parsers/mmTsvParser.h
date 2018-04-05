@@ -18,7 +18,7 @@ namespace MoMa {
 
         TsvParser(std::string const &fileName, Track *track);
         void load(std::string const &fileName, Track *track);
-
+        void checkemptytabs(std::string &mystring);
     private:
 
         std::vector<std::string> rawJoint;
@@ -28,6 +28,8 @@ namespace MoMa {
 
         std::stringstream thisStream;
         std::string thisLine;
+        bool isTimed;
+        arma::vec timestamps;
     };
 }
 
