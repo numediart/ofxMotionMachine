@@ -97,6 +97,24 @@ Parser::Parser(string const &fName, Track *tr) {
             tr->rotation.SetValidParam();
     }
 
+    else if (extension == "tsv") {
+
+        tr->clearData();
+        tr->type = TSV;
+        tr->setFileName(fileName.substr(sep + 1, dot - sep - 1));
+
+        TsvParser tsvParser(fileName, tr);
+
+        if (!tr->hasBoneList) {
+
+            cout << "Warning (tsv file parsing): you should load a bonelist before the data." << endl;
+        }
+
+        tr->position.SetValidParam();
+        if (tr->hasRotation)
+            tr->rotation.SetValidParam();
+    }
+
     else if (extension == "bvh") {
         tr->clear();
         tr->init();

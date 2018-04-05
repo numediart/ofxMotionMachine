@@ -44,7 +44,8 @@ namespace MoMa {
         BVH,
         CMP,
         KIN,
-        XML
+        XML,
+        TSV
     };
 
     class Track {
