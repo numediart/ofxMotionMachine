@@ -60,3 +60,6 @@ Installing MotionMachine has been tested on Ubuntu 14.04 and 16.04. Note that on
 1. Clone MotionMachine repository on your computer, or download the zip.
 2. Go to ./MotionMachine/libs/compiled/project/linux/ and follow the instructions in README.md
 
+# External links
+
+C3D-to-csv file converter developed from the MotionMachine parser: https://omid.al/projects/c3d_to_csv.html
