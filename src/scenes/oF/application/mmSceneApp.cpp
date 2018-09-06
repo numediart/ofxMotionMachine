@@ -1066,7 +1066,7 @@ void MoMa::SceneApp::render2d(void) {
                 float x = ofMap(_figure[fIdx].plot[f].data.time(n), lowBound.time(), highBound.time(), 0, ofGetWidth()); // Apply screen mapping here
                 float y = ofMap(_figure[fIdx].plot[f].data.get(n), _figure[fIdx].yMin, _figure[fIdx].yMax, _figure[fIdx].yBot - 5, _figure[fIdx].yTop + 5);
 
-                _figure[fIdx].plot[f].line.addVertex(ofVec2f(x, y)); // Add vertex
+                _figure[fIdx].plot[f].line.addVertex(ofVec3f(x, y)); // Add vertex
             }
 
             ofPushStyle();
@@ -1851,7 +1851,7 @@ void MoMa::SceneApp::setViewDistance(float distance) {
 
     camera.setPosition(ofVec3f(3.5f, 0.0f, 2.0f)*distance);
     camera.setTarget(ofVec3f(0, 0, 0)); // oF commands to move cam
-    camera.setFarClip(10000 + 10.0f*distance); camera.setNearClip(0);
+    camera.setFarClip(1000000 + 10.0f*distance); camera.setNearClip(0);
     light.setPosition(ofVec3f(3.5f, 2.0f, 2.0f)*distance);
 }
 

@@ -52,7 +52,7 @@ void ofPlot::updatePlot() {
 
             float x = ofMap( _figure.plot[f].data.time( n ), app->getLowBoundTime(), app->getHighBoundTime(), 0, ofGetWidth() ); // Apply screen mapping here
             float y = ofMap( _figure.plot[f].data.get( n ), _figure.yMin, _figure.yMax, _figure.yBot - 5, _figure.yTop + 5 );
-			_figure.plot[f].line.addVertex( ofVec2f( x, y ) ); // Add vertex
+			_figure.plot[f].line.addVertex( ofVec3f( x, y ) ); // Add vertex
         }
     }
 }

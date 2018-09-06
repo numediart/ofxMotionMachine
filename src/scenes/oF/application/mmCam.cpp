@@ -20,7 +20,6 @@ mmCam::mmCam(){
     bValidClick = false;
     bEnableMouseMiddleButton = true;
     doTranslationKey = 'm';
-    
     reset();
     enableMouseInput();
 }
@@ -33,7 +32,7 @@ mmCam::~mmCam(){
 void mmCam::update(ofEventArgs & args){
     if(bMouseInputEnabled){
     
-        rotationFactor = sensitivityRot * 180 / min(viewport.width, viewport.height);
+        rotationFactor = sensitivityRot * 180 / fmin(viewport.width, viewport.height);
         if (bMouseInputEnabled) {
             updateMouse();
         }
@@ -99,7 +98,7 @@ void mmCam::setDistance(float distance, bool save){//should this be the distance
 }
 //----------------------------------------
 float mmCam::getDistance() const {
-    return target.getPosition().distance(getPosition());
+    return glm::distance(target.getPosition(),getPosition());
 }
 //----------------------------------------
 void mmCam::setDrag(float drag){
@@ -179,7 +178,7 @@ void mmCam::updateRotation(){
         }
     }
     curRot = ofQuaternion(xRot, ofCamera::getXAxis(), yRot, ofCamera::getYAxis(), zRot, ofCamera::getZAxis());
-    setPosition((ofCamera::getGlobalPosition()-target.getGlobalPosition())*curRot +target.getGlobalPosition());
+    setPosition(curRot*(ofCamera::getGlobalPosition()-target.getGlobalPosition()) +target.getGlobalPosition());
     rotateLikeHuman();
 }
 //----------------------------------------

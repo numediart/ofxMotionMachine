@@ -1,10 +1,11 @@
 #ifndef __mmCam__
 #define __mmCam__
-
+#include "ofVectorMath.h"
 #include "ofCamera.h"
 #include "ofEvents.h"
 #include "ofUtils.h"
 #include "ofMath.h"
+#include "ofGraphics.h"
 
 // Modified version of ofEasyCam to have human caracteristics :
 // - Human see the world upside-down,
