@@ -1,10 +1,9 @@
 {
-	"advancedMode": true,
-	"defaultOfPath": "..\\..\\..",
+	"advancedMode": false,
+	"defaultOfPath": "../../../",
 	"defaultPlatform": "vs",
 	"defaultRelativeProjectPath": "apps/myApps",
 	"showConsole": false,
 	"showDeveloperTools": false,
-	"useDictionaryNameGenerator": true,
-	"verboseOutput": true
+	"useDictionaryNameGenerator": true
 }
