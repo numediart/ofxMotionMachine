@@ -7,6 +7,12 @@
 		<ClCompile Include="src\main.cpp">
 			<Filter>src</Filter>
 		</ClCompile>
+		<ClCompile Include="src\main.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
+		<ClCompile Include="src\ofApp.cpp">
+			<Filter>src</Filter>
+		</ClCompile>
 		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\archiver\mmHDF5Archiver.cpp">
 			<Filter>addons\ofxMotionMachine\src\archiver</Filter>
 		</ClCompile>
@@ -104,6 +110,9 @@
 			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmParser.cpp">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmTsvParser.cpp">
 			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmV3dParser.cpp">
@@ -443,6 +452,9 @@
 		<ClInclude Include="src\ofApp.h">
 			<Filter>src</Filter>
 		</ClInclude>
+		<ClInclude Include="src\ofApp.h">
+			<Filter>src</Filter>
+		</ClInclude>
 		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\archiver\mmHDF5Archiver.h">
 			<Filter>addons\ofxMotionMachine\src\archiver</Filter>
 		</ClInclude>
@@ -546,6 +558,9 @@
 			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmParser.h">
+			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmTsvParser.h">
 			<Filter>addons\ofxMotionMachine\src\parsers</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\..\addons\ofxMotionMachine\src\parsers\mmV3dParser.h">
