@@ -853,6 +853,7 @@ namespace MoMa {
 			}
 			mLastId=endInd;
 		}
+		return true;
 	};
 	
 	bool TimedMat::push(const arma::mat &pData){
@@ -883,6 +884,7 @@ namespace MoMa {
 			}
 			mLastId=endInd;
 		}
+		return true;
 	};
     
 // == TIMED CUBE ==
@@ -911,6 +913,7 @@ namespace MoMa {
 					mLastId=mBufferSize-1;
 			}
 		}
+		return true;
 	};
     bool TimedCube::setInterpAlgo( InterpTypes interpAlgo ) {
         
@@ -1309,6 +1312,8 @@ namespace MoMa {
 			}
 			mLastId=endInd;
 		}
+
+		return true;
 	};
 	
 	bool TimedCube::push(const arma::cube &pData){
@@ -1342,5 +1347,7 @@ namespace MoMa {
 			}
 			mLastId=endInd;
 		}
+
+		return true;
 	};
 };
