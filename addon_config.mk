@@ -24,9 +24,7 @@ meta:
 common:
 	# dependencies with other addons, a list of them separated by spaces 
 	# or use += in several lines
-	ADDON_DEPENDENCIES += ofxOsc
-	ADDON_DEPENDENCIES += ofxGui
-	ADDON_DEPENDENCIES += ofxXmlSettings
+	ADDON_DEPENDENCIES = ofxOsc ofxXmlSettings
 	
 	# include search paths, this will be usually parsed from the file system
 	# but if the addon or addon libraries need special search paths they can be
@@ -55,7 +53,7 @@ common:
 	
 	# some addons need resources to be copied to the bin/data folder of the project
 	# specify here any files that need to be copied, you can use wildcards like * and ?
-	#ADDON_DATA = data/resources/kinect2.bones
+	# ADDON_DATA = resources/kinect2.bones
 	
 	# when parsing the file system looking for libraries exclude this for all or
 	# a specific platform

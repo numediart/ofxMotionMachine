@@ -69,7 +69,7 @@ namespace MoMa {
 		//RealTime methods
 		inline bool isRealTime() const{return mIsRealTime;} ;
 		inline unsigned int getBufferSize() const{return mBufferSize;};
-		inline unsigned int setBufferSize(unsigned int pBufferSize){mBufferSize=pBufferSize;};
+		inline void setBufferSize(unsigned int pBufferSize){mBufferSize=pBufferSize;};
 		inline unsigned int memIndex(unsigned int index) const;//transform the index relative to mLastId in the index in memory
 		inline unsigned int usedIndex(unsigned int index) const;
 		void setIsFilled(bool pIsFilled){
@@ -86,7 +86,7 @@ namespace MoMa {
         unsigned int checkLastId(const arma::vec &pTime);
         bool interpIndexFind( const arma::vec pVec, double pValue, unsigned int &index1,
         double &weight1, unsigned int &index2, double &weight2 ) const; // Interpolation data
-        bool setValidIntervalTime( double time ) { mInterpValidTime = time; };
+        void setValidIntervalTime( double time ) { mInterpValidTime = time; };
 
     protected:
         arma::vec mTimeVec; // Time stamp vector

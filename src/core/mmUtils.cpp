@@ -83,6 +83,8 @@ string MoMa::getAbsoluteAppPath( void ) {
         string str( cwd );
 #ifdef  __APPLE__
         str = str + "/../../../";
+#else // __unix__ or __linux__
+		str = str + "/";
 #endif        
         return str;
         
