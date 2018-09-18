@@ -1,9 +1,10 @@
 {
-	"advancedMode": false,
+	"advancedMode": true,
 	"defaultOfPath": "../../../",
 	"defaultPlatform": "linux64",
 	"defaultRelativeProjectPath": "apps/myApps",
 	"showConsole": false,
 	"showDeveloperTools": false,
-	"useDictionaryNameGenerator": true
+	"useDictionaryNameGenerator": true,
+	"verboseOutput": true
 }
