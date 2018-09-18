@@ -68,7 +68,11 @@ linux64:
 	# ADDON_LIBS += libs/opencv/lib/linuxarmv6l/libopencv_legacy.a
 	# ADDON_LIBS += libs/opencv/lib/linuxarmv6l/libopencv_calib3d.a
 	# ...
+	ADDON_LDFLAGS = -lopenblas
+	ADDON_LDFLAGS +=-llapack
 linux:
+	ADDON_LDFLAGS = -lopenblas
+	ADDON_LDFLAGS +=-llapack
 vs:
 	ADDON_DLLS_TO_COPY = dll/blas_win32_MT.dll
 	ADDON_DLLS_TO_COPY += dll/lapack_win32_MT.dll
