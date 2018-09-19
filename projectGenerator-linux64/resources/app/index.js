@@ -645,7 +645,7 @@ ipc.on('generate', function(event, arg) {
 
     if (fs.existsSync(projectString.substring(1, projectString.length-1)+"\\src") == false){
 	console.log("template used");
-	templateString = "-t\"\\..\\..\\addons\\ofxMotionMachine\\template\"";
+	templateString = "-t\"../../addons/ofxMotionMachine/template\"";
     }
     else {
 	console.log("template not used");
