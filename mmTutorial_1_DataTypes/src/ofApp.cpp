@@ -121,7 +121,7 @@ and processing.
 
 #include "ofApp.h"
 #include "mmGeometry.h" //enable to use some geometry functions
-#include "mmsignal.h" //enable to use some signal processing functions
+#include "mmSignal.h" //enable to use some signal processing functions
 #include "mmXmlArchiver.h" //enable to save processed data in an xml archive
 
 using namespace std;
