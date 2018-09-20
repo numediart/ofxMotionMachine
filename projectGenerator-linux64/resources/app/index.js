@@ -643,7 +643,7 @@ ipc.on('generate', function(event, arg) {
         projectString = "\"" + pathTemp.join(generate['projectPath'], generate['projectName']) + "\"";
     }
 
-    if (fs.existsSync(projectString.substring(1, projectString.length-1)+"\\src") == false){
+    if (fs.existsSync(projectString.substring(1, projectString.length-1)+"/src") == false){
 	console.log("template used");
 	templateString = "-t\"../../addons/ofxMotionMachine/template\"";
     }
