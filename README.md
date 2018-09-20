@@ -4,10 +4,10 @@ MotionMachine is a C++ software toolkit for rapid prototyping of motion feature 
 
 # How to install ?
 ofxMotionMachine is an openframeworks addon. 
-1. Download version of OpenFrameworks from official website http://www.openframeworks.cc. The last version of MotionMachine works with 0.9.8 OF version, others might not work.
+1. Download version of OpenFrameworks from official website http://www.openframeworks.cc. The last version of MotionMachine works with 0.10.0 OF version, others might not work.
 2. Clone MotionMachine repository on your computer, or download the zip and unzip it in folder addons of openframeworks.
 3. you can generate a motionMachine project with the app:
-		of_v0.9.8_vs_release\addons\ofxMotionMachine\projectGenerator-*-MoMa\projectGenerator
+		of_v0.10.0_vs_release\addons\ofxMotionMachine\projectGenerator-*-MoMa\projectGenerator
 	This generator is a customized version of the OF project generator. It selects the appropriate addons and copy the good template for new project.
 
 Dependencies:	
