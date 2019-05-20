@@ -389,9 +389,11 @@ std::shared_ptr<BoneList> XmlArchiver::loadBoneList( TiXmlElement * boneRoot ) {
         std::string childrenString = mLoc->FirstChild()->ToText()->Value();
 
         std::string::size_type sz=0;   // alias of size_t
-        while( sz<childrenString.length()) {
+        while( childrenString.length()>0) {
             lBone.jointChildren.push_back( std::stoi( childrenString ) );
             sz = childrenString.find_first_of( " " );
+			if (sz == childrenString.npos)
+				break;
             childrenString = childrenString.substr( sz + 1 );
         }
         lBone.boneId = atoi( mHandle->Attribute( "id" ));
