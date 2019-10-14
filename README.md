@@ -1,4 +1,6 @@
-# MotionMachine   [//]: #  [MotionMachine](http://motionmachine.org)
+# MotionMachine   
+
+<!-- [MotionMachine](http://motionmachine.org) -->
 
 MotionMachine is a C++ software toolkit for rapid prototyping of motion feature extraction and motion-based interaction design. It encapsulates the complexity of motion capture data processing into an intuitive and easy-to-use set of APIs, associated with the openFrameworks environment for visualisation. MotionMachine is a new framework designed for “sense-making”, i.e. enabling the exploration of motion-related data so as to develop new kinds of analysis pipelines and/or interactive applications.
 
