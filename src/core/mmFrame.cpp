@@ -206,9 +206,19 @@ MoMa::Bone MoMa::Frame::bone(int index) const {
 	return bone(name);
 };
 
-int MoMa::Frame::nOfNodes( void ) const {
+int MoMa::Frame::nOfNodes(void) const {
 
-    return( (int)std::max( (float)(position.n_cols), (float)(rotation.n_cols) ) );
+	if (nodeList)
+		return(nodeList->size());
+	return(position.n_cols); // Make a robust version of this return
+}
+
+
+int MoMa::Frame::nOfBones(void) const {
+
+	if (boneList&&_hasRotation)
+		return(boneList->size());
+	else return(position.n_cols); // Make a robust version of this return
 }
 
 void MoMa::Frame::print( void ) {

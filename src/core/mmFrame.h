@@ -73,6 +73,7 @@ namespace MoMa {
         inline const arma::mat &getRotationOffset()const {return rotationOffset;};
         
         int nOfNodes( void ) const; // Get number of nodes in the frame
+		int nOfBones(void) const;
         void print( void ); // Print the content of the frame
         
         void clear( void ) {
