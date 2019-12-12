@@ -228,7 +228,8 @@ namespace MoMa {
         void operator/=(double d) { this->getRefData() /= d; }
 	
       protected:
-        
+
+		  InterpTypes interpolAlgo;
         arma::vec mData;
     };
     
@@ -248,11 +249,24 @@ namespace MoMa {
             unsigned int index1, index2;
             
             bool validFlag=interpIndexFind( this->mTimeVec, pTime, index1, weight1, index2, weight2 );
-            if( validFlag )
-                return( ( weight1*mData( index1 ) + weight2*mData( index2 ) ) / ( weight1 + weight2 ) );
-            else
-                return arma::datum::nan;
         
+
+			if (interpolAlgo == LINEAR) {
+				if (validFlag)
+					return((weight1*mData(index1) + weight2 * mData(index2)) / (weight1 + weight2));
+				else
+					return arma::datum::nan;
+
+			}
+			else if (interpolAlgo == STEP) {
+
+				if (validFlag)
+					return(weight1 >= weight2 ? mData(index1) : mData(index2));
+				else
+					return arma::datum::nan;
+
+
+			}
         } else {
 			return( this->mData(memIndex( this->nearestIndex(pTime)) ));
         }
@@ -371,11 +385,23 @@ namespace MoMa {
             unsigned int index1,index2;
             
             bool validFlag=interpIndexFind( this->mTimeVec, pTime, index1, weight1, index2, weight2 );
-            if( validFlag )
-                return ( ( weight1*mData.col( index1 ) + weight2*mData.col( index2 ) ) / ( weight1 + weight2 ) );
-            else
-                return (arma::datum::nan*arma::ones( mData.n_rows, 1 ));
-            
+
+			if (interpolAlgo == LINEAR) {
+				if (validFlag)
+					return ((weight1*mData.col(index1) + weight2 * mData.col(index2)) / (weight1 + weight2));
+				else
+					return (arma::datum::nan*arma::ones(mData.n_rows, 1));
+
+
+			}
+			else if (interpolAlgo == STEP) {
+
+				if (validFlag)
+					return(weight1 >= weight2 ? mData.col(index1) : mData.col(index2));
+				else
+					return (arma::datum::nan*arma::ones(mData.n_rows, 1));
+
+			}
             // TODO : Implement QSLERP interpolation
         
         } else 
@@ -501,12 +527,22 @@ namespace MoMa {
                     return ( arma::datum::nan*arma::ones( mData.n_rows, mData.n_cols ) );
 
                 
-            } else if ( interpolAlgo == QSLERP ) {
-                
-                // TODO : Implement QSLERP interpolation
-                return arma::zeros( 1, 1 );
-                
-            } else {
+            }
+			else if (interpolAlgo == STEP) {
+
+				if (validFlag)
+					return(weight1>=weight2?mData.slice(index1):mData.slice(index2));
+				else
+					return (arma::datum::nan*arma::ones(mData.n_rows, mData.n_cols));
+
+			}
+			else if (interpolAlgo == QSLERP) {
+
+				// TODO : Implement QSLERP interpolation
+				return arma::zeros(1, 1);
+
+			}
+			else {
                 
                 return arma::zeros( 1, 1 );
             }
@@ -521,7 +557,7 @@ namespace MoMa {
 	arma::mat TimedCube::getLast( double &pTime ){
 		if (mLastId>=mBufferSize){
 			pTime=-1.0;
-			return arma::zeros(mData.n_cols,mData.n_rows);
+			return arma::zeros(mData.n_rows,mData.n_cols);
 		}
 		else{
 			if (mTimed)
@@ -535,7 +571,7 @@ namespace MoMa {
 
 	arma::mat TimedCube::getLast( ){
 		if (mLastId>=mBufferSize)
-			return arma::zeros(mData.n_cols,mData.n_rows);
+			return arma::zeros(mData.n_rows,mData.n_cols);
 		else{
 			return 
 				mData.slice(mLastId);

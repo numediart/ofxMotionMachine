@@ -1004,7 +1004,7 @@ namespace MoMa {
 		mData.resize(initData.n_rows,initData.n_cols,bufferSize);
 		for (int i=0;i<bufferSize;i++)
 			mData.slice(i)=initData;
-		mTimeVec.zeros(bufferSize,1);
+		mTimeVec = -1 * arma::ones(bufferSize, 1);
 		return true;
 	}
 	
@@ -1026,7 +1026,7 @@ namespace MoMa {
 		mTimed=true;
 		mData.clear();
 		mData.resize(pDim0,pDim1,bufferSize);
-		mTimeVec.zeros(bufferSize,1);
+		mTimeVec=-1*arma::ones(bufferSize,1);
 		return true;
 	}
 	
