@@ -92,8 +92,8 @@ void XmlArchiver::addTrack( const Track& pTrack ){
     mTrack->LinkEndChild( mFrames );
     mFrames->SetAttribute( "TimeStamped", pTrack.position.isTimed() );
     if( pTrack.position.isTimed() ) {
-        mFrames->SetAttribute( "MinTime", pTrack.minTime() );
-        mFrames->SetAttribute( "MaxTime", pTrack.minTime() );
+        mFrames->SetDoubleAttribute( "MinTime", pTrack.minTime() );
+        mFrames->SetDoubleAttribute( "MaxTime", pTrack.maxTime() );
     }
     else
         mFrames->SetAttribute( "FrameRate", pTrack.frameRate() );
@@ -102,29 +102,30 @@ void XmlArchiver::addTrack( const Track& pTrack ){
         mFrames->LinkEndChild( mFrame );
         mFrame->SetAttribute( "id", i );
         if ( pTrack.position.isTimed() )
-            mFrame->SetAttribute( "time", pTrack.position.time(i));
+            mFrame->SetDoubleAttribute( "time", pTrack.position.time(i));
         TiXmlElement* mPosition = new TiXmlElement( "position" );
         mFrame->LinkEndChild( mPosition );
+		int realId = pTrack.position.memIndex(i);
         if ( rootPositionOnlyFlag==false )
-            for( int j = 0; j < pTrack.position.getData().slice( i ).n_elem; j++ ) {
-                mPosition->InsertEndChild( TiXmlText(std::to_string( pTrack.position.getData().slice( i ).at( j ) )) );
-                if( j <  pTrack.position.getData().slice( i ).n_elem-1 )
+            for( int j = 0; j < pTrack.position.getData().slice(realId).n_elem; j++ ) {
+                mPosition->InsertEndChild( TiXmlText(std::to_string( pTrack.position.getData().slice(realId).at( j ) )) );
+                if( j <  pTrack.position.getData().slice(realId).n_elem-1 )
                     mPosition->InsertEndChild( TiXmlText( " " ) );
             }
         else
-            for( int j = 0; j < pTrack.position.getData().slice( i ).col( 0 ).n_elem; j++ ) {
-                mPosition->InsertEndChild( TiXmlText( std::to_string( pTrack.position.getData().slice( i ).at( j ) ) ) );
-                if( j < pTrack.position.getData().slice( i ).col( 0 ).n_elem - 1 )
+            for( int j = 0; j < pTrack.position.getData().slice(realId).col( 0 ).n_elem; j++ ) {
+                mPosition->InsertEndChild( TiXmlText( std::to_string( pTrack.position.getData().slice(realId).at( j ) ) ) );
+                if( j < pTrack.position.getData().slice(realId).col( 0 ).n_elem - 1 )
                     mPosition->InsertEndChild( TiXmlText( " " ) );
 
             }
         if( pTrack.hasRotation ) {
             TiXmlElement* mOrientation = new TiXmlElement( "orientation" );
             mFrame->LinkEndChild( mOrientation );
-            for( int j = 0; j < pTrack.rotation.getData().slice( i ).n_elem; j++ ) {
-               mOrientation->InsertEndChild( TiXmlText( std::to_string( pTrack.rotation.getData().slice( i ).at( j ) ) ) );
+            for( int j = 0; j < pTrack.rotation.getData().slice(realId).n_elem; j++ ) {
+               mOrientation->InsertEndChild( TiXmlText( std::to_string( pTrack.rotation.getData().slice(realId).at( j ) ) ) );
 
-               if( j < pTrack.rotation.getData().slice( i ).n_elem - 1 )
+               if( j < pTrack.rotation.getData().slice(realId).n_elem - 1 )
                     mOrientation->InsertEndChild( TiXmlText( " " ) );
             }
         }
@@ -154,8 +155,8 @@ void XmlArchiver::addFeature( const TimedVec feat, std::string name, std::string
     mFrames->SetAttribute( "numFrames", feat.getData().n_elem );
     mFrames->SetAttribute( "TimeStamped", feat.isTimed() );
     if( feat.isTimed() ) {
-        mFrames->SetAttribute( "MinTime", feat.minTime() );
-        mFrames->SetAttribute( "MaxTime", feat.minTime() );
+        mFrames->SetDoubleAttribute( "MinTime", feat.minTime() );
+        mFrames->SetDoubleAttribute( "MaxTime", feat.maxTime() );
     }
     else
         mFrames->SetAttribute( "FrameRate", feat.frameRate() );
@@ -170,11 +171,12 @@ void XmlArchiver::addFeature( const TimedVec feat, std::string name, std::string
     TiXmlElement* mValues = new TiXmlElement( "values" );
     mFrames->LinkEndChild( mValues );
     for( int i = 0; i < feat.nOfFrames(); i++ ) {
-        if( feat.getData().at( i ) == arma::datum::nan )
+		int realId = feat.memIndex(i);
+        if( feat.getData().at(realId) == arma::datum::nan )
             mValues->InsertEndChild( TiXmlText( "nan" ) );
         else
-        mValues->InsertEndChild( TiXmlText( std::to_string( feat.getData().at(i) )) );
-        if( i < feat.getData().n_elem - 1 )
+        mValues->InsertEndChild( TiXmlText( std::to_string( feat.getData().at(realId) )) );
+        if(realId < feat.getData().n_elem - 1 )
             mValues->InsertEndChild( TiXmlText( " " ) );
     }
 
@@ -205,22 +207,23 @@ void XmlArchiver::addFeature( const TimedMat feat, std::string name, std::string
     mFrames->SetAttribute( "numRows", feat.getData().n_rows );
     mFrames->SetAttribute( "TimeStamped", feat.isTimed() );
     if( feat.isTimed() ) {
-        mFrames->SetAttribute( "MinTime", feat.minTime() );
-        mFrames->SetAttribute( "MaxTime", feat.minTime() );
+        mFrames->SetDoubleAttribute( "MinTime", feat.minTime() );
+        mFrames->SetDoubleAttribute( "MaxTime", feat.maxTime() );
     }
     else
         mFrames->SetAttribute( "FrameRate", feat.frameRate() );
     for( int i = 0; i < feat.nOfFrames(); i++ ) {
+		int realId = feat.memIndex(i);
         TiXmlElement* mFrame = new TiXmlElement( "frame" );
         mFrames->LinkEndChild( mFrame );
         mFrame->SetAttribute( "id", i );
         if( feat.isTimed() )
-            mFrame->SetAttribute( "time", feat.time( i ) );
+            mFrame->SetDoubleAttribute( "time", feat.time( i ) );
         for( int j = 0; j < feat.getData().n_rows; j++ ) {
-            if ( feat.getData().at( j, i ) ==arma::datum::nan)
+            if ( feat.getData().at( j, realId) ==arma::datum::nan)
                 mFrame->InsertEndChild( TiXmlText("nan" ) );
             else
-                mFrame->InsertEndChild( TiXmlText( std::to_string( feat.getData().at( j, i ) ) ) );
+                mFrame->InsertEndChild( TiXmlText( std::to_string( feat.getData().at( j, realId) ) ) );
             if ( j < feat.getData().n_rows-1 )  
                 mFrame->InsertEndChild( TiXmlText( " ") );
         }
@@ -251,23 +254,24 @@ void XmlArchiver::addFeature( const TimedCube feat, std::string name, std::strin
     mFrames->SetAttribute( "numRows", feat.getData().n_rows );
     mFrames->SetAttribute( "TimeStamped", feat.isTimed() );
     if( feat.isTimed() ) {
-        mFrames->SetAttribute( "MinTime", feat.minTime() );
-        mFrames->SetAttribute( "MaxTime", feat.minTime() );
+        mFrames->SetDoubleAttribute( "MinTime", feat.minTime() );
+        mFrames->SetDoubleAttribute( "MaxTime", feat.maxTime() );
     }
     else
         mFrames->SetAttribute( "FrameRate", feat.frameRate() );
     for( int i = 0; i < feat.nOfFrames(); i++ ) {
+		int realId = feat.memIndex(i);
         TiXmlElement* mFrame = new TiXmlElement( "frame" );
         mFrames->LinkEndChild( mFrame );
         mFrame->SetAttribute( "id", i );
         if( feat.isTimed() )
-            mFrame->SetAttribute( "time", feat.time( i ) );
-        for( int j = 0; j < feat.getData().n_elem; j++ ) {
-            if( feat.getData().at( j ) == arma::datum::nan )
+            mFrame->SetDoubleAttribute( "time", feat.time( i ) );
+        for( int j = 0; j < feat.getData().slice(realId).n_elem; j++ ) {
+            if( feat.getData().slice(realId).at( j ) == arma::datum::nan )
                 mFrame->InsertEndChild( TiXmlText( "nan" ) );
             else
-                mFrame->InsertEndChild( TiXmlText( std::to_string( feat.getData().at( j ) ) ) );
-            if( j < feat.getData().n_rows - 1 )
+                mFrame->InsertEndChild( TiXmlText( std::to_string( feat.getData().slice(realId).at( j ) ) ) );
+            if( j < feat.getData().slice(realId).n_elem - 1 )
                 mFrame->InsertEndChild( TiXmlText( " " ) );
         }
     }
@@ -294,7 +298,7 @@ void XmlArchiver::addLabels(  LabelList label,std::string name, std::string trac
         TiXmlElement* mSegment = new TiXmlElement( "segment" );
         mSegments->LinkEndChild( mSegment );
         mSegment->SetAttribute( "frameIndex", label[i].moment.index() );//TODO verify if index==frameIndex of the track
-        mSegment->SetAttribute( "time", std::to_string( label[i].moment.time() ) );
+        mSegment->SetDoubleAttribute( "time",label[i].moment.time()  );
         mSegment->SetAttribute( "frameRate", std::to_string( label[i].moment.frameRate() ) );
         mSegment->SetAttribute( "name", label[i].name);
         mSegment->SetAttribute( "state", label[i].state );
@@ -339,7 +343,8 @@ void XmlArchiver::getTrack( Track& pTrack ,int index) {
     if( mTrackRoot ==0)
         throw std::runtime_error( "XmlArchiver::load : no track is in this archive" );
         
-    for( id = std::stoi( mTrackRoot->Attribute("Id")); mTrackRoot, id != index; mTrackRoot->NextSiblingElement( "track" ) ) {
+    for( id = std::stoi( std::string(mTrackRoot->Attribute("Id"))); mTrackRoot, id != index; mTrackRoot=mTrackRoot->NextSiblingElement( "track" ), id = std::stoi(std::string(mTrackRoot->Attribute("Id")))) {
+		//std::cout << mTrackRoot->Attribute("Id") << std::endl;
     }
     if( mTrackRoot ) {
         pTrack.clear();
@@ -403,7 +408,7 @@ std::shared_ptr<BoneList> XmlArchiver::loadBoneList( TiXmlElement * boneRoot ) {
     return ret;
 }
 
-void XmlArchiver::loadData( TiXmlElement * frameRoot, MoMa::Track &pTrack) {
+void XmlArchiver::loadData( TiXmlElement * frameRoot, MoMa::Track &pTrack){//, MoMa::quaternion referenceAxis) {
     int numFrames = 0;
     int numNodes = pTrack.nodeList->size();
     int numBones = pTrack.boneList->size();
@@ -433,10 +438,17 @@ void XmlArchiver::loadData( TiXmlElement * frameRoot, MoMa::Track &pTrack) {
         std::string frameString = mFrame->FirstChild("position")->FirstChild()->ToText()->Value();
 
         std::string::size_type sz=0;   // alias of size_t
+		arma::vec3 axis;
+		axis.ones();
+		quaternion convQuat (2.0 * 180 / 3, -axis);
+		quaternion convQuatInv=convQuat.inverse();
         int j = 0;
+		int invIndex[4] = { 1,2,0,3 };
+		int invIndex2[4] = { 0,1,2,3 };
         while( sz<frameString.length() ) {
             for( int i = 0; i < 3; i++ ) {
-                positionCube( i, j, frameId ) = std::stod( frameString);
+				double test = std::stod(frameString);
+                positionCube(invIndex2[i], j, frameId ) = std::stod( frameString);
                 sz = frameString.find_first_of( " " );
                 frameString=frameString.substr( sz+1 );
             }
@@ -449,10 +461,13 @@ void XmlArchiver::loadData( TiXmlElement * frameRoot, MoMa::Track &pTrack) {
             int j = 0;
             while( sz < frameString.length() ) {
                 for( int i = 0; i < 4; i++ ) {
-                    rotationCube( i, j, frameId ) = std::stod( frameString );
+                    rotationCube(i, j, frameId ) = std::stod( frameString );
                     sz = frameString.find_first_of( " " );
                     frameString = frameString.substr( sz + 1 );
                 }
+				//quaternion temp = convQuatInv*quaternion(rotationCube.slice(frameId).col(j))*convQuat;
+				quaternion temp = quaternion(rotationCube.slice(frameId).col(j));
+				rotationCube.slice(frameId).col(j) = temp.asVec4();
                 sz = frameString.find_first_of( " " );
                 j++;
             }
@@ -703,7 +718,7 @@ bool XmlArchiver::getLabel( std::string labelName,LabelList &pLabelList, std::st
     pLabelList.clear();
     for( TiXmlElement* segment = segments->FirstChildElement( "segment" ); segment; segment = segment->NextSiblingElement( "segment" ) ) {
         MoMa::Moment mo;
-        mo.setIndex( std::stoi( segment->Attribute( "frameIndex" ) ) );
+        mo.setIndex( (unsigned long)std::stoi( segment->Attribute( "frameIndex" ) ) );
         mo.setFrameRate( std::stod( segment->Attribute( "frameRate" ) ) );
         mo.setTime( std::stod( segment->Attribute( "time" ) ));
         MoMa::Label lLabel(mo, segment->Attribute( "name" ) );

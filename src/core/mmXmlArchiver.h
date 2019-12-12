@@ -160,7 +160,7 @@ namespace MoMa {
 
         std::shared_ptr<NodeList> loadNodeList( TiXmlElement * nodeRoot );
         std::shared_ptr<BoneList> loadBoneList( TiXmlElement * boneRoot );
-        void loadData( TiXmlElement * frameRoot, MoMa::Track &pTrack );
+		void loadData(TiXmlElement * frameRoot, MoMa::Track &pTrack);// , MoMa::quaternion referenceAxis = MoMa::quaternion());
         TiXmlDocument mArchiver; 
         TiXmlElement* mRoot;
         bool rootPositionOnlyFlag;
