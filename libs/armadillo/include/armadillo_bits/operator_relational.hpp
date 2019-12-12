@@ -1,9 +1,17 @@
-// Copyright (C) 2009-2014 Conrad Sanderson
-// Copyright (C) 2009-2014 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup operator_relational
@@ -382,6 +390,50 @@ operator!=
   arma_extra_debug_sigprint();
   
   return mtOp<uword, T1, op_rel_noteq>(X, val);
+  }
+
+
+
+//
+
+
+
+template<typename T1, typename T2>
+inline
+typename
+enable_if2
+  <
+  (is_arma_sparse_type<T1>::value && is_arma_sparse_type<T2>::value && (is_cx<typename T1::elem_type>::no) && (is_cx<typename T2::elem_type>::no)),
+  const mtSpGlue<uword, T1, T2, spglue_rel_lt>
+  >::result
+operator<
+(const T1& X, const T2& Y)
+  {
+  arma_extra_debug_sigprint();
+  
+  // TODO: ensure T1::elem_type and T2::elem_type are the same
+  
+  return mtSpGlue<uword, T1, T2, spglue_rel_lt>( X, Y );
+  }
+
+
+
+template<typename T1, typename T2>
+inline
+typename
+enable_if2
+  <
+  (is_arma_sparse_type<T1>::value && is_arma_sparse_type<T2>::value && (is_cx<typename T1::elem_type>::no) && (is_cx<typename T2::elem_type>::no)),
+  const mtSpGlue<uword, T1, T2, spglue_rel_gt>
+  >::result
+operator>
+(const T1& X, const T2& Y)
+  {
+  arma_extra_debug_sigprint();
+  
+  // TODO: ensure T1::elem_type and T2::elem_type are the same
+  
+  return mtSpGlue<uword, T1, T2, spglue_rel_gt>( X, Y );
   }
 
 

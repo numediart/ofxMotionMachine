@@ -1,11 +1,17 @@
-// Copyright (C) 2008-2010 Conrad Sanderson
-// Copyright (C) 2008-2010 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup operator_cube_times
@@ -77,6 +83,38 @@ operator*
   arma_extra_debug_sigprint();
   
   return mtOpCube<typename std::complex<typename T1::pod_type>, T1, op_cx_scalar_times>('j', X.get_ref(), k);
+  }
+
+
+
+template<typename eT, typename T2>
+arma_inline
+Cube<eT>
+operator*
+  (
+  const subview_cube_each1<eT>& X,
+  const Base<eT,T2>&            Y
+  )
+  {
+  arma_extra_debug_sigprint();
+  
+  return subview_cube_each1_aux::operator_times(X, Y.get_ref());
+  }
+
+
+
+template<typename T1, typename eT>
+arma_inline
+Cube<eT>
+operator*
+  (
+  const Base<eT,T1>&            X,
+  const subview_cube_each1<eT>& Y
+  )
+  {
+  arma_extra_debug_sigprint();
+  
+  return subview_cube_each1_aux::operator_times(X.get_ref(), Y);
   }
 
 

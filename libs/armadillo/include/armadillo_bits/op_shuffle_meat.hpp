@@ -1,10 +1,17 @@
-// Copyright (C) 2009-2013 Conrad Sanderson
-// Copyright (C) 2009-2013 NICTA (www.nicta.com.au)
-// Copyright (C) 2009-2010 Dimitrios Bouzas
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 
@@ -13,30 +20,21 @@
 
 
 
-template<typename T1>
+template<typename eT>
 inline
 void
-op_shuffle::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_shuffle>& in)
+op_shuffle::apply_direct(Mat<eT>& out, const Mat<eT>& X, const uword dim)
   {
   arma_extra_debug_sigprint();
   
-  typedef typename T1::elem_type eT;
-  
-  const unwrap<T1>   tmp(in.m);
-  const Mat<eT>& X = tmp.M;
-  
   if(X.is_empty()) { out.copy_size(X); return; }
-  
-  const uword dim = in.aux_uword_a;
-  
-  arma_debug_check( (dim > 1), "shuffle(): dim must be 0 or 1" );
   
   const uword N = (dim == 0) ? X.n_rows : X.n_cols;
   
   
-  // see "fn_sort_index.hpp" for the definition of "arma_sort_index_packet"
+  // see op_sort_index_bones.hpp for the definition of arma_sort_index_packet
   // and the associated comparison functor
-  std::vector< arma_sort_index_packet<int,uword> > packet_vec(N);
+  std::vector< arma_sort_index_packet<int> > packet_vec(N);
   
   for(uword i=0; i<N; ++i)
     {
@@ -44,7 +42,7 @@ op_shuffle::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_shuffle>& in)
     packet_vec[i].index = i;
     }
   
-  arma_sort_index_helper_ascend comparator;
+  arma_sort_index_helper_ascend<int> comparator;
   
   std::sort( packet_vec.begin(), packet_vec.end(), comparator );
   
@@ -192,6 +190,41 @@ op_shuffle::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_shuffle>& in)
     }
   
   }
+
+
+
+template<typename T1>
+inline
+void
+op_shuffle::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_shuffle>& in)
+  {
+  arma_extra_debug_sigprint();
+  
+  const unwrap<T1> U(in.m);
+  
+  const uword dim = in.aux_uword_a;
+  
+  arma_debug_check( (dim > 1), "shuffle(): parameter 'dim' must be 0 or 1" );
+  
+  op_shuffle::apply_direct(out, U.M, dim);
+  }
+
+
+
+template<typename T1>
+inline
+void
+op_shuffle_vec::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_shuffle_vec>& in)
+  {
+  arma_extra_debug_sigprint();
+  
+  const unwrap<T1> U(in.m);
+  
+  const uword dim = (T1::is_xvec) ? uword(U.M.is_rowvec() ? 1 : 0) : uword((T1::is_row) ? 1 : 0);
+  
+  op_shuffle::apply_direct(out, U.M, dim);
+  }
+
 
 
 //! @}

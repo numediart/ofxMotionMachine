@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2014 Conrad Sanderson
-// Copyright (C) 2008-2013 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 
@@ -132,7 +140,7 @@ op_reshape::apply_proxy(Mat<typename T1::elem_type>& out, const Proxy<T1>& P, co
   
   if(P.get_n_elem() == in_n_elem)
     {
-    if(Proxy<T1>::prefer_at_accessor == false)
+    if(Proxy<T1>::use_at == false)
       {
       typename Proxy<T1>::ea_type Pea = P.get_ea();
       
@@ -170,7 +178,7 @@ op_reshape::apply_proxy(Mat<typename T1::elem_type>& out, const Proxy<T1>& P, co
     {
     const uword n_elem_to_copy = (std::min)(P.get_n_elem(), in_n_elem);
     
-    if(Proxy<T1>::prefer_at_accessor == false)
+    if(Proxy<T1>::use_at == false)
       {
       typename Proxy<T1>::ea_type Pea = P.get_ea();
       
@@ -222,7 +230,7 @@ op_reshape::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_reshape>& in)
   const uword in_n_rows = in.aux_uword_a;
   const uword in_n_cols = in.aux_uword_b;
   
-  if(is_Mat<typename Proxy<T1>::stored_type>::value == true)
+  if( (is_Mat<typename Proxy<T1>::stored_type>::value == true) && (Proxy<T1>::fake_mat == false) )
     {
     // not checking for aliasing here, as this might be an inplace reshape
     

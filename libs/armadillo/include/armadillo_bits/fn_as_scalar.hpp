@@ -1,9 +1,17 @@
-// Copyright (C) 2010-2013 Conrad Sanderson
-// Copyright (C) 2010-2013 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup fn_as_scalar
@@ -45,13 +53,18 @@ as_scalar_redirect<N>::apply(const T1& X)
   {
   arma_extra_debug_sigprint();
   
-  // typedef typename T1::elem_type eT;
+  typedef typename T1::elem_type eT;
   
   const Proxy<T1> P(X);
   
-  arma_debug_check( (P.get_n_elem() != 1), "as_scalar(): expression doesn't evaluate to exactly one element" );
+  if(P.get_n_elem() != 1)
+    {
+    arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
+    
+    return Datum<eT>::nan;
+    }
   
-  return (Proxy<T1>::prefer_at_accessor == true) ? P.at(0,0) : P[0];
+  return (Proxy<T1>::use_at) ? P.at(0,0) : P[0];
   }
 
 
@@ -68,12 +81,13 @@ as_scalar_redirect<2>::apply(const Glue<T1, T2, glue_times>& X)
   // T1 must result in a matrix with one row
   // T2 must result in a matrix with one column
   
-  const bool has_all_mat        = (is_Mat<T1>::value || is_Mat_trans<T1>::value) && (is_Mat<T2>::value || is_Mat_trans<T2>::value);
-  const bool prefer_at_accessor = Proxy<T1>::prefer_at_accessor                  || Proxy<T2>::prefer_at_accessor;
+  const bool has_all_mat = (is_Mat<T1>::value || is_Mat_trans<T1>::value) && (is_Mat<T2>::value || is_Mat_trans<T2>::value);
   
-  const bool do_partial_unwrap = has_all_mat || prefer_at_accessor;
+  const bool use_at = (Proxy<T1>::use_at || Proxy<T2>::use_at);
   
-  if(do_partial_unwrap == true)
+  const bool do_partial_unwrap = (has_all_mat || use_at);
+  
+  if(do_partial_unwrap)
     {
     const partial_unwrap<T1> tmp1(X.A);
     const partial_unwrap<T2> tmp2(X.B);
@@ -138,7 +152,12 @@ as_scalar_redirect<3>::apply(const Glue< Glue<T1, T2, glue_times>, T3, glue_time
     {
     const Mat<eT> tmp(X);
     
-    arma_debug_check( (tmp.n_elem != 1), "as_scalar(): expression doesn't evaluate to exactly one element" );
+    if(tmp.n_elem != 1)
+      {
+      arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
+      
+      return Datum<eT>::nan;
+      }
     
     return tmp[0];
     }
@@ -157,8 +176,8 @@ as_scalar_redirect<3>::apply(const Glue< Glue<T1, T2, glue_times>, T3, glue_time
     
     const bool B_is_vec = B.is_vec();
     
-    const uword B_n_rows = (B_is_vec == true) ? B.n_elem : ( (tmp2.do_trans == false) ? B.n_rows : B.n_cols );
-    const uword B_n_cols = (B_is_vec == true) ? B.n_elem : ( (tmp2.do_trans == false) ? B.n_cols : B.n_rows );
+    const uword B_n_rows = (B_is_vec) ? B.n_elem : ( (tmp2.do_trans == false) ? B.n_rows : B.n_cols );
+    const uword B_n_cols = (B_is_vec) ? B.n_elem : ( (tmp2.do_trans == false) ? B.n_cols : B.n_rows );
     
     const uword C_n_rows = (tmp3.do_trans == false) ? C.n_rows : C.n_cols;
     const uword C_n_cols = (tmp3.do_trans == false) ? C.n_cols : C.n_rows;
@@ -176,9 +195,9 @@ as_scalar_redirect<3>::apply(const Glue< Glue<T1, T2, glue_times>, T3, glue_time
       );
     
     
-    if(B_is_vec == true)
+    if(B_is_vec)
       {
-      if(tmp2_do_inv == true)
+      if(tmp2_do_inv)
         {
         return val * op_dotext::direct_rowvec_invdiagvec_colvec(A.mem, B, C.mem);
         }
@@ -189,7 +208,7 @@ as_scalar_redirect<3>::apply(const Glue< Glue<T1, T2, glue_times>, T3, glue_time
       }
     else
       {
-      if(tmp2_do_inv == true)
+      if(tmp2_do_inv)
         {
         return val * op_dotext::direct_rowvec_invdiagmat_colvec(A.mem, B, C.mem);
         }
@@ -215,7 +234,12 @@ as_scalar_diag(const Base<typename T1::elem_type,T1>& X)
   const unwrap<T1>   tmp(X.get_ref());
   const Mat<eT>& A = tmp.M;
   
-  arma_debug_check( (A.n_elem != 1), "as_scalar(): expression doesn't evaluate to exactly one element" );
+  if(A.n_elem != 1)
+    {
+    arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
+    
+    return Datum<eT>::nan;
+    }
   
   return A.mem[0];
   }
@@ -252,8 +276,8 @@ as_scalar_diag(const Glue< Glue<T1, T2, glue_times_diag>, T3, glue_times >& X)
   
   const bool B_is_vec = B.is_vec();
   
-  const uword B_n_rows = (B_is_vec == true) ? B.n_elem : ( (tmp2.do_trans == false) ? B.n_rows : B.n_cols );
-  const uword B_n_cols = (B_is_vec == true) ? B.n_elem : ( (tmp2.do_trans == false) ? B.n_cols : B.n_rows );
+  const uword B_n_rows = (B_is_vec) ? B.n_elem : ( (tmp2.do_trans == false) ? B.n_rows : B.n_cols );
+  const uword B_n_cols = (B_is_vec) ? B.n_elem : ( (tmp2.do_trans == false) ? B.n_cols : B.n_rows );
   
   const uword C_n_rows = (tmp3.do_trans == false) ? C.n_rows : C.n_cols;
   const uword C_n_cols = (tmp3.do_trans == false) ? C.n_cols : C.n_rows;
@@ -271,7 +295,7 @@ as_scalar_diag(const Glue< Glue<T1, T2, glue_times_diag>, T3, glue_times >& X)
     );
   
   
-  if(B_is_vec == true)
+  if(B_is_vec)
     {
     return val * op_dot::direct_dot(A.n_elem, A.mem, B.mem, C.mem);
     }
@@ -284,8 +308,8 @@ as_scalar_diag(const Glue< Glue<T1, T2, glue_times_diag>, T3, glue_times >& X)
 
 
 template<typename T1, typename T2>
-arma_inline
 arma_warn_unused
+arma_inline
 typename T1::elem_type
 as_scalar(const Glue<T1, T2, glue_times>& X, const typename arma_not_cx<typename T1::elem_type>::result* junk = 0)
   {
@@ -296,7 +320,7 @@ as_scalar(const Glue<T1, T2, glue_times>& X, const typename arma_not_cx<typename
     {
     const sword N_mat = 1 + depth_lhs< glue_times, Glue<T1,T2,glue_times> >::num;
     
-    arma_extra_debug_print(arma_boost::format("N_mat = %d") % N_mat);
+    arma_extra_debug_print(arma_str::format("N_mat = %d") % N_mat);
     
     return as_scalar_redirect<N_mat>::apply(X);
     }
@@ -309,92 +333,100 @@ as_scalar(const Glue<T1, T2, glue_times>& X, const typename arma_not_cx<typename
 
 
 template<typename T1>
-inline
 arma_warn_unused
+inline
 typename T1::elem_type
 as_scalar(const Base<typename T1::elem_type,T1>& X)
   {
   arma_extra_debug_sigprint();
   
-  // typedef typename T1::elem_type eT;
+  typedef typename T1::elem_type eT;
   
   const Proxy<T1> P(X.get_ref());
   
-  arma_debug_check( (P.get_n_elem() != 1), "as_scalar(): expression doesn't evaluate to exactly one element" );
+  if(P.get_n_elem() != 1)
+    {
+    arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
+    
+    return Datum<eT>::nan;
+    }
   
-  return (Proxy<T1>::prefer_at_accessor == true) ? P.at(0,0) : P[0];
+  return (Proxy<T1>::use_at) ? P.at(0,0) : P[0];
   }
 
 
-// ensure the following two functions are aware of each other
-template<typename T1,              typename   eop_type> inline arma_warn_unused typename T1::elem_type as_scalar(const   eOp<T1,       eop_type>& X);
-template<typename T1, typename T2, typename eglue_type> inline arma_warn_unused typename T1::elem_type as_scalar(const eGlue<T1, T2, eglue_type>& X);
-
-
-
-template<typename T1, typename eop_type>
-inline
+template<typename T1>
 arma_warn_unused
+inline
 typename T1::elem_type
-as_scalar(const eOp<T1, eop_type>& X)
+as_scalar(const Gen<T1, gen_randu>& X)
   {
   arma_extra_debug_sigprint();
   
   typedef typename T1::elem_type eT;
   
-  const eT val = as_scalar(X.P.Q);
+  if( (X.n_rows != 1) || (X.n_cols != 1) )
+    {
+    arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
+    
+    return Datum<eT>::nan;
+    }
   
-  return eop_core<eop_type>::process(val, X.aux);
-  }
-
-
-
-template<typename T1, typename T2, typename eglue_type>
-inline
-arma_warn_unused
-typename T1::elem_type
-as_scalar(const eGlue<T1, T2, eglue_type>& X)
-  {
-  arma_extra_debug_sigprint();
-  
-  typedef typename T1::elem_type eT;
-  
-  const eT a = as_scalar(X.P1.Q);
-  const eT b = as_scalar(X.P2.Q);
-  
-  // the optimiser will keep only one return statement
-  
-       if(is_same_type<eglue_type, eglue_plus >::yes) { return a + b; }
-  else if(is_same_type<eglue_type, eglue_minus>::yes) { return a - b; }
-  else if(is_same_type<eglue_type, eglue_div  >::yes) { return a / b; }
-  else if(is_same_type<eglue_type, eglue_schur>::yes) { return a * b; }
+  return eT(arma_rng::randu<eT>());
   }
 
 
 
 template<typename T1>
-inline
 arma_warn_unused
+inline
+typename T1::elem_type
+as_scalar(const Gen<T1, gen_randn>& X)
+  {
+  arma_extra_debug_sigprint();
+  
+  typedef typename T1::elem_type eT;
+  
+  if( (X.n_rows != 1) || (X.n_cols != 1) )
+    {
+    arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
+    
+    return Datum<eT>::nan;
+    }
+  
+  return eT(arma_rng::randn<eT>());
+  }
+
+
+
+template<typename T1>
+arma_warn_unused
+inline
 typename T1::elem_type
 as_scalar(const BaseCube<typename T1::elem_type,T1>& X)
   {
   arma_extra_debug_sigprint();
   
-  // typedef typename T1::elem_type eT;
+  typedef typename T1::elem_type eT;
   
   const ProxyCube<T1> P(X.get_ref());
   
-  arma_debug_check( (P.get_n_elem() != 1), "as_scalar(): expression doesn't evaluate to exactly one element" );
+  if(P.get_n_elem() != 1)
+    {
+    arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
+    
+    return Datum<eT>::nan;
+    }
   
-  return (ProxyCube<T1>::prefer_at_accessor == true) ? P.at(0,0,0) : P[0];
+  return (ProxyCube<T1>::use_at) ? P.at(0,0,0) : P[0];
   }
 
 
 
 template<typename T>
-arma_inline
 arma_warn_unused
-const typename arma_scalar_only<T>::result &
+arma_inline
+typename arma_scalar_only<T>::result
 as_scalar(const T& x)
   {
   return x;
@@ -403,8 +435,8 @@ as_scalar(const T& x)
 
 
 template<typename T1>
-inline
 arma_warn_unused
+inline
 typename T1::elem_type
 as_scalar(const SpBase<typename T1::elem_type, T1>& X)
   {
@@ -413,7 +445,12 @@ as_scalar(const SpBase<typename T1::elem_type, T1>& X)
   const unwrap_spmat<T1>  tmp(X.get_ref());
   const SpMat<eT>& A    = tmp.M;
   
-  arma_debug_check( (A.n_elem != 1), "as_scalar(): expression doesn't evaluate to exactly one element" );
+  if(A.n_elem != 1)
+    {
+    arma_debug_check(true, "as_scalar(): expression doesn't evaluate to exactly one element");
+    
+    return Datum<eT>::nan;
+    }
   
   return A.at(0,0);
   }

@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2013 Conrad Sanderson
-// Copyright (C) 2008-2013 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup Col
@@ -19,59 +27,65 @@ class Col : public Mat<eT>
   typedef eT                                elem_type;
   typedef typename get_pod_type<eT>::result pod_type;
   
-  static const bool is_col = true;
-  static const bool is_row = false;
+  static const bool is_col  = true;
+  static const bool is_row  = false;
+  static const bool is_xvec = false;
   
   inline          Col();
   inline          Col(const Col<eT>& X);
   inline explicit Col(const uword n_elem);
-  inline          Col(const uword in_rows, const uword in_cols);
+  inline explicit Col(const uword in_rows, const uword in_cols);
+  inline explicit Col(const SizeMat& s);
   
   template<typename fill_type> inline Col(const uword n_elem,                       const fill::fill_class<fill_type>& f);
   template<typename fill_type> inline Col(const uword in_rows, const uword in_cols, const fill::fill_class<fill_type>& f);
+  template<typename fill_type> inline Col(const SizeMat& s,                         const fill::fill_class<fill_type>& f);
   
-  inline                  Col(const char*        text);
-  inline const Col& operator=(const char*        text);
+  inline            Col(const char*        text);
+  inline Col& operator=(const char*        text);
   
-  inline                  Col(const std::string& text);
-  inline const Col& operator=(const std::string& text);
+  inline            Col(const std::string& text);
+  inline Col& operator=(const std::string& text);
   
-  inline                  Col(const std::vector<eT>& x);
-  inline const Col& operator=(const std::vector<eT>& x);
+  inline            Col(const std::vector<eT>& x);
+  inline Col& operator=(const std::vector<eT>& x);
   
   #if defined(ARMA_USE_CXX11)
-  inline                  Col(const std::initializer_list<eT>& list);
-  inline const Col& operator=(const std::initializer_list<eT>& list);
+  inline            Col(const std::initializer_list<eT>& list);
+  inline Col& operator=(const std::initializer_list<eT>& list);
   
-  inline                  Col(Col&& m);
-  inline const Col& operator=(Col&& m);
+  inline            Col(Col&& m);
+  inline Col& operator=(Col&& m);
   #endif
   
-  inline explicit Col(const SpCol<eT>& X);
+  inline Col& operator=(const eT val);
+  inline Col& operator=(const Col& m);
   
-  inline const Col& operator=(const eT val);
-  inline const Col& operator=(const Col& m);
+  template<typename T1> inline             Col(const Base<eT,T1>& X);
+  template<typename T1> inline Col&  operator=(const Base<eT,T1>& X);
   
-  template<typename T1> inline                   Col(const Base<eT,T1>& X);
-  template<typename T1> inline const Col&  operator=(const Base<eT,T1>& X);
+  template<typename T1> inline explicit    Col(const SpBase<eT,T1>& X);
+  template<typename T1> inline Col&  operator=(const SpBase<eT,T1>& X);
   
-  inline Col(      eT* aux_mem, const uword aux_length, const bool copy_aux_mem = true, const bool strict = true);
+  inline Col(      eT* aux_mem, const uword aux_length, const bool copy_aux_mem = true, const bool strict = false);
   inline Col(const eT* aux_mem, const uword aux_length);
   
   template<typename T1, typename T2>
   inline explicit Col(const Base<pod_type,T1>& A, const Base<pod_type,T2>& B);
   
-  template<typename T1> inline                  Col(const BaseCube<eT,T1>& X);
-  template<typename T1> inline const Col& operator=(const BaseCube<eT,T1>& X);
+  template<typename T1> inline            Col(const BaseCube<eT,T1>& X);
+  template<typename T1> inline Col& operator=(const BaseCube<eT,T1>& X);
   
-  inline                  Col(const subview_cube<eT>& X);
-  inline const Col& operator=(const subview_cube<eT>& X);
+  inline            Col(const subview_cube<eT>& X);
+  inline Col& operator=(const subview_cube<eT>& X);
   
   inline mat_injector<Col> operator<<(const eT val);
   
   arma_inline const Op<Col<eT>,op_htrans>  t() const;
   arma_inline const Op<Col<eT>,op_htrans> ht() const;
   arma_inline const Op<Col<eT>,op_strans> st() const;
+  
+  arma_inline const Op<Col<eT>,op_strans> as_row() const;
   
   arma_inline       subview_col<eT> row(const uword row_num);
   arma_inline const subview_col<eT> row(const uword row_num) const;
@@ -94,9 +108,26 @@ class Col : public Mat<eT>
   arma_inline       subview_col<eT> operator()(const span& row_span);
   arma_inline const subview_col<eT> operator()(const span& row_span) const;
   
+  arma_inline       subview_col<eT> subvec(const uword start_row, const SizeMat& s);
+  arma_inline const subview_col<eT> subvec(const uword start_row, const SizeMat& s) const;
+  
+  arma_inline       subview_col<eT> head(const uword N);
+  arma_inline const subview_col<eT> head(const uword N) const;
+  
+  arma_inline       subview_col<eT> tail(const uword N);
+  arma_inline const subview_col<eT> tail(const uword N) const;
+  
+  arma_inline       subview_col<eT> head_rows(const uword N);
+  arma_inline const subview_col<eT> head_rows(const uword N) const;
+  
+  arma_inline       subview_col<eT> tail_rows(const uword N);
+  arma_inline const subview_col<eT> tail_rows(const uword N) const;
+  
   
   inline void shed_row (const uword row_num);
   inline void shed_rows(const uword in_row1, const uword in_row2);
+  
+  template<typename T1> inline void shed_rows(const Base<uword, T1>& indices);
   
                         inline void insert_rows(const uword row_num, const uword N, const bool set_to_zero = true);
   template<typename T1> inline void insert_rows(const uword row_num, const Base<eT,T1>& X);
@@ -146,8 +177,6 @@ class Col<eT>::fixed : public Col<eT>
   
   arma_align_mem eT mem_local_extra[ (use_extra) ? fixed_n_elem : 1 ];
   
-  arma_inline void change_to_row();
-  
   
   public:
   
@@ -156,12 +185,13 @@ class Col<eT>::fixed : public Col<eT>
   typedef eT                                elem_type;
   typedef typename get_pod_type<eT>::result pod_type;
   
-  static const bool is_col = true;
-  static const bool is_row = false;
+  static const bool is_col  = true;
+  static const bool is_row  = false;
+  static const bool is_xvec = false;
   
-  static const uword n_rows = fixed_n_elem;
-  static const uword n_cols = 1;
-  static const uword n_elem = fixed_n_elem;
+  static const uword n_rows;  // value provided below the class definition
+  static const uword n_cols;  // value provided below the class definition
+  static const uword n_elem;  // value provided below the class definition
   
   arma_inline fixed();
   arma_inline fixed(const fixed<fixed_n_elem>& X);
@@ -176,21 +206,26 @@ class Col<eT>::fixed : public Col<eT>
   inline fixed(const char*        text);
   inline fixed(const std::string& text);
   
-  template<typename T1> inline const Col& operator=(const Base<eT,T1>& A);
+  template<typename T1> inline Col& operator=(const Base<eT,T1>& A);
   
-  inline const Col& operator=(const eT val);
-  inline const Col& operator=(const char*        text);
-  inline const Col& operator=(const std::string& text);
-  inline const Col& operator=(const subview_cube<eT>& X);
+  inline Col& operator=(const eT val);
+  inline Col& operator=(const char*        text);
+  inline Col& operator=(const std::string& text);
+  inline Col& operator=(const subview_cube<eT>& X);
   
   using Col<eT>::operator();
   
   #if defined(ARMA_USE_CXX11)
-    inline                fixed(const std::initializer_list<eT>& list);
-    inline const Col& operator=(const std::initializer_list<eT>& list);
+    inline          fixed(const std::initializer_list<eT>& list);
+    inline Col& operator=(const std::initializer_list<eT>& list);
   #endif
   
-  arma_inline const Col& operator=(const fixed<fixed_n_elem>& X);
+  arma_inline Col& operator=(const fixed<fixed_n_elem>& X);
+  
+  #if defined(ARMA_GOOD_COMPILER)
+    template<typename T1,              typename   eop_type> inline Col& operator=(const   eOp<T1,       eop_type>& X);
+    template<typename T1, typename T2, typename eglue_type> inline Col& operator=(const eGlue<T1, T2, eglue_type>& X);
+  #endif
   
   arma_inline const Op< Col_fixed_type, op_htrans >  t() const;
   arma_inline const Op< Col_fixed_type, op_htrans > ht() const;
@@ -217,6 +252,23 @@ class Col<eT>::fixed : public Col<eT>
   arma_hot inline const Col<eT>& zeros();
   arma_hot inline const Col<eT>& ones();
   };
+
+
+
+// these definitions are outside of the class due to bizarre C++ rules;
+// C++17 has inline variables to address this shortcoming
+
+template<typename eT>
+template<uword fixed_n_elem>
+const uword Col<eT>::fixed<fixed_n_elem>::n_rows = fixed_n_elem;
+
+template<typename eT>
+template<uword fixed_n_elem>
+const uword Col<eT>::fixed<fixed_n_elem>::n_cols = 1u;
+
+template<typename eT>
+template<uword fixed_n_elem>
+const uword Col<eT>::fixed<fixed_n_elem>::n_elem = fixed_n_elem;
 
 
 

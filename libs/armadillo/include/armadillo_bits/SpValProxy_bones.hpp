@@ -1,18 +1,27 @@
-// Copyright (C) 2011-2012 Ryan Curtin
-//
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
+
 
 //! \addtogroup SpValProxy
 //! @{
 
-/**
- * Sparse value proxy class, meant to prevent 0s from being added to sparse
- * matrices.  T1 should be either SpMat or SpSubview, and if it's not, bad news
- * is probably coming.  This class only uses T1::add_element() and
- * T1::delete_element().
- */
+
+// Sparse value proxy class, to prevent inserting 0s into sparse matrices.
+// T1 must be either SpMat or SpSubview.
+// This class uses T1::insert_element(), T1::delete_element(), T1::invalidate_cache()
+
 template<typename T1>
 class SpValProxy
   {
@@ -51,18 +60,21 @@ class SpValProxy
   //! This will work for any other operations that do not modify a value.
   arma_inline operator eT() const;
   
+  arma_inline typename get_pod_type<eT>::result real() const;
+  arma_inline typename get_pod_type<eT>::result imag() const;
+  
   
   private:
   
   // Deletes the element if it is zero.  Does not check if val_ptr == NULL!
-  arma_inline arma_hot void check_zero();
+  arma_inline void check_zero();
   
-  uword row;
-  uword col;
+  arma_aligned const uword row;
+  arma_aligned const uword col;
   
-  eT* val_ptr;
+  arma_aligned eT* val_ptr;
   
-  T1& parent; // We will call this object if we need to insert or delete an element.
+  arma_aligned T1& parent; // We will call this object if we need to insert or delete an element.
   };
 
 

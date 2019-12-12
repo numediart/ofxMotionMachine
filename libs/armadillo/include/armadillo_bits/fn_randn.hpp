@@ -1,15 +1,25 @@
-// Copyright (C) 2008-2012 Conrad Sanderson
-// Copyright (C) 2008-2012 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup fn_randn
 //! @{
 
 
+
+arma_warn_unused
 inline
 double
 randn()
@@ -18,9 +28,11 @@ randn()
   }
 
 
+
 template<typename eT>
+arma_warn_unused
 inline
-typename arma_scalar_only<eT>::result
+typename arma_real_or_cx_only<eT>::result
 randn()
   {
   return eT(arma_rng::randn<eT>());
@@ -29,6 +41,7 @@ randn()
 
 
 //! Generate a vector with all elements set to random values with a gaussian distribution (zero mean, unit variance)
+arma_warn_unused
 arma_inline
 const Gen<vec, gen_randn>
 randn(const uword n_elem)
@@ -41,6 +54,7 @@ randn(const uword n_elem)
 
 
 template<typename obj_type>
+arma_warn_unused
 arma_inline
 const Gen<obj_type, gen_randn>
 randn(const uword n_elem, const arma_empty_class junk1 = arma_empty_class(), const typename arma_Mat_Col_Row_only<obj_type>::result* junk2 = 0)
@@ -49,7 +63,7 @@ randn(const uword n_elem, const arma_empty_class junk1 = arma_empty_class(), con
   arma_ignore(junk1);
   arma_ignore(junk2);
   
-  if(is_Row<obj_type>::value == true)
+  if(is_Row<obj_type>::value)
     {
     return Gen<obj_type, gen_randn>(1, n_elem);
     }
@@ -62,6 +76,7 @@ randn(const uword n_elem, const arma_empty_class junk1 = arma_empty_class(), con
 
 
 //! Generate a dense matrix with all elements set to random values with a gaussian distribution (zero mean, unit variance)
+arma_warn_unused
 arma_inline
 const Gen<mat, gen_randn>
 randn(const uword n_rows, const uword n_cols)
@@ -73,7 +88,20 @@ randn(const uword n_rows, const uword n_cols)
 
 
 
+arma_warn_unused
+arma_inline
+const Gen<mat, gen_randn>
+randn(const SizeMat& s)
+  {
+  arma_extra_debug_sigprint();
+  
+  return Gen<mat, gen_randn>(s.n_rows, s.n_cols);
+  }
+
+
+
 template<typename obj_type>
+arma_warn_unused
 arma_inline
 const Gen<obj_type, gen_randn>
 randn(const uword n_rows, const uword n_cols, const typename arma_Mat_Col_Row_only<obj_type>::result* junk = 0)
@@ -81,12 +109,12 @@ randn(const uword n_rows, const uword n_cols, const typename arma_Mat_Col_Row_on
   arma_extra_debug_sigprint();
   arma_ignore(junk);
   
-  if(is_Col<obj_type>::value == true)
+  if(is_Col<obj_type>::value)
     {
     arma_debug_check( (n_cols != 1), "randn(): incompatible size" );
     }
   else
-  if(is_Row<obj_type>::value == true)
+  if(is_Row<obj_type>::value)
     {
     arma_debug_check( (n_rows != 1), "randn(): incompatible size" );
     }
@@ -96,6 +124,21 @@ randn(const uword n_rows, const uword n_cols, const typename arma_Mat_Col_Row_on
 
 
 
+template<typename obj_type>
+arma_warn_unused
+arma_inline
+const Gen<obj_type, gen_randn>
+randn(const SizeMat& s, const typename arma_Mat_Col_Row_only<obj_type>::result* junk = 0)
+  {
+  arma_extra_debug_sigprint();
+  arma_ignore(junk);
+  
+  return randn<obj_type>(s.n_rows, s.n_cols);
+  }
+
+
+
+arma_warn_unused
 arma_inline
 const GenCube<cube::elem_type, gen_randn>
 randn(const uword n_rows, const uword n_cols, const uword n_slices)
@@ -107,7 +150,20 @@ randn(const uword n_rows, const uword n_cols, const uword n_slices)
 
 
 
+arma_warn_unused
+arma_inline
+const GenCube<cube::elem_type, gen_randn>
+randn(const SizeCube& s)
+  {
+  arma_extra_debug_sigprint();
+  
+  return GenCube<cube::elem_type, gen_randn>(s.n_rows, s.n_cols, s.n_slices);
+  }
+
+
+
 template<typename cube_type>
+arma_warn_unused
 arma_inline
 const GenCube<typename cube_type::elem_type, gen_randn>
 randn(const uword n_rows, const uword n_cols, const uword n_slices, const typename arma_Cube_only<cube_type>::result* junk = 0)
@@ -116,6 +172,20 @@ randn(const uword n_rows, const uword n_cols, const uword n_slices, const typena
   arma_ignore(junk);
   
   return GenCube<typename cube_type::elem_type, gen_randn>(n_rows, n_cols, n_slices);
+  }
+
+
+
+template<typename cube_type>
+arma_warn_unused
+arma_inline
+const GenCube<typename cube_type::elem_type, gen_randn>
+randn(const SizeCube& s, const typename arma_Cube_only<cube_type>::result* junk = 0)
+  {
+  arma_extra_debug_sigprint();  
+  arma_ignore(junk);
+  
+  return GenCube<typename cube_type::elem_type, gen_randn>(s.n_rows, s.n_cols, s.n_slices);
   }
 
 

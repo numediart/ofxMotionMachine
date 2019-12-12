@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2014 Conrad Sanderson
-// Copyright (C) 2008-2014 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup glue_times
@@ -75,23 +83,106 @@ glue_times_redirect2_helper<true>::apply(Mat<typename T1::elem_type>& out, const
   
   if(strip_inv<T1>::do_inv == true)
     {
+    // replace inv(A)*B with solve(A,B)
+    
     arma_extra_debug_print("glue_times_redirect<2>::apply(): detected inv(A)*B");
     
     const strip_inv<T1> A_strip(X.A);
     
     Mat<eT> A = A_strip.M;
     
-    arma_debug_check( (A.is_square() == false), "inv(): given matrix is not square" );
+    arma_debug_check( (A.is_square() == false), "inv(): given matrix must be square sized" );
+    
+    if(strip_inv<T1>::do_inv_sympd)
+      {
+      // if(auxlib::rudimentary_sym_check(A) == false)
+      //   {
+      //   if(is_cx<eT>::no )  { arma_debug_warn("inv_sympd(): given matrix is not symmetric"); }
+      //   if(is_cx<eT>::yes)  { arma_debug_warn("inv_sympd(): given matrix is not hermitian"); }
+      //   
+      //   out.soft_reset();
+      //   arma_stop_runtime_error("matrix multiplication: problem with matrix inverse; suggest to use solve() instead");
+      //   
+      //   return;
+      //   }
+      
+      if( (arma_config::debug) && (auxlib::rudimentary_sym_check(A) == false) )
+        {
+        if(is_cx<eT>::no )  { arma_debug_warn("inv_sympd(): given matrix is not symmetric"); }
+        if(is_cx<eT>::yes)  { arma_debug_warn("inv_sympd(): given matrix is not hermitian"); }
+        }
+      }
     
     const unwrap_check<T2> B_tmp(X.B, out);
     const Mat<eT>& B = B_tmp.M;
     
     arma_debug_assert_mul_size(A, B, "matrix multiplication");
     
-    glue_solve::solve_direct( out, A, B, A_strip.slow );
+    #if defined(ARMA_OPTIMISE_SOLVE_SYMPD)
+      const bool status = (strip_inv<T1>::do_inv_sympd) ? auxlib::solve_sympd_fast(out, A, B) : auxlib::solve_square_fast(out, A, B);
+    #else
+      const bool status = auxlib::solve_square_fast(out, A, B);
+    #endif
+    
+    if(status == false)
+      {
+      out.soft_reset();
+      arma_stop_runtime_error("matrix multiplication: problem with matrix inverse; suggest to use solve() instead");
+      }
     
     return;
     }
+  
+  #if defined(ARMA_OPTIMISE_SOLVE_SYMPD)
+    {
+    if(strip_inv<T2>::do_inv_sympd)
+      {
+      // replace A*inv_sympd(B) with trans( solve(trans(B),trans(A)) )
+      // transpose of B is avoided as B is explicitly marked as symmetric
+      
+      arma_extra_debug_print("glue_times_redirect<2>::apply(): detected A*inv_sympd(B)");
+      
+      const Mat<eT> At = trans(X.A);
+      
+      const strip_inv<T2> B_strip(X.B);
+      
+      Mat<eT> B = B_strip.M;
+      
+      arma_debug_check( (B.is_square() == false), "inv_sympd(): given matrix must be square sized" );
+      
+      // if(auxlib::rudimentary_sym_check(B) == false)
+      //   {
+      //   if(is_cx<eT>::no )  { arma_debug_warn("inv_sympd(): given matrix is not symmetric"); }
+      //   if(is_cx<eT>::yes)  { arma_debug_warn("inv_sympd(): given matrix is not hermitian"); }
+      //   
+      //   out.soft_reset();
+      //   arma_stop_runtime_error("matrix multiplication: problem with matrix inverse; suggest to use solve() instead");
+      //   
+      //   return;
+      //   }
+      
+      if( (arma_config::debug) && (auxlib::rudimentary_sym_check(B) == false) )
+        {
+        if(is_cx<eT>::no )  { arma_debug_warn("inv_sympd(): given matrix is not symmetric"); }
+        if(is_cx<eT>::yes)  { arma_debug_warn("inv_sympd(): given matrix is not hermitian"); }
+        }
+      
+      arma_debug_assert_mul_size(At.n_cols, At.n_rows, B.n_rows, B.n_cols, "matrix multiplication");
+      
+      const bool status = auxlib::solve_sympd_fast(out, B, At);
+      
+      if(status == false)
+        {
+        out.soft_reset();
+        arma_stop_runtime_error("matrix multiplication: problem with matrix inverse; suggest to use solve() instead");
+        }
+      
+      out = trans(out);
+      
+      return;
+      }
+    }
+  #endif
   
   glue_times_redirect2_helper<false>::apply(out, X);
   }
@@ -177,7 +268,7 @@ glue_times_redirect3_helper<true>::apply(Mat<typename T1::elem_type>& out, const
     
     Mat<eT> A = A_strip.M;
     
-    arma_debug_check( (A.is_square() == false), "inv(): given matrix is not square" );
+    arma_debug_check( (A.is_square() == false), "inv(): given matrix must be square sized" );
     
     const partial_unwrap<T2> tmp2(X.A.B);
     const partial_unwrap<T3> tmp3(X.B  );
@@ -201,7 +292,17 @@ glue_times_redirect3_helper<true>::apply(Mat<typename T1::elem_type>& out, const
     
     arma_debug_assert_mul_size(A, BC, "matrix multiplication");
     
-    glue_solve::solve_direct( out, A, BC, A_strip.slow );
+    #if defined(ARMA_OPTIMISE_SOLVE_SYMPD)
+      const bool status = (strip_inv<T1>::do_inv_sympd) ? auxlib::solve_sympd_fast(out, A, BC) : auxlib::solve_square_fast(out, A, BC);
+    #else
+      const bool status = auxlib::solve_square_fast(out, A, BC);
+    #endif
+    
+    if(status == false)
+      {
+      out.soft_reset();
+      arma_stop_runtime_error("matrix multiplication: problem with matrix inverse; suggest to use solve() instead");
+      }
     
     return;
     }
@@ -217,7 +318,7 @@ glue_times_redirect3_helper<true>::apply(Mat<typename T1::elem_type>& out, const
     
     Mat<eT> B = B_strip.M;
     
-    arma_debug_check( (B.is_square() == false), "inv(): given matrix is not square" );
+    arma_debug_check( (B.is_square() == false), "inv(): given matrix must be square sized" );
     
     const unwrap<T3> C_tmp(X.B);
     const Mat<eT>& C = C_tmp.M;
@@ -226,7 +327,18 @@ glue_times_redirect3_helper<true>::apply(Mat<typename T1::elem_type>& out, const
     
     Mat<eT> solve_result;
     
-    glue_solve::solve_direct( solve_result, B, C, B_strip.slow );
+    #if defined(ARMA_OPTIMISE_SOLVE_SYMPD)
+      const bool status = (strip_inv<T2>::do_inv_sympd) ? auxlib::solve_sympd_fast(solve_result, B, C) : auxlib::solve_square_fast(solve_result, B, C);
+    #else
+      const bool status = auxlib::solve_square_fast(solve_result, B, C);
+    #endif
+    
+    if(status == false)
+      {
+      out.soft_reset();
+      arma_stop_runtime_error("matrix multiplication: problem with matrix inverse; suggest to use solve() instead");
+      return;
+      }
     
     const partial_unwrap_check<T1> tmp1(X.A.A, out);
     
@@ -407,7 +519,7 @@ glue_times::apply(Mat<typename T1::elem_type>& out, const Glue<T1,T2,glue_times>
   
   const sword N_mat = 1 + depth_lhs< glue_times, Glue<T1,T2,glue_times> >::num;
   
-  arma_extra_debug_print(arma_boost::format("N_mat = %d") % N_mat);
+  arma_extra_debug_print(arma_str::format("N_mat = %d") % N_mat);
   
   glue_times_redirect<N_mat>::apply(out, X);
   }
@@ -422,42 +534,7 @@ glue_times::apply_inplace(Mat<typename T1::elem_type>& out, const T1& X)
   {
   arma_extra_debug_sigprint();
   
-  typedef typename T1::elem_type eT;
-  
-  const unwrap_check<T1> B_tmp(X, out);
-  const Mat<eT>& B     = B_tmp.M;
-  
-  arma_debug_assert_mul_size(out, B, "matrix multiplication");
-  
-  const uword out_n_rows = out.n_rows;
-  const uword out_n_cols = out.n_cols;
-  
-  if(out_n_cols == B.n_cols)
-    {
-    // size of resulting matrix is the same as 'out'
-    
-    podarray<eT> tmp(out_n_cols);
-    
-    eT* tmp_rowdata = tmp.memptr();
-    
-    for(uword row=0; row < out_n_rows; ++row)
-      {
-      tmp.copy_row(out, row);
-      
-      for(uword col=0; col < out_n_cols; ++col)
-        {
-        out.at(row,col) = op_dot::direct_dot( out_n_cols, tmp_rowdata, B.colptr(col) );
-        }
-      }
-    
-    }
-  else
-    {
-    const Mat<eT> tmp(out);
-    
-    glue_times::apply<eT, false, false, false>(out, tmp, B, eT(1));
-    }
-  
+  out = out * X;
   }
 
 
@@ -472,6 +549,17 @@ glue_times::apply_inplace_plus(Mat<typename T1::elem_type>& out, const Glue<T1, 
   
   typedef typename T1::elem_type            eT;
   typedef typename get_pod_type<eT>::result  T;
+  
+  if( (is_outer_product<T1>::value) || (has_op_inv<T1>::value) || (has_op_inv<T2>::value) || (has_op_inv_sympd<T1>::value) || (has_op_inv_sympd<T2>::value) )
+    {
+    // partial workaround for corner cases
+    
+    const Mat<eT> tmp(X);
+    
+    if(sign > sword(0))  { out += tmp; }  else  { out -= tmp; }
+    
+    return;
+    }
   
   const partial_unwrap_check<T1> tmp1(X.A, out);
   const partial_unwrap_check<T2> tmp2(X.B, out);
@@ -805,38 +893,30 @@ glue_times_diag::apply(Mat<typename T1::elem_type>& out, const Glue<T1, T2, glue
   
   if( (strip_diagmat<T1>::do_diagmat == true) && (strip_diagmat<T2>::do_diagmat == false) )
     {
+    arma_extra_debug_print("glue_times_diag::apply(): diagmat(A) * B");
+    
     const diagmat_proxy_check<T1_stripped> A(S1.M, out);
     
     const unwrap_check<T2> tmp(X.B, out);
     const Mat<eT>& B     = tmp.M;
     
-    const uword A_n_elem = A.n_elem;
+    const uword A_n_rows = A.n_rows;
+    const uword A_n_cols = A.n_cols;
+    const uword A_length = (std::min)(A_n_rows, A_n_cols);
+    
     const uword B_n_rows = B.n_rows;
     const uword B_n_cols = B.n_cols;
     
-    arma_debug_assert_mul_size(A_n_elem, A_n_elem, B_n_rows, B_n_cols, "matrix multiplication");
+    arma_debug_assert_mul_size(A_n_rows, A_n_cols, B_n_rows, B_n_cols, "matrix multiplication");
     
-    out.set_size(A_n_elem, B_n_cols);
+    out.zeros(A_n_rows, B_n_cols);
     
     for(uword col=0; col < B_n_cols; ++col)
       {
             eT* out_coldata = out.colptr(col);
-      const eT* B_coldata   = B.colptr(col);
+      const eT*   B_coldata =   B.colptr(col);
       
-      uword i,j;
-      for(i=0, j=1; j < B_n_rows; i+=2, j+=2)
-        {
-        eT tmp_i = A[i];
-        eT tmp_j = A[j];
-        
-        tmp_i *= B_coldata[i];
-        tmp_j *= B_coldata[j];
-        
-        out_coldata[i] = tmp_i;
-        out_coldata[j] = tmp_j;
-        }
-      
-      if(i < B_n_rows)
+      for(uword i=0; i < A_length; ++i)
         {
         out_coldata[i] = A[i] * B_coldata[i];
         }
@@ -845,6 +925,8 @@ glue_times_diag::apply(Mat<typename T1::elem_type>& out, const Glue<T1, T2, glue
   else
   if( (strip_diagmat<T1>::do_diagmat == false) && (strip_diagmat<T2>::do_diagmat == true) )
     {
+    arma_extra_debug_print("glue_times_diag::apply(): A * diagmat(B)");
+    
     const unwrap_check<T1> tmp(X.A, out);
     const Mat<eT>& A     = tmp.M;
     
@@ -852,30 +934,23 @@ glue_times_diag::apply(Mat<typename T1::elem_type>& out, const Glue<T1, T2, glue
     
     const uword A_n_rows = A.n_rows;
     const uword A_n_cols = A.n_cols;
-    const uword B_n_elem = B.n_elem;
     
-    arma_debug_assert_mul_size(A_n_rows, A_n_cols, B_n_elem, B_n_elem, "matrix multiplication");
+    const uword B_n_rows = B.n_rows;
+    const uword B_n_cols = B.n_cols;
+    const uword B_length = (std::min)(B_n_rows, B_n_cols);
     
-    out.set_size(A_n_rows, B_n_elem);
+    arma_debug_assert_mul_size(A_n_rows, A_n_cols, B_n_rows, B_n_cols, "matrix multiplication");
     
-    for(uword col=0; col < A_n_cols; ++col)
+    out.zeros(A_n_rows, B_n_cols);
+    
+    for(uword col=0; col < B_length; ++col)
       {
       const eT  val = B[col];
       
             eT* out_coldata = out.colptr(col);
       const eT*   A_coldata =   A.colptr(col);
       
-      uword i,j;
-      for(i=0, j=1; j < A_n_rows; i+=2, j+=2)
-        {
-        const eT tmp_i = A_coldata[i] * val;
-        const eT tmp_j = A_coldata[j] * val;
-        
-        out_coldata[i] = tmp_i;
-        out_coldata[j] = tmp_j;
-        }
-      
-      if(i < A_n_rows)
+      for(uword i=0; i < A_n_rows; ++i)
         {
         out_coldata[i] = A_coldata[i] * val;
         }
@@ -884,17 +959,21 @@ glue_times_diag::apply(Mat<typename T1::elem_type>& out, const Glue<T1, T2, glue
   else
   if( (strip_diagmat<T1>::do_diagmat == true) && (strip_diagmat<T2>::do_diagmat == true) )
     {
+    arma_extra_debug_print("glue_times_diag::apply(): diagmat(A) * diagmat(B)");
+    
     const diagmat_proxy_check<T1_stripped> A(S1.M, out);
     const diagmat_proxy_check<T2_stripped> B(S2.M, out);
     
-    const uword A_n_elem = A.n_elem;
-    const uword B_n_elem = B.n_elem;
+    arma_debug_assert_mul_size(A.n_rows, A.n_cols, B.n_rows, B.n_cols, "matrix multiplication");
     
-    arma_debug_assert_mul_size(A_n_elem, A_n_elem, B_n_elem, B_n_elem, "matrix multiplication");
+    out.zeros(A.n_rows, B.n_cols);
     
-    out.zeros(A_n_elem, A_n_elem);
+    const uword A_length = (std::min)(A.n_rows, A.n_cols);
+    const uword B_length = (std::min)(B.n_rows, B.n_cols);
     
-    for(uword i=0; i < A_n_elem; ++i)
+    const uword N = (std::min)(A_length, B_length);
+    
+    for(uword i=0; i < N; ++i)
       {
       out.at(i,i) = A[i] * B[i];
       }

@@ -1,9 +1,17 @@
-// Copyright (C) 2011-2013 Conrad Sanderson
-// Copyright (C) 2011-2013 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup GenCube
@@ -12,15 +20,17 @@
 
 //! support class for generator functions (eg. zeros, randu, randn, ...)
 template<typename eT, typename gen_type>
-class GenCube : public BaseCube<eT, GenCube<eT, gen_type> >
+class GenCube
+  : public BaseCube<eT, GenCube<eT, gen_type> >
+  , public GenSpecialiser<eT, is_same_type<gen_type, gen_zeros>::yes, is_same_type<gen_type, gen_ones>::yes, is_same_type<gen_type, gen_randu>::yes, is_same_type<gen_type, gen_randn>::yes>
   {
   public:
   
   typedef          eT                              elem_type;
   typedef typename get_pod_type<elem_type>::result pod_type;
   
-  static const bool prefer_at_accessor = false;
-  static const bool is_simple          = (is_same_type<gen_type, gen_ones_full>::value) || (is_same_type<gen_type, gen_zeros>::value); 
+  static const bool use_at    = false;
+  static const bool is_simple = (is_same_type<gen_type, gen_ones>::value) || (is_same_type<gen_type, gen_zeros>::value); 
   
   arma_aligned const uword n_rows;
   arma_aligned const uword n_cols;
@@ -28,8 +38,6 @@ class GenCube : public BaseCube<eT, GenCube<eT, gen_type> >
   
   arma_inline  GenCube(const uword in_n_rows, const uword in_n_cols, const uword in_n_slices);
   arma_inline ~GenCube();
-  
-  arma_inline static eT generate();
   
   arma_inline eT operator[] (const uword i)                                       const;
   arma_inline eT at         (const uword row, const uword col, const uword slice) const;
@@ -40,6 +48,8 @@ class GenCube : public BaseCube<eT, GenCube<eT, gen_type> >
   inline void apply_inplace_minus(Cube<eT>& out) const;
   inline void apply_inplace_schur(Cube<eT>& out) const;
   inline void apply_inplace_div  (Cube<eT>& out) const;
+  
+  inline void apply(subview_cube<elem_type>& out) const;
   };
 
 

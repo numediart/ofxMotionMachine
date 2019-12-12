@@ -1,19 +1,21 @@
-// This Source Code Form is a compilation of:
-// (1) source code written by Conrad Sanderson, and
-// (2) a modified form of source code referred to as "kissfft.hh".
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This compilation is Copyright (C) 2013 Conrad Sanderson
-// and is subject to the terms of the Mozilla Public License, v. 2.0.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
 // 
-// The source code that is distinct and separate from "kissfft.hh"
-// is Copyright (C) 2013 Conrad Sanderson and is subject to the
-// terms of the Mozilla Public License, v. 2.0.
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 // 
-// If a copy of the MPL was not distributed with this file,
-// You can obtain one at http://mozilla.org/MPL/2.0/.
+// ------------------------------------------------------------------------
 // 
-// The original "kissfft.hh" source code is licensed under a 3-clause BSD license,
-// as follows:
+// This file includes portions of Kiss FFT software,
+// licensed under the following conditions.
 // 
 // Copyright (c) 2003-2010 Mark Borgerding
 // 
@@ -29,31 +31,40 @@
 //   this list of conditions and the following disclaimer in the documentation
 //   and/or other materials provided with the distribution.
 // 
-// * Neither the author nor the names of any contributors may be used to endorse or promote
-//   products derived from this software without specific prior written permission.
+// * Neither the author nor the names of any contributors may be used to
+//   endorse or promote products derived from this software without specific
+//   prior written permission.
 // 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS
-// OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
-// AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER
-// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
-// OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-// OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-// ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-// OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+// PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+// OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+// OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+// EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// 
+// ------------------------------------------------------------------------
 
 
+//! \addtogroup fft_engine
+//! @{
 
-template<typename cx_type, uword fixed_N, bool> struct store {};
+
+template<typename cx_type, uword fixed_N, bool> struct fft_store {};
 
 template<typename cx_type, uword fixed_N>
-struct store<cx_type, fixed_N, true>
+struct fft_store<cx_type, fixed_N, true>
   {
   static const uword N = fixed_N;
   
   arma_aligned cx_type coeffs_array[fixed_N];
   
-  inline store()      {}
-  inline store(uword) {}
+  inline fft_store()      {}
+  inline fft_store(uword) {}
   
   arma_inline       cx_type* coeffs_ptr()       { return &coeffs_array[0]; }
   arma_inline const cx_type* coeffs_ptr() const { return &coeffs_array[0]; }
@@ -62,14 +73,14 @@ struct store<cx_type, fixed_N, true>
 
 
 template<typename cx_type, uword fixed_N>
-struct store<cx_type, fixed_N, false>
+struct fft_store<cx_type, fixed_N, false>
   {
   const uword N;
   
   podarray<cx_type> coeffs_array;
   
-  inline store()           : N(0)    {}
-  inline store(uword in_N) : N(in_N) { coeffs_array.set_size(N); }
+  inline fft_store()           : N(0)    {}
+  inline fft_store(uword in_N) : N(in_N) { coeffs_array.set_size(N); }
   
   arma_inline       cx_type* coeffs_ptr()       { return coeffs_array.memptr(); }
   arma_inline const cx_type* coeffs_ptr() const { return coeffs_array.memptr(); }
@@ -78,14 +89,14 @@ struct store<cx_type, fixed_N, false>
 
 
 template<typename cx_type, bool inverse, uword fixed_N = 0>
-class fft_engine : public store<cx_type, fixed_N, (fixed_N > 0)>
+class fft_engine : public fft_store<cx_type, fixed_N, (fixed_N > 0)>
   {
   public:
   
   typedef typename get_pod_type<cx_type>::result T;
   
-  using store<cx_type, fixed_N, (fixed_N > 0)>::N;
-  using store<cx_type, fixed_N, (fixed_N > 0)>::coeffs_ptr;
+  using fft_store<cx_type, fixed_N, (fixed_N > 0)>::N;
+  using fft_store<cx_type, fixed_N, (fixed_N > 0)>::coeffs_ptr;
   
   podarray<uword>   residue;
   podarray<uword>   radix;
@@ -130,7 +141,7 @@ class fft_engine : public store<cx_type, fixed_N, (fixed_N > 0)>
   
   inline
   fft_engine(const uword in_N)
-    : store< cx_type, fixed_N, (fixed_N > 0) >(in_N)
+    : fft_store< cx_type, fixed_N, (fixed_N > 0) >(in_N)
     {
     arma_extra_debug_sigprint();
     
@@ -201,7 +212,7 @@ class fft_engine : public store<cx_type, fixed_N, (fixed_N > 0)>
       
       tmp[3] = tmp[1] + tmp[2];
       
-      Y[m] = cx_type( (Y[0].real() - (0.5*tmp[3].real())), (Y[0].imag() - (0.5*tmp[3].imag())) );
+      Y[m] = cx_type( (Y[0].real() - (T(0.5)*tmp[3].real())), (Y[0].imag() - (T(0.5)*tmp[3].imag())) );
       
       Y[0] += tmp[3];
       
@@ -407,3 +418,6 @@ class fft_engine : public store<cx_type, fixed_N, (fixed_N > 0)>
 
 
   };
+
+
+//! @}

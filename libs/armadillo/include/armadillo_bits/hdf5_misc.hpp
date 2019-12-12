@@ -1,10 +1,18 @@
-// Copyright (C) 2012 Ryan Curtin
-// Copyright (C) 2012 Conrad Sanderson
-// Copyright (C) 2013 Szabolcs Horvat
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
+
 
 //! \addtogroup hdf5_misc
 //! @{
@@ -324,18 +332,51 @@ hdf5_search_callback
       // we can do the comparison.
       
       // Count the number of forward slashes in names[string_pos].
-      uword count = 0;
+      uword name_count = 0;
       for (uword i = 0; i < search_info->names[string_pos].length(); ++i)
         {
-        if ((search_info->names[string_pos])[i] == '/') { ++count; }
+        if ((search_info->names[string_pos])[i] == '/') { ++name_count; }
         }
 
       // Count the number of forward slashes in the full name.
-      uword name_count = 0;
+      uword count = 0;
       const std::string str = std::string(name);
       for (uword i = 0; i < str.length(); ++i)
         {
         if (str[i] == '/') { ++count; }
+        }
+
+      // Is the full string the same?
+      if (str == search_info->names[string_pos])
+        {
+        // We found it exactly.
+        hid_t match_candidate = arma_H5Dopen(loc_id, name, H5P_DEFAULT);
+
+        if (match_candidate < 0)
+          {
+          return -1;
+          }
+
+        // Ensure that the dataset is valid and of the correct dimensionality.
+        hid_t filespace = arma_H5Dget_space(match_candidate);
+        int num_dims = arma_H5Sget_simple_extent_ndims(filespace);
+        
+        if (num_dims <= search_info->num_dims)
+          {
+          // Valid dataset -- we'll keep it.
+          // If we already have an existing match we have to close it.
+          if (search_info->best_match != -1)
+            {
+            arma_H5Dclose(search_info->best_match);
+            }
+
+          search_info->best_match_position = string_pos;
+          search_info->best_match          = match_candidate;
+          }
+        
+        arma_H5Sclose(filespace);
+        // There is no possibility of anything better, so terminate the search.
+        return 1;
         }
 
       // If we are asking for more slashes than we have, this can't be a match.
@@ -670,7 +711,7 @@ load_and_convert_hdf5
   
   if(is_equal)
     {
-    if(is_complex<eT>::value == false)
+    if(is_cx<eT>::no)
       {
       return -1; // can't read complex data into non-complex matrix/cube
       }
@@ -690,7 +731,7 @@ load_and_convert_hdf5
   
   if(is_equal)
     {
-    if(is_complex<eT>::value == false)
+    if(is_cx<eT>::no)
       {
       return -1; // can't read complex data into non-complex matrix/cube
       }
@@ -705,6 +746,39 @@ load_and_convert_hdf5
   
   return -1; // Failure.
   }
+
+
+
+struct hdf5_suspend_printing_errors
+  {
+  #if defined(ARMA_PRINT_HDF5_ERRORS)
+    
+    inline
+    hdf5_suspend_printing_errors() {}
+    
+  #else
+    
+    herr_t (*old_client_func)(hid_t, void*);
+    void*    old_client_data;
+    
+    inline
+    hdf5_suspend_printing_errors()
+      {
+      // Save old error handler.
+      arma_H5Eget_auto(H5E_DEFAULT, &old_client_func, &old_client_data);
+      
+      // Disable annoying HDF5 error messages.
+      arma_H5Eset_auto(H5E_DEFAULT, NULL, NULL);
+      }
+    
+    inline
+    ~hdf5_suspend_printing_errors()
+      {
+      arma_H5Eset_auto(H5E_DEFAULT, old_client_func, old_client_data);
+      }
+    
+  #endif
+  };
 
 
 

@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2013 NICTA (www.nicta.com.au)
-// Copyright (C) 2008-2013 Conrad Sanderson
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup diagview
@@ -186,15 +194,15 @@ diagview<eT>::operator= (const Base<eT,T1>& o)
   
   arma_debug_check
     (
-    ( (d.n_elem != P.get_n_elem()) || ((P.get_n_rows() != 1) && (P.get_n_cols() != 1)) ),
+    ( (d_n_elem != P.get_n_elem()) || ((P.get_n_rows() != 1) && (P.get_n_cols() != 1)) ),
     "diagview: given object has incompatible size"
     );
   
   const bool is_alias = P.is_alias(d_m);
   
-  arma_extra_debug_warn(is_alias, "aliasing detected");
+  if(is_alias)  { arma_extra_debug_print("aliasing detected"); }
   
-  if( (is_Mat<typename Proxy<T1>::stored_type>::value == true) || (Proxy<T1>::prefer_at_accessor == true) || (is_alias == true) )
+  if( (is_Mat<typename Proxy<T1>::stored_type>::value) || (Proxy<T1>::use_at) || (is_alias) )
     {
     const unwrap_check<typename Proxy<T1>::stored_type> tmp(P.Q, is_alias);
     const Mat<eT>& x = tmp.M;
@@ -259,15 +267,15 @@ diagview<eT>::operator+=(const Base<eT,T1>& o)
   
   arma_debug_check
     (
-    ( (d.n_elem != P.get_n_elem()) || ((P.get_n_rows() != 1) && (P.get_n_cols() != 1)) ),
+    ( (d_n_elem != P.get_n_elem()) || ((P.get_n_rows() != 1) && (P.get_n_cols() != 1)) ),
     "diagview: given object has incompatible size"
     );
   
   const bool is_alias = P.is_alias(d_m);
   
-  arma_extra_debug_warn(is_alias, "aliasing detected");
+  if(is_alias)  { arma_extra_debug_print("aliasing detected"); }
   
-  if( (is_Mat<typename Proxy<T1>::stored_type>::value == true) || (Proxy<T1>::prefer_at_accessor == true) || (is_alias == true) )
+  if( (is_Mat<typename Proxy<T1>::stored_type>::value) || (Proxy<T1>::use_at) || (is_alias) )
     {
     const unwrap_check<typename Proxy<T1>::stored_type> tmp(P.Q, is_alias);
     const Mat<eT>& x = tmp.M;
@@ -332,15 +340,15 @@ diagview<eT>::operator-=(const Base<eT,T1>& o)
   
   arma_debug_check
     (
-    ( (d.n_elem != P.get_n_elem()) || ((P.get_n_rows() != 1) && (P.get_n_cols() != 1)) ),
+    ( (d_n_elem != P.get_n_elem()) || ((P.get_n_rows() != 1) && (P.get_n_cols() != 1)) ),
     "diagview: given object has incompatible size"
     );
   
   const bool is_alias = P.is_alias(d_m);
   
-  arma_extra_debug_warn(is_alias, "aliasing detected");
+  if(is_alias)  { arma_extra_debug_print("aliasing detected"); }
   
-  if( (is_Mat<typename Proxy<T1>::stored_type>::value == true) || (Proxy<T1>::prefer_at_accessor == true) || (is_alias == true) )
+  if( (is_Mat<typename Proxy<T1>::stored_type>::value) || (Proxy<T1>::use_at) || (is_alias) )
     {
     const unwrap_check<typename Proxy<T1>::stored_type> tmp(P.Q, is_alias);
     const Mat<eT>& x = tmp.M;
@@ -405,15 +413,15 @@ diagview<eT>::operator%=(const Base<eT,T1>& o)
   
   arma_debug_check
     (
-    ( (d.n_elem != P.get_n_elem()) || ((P.get_n_rows() != 1) && (P.get_n_cols() != 1)) ),
+    ( (d_n_elem != P.get_n_elem()) || ((P.get_n_rows() != 1) && (P.get_n_cols() != 1)) ),
     "diagview: given object has incompatible size"
     );
   
   const bool is_alias = P.is_alias(d_m);
   
-  arma_extra_debug_warn(is_alias, "aliasing detected");
+  if(is_alias)  { arma_extra_debug_print("aliasing detected"); }
   
-  if( (is_Mat<typename Proxy<T1>::stored_type>::value == true) || (Proxy<T1>::prefer_at_accessor == true) || (is_alias == true) )
+  if( (is_Mat<typename Proxy<T1>::stored_type>::value) || (Proxy<T1>::use_at) || (is_alias) )
     {
     const unwrap_check<typename Proxy<T1>::stored_type> tmp(P.Q, is_alias);
     const Mat<eT>& x = tmp.M;
@@ -478,15 +486,15 @@ diagview<eT>::operator/=(const Base<eT,T1>& o)
   
   arma_debug_check
     (
-    ( (d.n_elem != P.get_n_elem()) || ((P.get_n_rows() != 1) && (P.get_n_cols() != 1)) ),
+    ( (d_n_elem != P.get_n_elem()) || ((P.get_n_rows() != 1) && (P.get_n_cols() != 1)) ),
     "diagview: given object has incompatible size"
     );
   
   const bool is_alias = P.is_alias(d_m);
   
-  arma_extra_debug_warn(is_alias, "aliasing detected");
+  if(is_alias)  { arma_extra_debug_print("aliasing detected"); }
   
-  if( (is_Mat<typename Proxy<T1>::stored_type>::value == true) || (Proxy<T1>::prefer_at_accessor == true) || (is_alias == true) )
+  if( (is_Mat<typename Proxy<T1>::stored_type>::value) || (Proxy<T1>::use_at) || (is_alias) )
     {
     const unwrap_check<typename Proxy<T1>::stored_type> tmp(P.Q, is_alias);
     const Mat<eT>& x = tmp.M;
@@ -856,6 +864,39 @@ const Op<diagview<eT>,op_strans>
 diagview<eT>::st() const
   {
   return Op<diagview<eT>,op_strans>(*this);
+  }
+
+
+
+template<typename eT>
+inline
+void
+diagview<eT>::replace(const eT old_val, const eT new_val)
+  {
+  arma_extra_debug_sigprint();
+  
+  Mat<eT>& x = const_cast< Mat<eT>& >(m);
+  
+  const uword local_n_elem = n_elem;
+  
+  if(arma_isnan(old_val))
+    {
+    for(uword ii=0; ii < local_n_elem; ++ii)
+      {
+      eT& val = x.at(ii+row_offset, ii+col_offset);
+      
+      val = (arma_isnan(val)) ? new_val : val;
+      }
+    }
+  else
+    {
+    for(uword ii=0; ii < local_n_elem; ++ii)
+      {
+      eT& val = x.at(ii+row_offset, ii+col_offset);
+      
+      val = (val == old_val) ? new_val : val;
+      }
+    }
   }
 
 

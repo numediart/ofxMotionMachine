@@ -1,9 +1,17 @@
-// Copyright (C) 2013-2014 Conrad Sanderson
-// Copyright (C) 2013-2014 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup SizeMat
@@ -21,11 +29,29 @@ SizeMat::SizeMat(const uword in_n_rows, const uword in_n_cols)
 
 
 
-// inline
-// SizeMat::operator SizeCube () const 
-//   {
-//   return SizeCube(n_rows, n_cols, 1);
-//   }
+inline
+uword
+SizeMat::operator[](const uword dim) const
+  {
+  if(dim == 0)  { return n_rows; }
+  if(dim == 1)  { return n_cols; }
+  
+  return uword(1);
+  }
+
+
+
+inline
+uword
+SizeMat::operator()(const uword dim) const
+  {
+  if(dim == 0)  { return n_rows; }
+  if(dim == 1)  { return n_cols; }
+  
+  arma_debug_check(true, "size(): index out of bounds");
+  
+  return uword(1);
+  }
 
 
 
@@ -56,71 +82,61 @@ SizeMat::operator!=(const SizeMat& s) const
 
 
 inline
-bool
-SizeMat::operator==(const SizeCube& s) const
+SizeMat
+SizeMat::operator+(const SizeMat& s) const
   {
-  if(n_rows   != s.n_rows  )  { return false; }
-  
-  if(n_cols   != s.n_cols  )  { return false; }
-  
-  if(uword(1) != s.n_slices)  { return false; }
-  
-  return true;
+  return SizeMat( (n_rows + s.n_rows), (n_cols + s.n_cols) );
   }
 
 
 
 inline
-bool
-SizeMat::operator!=(const SizeCube& s) const
+SizeMat
+SizeMat::operator-(const SizeMat& s) const
   {
-  if(n_rows   != s.n_rows  )  { return true; }
+  const uword out_n_rows = (n_rows > s.n_rows) ? (n_rows - s.n_rows) : uword(0);
+  const uword out_n_cols = (n_cols > s.n_cols) ? (n_cols - s.n_cols) : uword(0);
   
-  if(n_cols   != s.n_cols  )  { return true; }
-  
-  if(uword(1) != s.n_slices)  { return true; }
-  
-  return false;
+  return SizeMat(out_n_rows, out_n_cols);
   }
 
 
 
 inline
-void
-SizeMat::print(const std::string extra_text) const
+SizeMat
+SizeMat::operator+(const uword val) const
   {
-  arma_extra_debug_sigprint();
-  
-  if(extra_text.length() != 0)
-    {
-    const std::streamsize orig_width = ARMA_DEFAULT_OSTREAM.width();
-    
-    ARMA_DEFAULT_OSTREAM << extra_text << ' ';
-  
-    ARMA_DEFAULT_OSTREAM.width(orig_width);
-    }
-  
-  arma_ostream::print(ARMA_DEFAULT_OSTREAM, *this);
+  return SizeMat( (n_rows + val), (n_cols + val) );
   }
 
 
 
 inline
-void
-SizeMat::print(std::ostream& user_stream, const std::string extra_text) const
+SizeMat
+SizeMat::operator-(const uword val) const
   {
-  arma_extra_debug_sigprint();
+  const uword out_n_rows = (n_rows > val) ? (n_rows - val) : uword(0);
+  const uword out_n_cols = (n_cols > val) ? (n_cols - val) : uword(0);
   
-  if(extra_text.length() != 0)
-    {
-    const std::streamsize orig_width = user_stream.width();
-    
-    user_stream << extra_text << ' ';
-    
-    user_stream.width(orig_width);
-    }
-  
-  arma_ostream::print(user_stream, *this);
+  return SizeMat(out_n_rows, out_n_cols);
+  }
+
+
+
+inline
+SizeMat
+SizeMat::operator*(const uword val) const
+  {
+  return SizeMat( (n_rows * val), (n_cols * val) );
+  }
+
+
+
+inline
+SizeMat
+SizeMat::operator/(const uword val) const
+  {
+  return SizeMat( (n_rows / val), (n_cols / val) );
   }
 
 

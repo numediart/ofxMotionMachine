@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2014 Conrad Sanderson
-// Copyright (C) 2008-2014 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup subview_cube
@@ -24,12 +32,12 @@ arma_inline
 subview_cube<eT>::subview_cube
   (
   const Cube<eT>& in_m,
-  const uword       in_row1,
-  const uword       in_col1,
-  const uword       in_slice1,
-  const uword       in_n_rows,
-  const uword       in_n_cols,
-  const uword       in_n_slices
+  const uword     in_row1,
+  const uword     in_col1,
+  const uword     in_slice1,
+  const uword     in_n_rows,
+  const uword     in_n_cols,
+  const uword     in_n_slices
   )
   : m           (in_m)
   , aux_row1    (in_row1)
@@ -575,9 +583,9 @@ subview_cube<eT>::operator= (const Base<eT,T1>& in)
     }
   else
     {
-    if(arma_config::debug == true)
+    if(arma_config::debug)
       {
-      arma_stop( arma_incompat_size_string(t, x, "copy into subcube") );
+      arma_stop_logic_error( arma_incompat_size_string(t, x, "copy into subcube") );
       }
     }
   }
@@ -678,9 +686,9 @@ subview_cube<eT>::operator+= (const Base<eT,T1>& in)
     }
   else
     {
-    if(arma_config::debug == true)
+    if(arma_config::debug)
       {
-      arma_stop( arma_incompat_size_string(t, x, "addition") );
+      arma_stop_logic_error( arma_incompat_size_string(t, x, "addition") );
       }
     }
   }
@@ -781,9 +789,9 @@ subview_cube<eT>::operator-= (const Base<eT,T1>& in)
     }
   else
     {
-    if(arma_config::debug == true)
+    if(arma_config::debug)
       {
-      arma_stop( arma_incompat_size_string(t, x, "subtraction") );
+      arma_stop_logic_error( arma_incompat_size_string(t, x, "subtraction") );
       }
     }
   }
@@ -884,9 +892,9 @@ subview_cube<eT>::operator%= (const Base<eT,T1>& in)
     }
   else
     {
-    if(arma_config::debug == true)
+    if(arma_config::debug)
       {
-      arma_stop( arma_incompat_size_string(t, x, "element-wise multiplication") );
+      arma_stop_logic_error( arma_incompat_size_string(t, x, "element-wise multiplication") );
       }
     }
   }
@@ -987,10 +995,82 @@ subview_cube<eT>::operator/= (const Base<eT,T1>& in)
     }
   else
     {
-    if(arma_config::debug == true)
+    if(arma_config::debug)
       {
-      arma_stop( arma_incompat_size_string(t, x, "element-wise division") );
+      arma_stop_logic_error( arma_incompat_size_string(t, x, "element-wise division") );
       }
+    }
+  }
+
+
+
+template<typename eT>
+template<typename gen_type>
+inline
+void
+subview_cube<eT>::operator= (const GenCube<eT,gen_type>& in)
+  {
+  arma_extra_debug_sigprint();
+  
+  arma_debug_assert_same_size(n_rows, n_cols, n_slices, in.n_rows, in.n_cols, in.n_slices, "copy into subcube");
+  
+  in.apply(*this);
+  }
+
+
+
+//! apply a functor to each element
+template<typename eT>
+template<typename functor>
+inline
+void
+subview_cube<eT>::for_each(functor F)
+  {
+  arma_extra_debug_sigprint();
+  
+  Cube<eT>& Q = const_cast< Cube<eT>& >(m);
+  
+  const uword start_col   = aux_col1;
+  const uword start_row   = aux_row1;
+  const uword start_slice = aux_slice1;
+  
+  const uword end_col_plus1   = start_col   + n_cols;
+  const uword end_row_plus1   = start_row   + n_rows;
+  const uword end_slice_plus1 = start_slice + n_slices;
+  
+  for(uword uslice = start_slice; uslice < end_slice_plus1; ++uslice)
+  for(uword ucol   = start_col;     ucol < end_col_plus1;   ++ucol  )
+  for(uword urow   = start_row;     urow < end_row_plus1;   ++urow  )
+    {
+    F( Q.at(urow, ucol, uslice) );
+    }
+  }
+
+
+
+template<typename eT>
+template<typename functor>
+inline
+void
+subview_cube<eT>::for_each(functor F) const
+  {
+  arma_extra_debug_sigprint();
+  
+  const Cube<eT>& Q = m;
+  
+  const uword start_col   = aux_col1;
+  const uword start_row   = aux_row1;
+  const uword start_slice = aux_slice1;
+  
+  const uword end_col_plus1   = start_col   + n_cols;
+  const uword end_row_plus1   = start_row   + n_rows;
+  const uword end_slice_plus1 = start_slice + n_slices;
+  
+  for(uword uslice = start_slice; uslice < end_slice_plus1; ++uslice)
+  for(uword ucol   = start_col;     ucol < end_col_plus1;   ++ucol  )
+  for(uword urow   = start_row;     urow < end_row_plus1;   ++urow  )
+    {
+    F( Q.at(urow, ucol, uslice) );
     }
   }
 
@@ -1049,6 +1129,106 @@ subview_cube<eT>::imbue(functor F)
   for(uword urow   = start_row;     urow < end_row_plus1;   ++urow  )
     {
     Q.at(urow, ucol, uslice) = eT( F() );
+    }
+  }
+
+
+
+#if defined(ARMA_USE_CXX11)
+  
+  //! apply a lambda function to each slice, where each slice is interpreted as a matrix
+  template<typename eT>
+  inline
+  void
+  subview_cube<eT>::each_slice(const std::function< void(Mat<eT>&) >& F)
+    {
+    arma_extra_debug_sigprint();
+    
+    Mat<eT> tmp1(n_rows, n_cols);
+    Mat<eT> tmp2('j', tmp1.memptr(), n_rows, n_cols);
+    
+    for(uword slice_id=0; slice_id < n_slices; ++slice_id)
+      {
+      for(uword col_id=0; col_id < n_cols; ++col_id)
+        {
+        arrayops::copy( tmp1.colptr(col_id), slice_colptr(slice_id, col_id), n_rows );
+        }
+      
+      F(tmp2);
+      
+      for(uword col_id=0; col_id < n_cols; ++col_id)
+        {
+        arrayops::copy( slice_colptr(slice_id, col_id), tmp1.colptr(col_id), n_rows );
+        }
+      }
+    }
+  
+  
+  
+  template<typename eT>
+  inline
+  void
+  subview_cube<eT>::each_slice(const std::function< void(const Mat<eT>&) >& F) const
+    {
+    arma_extra_debug_sigprint();
+    
+          Mat<eT> tmp1(n_rows, n_cols);
+    const Mat<eT> tmp2('j', tmp1.memptr(), n_rows, n_cols);
+    
+    for(uword slice_id=0; slice_id < n_slices; ++slice_id)
+      {
+      for(uword col_id=0; col_id < n_cols; ++col_id)
+        {
+        arrayops::copy( tmp1.colptr(col_id), slice_colptr(slice_id, col_id), n_rows );
+        }
+      
+      F(tmp2);
+      }
+    }
+  
+#endif
+
+
+
+template<typename eT>
+inline
+void
+subview_cube<eT>::replace(const eT old_val, const eT new_val)
+  {
+  arma_extra_debug_sigprint();
+  
+  const uword local_n_rows   = n_rows;
+  const uword local_n_cols   = n_cols;
+  const uword local_n_slices = n_slices;
+  
+  for(uword slice = 0; slice < local_n_slices; ++slice)
+    {
+    for(uword col = 0; col < local_n_cols; ++col)
+      {
+      arrayops::replace(slice_colptr(slice,col), local_n_rows, old_val, new_val);
+      }
+    }
+  }
+
+
+
+template<typename eT>
+inline
+void
+subview_cube<eT>::clean(const typename get_pod_type<eT>::result threshold)
+  {
+  arma_extra_debug_sigprint();
+
+  const uword local_n_rows   = n_rows;
+  const uword local_n_cols   = n_cols;
+  const uword local_n_slices = n_slices;
+  
+  for(uword slice = 0; slice < local_n_slices; ++slice)
+    {
+    for(uword col = 0; col < local_n_cols; ++col)
+      {
+      arrayops::clean( slice_colptr(slice,col), local_n_rows, threshold );
+      }
     }
   }
 
@@ -1157,26 +1337,24 @@ subview_cube<eT>::randn()
 template<typename eT>
 inline
 arma_warn_unused
-eT
-subview_cube<eT>::min() const
+bool
+subview_cube<eT>::is_finite() const
   {
   arma_extra_debug_sigprint();
-  
-  arma_debug_check( (n_elem == 0), "subview_cube::min(): object has no elements" );
   
   const uword local_n_rows   = n_rows;
   const uword local_n_cols   = n_cols;
   const uword local_n_slices = n_slices;
   
-  eT min_val = at(0,0,0);
-  
-  for(uword si=0; si < local_n_slices; ++si)
-  for(uword ci=0; ci < local_n_cols;   ++ci)
+  for(uword slice = 0; slice < local_n_slices; ++slice)
     {
-    min_val = (std::min)( min_val, op_min::direct_min(slice_colptr(si,ci), local_n_rows) );
+    for(uword col = 0; col < local_n_cols; ++col)
+      {
+      if(arrayops::is_finite(slice_colptr(slice,col), local_n_rows) == false)  { return false; }
+      }
     }
   
-  return min_val;
+  return true;
   }
 
 
@@ -1184,26 +1362,49 @@ subview_cube<eT>::min() const
 template<typename eT>
 inline
 arma_warn_unused
-eT
-subview_cube<eT>::max() const
+bool
+subview_cube<eT>::has_inf() const
   {
   arma_extra_debug_sigprint();
-  
-  arma_debug_check( (n_elem == 0), "subview_cube::max(): object has no elements" );
   
   const uword local_n_rows   = n_rows;
   const uword local_n_cols   = n_cols;
   const uword local_n_slices = n_slices;
   
-  eT max_val = at(0,0,0);
-  
-  for(uword si=0; si < local_n_slices; ++si)
-  for(uword ci=0; ci < local_n_cols;   ++ci)
+  for(uword slice = 0; slice < local_n_slices; ++slice)
     {
-    max_val = (std::max)( max_val, op_max::direct_max(slice_colptr(si,ci), local_n_rows) );
+    for(uword col = 0; col < local_n_cols; ++col)
+      {
+      if(arrayops::has_inf(slice_colptr(slice,col), local_n_rows))  { return true; }
+      }
     }
   
-  return max_val;
+  return false;
+  }
+
+
+
+template<typename eT>
+inline
+arma_warn_unused
+bool
+subview_cube<eT>::has_nan() const
+  {
+  arma_extra_debug_sigprint();
+  
+  const uword local_n_rows   = n_rows;
+  const uword local_n_cols   = n_cols;
+  const uword local_n_slices = n_slices;
+  
+  for(uword slice = 0; slice < local_n_slices; ++slice)
+    {
+    for(uword col = 0; col < local_n_cols; ++col)
+      {
+      if(arrayops::has_nan(slice_colptr(slice,col), local_n_rows))  { return true; }
+      }
+    }
+  
+  return false;
   }
 
 
@@ -1261,7 +1462,7 @@ inline
 eT&
 subview_cube<eT>::operator()(const uword i)
   {
-  arma_debug_check( (i >= n_elem), "subview_cube::operator(): index out of bounds");
+  arma_debug_check( (i >= n_elem), "subview_cube::operator(): index out of bounds" );
   
   const uword in_slice = i / n_elem_slice;
   const uword offset   = in_slice * n_elem_slice;
@@ -1282,7 +1483,7 @@ inline
 eT
 subview_cube<eT>::operator()(const uword i) const
   {
-  arma_debug_check( (i >= n_elem), "subview_cube::operator(): index out of bounds");
+  arma_debug_check( (i >= n_elem), "subview_cube::operator(): index out of bounds" );
   
   const uword in_slice = i / n_elem_slice;
   const uword offset   = in_slice * n_elem_slice;
@@ -1303,7 +1504,7 @@ arma_inline
 eT&
 subview_cube<eT>::operator()(const uword in_row, const uword in_col, const uword in_slice)
   {
-  arma_debug_check( ( (in_row >= n_rows) || (in_col >= n_cols) || (in_slice >= n_slices) ), "subview_cube::operator(): location out of bounds");
+  arma_debug_check( ( (in_row >= n_rows) || (in_col >= n_cols) || (in_slice >= n_slices) ), "subview_cube::operator(): location out of bounds" );
   
   const uword index = (in_slice + aux_slice1)*m.n_elem_slice + (in_col + aux_col1)*m.n_rows + aux_row1 + in_row;
   
@@ -1317,7 +1518,7 @@ arma_inline
 eT
 subview_cube<eT>::operator()(const uword in_row, const uword in_col, const uword in_slice) const
   {
-  arma_debug_check( ( (in_row >= n_rows) || (in_col >= n_cols) || (in_slice >= n_slices) ), "subview_cube::operator(): location out of bounds");
+  arma_debug_check( ( (in_row >= n_rows) || (in_col >= n_cols) || (in_slice >= n_slices) ), "subview_cube::operator(): location out of bounds" );
   
   const uword index = (in_slice + aux_slice1)*m.n_elem_slice + (in_col + aux_col1)*m.n_rows + aux_row1 + in_row;
   
@@ -1432,11 +1633,11 @@ subview_cube<eT>::check_overlap(const Mat<eT>& x) const
   
   for(uword slice = t_aux_slice1; slice < t_aux_slice2_plus_1; ++slice)
     {
-    const Mat<eT>& y = *(t.m.mat_ptrs[slice]);
-  
-    if( x.memptr() == y.memptr() )
+    if(t.m.mat_ptrs[slice] != NULL)
       {
-      return true;
+      const Mat<eT>& y = *(t.m.mat_ptrs[slice]);
+      
+      if( x.memptr() == y.memptr() )  { return true; }
       }
     }
   
@@ -1460,7 +1661,7 @@ subview_cube<eT>::extract(Cube<eT>& out, const subview_cube<eT>& in)
   const uword n_cols   = in.n_cols;
   const uword n_slices = in.n_slices;
   
-  arma_extra_debug_print(arma_boost::format("out.n_rows = %d   out.n_cols = %d    out.n_slices = %d    in.m.n_rows = %d   in.m.n_cols = %d   in.m.n_slices = %d") % out.n_rows % out.n_cols % out.n_slices % in.m.n_rows % in.m.n_cols % in.m.n_slices);
+  arma_extra_debug_print(arma_str::format("out.n_rows = %d   out.n_cols = %d    out.n_slices = %d    in.m.n_rows = %d   in.m.n_cols = %d   in.m.n_slices = %d") % out.n_rows % out.n_cols % out.n_slices % in.m.n_rows % in.m.n_cols % in.m.n_slices);
   
   
   for(uword slice = 0; slice < n_slices; ++slice)
@@ -1688,6 +1889,19 @@ subview_cube<eT>::plus_inplace(Mat<eT>& out, const subview_cube<eT>& in)
   
   if(in_n_slices == 1)
     {
+    if( (arma_config::debug) && ((out_n_rows != in_n_rows) || (out_n_cols != in_n_cols)) )
+      {
+      std::ostringstream tmp;
+      
+      tmp
+        << "in-place addition: "
+        << out_n_rows << 'x' << out_n_cols << " output matrix is incompatible with "
+        <<  in_n_rows << 'x' <<  in_n_cols << 'x' << in_n_slices << " cube interpreted as "
+        <<  in_n_rows << 'x' <<  in_n_cols << " matrix";
+      
+      arma_stop_logic_error(tmp.str());
+      }
+    
     for(uword col=0; col < in_n_cols; ++col)
       {
       arrayops::inplace_plus( out.colptr(col), in.slice_colptr(0, col), in_n_rows );
@@ -1776,6 +1990,19 @@ subview_cube<eT>::minus_inplace(Mat<eT>& out, const subview_cube<eT>& in)
   
   if(in_n_slices == 1)
     {
+    if( (arma_config::debug) && ((out_n_rows != in_n_rows) || (out_n_cols != in_n_cols)) )
+      {
+      std::ostringstream tmp;
+      
+      tmp
+        << "in-place subtraction: "
+        << out_n_rows << 'x' << out_n_cols << " output matrix is incompatible with "
+        <<  in_n_rows << 'x' <<  in_n_cols << 'x' << in_n_slices << " cube interpreted as "
+        <<  in_n_rows << 'x' <<  in_n_cols << " matrix";
+      
+      arma_stop_logic_error(tmp.str());
+      }
+    
     for(uword col=0; col < in_n_cols; ++col)
       {
       arrayops::inplace_minus( out.colptr(col), in.slice_colptr(0, col), in_n_rows );
@@ -1864,6 +2091,19 @@ subview_cube<eT>::schur_inplace(Mat<eT>& out, const subview_cube<eT>& in)
   
   if(in_n_slices == 1)
     {
+    if( (arma_config::debug) && ((out_n_rows != in_n_rows) || (out_n_cols != in_n_cols)) )
+      {
+      std::ostringstream tmp;
+      
+      tmp
+        << "in-place element-wise multiplication: "
+        << out_n_rows << 'x' << out_n_cols << " output matrix is incompatible with "
+        <<  in_n_rows << 'x' <<  in_n_cols << 'x' << in_n_slices << " cube interpreted as "
+        <<  in_n_rows << 'x' <<  in_n_cols << " matrix";
+      
+      arma_stop_logic_error(tmp.str());
+      }
+    
     for(uword col=0; col < in_n_cols; ++col)
       {
       arrayops::inplace_mul( out.colptr(col), in.slice_colptr(0, col), in_n_rows );
@@ -1952,6 +2192,19 @@ subview_cube<eT>::div_inplace(Mat<eT>& out, const subview_cube<eT>& in)
   
   if(in_n_slices == 1)
     {
+    if( (arma_config::debug) && ((out_n_rows != in_n_rows) || (out_n_cols != in_n_cols)) )
+      {
+      std::ostringstream tmp;
+      
+      tmp
+        << "in-place element-wise division: "
+        << out_n_rows << 'x' << out_n_cols << " output matrix is incompatible with "
+        <<  in_n_rows << 'x' <<  in_n_cols << 'x' << in_n_slices << " cube interpreted as "
+        <<  in_n_rows << 'x' <<  in_n_cols << " matrix";
+      
+      arma_stop_logic_error(tmp.str());
+      }
+    
     for(uword col=0; col < in_n_cols; ++col)
       {
       arrayops::inplace_div( out.colptr(col), in.slice_colptr(0, col), in_n_rows );
@@ -2016,6 +2269,406 @@ subview_cube<eT>::div_inplace(Mat<eT>& out, const subview_cube<eT>& in)
         }
       }
     }
+  }
+
+
+
+template<typename eT>
+inline
+typename subview_cube<eT>::iterator
+subview_cube<eT>::begin()
+  {
+  return iterator(*this, aux_row1, aux_col1, aux_slice1);
+  }
+
+
+
+template<typename eT>
+inline
+typename subview_cube<eT>::const_iterator
+subview_cube<eT>::begin() const
+  {
+  return const_iterator(*this, aux_row1, aux_col1, aux_slice1);
+  }
+
+
+
+template<typename eT>
+inline
+typename subview_cube<eT>::const_iterator
+subview_cube<eT>::cbegin() const
+  {
+  return const_iterator(*this, aux_row1, aux_col1, aux_slice1);
+  }
+
+
+
+template<typename eT>
+inline
+typename subview_cube<eT>::iterator
+subview_cube<eT>::end()
+  {
+  return iterator(*this, aux_row1, aux_col1, aux_slice1 + n_slices);
+  }
+
+
+
+template<typename eT>
+inline
+typename subview_cube<eT>::const_iterator
+subview_cube<eT>::end() const
+  {
+  return const_iterator(*this, aux_row1, aux_col1, aux_slice1 + n_slices);
+  }
+
+
+
+template<typename eT>
+inline
+typename subview_cube<eT>::const_iterator
+subview_cube<eT>::cend() const
+  {
+  return const_iterator(*this, aux_row1, aux_col1, aux_slice1 + n_slices);
+  }
+
+
+
+//
+//
+//
+
+
+
+template<typename eT>
+inline
+subview_cube<eT>::iterator::iterator()
+  : M            (NULL)
+  , current_ptr  (NULL)
+  , current_row  (0   )
+  , current_col  (0   )
+  , current_slice(0   )
+  , aux_row1     (0   )
+  , aux_col1     (0   )
+  , aux_row2_p1  (0   )
+  , aux_col2_p1  (0   )
+  {
+  arma_extra_debug_sigprint();
+  // Technically this iterator is invalid (it does not point to a valid element)
+  }
+
+
+
+template<typename eT>
+inline
+subview_cube<eT>::iterator::iterator(const iterator& X)
+  : M            (X.M            )
+  , current_ptr  (X.current_ptr  )
+  , current_row  (X.current_row  )
+  , current_col  (X.current_col  )
+  , current_slice(X.current_slice)
+  , aux_row1     (X.aux_row1     )
+  , aux_col1     (X.aux_col1     )
+  , aux_row2_p1  (X.aux_row2_p1  )
+  , aux_col2_p1  (X.aux_col2_p1  )
+  {
+  arma_extra_debug_sigprint();
+  }
+
+
+
+template<typename eT>
+inline
+subview_cube<eT>::iterator::iterator(subview_cube<eT>& in_sv, const uword in_row, const uword in_col, const uword in_slice)
+  : M            (&(const_cast< Cube<eT>& >(in_sv.m)))
+  , current_ptr  (&(M->at(in_row,in_col,in_slice))   )
+  , current_row  (in_row                             )
+  , current_col  (in_col                             )
+  , current_slice(in_slice                           )
+  , aux_row1     (in_sv.aux_row1                     )
+  , aux_col1     (in_sv.aux_col1                     )
+  , aux_row2_p1  (in_sv.aux_row1 + in_sv.n_rows      )
+  , aux_col2_p1  (in_sv.aux_col1 + in_sv.n_cols      )
+  {
+  arma_extra_debug_sigprint();
+  }
+
+
+
+template<typename eT>
+inline
+arma_warn_unused
+eT&
+subview_cube<eT>::iterator::operator*()
+  {
+  return (*current_ptr);
+  }
+
+
+
+template<typename eT>
+inline
+typename subview_cube<eT>::iterator&
+subview_cube<eT>::iterator::operator++()
+  {
+  current_row++;
+  
+  if(current_row == aux_row2_p1)
+    {
+    current_row = aux_row1;
+    current_col++;
+    
+    if(current_col == aux_col2_p1)
+      {
+      current_col = aux_col1;
+      current_slice++;
+      }
+    
+    current_ptr = &( (*M).at(current_row,current_col,current_slice) );
+    }
+  else
+    {
+    current_ptr++;
+    }
+  
+  return *this;
+  }
+
+
+
+template<typename eT>
+inline
+arma_warn_unused
+typename subview_cube<eT>::iterator
+subview_cube<eT>::iterator::operator++(int)
+  {
+  typename subview_cube<eT>::iterator temp(*this);
+  
+  ++(*this);
+  
+  return temp;
+  }
+
+
+
+template<typename eT>
+inline
+arma_warn_unused
+bool
+subview_cube<eT>::iterator::operator==(const iterator& rhs) const
+  {
+  return (current_ptr == rhs.current_ptr);
+  }
+
+
+
+template<typename eT>
+inline
+arma_warn_unused
+bool
+subview_cube<eT>::iterator::operator!=(const iterator& rhs) const
+  {
+  return (current_ptr != rhs.current_ptr);
+  }
+
+
+
+template<typename eT>
+inline
+arma_warn_unused
+bool
+subview_cube<eT>::iterator::operator==(const const_iterator& rhs) const
+  {
+  return (current_ptr == rhs.current_ptr);
+  }
+
+
+
+template<typename eT>
+inline
+arma_warn_unused
+bool
+subview_cube<eT>::iterator::operator!=(const const_iterator& rhs) const
+  {
+  return (current_ptr != rhs.current_ptr);
+  }
+
+
+
+//
+//
+//
+
+
+
+template<typename eT>
+inline
+subview_cube<eT>::const_iterator::const_iterator()
+  : M            (NULL)
+  , current_ptr  (NULL)
+  , current_row  (0   )
+  , current_col  (0   )
+  , current_slice(0   )
+  , aux_row1     (0   )
+  , aux_col1     (0   )
+  , aux_row2_p1  (0   )
+  , aux_col2_p1  (0   )
+  {
+  arma_extra_debug_sigprint();
+  // Technically this iterator is invalid (it does not point to a valid element)
+  }
+
+
+
+template<typename eT>
+inline
+subview_cube<eT>::const_iterator::const_iterator(const iterator& X)
+  : M            (X.M            )
+  , current_ptr  (X.current_ptr  )
+  , current_row  (X.current_row  )
+  , current_col  (X.current_col  )
+  , current_slice(X.current_slice)
+  , aux_row1     (X.aux_row1     )
+  , aux_col1     (X.aux_col1     )
+  , aux_row2_p1  (X.aux_row2_p1  )
+  , aux_col2_p1  (X.aux_col2_p1  )
+  {
+  arma_extra_debug_sigprint();
+  }
+
+
+
+template<typename eT>
+inline
+subview_cube<eT>::const_iterator::const_iterator(const const_iterator& X)
+  : M            (X.M            )
+  , current_ptr  (X.current_ptr  )
+  , current_row  (X.current_row  )
+  , current_col  (X.current_col  )
+  , current_slice(X.current_slice)
+  , aux_row1     (X.aux_row1     )
+  , aux_col1     (X.aux_col1     )
+  , aux_row2_p1  (X.aux_row2_p1  )
+  , aux_col2_p1  (X.aux_col2_p1  )
+  {
+  arma_extra_debug_sigprint();
+  }
+
+
+
+template<typename eT>
+inline
+subview_cube<eT>::const_iterator::const_iterator(const subview_cube<eT>& in_sv, const uword in_row, const uword in_col, const uword in_slice)
+  : M            (&(in_sv.m)                      )
+  , current_ptr  (&(M->at(in_row,in_col,in_slice)))
+  , current_row  (in_row                          )
+  , current_col  (in_col                          )
+  , current_slice(in_slice                        )
+  , aux_row1     (in_sv.aux_row1                  )
+  , aux_col1     (in_sv.aux_col1                  )
+  , aux_row2_p1  (in_sv.aux_row1 + in_sv.n_rows   )
+  , aux_col2_p1  (in_sv.aux_col1 + in_sv.n_cols   )
+  {
+  arma_extra_debug_sigprint();
+  }
+
+
+
+template<typename eT>
+inline
+arma_warn_unused
+const eT&
+subview_cube<eT>::const_iterator::operator*()
+  {
+  return (*current_ptr);
+  }
+
+
+
+template<typename eT>
+inline
+typename subview_cube<eT>::const_iterator&
+subview_cube<eT>::const_iterator::operator++()
+  {
+  current_row++;
+  
+  if(current_row == aux_row2_p1)
+    {
+    current_row = aux_row1;
+    current_col++;
+    
+    if(current_col == aux_col2_p1)
+      {
+      current_col = aux_col1;
+      current_slice++;
+      }
+    
+    current_ptr = &( (*M).at(current_row,current_col,current_slice) );
+    }
+  else
+    {
+    current_ptr++;
+    }
+  
+  return *this;
+  }
+
+
+
+template<typename eT>
+inline
+arma_warn_unused
+typename subview_cube<eT>::const_iterator
+subview_cube<eT>::const_iterator::operator++(int)
+  {
+  typename subview_cube<eT>::const_iterator temp(*this);
+  
+  ++(*this);
+  
+  return temp;
+  }
+
+
+
+template<typename eT>
+inline
+arma_warn_unused
+bool
+subview_cube<eT>::const_iterator::operator==(const iterator& rhs) const
+  {
+  return (current_ptr == rhs.current_ptr);
+  }
+
+
+
+template<typename eT>
+inline
+arma_warn_unused
+bool
+subview_cube<eT>::const_iterator::operator!=(const iterator& rhs) const
+  {
+  return (current_ptr != rhs.current_ptr);
+  }
+
+
+
+template<typename eT>
+inline
+arma_warn_unused
+bool
+subview_cube<eT>::const_iterator::operator==(const const_iterator& rhs) const
+  {
+  return (current_ptr == rhs.current_ptr);
+  }
+
+
+
+template<typename eT>
+inline
+arma_warn_unused
+bool
+subview_cube<eT>::const_iterator::operator!=(const const_iterator& rhs) const
+  {
+  return (current_ptr != rhs.current_ptr);
   }
 
 

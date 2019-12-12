@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2011 Conrad Sanderson
-// Copyright (C) 2008-2011 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup OpCube
@@ -29,12 +37,12 @@ class OpCube : public BaseCube<typename T1::elem_type, OpCube<T1, op_type> >
   inline          OpCube(const BaseCube<typename T1::elem_type, T1>& in_m, const uword in_aux_uword_a, const uword in_aux_uword_b, const uword in_aux_uword_c, const uword in_aux_uword_d, const char junk);
   inline         ~OpCube();
   
-  arma_aligned const T1&       m;            //!< storage of reference to the operand (e.g. a cube)
-  arma_aligned       elem_type aux;          //!< storage of auxiliary data, user defined format
-  arma_aligned       uword     aux_uword_a;  //!< storage of auxiliary data, uword format
-  arma_aligned       uword     aux_uword_b;  //!< storage of auxiliary data, uword format
-  arma_aligned       uword     aux_uword_c;  //!< storage of auxiliary data, uword format
-  arma_aligned       uword     aux_uword_d;  //!< storage of auxiliary data, uword format
+  arma_aligned const T1&       m;            //!< the operand; must be derived from BaseCube
+  arma_aligned       elem_type aux;          //!< auxiliary data, using the element type as used by T1
+  arma_aligned       uword     aux_uword_a;  //!< auxiliary data, uword format
+  arma_aligned       uword     aux_uword_b;  //!< auxiliary data, uword format
+  arma_aligned       uword     aux_uword_c;  //!< auxiliary data, uword format
+  arma_aligned       uword     aux_uword_d;  //!< auxiliary data, uword format
   
   };
 

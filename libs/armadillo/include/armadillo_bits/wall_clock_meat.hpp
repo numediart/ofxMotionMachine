@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2013 Conrad Sanderson
-// Copyright (C) 2008-2013 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup wall_clock
@@ -33,7 +41,7 @@ wall_clock::tic()
   {
   arma_extra_debug_sigprint();
   
-  #if defined(ARMA_USE_CXX11) && !defined(ARMA_DONT_USE_CXX11_CHRONO)
+  #if defined(ARMA_USE_CXX11)
     {
     chrono_time1 = std::chrono::steady_clock::now();
     valid = true;
@@ -45,7 +53,7 @@ wall_clock::tic()
     }
   #else
     {
-    time1 = clock();
+    time1 = std::clock();
     valid = true;
     }
   #endif
@@ -61,7 +69,7 @@ wall_clock::toc()
   
   if(valid)
     {
-    #if defined(ARMA_USE_CXX11) && !defined(ARMA_DONT_USE_CXX11_CHRONO)
+    #if defined(ARMA_USE_CXX11)
       {
       const std::chrono::steady_clock::time_point chrono_time2 = std::chrono::steady_clock::now();
       
@@ -75,16 +83,16 @@ wall_clock::toc()
       {
       gettimeofday(&posix_time2, 0);
       
-      const double tmp_time1 = posix_time1.tv_sec + posix_time1.tv_usec * 1.0e-6;
-      const double tmp_time2 = posix_time2.tv_sec + posix_time2.tv_usec * 1.0e-6;
+      const double tmp_time1 = double(posix_time1.tv_sec) + double(posix_time1.tv_usec) * 1.0e-6;
+      const double tmp_time2 = double(posix_time2.tv_sec) + double(posix_time2.tv_usec) * 1.0e-6;
       
       return tmp_time2 - tmp_time1;
       }
     #else
       {
-      clock_t time2 = clock();
+      std::clock_t time2 = std::clock();
       
-      clock_t diff = time2 - time1;
+      std::clock_t diff = time2 - time1;
       
       return double(diff) / double(CLOCKS_PER_SEC);
       }

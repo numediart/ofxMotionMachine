@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2013 Conrad Sanderson
-// Copyright (C) 2008-2013 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup gemv
@@ -29,7 +37,6 @@ class gemv_emul_tinysq
   
   
   template<typename eT, const uword i>
-  arma_hot
   arma_inline
   static
   void
@@ -50,7 +57,7 @@ class gemv_emul_tinysq
   
 
   template<typename eT, typename TA>
-  arma_hot
+  arma_cold
   inline
   static
   void
@@ -131,7 +138,7 @@ class gemv_emul_tinysq
 
 
 
-class gemv_emul_large_helper
+class gemv_emul_helper
   {
   public:
   
@@ -204,7 +211,7 @@ class gemv_emul_large_helper
 //! 'y' is assumed to have been set to the correct size (i.e. taking into account the transpose)
 
 template<const bool do_trans_A=false, const bool use_alpha=false, const bool use_beta=false>
-class gemv_emul_large
+class gemv_emul
   {
   public:
   
@@ -234,7 +241,7 @@ class gemv_emul_large
       else
       for(uword row=0; row < A_n_rows; ++row)
         {
-        const eT acc = gemv_emul_large_helper::dot_row_col(A, x, row, A_n_cols);
+        const eT acc = gemv_emul_helper::dot_row_col(A, x, row, A_n_cols);
         
              if( (use_alpha == false) && (use_beta == false) )  { y[row] =       acc;               }
         else if( (use_alpha == true ) && (use_beta == false) )  { y[row] = alpha*acc;               }
@@ -245,95 +252,40 @@ class gemv_emul_large
     else
     if(do_trans_A == true)
       {
-      for(uword col=0; col < A_n_cols; ++col)
+      if(is_cx<eT>::no)
         {
-        // col is interpreted as row when storing the results in 'y'
+        for(uword col=0; col < A_n_cols; ++col)
+          {
+          // col is interpreted as row when storing the results in 'y'
+          
+          
+          // const eT* A_coldata = A.colptr(col);
+          // 
+          // eT acc = eT(0);
+          // for(uword row=0; row < A_n_rows; ++row)
+          //   {
+          //   acc += A_coldata[row] * x[row];
+          //   }
+          
+          const eT acc = op_dot::direct_dot_arma(A_n_rows, A.colptr(col), x);
+          
+               if( (use_alpha == false) && (use_beta == false) )  { y[col] =       acc;               }
+          else if( (use_alpha == true ) && (use_beta == false) )  { y[col] = alpha*acc;               }
+          else if( (use_alpha == false) && (use_beta == true ) )  { y[col] =       acc + beta*y[col]; }
+          else if( (use_alpha == true ) && (use_beta == true ) )  { y[col] = alpha*acc + beta*y[col]; }
+          }
+        }
+      else
+        {
+        Mat<eT> AA;
         
+        op_htrans::apply_mat_noalias(AA, A);
         
-        // const eT* A_coldata = A.colptr(col);
-        // 
-        // eT acc = eT(0);
-        // for(uword row=0; row < A_n_rows; ++row)
-        //   {
-        //   acc += A_coldata[row] * x[row];
-        //   }
-        
-        const eT acc = op_dot::direct_dot_arma(A_n_rows, A.colptr(col), x);
-        
-             if( (use_alpha == false) && (use_beta == false) )  { y[col] =       acc;               }
-        else if( (use_alpha == true ) && (use_beta == false) )  { y[col] = alpha*acc;               }
-        else if( (use_alpha == false) && (use_beta == true ) )  { y[col] =       acc + beta*y[col]; }
-        else if( (use_alpha == true ) && (use_beta == true ) )  { y[col] = alpha*acc + beta*y[col]; }
-        
+        gemv_emul<false, use_alpha, use_beta>::apply(y, AA, x, alpha, beta);
         }
       }
     }
   
-  };
-
-
-
-template<const bool do_trans_A=false, const bool use_alpha=false, const bool use_beta=false>
-class gemv_emul
-  {
-  public:
-  
-  template<typename eT, typename TA>
-  arma_hot
-  inline
-  static
-  void
-  apply( eT* y, const TA& A, const eT* x, const eT alpha = eT(1), const eT beta = eT(0), const typename arma_not_cx<eT>::result* junk = 0 )
-    {
-    arma_extra_debug_sigprint();
-    arma_ignore(junk);
-    
-    const uword A_n_rows = A.n_rows;
-    const uword A_n_cols = A.n_cols;
-    
-    if( (A_n_rows <= 4) && (A_n_rows == A_n_cols) )
-      {
-      gemv_emul_tinysq<do_trans_A, use_alpha, use_beta>::apply(y, A, x, alpha, beta);
-      }
-    else
-      {
-      gemv_emul_large<do_trans_A, use_alpha, use_beta>::apply(y, A, x, alpha, beta);
-      }
-    }
-  
-  
-  
-  template<typename eT>
-  arma_hot
-  inline
-  static
-  void
-  apply( eT* y, const Mat<eT>& A, const eT* x, const eT alpha = eT(1), const eT beta = eT(0), const typename arma_cx_only<eT>::result* junk = 0 )
-    {
-    arma_extra_debug_sigprint();
-    arma_ignore(junk);
-    
-    Mat<eT> tmp_A;
-    
-    if(do_trans_A)
-      {
-      op_htrans::apply_mat_noalias(tmp_A, A);
-      }
-    
-    const Mat<eT>& AA = (do_trans_A == false) ? A : tmp_A;
-    
-    const uword AA_n_rows = AA.n_rows;
-    const uword AA_n_cols = AA.n_cols;
-    
-    if( (AA_n_rows <= 4) && (AA_n_rows == AA_n_cols) )
-      {
-      gemv_emul_tinysq<false, use_alpha, use_beta>::apply(y, AA, x, alpha, beta);
-      }
-    else
-      {
-      gemv_emul_large<false, use_alpha, use_beta>::apply(y, AA, x, alpha, beta);
-      }
-    }
   };
 
 
@@ -355,17 +307,16 @@ class gemv
     {
     arma_extra_debug_sigprint();
     
-    //const uword threshold = (is_cx<eT>::yes) ? 16u : 64u;
-    const uword threshold = (is_cx<eT>::yes) ? 64u : 100u;
-    
-    if(A.n_elem <= threshold)
+    if( (A.n_rows <= 4) && (A.n_rows == A.n_cols) && (is_cx<eT>::no) )
       {
-      gemv_emul<do_trans_A, use_alpha, use_beta>::apply(y,A,x,alpha,beta);
+      gemv_emul_tinysq<do_trans_A, use_alpha, use_beta>::apply(y, A, x, alpha, beta);
       }
     else
       {
       #if defined(ARMA_USE_ATLAS)
         {
+        arma_debug_assert_atlas_size(A);
+        
         if(is_cx<eT>::no)
           {
           // use gemm() instead of gemv() to work around a speed issue in Atlas 3.8.4
@@ -415,15 +366,17 @@ class gemv
         {
         arma_extra_debug_print("blas::gemv()");
         
+        arma_debug_assert_blas_size(A);
+        
         const char      trans_A     = (do_trans_A) ? ( is_cx<eT>::yes ? 'C' : 'T' ) : 'N';
-        const blas_int  m           = A.n_rows;
-        const blas_int  n           = A.n_cols;
+        const blas_int  m           = blas_int(A.n_rows);
+        const blas_int  n           = blas_int(A.n_cols);
         const eT        local_alpha = (use_alpha) ? alpha : eT(1);
         //const blas_int  lda         = A.n_rows;
-        const blas_int  inc         = 1;
+        const blas_int  inc         = blas_int(1);
         const eT        local_beta  = (use_beta) ? beta : eT(0);
         
-        arma_extra_debug_print( arma_boost::format("blas::gemv(): trans_A = %c") % trans_A );
+        arma_extra_debug_print( arma_str::format("blas::gemv(): trans_A = %c") % trans_A );
         
         blas::gemv<eT>
           (

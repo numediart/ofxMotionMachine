@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2013 Conrad Sanderson
-// Copyright (C) 2008-2013 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup op_htrans
@@ -16,11 +24,27 @@ class op_htrans
   {
   public:
   
+  template<typename T1>
+  struct traits
+    {
+    static const bool is_row  = T1::is_col;  // deliberately swapped
+    static const bool is_col  = T1::is_row;
+    static const bool is_xvec = T1::is_xvec;
+    };
+  
   template<typename eT>
   arma_hot arma_inline static void apply_mat_noalias(Mat<eT>& out, const Mat<eT>& A, const typename arma_not_cx<eT>::result* junk = 0);
   
   template<typename eT>
   arma_hot      inline static void apply_mat_noalias(Mat<eT>& out, const Mat<eT>& A, const typename arma_cx_only<eT>::result* junk = 0);
+  
+  //
+  
+  template<typename T>
+  arma_hot inline static void block_worker(std::complex<T>* Y, const std::complex<T>* X, const uword X_n_rows, const uword Y_n_rows, const uword n_rows, const uword n_cols);
+  
+  template<typename T>
+  arma_hot inline static void apply_mat_noalias_large(Mat< std::complex<T> >& out, const Mat< std::complex<T> >& A);
   
   //
   
@@ -62,6 +86,14 @@ class op_htrans
 class op_htrans2
   {
   public:
+  
+  template<typename T1>
+  struct traits
+    {
+    static const bool is_row  = T1::is_col;  // deliberately swapped
+    static const bool is_col  = T1::is_row;
+    static const bool is_xvec = T1::is_xvec;
+    };
   
   template<typename eT>
   arma_hot inline static void apply_noalias(Mat<eT>& out, const Mat<eT>& A, const eT val);

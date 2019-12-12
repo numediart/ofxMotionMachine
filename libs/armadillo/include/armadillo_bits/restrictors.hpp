@@ -1,9 +1,17 @@
-// Copyright (C) 2010-2013 Conrad Sanderson
-// Copyright (C) 2010-2013 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup restrictors
@@ -18,112 +26,111 @@
 
 template<typename T> struct arma_scalar_only { };
 
-template<> struct arma_scalar_only<u8>     { typedef u8     result; };
-template<> struct arma_scalar_only<s8>     { typedef s8     result; };
-template<> struct arma_scalar_only<u16>    { typedef u16    result; };
-template<> struct arma_scalar_only<s16>    { typedef s16    result; };
-template<> struct arma_scalar_only<u32>    { typedef u32    result; };
-template<> struct arma_scalar_only<s32>    { typedef s32    result; };
+template<> struct arma_scalar_only< u8        > { typedef u8        result; };
+template<> struct arma_scalar_only< s8        > { typedef s8        result; };
+template<> struct arma_scalar_only< u16       > { typedef u16       result; };
+template<> struct arma_scalar_only< s16       > { typedef s16       result; };
+template<> struct arma_scalar_only< u32       > { typedef u32       result; };
+template<> struct arma_scalar_only< s32       > { typedef s32       result; };
 #if defined(ARMA_USE_U64S64)
-template<> struct arma_scalar_only<u64>    { typedef u64    result; };
-template<> struct arma_scalar_only<s64>    { typedef s64    result; };
+template<> struct arma_scalar_only< u64       > { typedef u64       result; };
+template<> struct arma_scalar_only< s64       > { typedef s64       result; };
 #endif
-template<> struct arma_scalar_only<float>  { typedef float  result; };
-template<> struct arma_scalar_only<double> { typedef double result; };
 #if defined(ARMA_ALLOW_LONG)
-template<> struct arma_scalar_only<ulng_t> { typedef ulng_t result; };
-template<> struct arma_scalar_only<slng_t> { typedef slng_t result; };
+template<> struct arma_scalar_only< ulng_t    > { typedef ulng_t    result; };
+template<> struct arma_scalar_only< slng_t    > { typedef slng_t    result; };
 #endif
-
-template<typename T>
-struct arma_scalar_only< std::complex<T> > { typedef std::complex<T> result; };
+template<> struct arma_scalar_only< float     > { typedef float     result; };
+template<> struct arma_scalar_only< double    > { typedef double    result; };
+template<> struct arma_scalar_only< cx_float  > { typedef cx_float  result; };
+template<> struct arma_scalar_only< cx_double > { typedef cx_double result; };
 
 
 
 template<typename T> struct arma_integral_only { };
 
-template<> struct arma_integral_only<u8>  { typedef u8  result; };
-template<> struct arma_integral_only<s8>  { typedef s8  result; };
-template<> struct arma_integral_only<u16> { typedef u16 result; };
-template<> struct arma_integral_only<s16> { typedef s16 result; };
-template<> struct arma_integral_only<u32> { typedef u32 result; };
-template<> struct arma_integral_only<s32> { typedef s32 result; };
+template<> struct arma_integral_only< u8     > { typedef u8  result; };
+template<> struct arma_integral_only< s8     > { typedef s8  result; };
+template<> struct arma_integral_only< u16    > { typedef u16 result; };
+template<> struct arma_integral_only< s16    > { typedef s16 result; };
+template<> struct arma_integral_only< u32    > { typedef u32 result; };
+template<> struct arma_integral_only< s32    > { typedef s32 result; };
 #if defined(ARMA_USE_U64S64)
-template<> struct arma_integral_only<u64> { typedef u64 result; };
-template<> struct arma_integral_only<s64> { typedef s64 result; };
+template<> struct arma_integral_only< u64    > { typedef u64 result; };
+template<> struct arma_integral_only< s64    > { typedef s64 result; };
 #endif
 #if defined(ARMA_ALLOW_LONG)
-template<> struct arma_integral_only<ulng_t> { typedef ulng_t result; };
-template<> struct arma_integral_only<slng_t> { typedef slng_t result; };
+template<> struct arma_integral_only< ulng_t > { typedef ulng_t result; };
+template<> struct arma_integral_only< slng_t > { typedef slng_t result; };
 #endif
 
 
 
 template<typename T> struct arma_unsigned_integral_only { };
 
-template<> struct arma_unsigned_integral_only<u8>     { typedef u8     result; };
-template<> struct arma_unsigned_integral_only<u16>    { typedef u16    result; };
-template<> struct arma_unsigned_integral_only<u32>    { typedef u32    result; };
+template<> struct arma_unsigned_integral_only< u8     > { typedef u8     result; };
+template<> struct arma_unsigned_integral_only< u16    > { typedef u16    result; };
+template<> struct arma_unsigned_integral_only< u32    > { typedef u32    result; };
 #if defined(ARMA_USE_U64S64)
-template<> struct arma_unsigned_integral_only<u64>    { typedef u64    result; };
+template<> struct arma_unsigned_integral_only< u64    > { typedef u64    result; };
 #endif
 #if defined(ARMA_ALLOW_LONG)
-template<> struct arma_unsigned_integral_only<ulng_t> { typedef ulng_t result; };
+template<> struct arma_unsigned_integral_only< ulng_t > { typedef ulng_t result; };
 #endif
 
 
 
 template<typename T> struct arma_signed_integral_only { };
 
-template<> struct arma_signed_integral_only<s8>     { typedef s8     result; };
-template<> struct arma_signed_integral_only<s16>    { typedef s16    result; };
-template<> struct arma_signed_integral_only<s32>    { typedef s32    result; };
+template<> struct arma_signed_integral_only< s8     > { typedef s8     result; };
+template<> struct arma_signed_integral_only< s16    > { typedef s16    result; };
+template<> struct arma_signed_integral_only< s32    > { typedef s32    result; };
 #if defined(ARMA_USE_U64S64)
-template<> struct arma_signed_integral_only<s64>    { typedef s64    result; };
+template<> struct arma_signed_integral_only< s64    > { typedef s64    result; };
 #endif
 #if defined(ARMA_ALLOW_LONG)
-template<> struct arma_signed_integral_only<slng_t> { typedef slng_t result; };
+template<> struct arma_signed_integral_only< slng_t > { typedef slng_t result; };
 #endif
 
 
 
 template<typename T> struct arma_signed_only { };
 
-template<> struct arma_signed_only<s8>     { typedef s8     result; };
-template<> struct arma_signed_only<s16>    { typedef s16    result; };
-template<> struct arma_signed_only<s32>    { typedef s32    result; };
+template<> struct arma_signed_only< s8        > { typedef s8        result; };
+template<> struct arma_signed_only< s16       > { typedef s16       result; };
+template<> struct arma_signed_only< s32       > { typedef s32       result; };
 #if defined(ARMA_USE_U64S64)
-template<> struct arma_signed_only<s64>    { typedef s64    result; };
+template<> struct arma_signed_only< s64       > { typedef s64       result; };
 #endif
-template<> struct arma_signed_only<float>  { typedef float  result; };
-template<> struct arma_signed_only<double> { typedef double result; };
 #if defined(ARMA_ALLOW_LONG)
-template<> struct arma_signed_only<slng_t> { typedef slng_t result; };
+template<> struct arma_signed_only< slng_t    > { typedef slng_t    result; };
 #endif
-
-template<typename T> struct arma_signed_only< std::complex<T> > { typedef std::complex<T> result; };
+template<> struct arma_signed_only< float     > { typedef float     result; };
+template<> struct arma_signed_only< double    > { typedef double    result; };
+template<> struct arma_signed_only< cx_float  > { typedef cx_float  result; };
+template<> struct arma_signed_only< cx_double > { typedef cx_double result; };
 
 
 
 template<typename T> struct arma_real_only { };
 
-template<> struct arma_real_only<float>  { typedef float  result; };
-template<> struct arma_real_only<double> { typedef double result; };
+template<> struct arma_real_only< float  > { typedef float  result; };
+template<> struct arma_real_only< double > { typedef double result; };
 
 
 template<typename T> struct arma_real_or_cx_only { };
 
-template<> struct arma_real_or_cx_only< float >                { typedef float                result; };
-template<> struct arma_real_or_cx_only< double >               { typedef double               result; };
-template<> struct arma_real_or_cx_only< std::complex<float>  > { typedef std::complex<float>  result; };
-template<> struct arma_real_or_cx_only< std::complex<double> > { typedef std::complex<double> result; };
+template<> struct arma_real_or_cx_only< float     > { typedef float     result; };
+template<> struct arma_real_or_cx_only< double    > { typedef double    result; };
+template<> struct arma_real_or_cx_only< cx_float  > { typedef cx_float  result; };
+template<> struct arma_real_or_cx_only< cx_double > { typedef cx_double result; };
 
 
 
 template<typename T> struct arma_cx_only { };
 
-template<> struct arma_cx_only< std::complex<float>  > { typedef std::complex<float>  result; };
-template<> struct arma_cx_only< std::complex<double> > { typedef std::complex<double> result; };
+template<> struct arma_cx_only< cx_float  > { typedef cx_float  result; };
+template<> struct arma_cx_only< cx_double > { typedef cx_double result; };
 
 
 
@@ -134,19 +141,19 @@ template<typename T> struct arma_not_cx< std::complex<T> > { };
 
 template<typename T> struct arma_blas_type_only { };
 
-template<> struct arma_blas_type_only< float                > { typedef float                result; };
-template<> struct arma_blas_type_only< double               > { typedef double               result; };
-template<> struct arma_blas_type_only< std::complex<float>  > { typedef std::complex<float>  result; };
-template<> struct arma_blas_type_only< std::complex<double> > { typedef std::complex<double> result; };
+template<> struct arma_blas_type_only< float     > { typedef float     result; };
+template<> struct arma_blas_type_only< double    > { typedef double    result; };
+template<> struct arma_blas_type_only< cx_float  > { typedef cx_float  result; };
+template<> struct arma_blas_type_only< cx_double > { typedef cx_double result; };
 
 
 
 template<typename T> struct arma_not_blas_type { typedef T result; };
 
-template<> struct arma_not_blas_type< float                > {  };
-template<> struct arma_not_blas_type< double               > {  };
-template<> struct arma_not_blas_type< std::complex<float>  > {  };
-template<> struct arma_not_blas_type< std::complex<double> > {  };
+template<> struct arma_not_blas_type< float     > {  };
+template<> struct arma_not_blas_type< double    > {  };
+template<> struct arma_not_blas_type< cx_float  > {  };
+template<> struct arma_not_blas_type< cx_double > {  };
 
 
 

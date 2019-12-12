@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2013 Conrad Sanderson
-// Copyright (C) 2008-2013 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup typedef_mat
@@ -60,6 +68,12 @@ typedef Col <float> fcolvec;
 typedef Row <float> frowvec;
 typedef Cube<float> fcube;
 
+typedef Mat <double> dmat;
+typedef Col <double> dvec;
+typedef Col <double> dcolvec;
+typedef Row <double> drowvec;
+typedef Cube<double> dcube;
+
 typedef Mat <double> mat;
 typedef Col <double> vec;
 typedef Col <double> colvec;
@@ -71,6 +85,12 @@ typedef Col <cx_float> cx_fvec;
 typedef Col <cx_float> cx_fcolvec;
 typedef Row <cx_float> cx_frowvec;
 typedef Cube<cx_float> cx_fcube;
+
+typedef Mat <cx_double> cx_dmat;
+typedef Col <cx_double> cx_dvec;
+typedef Col <cx_double> cx_dcolvec;
+typedef Row <cx_double> cx_drowvec;
+typedef Cube<cx_double> cx_dcube;
 
 typedef Mat <cx_double> cx_mat;
 typedef Col <cx_double> cx_vec;
@@ -95,6 +115,11 @@ typedef SpCol <float> sp_fvec;
 typedef SpCol <float> sp_fcolvec;
 typedef SpRow <float> sp_frowvec;
 
+typedef SpMat <double> sp_dmat;
+typedef SpCol <double> sp_dvec;
+typedef SpCol <double> sp_dcolvec;
+typedef SpRow <double> sp_drowvec;
+
 typedef SpMat <double> sp_mat;
 typedef SpCol <double> sp_vec;
 typedef SpCol <double> sp_colvec;
@@ -104,6 +129,11 @@ typedef SpMat <cx_float> sp_cx_fmat;
 typedef SpCol <cx_float> sp_cx_fvec;
 typedef SpCol <cx_float> sp_cx_fcolvec;
 typedef SpRow <cx_float> sp_cx_frowvec;
+
+typedef SpMat <cx_double> sp_cx_dmat;
+typedef SpCol <cx_double> sp_cx_dvec;
+typedef SpCol <cx_double> sp_cx_dcolvec;
+typedef SpRow <cx_double> sp_cx_drowvec;
 
 typedef SpMat <cx_double> sp_cx_mat;
 typedef SpCol <cx_double> sp_cx_vec;

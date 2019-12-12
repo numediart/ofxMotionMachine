@@ -1,9 +1,17 @@
-// Copyright (C) 2012 Ryan Curtin
-// Copyright (C) 2012 Conrad Sanderson
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup spglue_times
@@ -20,19 +28,20 @@ spglue_times::apply(SpMat<typename T1::elem_type>& out, const SpGlue<T1,T2,spglu
   
   typedef typename T1::elem_type eT;
   
-  const SpProxy<T1> pa(X.A);
-  const SpProxy<T2> pb(X.B);
+  const unwrap_spmat<T1> UA(X.A);
+  const unwrap_spmat<T2> UB(X.B);
   
-  const bool is_alias = pa.is_alias(out) || pb.is_alias(out);
+  const bool is_alias = (UA.is_alias(out) || UB.is_alias(out));
   
   if(is_alias == false)
     {
-    spglue_times::apply_noalias(out, pa, pb);
+    spglue_times::apply_noalias(out, UA.M, UB.M);
     }
   else
     {
     SpMat<eT> tmp;
-    spglue_times::apply_noalias(tmp, pa, pb);
+    
+    spglue_times::apply_noalias(tmp, UA.M, UB.M);
     
     out.steal_mem(tmp);
     }
@@ -40,18 +49,50 @@ spglue_times::apply(SpMat<typename T1::elem_type>& out, const SpGlue<T1,T2,spglu
 
 
 
-template<typename eT, typename T1, typename T2>
-arma_hot
+template<typename T1, typename T2>
 inline
 void
-spglue_times::apply_noalias(SpMat<eT>& c, const SpProxy<T1>& pa, const SpProxy<T2>& pb)
+spglue_times::apply(SpMat<typename T1::elem_type>& out, const SpGlue<SpOp<T1,spop_scalar_times>,T2,spglue_times>& X)
   {
   arma_extra_debug_sigprint();
   
-  const uword x_n_rows = pa.get_n_rows();
-  const uword x_n_cols = pa.get_n_cols();
-  const uword y_n_rows = pb.get_n_rows();
-  const uword y_n_cols = pb.get_n_cols();
+  typedef typename T1::elem_type eT;
+  
+  const unwrap_spmat<T1> UA(X.A.m);
+  const unwrap_spmat<T2> UB(X.B);
+  
+  const bool is_alias = (UA.is_alias(out) || UB.is_alias(out));
+  
+  if(is_alias == false)
+    {
+    spglue_times::apply_noalias(out, UA.M, UB.M);
+    }
+  else
+    {
+    SpMat<eT> tmp;
+    
+    spglue_times::apply_noalias(tmp, UA.M, UB.M);
+    
+    out.steal_mem(tmp);
+    }
+  
+  out *= X.A.aux;
+  }
+
+
+
+template<typename eT>
+arma_hot
+inline
+void
+spglue_times::apply_noalias(SpMat<eT>& c, const SpMat<eT>& x, const SpMat<eT>& y)
+  {
+  arma_extra_debug_sigprint();
+  
+  const uword x_n_rows = x.n_rows;
+  const uword x_n_cols = x.n_cols;
+  const uword y_n_rows = y.n_rows;
+  const uword y_n_cols = y.n_cols;
 
   arma_debug_assert_mul_size(x_n_rows, x_n_cols, y_n_rows, y_n_cols, "matrix multiplication");
 
@@ -67,8 +108,8 @@ spglue_times::apply_noalias(SpMat<eT>& c, const SpProxy<T1>& pa, const SpProxy<T
   //SpMat<typename T1::elem_type> c(x_n_rows, y_n_cols); // Initializes col_ptrs to 0.
   c.zeros(x_n_rows, y_n_cols);
   
-  //if( (pa.get_n_elem() == 0) || (pb.get_n_elem() == 0) )
-  if( (pa.get_n_nonzero() == 0) || (pb.get_n_nonzero() == 0) )
+  //if( (x.n_elem == 0) || (y.n_elem == 0) )
+  if( (x.n_nonzero == 0) || (y.n_nonzero == 0) )
     {
     return;
     }
@@ -77,8 +118,8 @@ spglue_times::apply_noalias(SpMat<eT>& c, const SpProxy<T1>& pa, const SpProxy<T
   podarray<uword> index(x_n_rows);
   index.fill(x_n_rows); // Fill with invalid links.
   
-  typename SpProxy<T2>::const_iterator_type y_it  = pb.begin();
-  typename SpProxy<T2>::const_iterator_type y_end = pb.end();
+  typename SpMat<eT>::const_iterator y_it  = y.begin();
+  typename SpMat<eT>::const_iterator y_end = y.end();
 
   // SYMBMM: calculate column pointers for resultant matrix to obtain a good
   // upper bound on the number of nonzero elements.
@@ -89,15 +130,17 @@ spglue_times::apply_noalias(SpMat<eT>& c, const SpProxy<T1>& pa, const SpProxy<T
     const uword y_it_row = y_it.row();
     
     // Look through the column that this point (*y_it) could affect.
-    typename SpProxy<T1>::const_iterator_type x_it = pa.begin_col(y_it_row);
+    typename SpMat<eT>::const_iterator x_it = x.begin_col_no_sync(y_it_row);
     
     while(x_it.col() == y_it_row)
       {
+      const uword x_it_row = x_it.row();
+      
       // A point at x(i, j) and y(j, k) implies a point at c(i, k).
-      if(index[x_it.row()] == x_n_rows)
+      if(index[x_it_row] == x_n_rows)
         {
-        index[x_it.row()] = last_ind;
-        last_ind = x_it.row();
+        index[x_it_row] = last_ind;
+        last_ind = x_it_row;
         ++cur_col_length;
         }
 
@@ -140,9 +183,7 @@ spglue_times::apply_noalias(SpMat<eT>& c, const SpProxy<T1>& pa, const SpProxy<T
   podarray<eT> sums(x_n_rows); // Partial sums.
   sums.zeros();
   
-  // setting the size of 'sorted_indices' to x_n_rows is a better-than-nothing guess;
-  // the correct minimum size is determined later
-  podarray<uword> sorted_indices(x_n_rows);
+  podarray<uword> sorted_indices(x_n_rows);  // upper bound
   
   // last_ind is already set to x_n_rows, and cur_col_length is already set to 0.
   // We will loop through all columns as necessary.
@@ -167,28 +208,32 @@ spglue_times::apply_noalias(SpMat<eT>& c, const SpProxy<T1>& pa, const SpProxy<T
     access::rw(c.col_ptrs[cur_col]) = cur_pos;
 
     // Check all elements in this column.
-    typename SpProxy<T2>::const_iterator_type y_col_it = pb.begin_col(cur_col);
+    typename SpMat<eT>::const_iterator y_col_it = y.begin_col_no_sync(cur_col);
     
     while(y_col_it.col() == cur_col)
       {
+      const uword y_col_it_row = y_col_it.row();
+      
       // Check all elements in the column of the other matrix corresponding to
       // the row of this column.
-      typename SpProxy<T1>::const_iterator_type x_col_it = pa.begin_col(y_col_it.row());
+      typename SpMat<eT>::const_iterator x_col_it = x.begin_col_no_sync(y_col_it_row);
 
       const eT y_value = (*y_col_it);
 
-      while(x_col_it.col() == y_col_it.row())
+      while(x_col_it.col() == y_col_it_row)
         {
+        const uword x_col_it_row = x_col_it.row();
+        
         // A point at x(i, j) and y(j, k) implies a point at c(i, k).
         // Add to partial sum.
         const eT x_value = (*x_col_it);
-        sums[x_col_it.row()] += (x_value * y_value);
+        sums[x_col_it_row] += (x_value * y_value);
 
         // Add point if it hasn't already been marked.
-        if(index[x_col_it.row()] == x_n_rows)
+        if(index[x_col_it_row] == x_n_rows)
           {
-          index[x_col_it.row()] = last_ind;
-          last_ind = x_col_it.row();
+          index[x_col_it_row] = last_ind;
+          last_ind = x_col_it_row;
           }
 
         ++x_col_it;
@@ -198,14 +243,6 @@ spglue_times::apply_noalias(SpMat<eT>& c, const SpProxy<T1>& pa, const SpProxy<T
       }
 
     // Now sort the indices that were used in this column.
-    //podarray<uword> sorted_indices(c.col_ptrs[cur_col + 1] - c.col_ptrs[cur_col]);
-    sorted_indices.set_min_size(c.col_ptrs[cur_col + 1] - c.col_ptrs[cur_col]);
-    
-    // .set_min_size() can only enlarge the array to the specified size,
-    // hence if we request a smaller size than already allocated,
-    // no new memory allocation is done
-    
-    
     uword cur_index = 0;
     while(last_ind != x_n_rows + 1)
       {
@@ -251,37 +288,392 @@ spglue_times::apply_noalias(SpMat<eT>& c, const SpProxy<T1>& pa, const SpProxy<T
 
 //
 //
-// spglue_times2: scalar*(A * B)
+//
 
 
 
 template<typename T1, typename T2>
 inline
 void
-spglue_times2::apply(SpMat<typename T1::elem_type>& out, const SpGlue<T1,T2,spglue_times2>& X)
+spglue_times_misc::sparse_times_dense(Mat<typename T1::elem_type>& out, const T1& x, const T2& y)
   {
   arma_extra_debug_sigprint();
   
   typedef typename T1::elem_type eT;
   
-  const SpProxy<T1> pa(X.A);
-  const SpProxy<T2> pb(X.B);
-  
-  const bool is_alias = pa.is_alias(out) || pb.is_alias(out);
-  
-  if(is_alias == false)
+  if(is_op_diagmat<T2>::value)
     {
-    spglue_times::apply_noalias(out, pa, pb);
+    const SpMat<eT> tmp(y);
+    
+    out = x * tmp;
     }
   else
     {
-    SpMat<eT> tmp;
-    spglue_times::apply_noalias(tmp, pa, pb);
+    const unwrap_spmat<T1> UA(x);
+    const quasi_unwrap<T2> UB(y);
     
-    out.steal_mem(tmp);
+    const SpMat<eT>& A = UA.M;
+    const   Mat<eT>& B = UB.M;
+    
+    const uword A_n_rows = A.n_rows;
+    const uword A_n_cols = A.n_cols;
+    
+    const uword B_n_rows = B.n_rows;
+    const uword B_n_cols = B.n_cols;
+    
+    arma_debug_assert_mul_size(A_n_rows, A_n_cols, B_n_rows, B_n_cols, "matrix multiplication");
+    
+    if(B_n_cols >= (B_n_rows / uword(100)))
+      {
+      arma_extra_debug_print("using transpose-based multiplication");
+      
+      const SpMat<eT> At = A.st();
+      const   Mat<eT> Bt = B.st();
+      
+      if(A_n_rows == B_n_cols)
+        {
+        spglue_times_misc::dense_times_sparse(out, Bt, At);
+        
+        op_strans::apply_mat(out, out);  // since 'out' is square-sized, this will do an inplace transpose
+        }
+      else
+        {
+        Mat<eT> tmp;
+        
+        spglue_times_misc::dense_times_sparse(tmp, Bt, At);
+        
+        op_strans::apply_mat(out, tmp);
+        }
+      }
+    else
+      {
+      arma_extra_debug_print("using standard multiplication");
+      
+      out.zeros(A_n_rows, B_n_cols);
+      
+      typename SpMat<eT>::const_iterator A_it     = A.begin();
+      typename SpMat<eT>::const_iterator A_it_end = A.end();
+      
+      while(A_it != A_it_end)
+        {
+        const eT    A_it_val = (*A_it);
+        const uword A_it_row = A_it.row();
+        const uword A_it_col = A_it.col();
+        
+        for(uword col = 0; col < B_n_cols; ++col)
+          {
+          out.at(A_it_row, col) += A_it_val * B.at(A_it_col, col);
+          }
+        
+        ++A_it;
+        }
+      }
     }
+  }
+
+
+
+template<typename T1, typename T2>
+inline
+void
+spglue_times_misc::dense_times_sparse(Mat<typename T1::elem_type>& out, const T1& x, const T2& y)
+  {
+  arma_extra_debug_sigprint();
   
-  out *= X.aux;
+  typedef typename T1::elem_type eT;
+  
+  if(is_op_diagmat<T1>::value)
+    {
+    const SpMat<eT> tmp(x);
+    
+    out = tmp * y;
+    }
+  else
+    {
+    const   Proxy<T1> pa(x);
+    const SpProxy<T2> pb(y);
+    
+    arma_debug_assert_mul_size(pa.get_n_rows(), pa.get_n_cols(), pb.get_n_rows(), pb.get_n_cols(), "matrix multiplication");
+    
+    out.zeros(pa.get_n_rows(), pb.get_n_cols());
+    
+    if( (pa.get_n_elem() > 0) && (pb.get_n_nonzero() > 0) )
+      {
+      if( (arma_config::openmp) && (mp_thread_limit::in_parallel() == false) && (pa.get_n_rows() <= (pa.get_n_cols() / uword(100))) )
+        {
+        #if defined(ARMA_USE_OPENMP)
+          {
+          arma_extra_debug_print("using parallelised multiplication");
+          
+          const quasi_unwrap<typename   Proxy<T1>::stored_type> UX(pa.Q);
+          const unwrap_spmat<typename SpProxy<T2>::stored_type> UY(pb.Q);
+          
+          const   Mat<eT>& X = UX.M;
+          const SpMat<eT>& Y = UY.M;
+          
+          const uword Y_n_cols  = Y.n_cols;
+          const int   n_threads = mp_thread_limit::get();
+          
+          #pragma omp parallel for schedule(static) num_threads(n_threads)
+          for(uword i=0; i < Y_n_cols; ++i)
+            {
+            const uword col_offset_1 = Y.col_ptrs[i  ];
+            const uword col_offset_2 = Y.col_ptrs[i+1];
+            
+            const uword col_offset_delta = col_offset_2 - col_offset_1;
+            
+            const uvec    indices(const_cast<uword*>(&(Y.row_indices[col_offset_1])), col_offset_delta, false, false);
+            const Col<eT>   Y_col(const_cast<   eT*>(&(     Y.values[col_offset_1])), col_offset_delta, false, false);
+            
+            out.col(i) = X.cols(indices) * Y_col;
+            }
+          }
+        #endif
+        }
+      else
+        {
+        arma_extra_debug_print("using standard multiplication");
+        
+        typename SpProxy<T2>::const_iterator_type y_it     = pb.begin();
+        typename SpProxy<T2>::const_iterator_type y_it_end = pb.end();
+        
+        const uword out_n_rows = out.n_rows;
+        
+        while(y_it != y_it_end)
+          {
+          const eT    y_it_val = (*y_it);
+          const uword y_it_col = y_it.col();
+          const uword y_it_row = y_it.row();
+          
+          eT* out_col = out.colptr(y_it_col);
+          
+          for(uword row = 0; row < out_n_rows; ++row)
+            {
+            out_col[row] += pa.at(row, y_it_row) * y_it_val;
+            }
+          
+          ++y_it;
+          }
+        }
+      }
+    }
+  }
+
+
+
+//
+
+
+
+template<typename T1, typename T2>
+inline
+void
+spglue_times_mixed::apply(SpMat<typename eT_promoter<T1,T2>::eT>& out, const mtSpGlue<typename eT_promoter<T1,T2>::eT, T1, T2, spglue_times_mixed>& expr)
+  {
+  arma_extra_debug_sigprint();
+  
+  typedef typename T1::elem_type eT1;
+  typedef typename T2::elem_type eT2;
+  
+  typedef typename eT_promoter<T1,T2>::eT out_eT;
+  
+  if( (is_same_type<eT1,out_eT>::no) && (is_same_type<eT2,out_eT>::yes) )
+    {
+    // upgrade T1
+    
+    const unwrap_spmat<T1> UA(expr.A);
+    const unwrap_spmat<T2> UB(expr.B);
+    
+    const SpMat<eT1>& A = UA.M;
+    const SpMat<eT2>& B = UB.M;
+    
+    SpMat<out_eT> AA(arma_layout_indicator(), A);
+    
+    for(uword i=0; i < A.n_nonzero; ++i)  { access::rw(AA.values[i]) = out_eT(A.values[i]); }
+    
+    const SpMat<out_eT>& BB = reinterpret_cast< const SpMat<out_eT>& >(B);
+    
+    out = AA * BB;
+    }
+  else
+  if( (is_same_type<eT1,out_eT>::yes) && (is_same_type<eT2,out_eT>::no) )
+    {
+    // upgrade T2 
+    
+    const unwrap_spmat<T1> UA(expr.A);
+    const unwrap_spmat<T2> UB(expr.B);
+    
+    const SpMat<eT1>& A = UA.M;
+    const SpMat<eT2>& B = UB.M;
+    
+    const SpMat<out_eT>& AA = reinterpret_cast< const SpMat<out_eT>& >(A);
+    
+    SpMat<out_eT> BB(arma_layout_indicator(), B);
+    
+    for(uword i=0; i < B.n_nonzero; ++i)  { access::rw(BB.values[i]) = out_eT(B.values[i]); }
+    
+    out = AA * BB;
+    }
+  else
+    {
+    // upgrade T1 and T2
+    
+    const unwrap_spmat<T1> UA(expr.A);
+    const unwrap_spmat<T2> UB(expr.B);
+    
+    const SpMat<eT1>& A = UA.M;
+    const SpMat<eT2>& B = UB.M;
+    
+    SpMat<out_eT> AA(arma_layout_indicator(), A);
+    SpMat<out_eT> BB(arma_layout_indicator(), B);
+    
+    for(uword i=0; i < A.n_nonzero; ++i)  { access::rw(AA.values[i]) = out_eT(A.values[i]); }
+    for(uword i=0; i < B.n_nonzero; ++i)  { access::rw(BB.values[i]) = out_eT(B.values[i]); }
+    
+    out = AA * BB;
+    }
+  }
+
+
+
+template<typename T1, typename T2>
+inline
+void
+spglue_times_mixed::sparse_times_dense(Mat< typename promote_type<typename T1::elem_type, typename T2::elem_type>::result >& out, const T1& X, const T2& Y)
+  {
+  arma_extra_debug_sigprint();
+  
+  typedef typename T1::elem_type eT1;
+  typedef typename T2::elem_type eT2;
+  
+  typedef typename promote_type<eT1,eT2>::result out_eT;
+  
+  promote_type<eT1,eT2>::check();
+  
+  if( (is_same_type<eT1,out_eT>::no) && (is_same_type<eT2,out_eT>::yes) )
+    {
+    // upgrade T1
+    
+    const unwrap_spmat<T1> UA(X);
+    const quasi_unwrap<T2> UB(Y);
+    
+    const SpMat<eT1>& A = UA.M;
+    const   Mat<eT2>& B = UB.M;
+    
+    SpMat<out_eT> AA(arma_layout_indicator(), A);
+    
+    for(uword i=0; i < A.n_nonzero; ++i)  { access::rw(AA.values[i]) = out_eT(A.values[i]); }
+    
+    const Mat<out_eT>& BB = reinterpret_cast< const Mat<out_eT>& >(B);
+    
+    spglue_times_misc::sparse_times_dense(out, AA, BB);
+    }
+  else
+  if( (is_same_type<eT1,out_eT>::yes) && (is_same_type<eT2,out_eT>::no) )
+    {
+    // upgrade T2 
+    
+    const unwrap_spmat<T1> UA(X);
+    const quasi_unwrap<T2> UB(Y);
+    
+    const SpMat<eT1>& A = UA.M;
+    const   Mat<eT2>& B = UB.M;
+    
+    const SpMat<out_eT>& AA = reinterpret_cast< const SpMat<out_eT>& >(A);
+    
+    const Mat<out_eT> BB = conv_to< Mat<out_eT> >::from(B);
+    
+    spglue_times_misc::sparse_times_dense(out, AA, BB);
+    }
+  else
+    {
+    // upgrade T1 and T2
+    
+    const unwrap_spmat<T1> UA(X);
+    const quasi_unwrap<T2> UB(Y);
+    
+    const SpMat<eT1>& A = UA.M;
+    const   Mat<eT2>& B = UB.M;
+    
+    SpMat<out_eT> AA(arma_layout_indicator(), A);
+    
+    for(uword i=0; i < A.n_nonzero; ++i)  { access::rw(AA.values[i]) = out_eT(A.values[i]); }
+    
+    const Mat<out_eT> BB = conv_to< Mat<out_eT> >::from(B);
+    
+    spglue_times_misc::sparse_times_dense(out, AA, BB);
+    }
+  }
+
+
+
+template<typename T1, typename T2>
+inline
+void
+spglue_times_mixed::dense_times_sparse(Mat< typename promote_type<typename T1::elem_type, typename T2::elem_type>::result >& out, const T1& X, const T2& Y)
+  {
+  arma_extra_debug_sigprint();
+  
+  typedef typename T1::elem_type eT1;
+  typedef typename T2::elem_type eT2;
+  
+  typedef typename promote_type<eT1,eT2>::result out_eT;
+  
+  promote_type<eT1,eT2>::check();
+  
+  if( (is_same_type<eT1,out_eT>::no) && (is_same_type<eT2,out_eT>::yes) )
+    {
+    // upgrade T1
+    
+    const quasi_unwrap<T1> UA(X);
+    const unwrap_spmat<T2> UB(Y);
+    
+    const   Mat<eT1>& A = UA.M;
+    const SpMat<eT2>& B = UB.M;
+    
+    const Mat<out_eT> AA = conv_to< Mat<out_eT> >::from(A);
+    
+    const SpMat<out_eT>& BB = reinterpret_cast< const SpMat<out_eT>& >(B);
+    
+    spglue_times_misc::dense_times_sparse(out, AA, BB);
+    }
+  else
+  if( (is_same_type<eT1,out_eT>::yes) && (is_same_type<eT2,out_eT>::no) )
+    {
+    // upgrade T2 
+    
+    const quasi_unwrap<T1> UA(X);
+    const unwrap_spmat<T2> UB(Y);
+    
+    const   Mat<eT1>& A = UA.M;
+    const SpMat<eT2>& B = UB.M;
+    
+    const Mat<out_eT>& AA = reinterpret_cast< const Mat<out_eT>& >(A);
+    
+    SpMat<out_eT> BB(arma_layout_indicator(), B);
+    
+    for(uword i=0; i < B.n_nonzero; ++i)  { access::rw(BB.values[i]) = out_eT(B.values[i]); }
+    
+    spglue_times_misc::dense_times_sparse(out, AA, BB);
+    }
+  else
+    {
+    // upgrade T1 and T2
+    
+    const quasi_unwrap<T1> UA(X);
+    const unwrap_spmat<T2> UB(Y);
+    
+    const   Mat<eT1>& A = UA.M;
+    const SpMat<eT2>& B = UB.M;
+    
+    const Mat<out_eT> AA = conv_to< Mat<out_eT> >::from(A);
+    
+    SpMat<out_eT> BB(arma_layout_indicator(), B);
+    
+    for(uword i=0; i < B.n_nonzero; ++i)  { access::rw(BB.values[i]) = out_eT(B.values[i]); }
+    
+    spglue_times_misc::dense_times_sparse(out, AA, BB);
+    }
   }
 
 

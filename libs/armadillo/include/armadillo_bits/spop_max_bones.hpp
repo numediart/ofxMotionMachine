@@ -1,9 +1,17 @@
-// Copyright (C) 2012-2014 Conrad Sanderson
-// Copyright (C) 2012-2014 Ryan Curtin
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup spop_max
@@ -11,6 +19,7 @@
 
 
 class spop_max
+  : public traits_op_xvec
   {
   public:
   
@@ -20,7 +29,7 @@ class spop_max
   //
   
   template<typename T1>
-  inline static void apply_noalias(SpMat<typename T1::elem_type>& out, const SpProxy<T1>& p, const uword dim, const typename arma_not_cx<typename T1::elem_type>::result* junk = 0);
+  inline static void apply_proxy(SpMat<typename T1::elem_type>& out, const SpProxy<T1>& p, const uword dim, const typename arma_not_cx<typename T1::elem_type>::result* junk = 0);
   
   template<typename T1>
   inline static typename T1::elem_type vector_max(const T1& X, const typename arma_not_cx<typename T1::elem_type>::result* junk = 0);
@@ -34,7 +43,7 @@ class spop_max
   //
   
   template<typename T1>
-  inline static void apply_noalias(SpMat<typename T1::elem_type>& out, const SpProxy<T1>& p, const uword dim, const typename arma_cx_only<typename T1::elem_type>::result* junk = 0);
+  inline static void apply_proxy(SpMat<typename T1::elem_type>& out, const SpProxy<T1>& p, const uword dim, const typename arma_cx_only<typename T1::elem_type>::result* junk = 0);
   
   template<typename T1>
   inline static typename T1::elem_type vector_max(const T1& X, const typename arma_cx_only<typename T1::elem_type>::result* junk = 0);

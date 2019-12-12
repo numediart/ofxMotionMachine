@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2014 Conrad Sanderson
-// Copyright (C) 2008-2014 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup op_min
@@ -11,33 +19,55 @@
 
 
 
-//! \brief
-//! For each row or for each column, find the minimum value.
-//! The result is stored in a dense matrix that has either one column or one row.
-//! The dimension, for which the minima are found, is set via the min() function.
 template<typename T1>
-inline void op_min::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_min>& in)
+inline
+void
+op_min::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_min>& in)
   {
   arma_extra_debug_sigprint();
   
   typedef typename T1::elem_type eT;
   
-  const unwrap_check<T1> tmp(in.m, out);
-  const Mat<eT>&     X = tmp.M;
-  
   const uword dim = in.aux_uword_a;
-  arma_debug_check( (dim > 1), "min(): incorrect usage. dim must be 0 or 1");
+  arma_debug_check( (dim > 1), "min(): parameter 'dim' must be 0 or 1");
+  
+  const quasi_unwrap<T1> U(in.m);
+  const Mat<eT>& X = U.M;
+  
+  if(U.is_alias(out) == false)
+    {
+    op_min::apply_noalias(out, X, dim);
+    }
+  else
+    {
+    Mat<eT> tmp;
+    
+    op_min::apply_noalias(tmp, X, dim);
+    
+    out.steal_mem(tmp);
+    }
+  }
+
+
+
+template<typename eT>
+inline
+void
+op_min::apply_noalias(Mat<eT>& out, const Mat<eT>& X, const uword dim, const typename arma_not_cx<eT>::result* junk)
+  {
+  arma_extra_debug_sigprint();
+  arma_ignore(junk);
   
   const uword X_n_rows = X.n_rows;
   const uword X_n_cols = X.n_cols;
   
-  if(dim == 0)  // min in each column
+  if(dim == 0)
     {
-    arma_extra_debug_print("op_min::apply(), dim = 0");
+    arma_extra_debug_print("op_min::apply(): dim = 0");
     
-    arma_debug_check( (X_n_rows == 0), "min(): given object has zero rows" );
-
-    out.set_size(1, X_n_cols);
+    out.set_size((X_n_rows > 0) ? 1 : 0, X_n_cols);
+    
+    if(X_n_rows == 0)  { return; }
     
     eT* out_mem = out.memptr();
     
@@ -47,13 +77,68 @@ inline void op_min::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_min>&
       }
     }
   else
-  if(dim == 1)  // min in each row
+  if(dim == 1)
     {
-    arma_extra_debug_print("op_min::apply(), dim = 1");
+    arma_extra_debug_print("op_min::apply(): dim = 1");
     
-    arma_debug_check( (X_n_cols == 0), "min(): given object has zero columns" );
+    out.set_size(X_n_rows, (X_n_cols > 0) ? 1 : 0);
+    
+    if(X_n_cols == 0)  { return; }
+    
+    eT* out_mem = out.memptr();
+    
+    arrayops::copy(out_mem, X.colptr(0), X_n_rows);
+    
+    for(uword col=1; col<X_n_cols; ++col)
+      {
+      const eT* col_mem = X.colptr(col);
+      
+      for(uword row=0; row<X_n_rows; ++row)
+        {
+        const eT col_val = col_mem[row];
+        
+        if(col_val < out_mem[row])  { out_mem[row] = col_val; }
+        }
+      }
+    }
+  }
 
-    out.set_size(X_n_rows, 1);
+
+
+template<typename eT>
+inline
+void
+op_min::apply_noalias(Mat<eT>& out, const Mat<eT>& X, const uword dim, const typename arma_cx_only<eT>::result* junk)
+  {
+  arma_extra_debug_sigprint();
+  arma_ignore(junk);
+  
+  const uword X_n_rows = X.n_rows;
+  const uword X_n_cols = X.n_cols;
+  
+  if(dim == 0)
+    {
+    arma_extra_debug_print("op_min::apply(): dim = 0");
+    
+    out.set_size((X_n_rows > 0) ? 1 : 0, X_n_cols);
+    
+    if(X_n_rows == 0)  { return; }
+    
+    eT* out_mem = out.memptr();
+    
+    for(uword col=0; col<X_n_cols; ++col)
+      {
+      out_mem[col] = op_min::direct_min( X.colptr(col), X_n_rows );
+      }
+    }
+  else
+  if(dim == 1)
+    {
+    arma_extra_debug_print("op_min::apply(): dim = 1");
+    
+    out.set_size(X_n_rows, (X_n_cols > 0) ? 1 : 0);
+    
+    if(X_n_cols == 0)  { return; }
     
     eT* out_mem = out.memptr();
     
@@ -66,9 +151,209 @@ inline void op_min::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_min>&
 
 
 
+template<typename T1>
+inline
+void
+op_min::apply(Cube<typename T1::elem_type>& out, const OpCube<T1,op_min>& in)
+  {
+  arma_extra_debug_sigprint();
+  
+  typedef typename T1::elem_type eT;
+  
+  const uword dim = in.aux_uword_a;
+  arma_debug_check( (dim > 2), "min(): parameter 'dim' must be 0 or 1 or 2" );
+  
+  const unwrap_cube<T1> U(in.m);
+  
+  if(U.is_alias(out) == false)
+    {
+    op_min::apply_noalias(out, U.M, dim);
+    }
+  else
+    {
+    Cube<eT> tmp;
+    
+    op_min::apply_noalias(tmp, U.M, dim);
+    
+    out.steal_mem(tmp);
+    }
+  }
+
+
+
 template<typename eT>
-arma_pure
-inline 
+inline
+void
+op_min::apply_noalias(Cube<eT>& out, const Cube<eT>& X, const uword dim, const typename arma_not_cx<eT>::result* junk)
+  {
+  arma_extra_debug_sigprint();
+  arma_ignore(junk);
+  
+  const uword X_n_rows   = X.n_rows;
+  const uword X_n_cols   = X.n_cols;
+  const uword X_n_slices = X.n_slices;
+  
+  if(dim == 0)
+    {
+    arma_extra_debug_print("op_min::apply(): dim = 0");
+    
+    out.set_size((X_n_rows > 0) ? 1 : 0, X_n_cols, X_n_slices);
+    
+    if(X_n_rows == 0)  { return; }
+    
+    for(uword slice=0; slice < X_n_slices; ++slice)
+      {
+      eT* out_mem = out.slice_memptr(slice);
+      
+      for(uword col=0; col < X_n_cols; ++col)
+        {
+        out_mem[col] = op_min::direct_min( X.slice_colptr(slice,col), X_n_rows );
+        }
+      }
+    }
+  else
+  if(dim == 1)
+    {
+    arma_extra_debug_print("op_min::apply(): dim = 1");
+    
+    out.set_size(X_n_rows, (X_n_cols > 0) ? 1 : 0, X_n_slices);
+    
+    if(X_n_cols == 0)  { return; }
+    
+    for(uword slice=0; slice < X_n_slices; ++slice)
+      {
+      eT* out_mem = out.slice_memptr(slice);
+      
+      arrayops::copy(out_mem, X.slice_colptr(slice,0), X_n_rows);
+      
+      for(uword col=1; col < X_n_cols; ++col)
+        {
+        const eT* col_mem = X.slice_colptr(slice,col);
+        
+        for(uword row=0; row < X_n_rows; ++row)
+          {
+          const eT col_val = col_mem[row];
+          
+          if(col_val < out_mem[row])  { out_mem[row] = col_val; }
+          }
+        }
+      }
+    }
+  else
+  if(dim == 2)
+    {
+    arma_extra_debug_print("op_min::apply(): dim = 2");
+    
+    out.set_size(X_n_rows, X_n_cols, (X_n_slices > 0) ? 1 : 0);
+    
+    if(X_n_slices == 0)  { return; }
+    
+    const uword N = X.n_elem_slice;
+    
+    eT* out_mem = out.slice_memptr(0);
+    
+    arrayops::copy(out_mem, X.slice_memptr(0), N);
+    
+    for(uword slice=1; slice < X_n_slices; ++slice)
+      {
+      const eT* X_mem = X.slice_memptr(slice);
+      
+      for(uword i=0; i < N; ++i)
+        {
+        const eT val = X_mem[i];
+        
+        if(val < out_mem[i])  { out_mem[i] = val; }
+        }
+      }
+    }
+  }
+
+
+
+template<typename eT>
+inline
+void
+op_min::apply_noalias(Cube<eT>& out, const Cube<eT>& X, const uword dim, const typename arma_cx_only<eT>::result* junk)
+  {
+  arma_extra_debug_sigprint();
+  arma_ignore(junk);
+  
+  const uword X_n_rows   = X.n_rows;
+  const uword X_n_cols   = X.n_cols;
+  const uword X_n_slices = X.n_slices;
+  
+  if(dim == 0)
+    {
+    arma_extra_debug_print("op_min::apply(): dim = 0");
+    
+    out.set_size((X_n_rows > 0) ? 1 : 0, X_n_cols, X_n_slices);
+    
+    if(X_n_rows == 0)  { return; }
+    
+    for(uword slice=0; slice < X_n_slices; ++slice)
+      {
+      eT* out_mem = out.slice_memptr(slice);
+      
+      for(uword col=0; col < X_n_cols; ++col)
+        {
+        out_mem[col] = op_min::direct_min( X.slice_colptr(slice,col), X_n_rows );
+        }
+      }
+    }
+  else
+  if(dim == 1)
+    {
+    arma_extra_debug_print("op_min::apply(): dim = 1");
+    
+    out.set_size(X_n_rows, (X_n_cols > 0) ? 1 : 0, X_n_slices);
+    
+    if(X_n_cols == 0)  { return; }
+    
+    for(uword slice=0; slice < X_n_slices; ++slice)
+      {
+      eT* out_mem = out.slice_memptr(slice);
+      
+      const Mat<eT> tmp('j', X.slice_memptr(slice), X_n_rows, X_n_cols);
+      
+      for(uword row=0; row < X_n_rows; ++row)
+        {
+        out_mem[row] = op_min::direct_min(tmp, row);
+        }
+      }
+    }
+  else
+  if(dim == 2)
+    {
+    arma_extra_debug_print("op_min::apply(): dim = 2");
+    
+    out.set_size(X_n_rows, X_n_cols, (X_n_slices > 0) ? 1 : 0);
+    
+    if(X_n_slices == 0)  { return; }
+    
+    const uword N = X.n_elem_slice;
+    
+    eT* out_mem = out.slice_memptr(0);
+    
+    arrayops::copy(out_mem, X.slice_memptr(0), N);
+    
+    for(uword slice=1; slice < X_n_slices; ++slice)
+      {
+      const eT* X_mem = X.slice_memptr(slice);
+      
+      for(uword i=0; i < N; ++i)
+        {
+        const eT& val = X_mem[i];
+        
+        if(std::abs(val) < std::abs(out_mem[i]))  { out_mem[i] = val; }
+        }
+      }
+    }
+  }
+
+
+
+template<typename eT>
+inline
 eT
 op_min::direct_min(const eT* const X, const uword n_elem)
   {
@@ -142,12 +427,12 @@ op_min::direct_min(const eT* const X, const uword n_elem, uword& index_of_min_va
   index_of_min_val = best_index;
   
   return min_val;
-  }  
+  }
 
 
 
 template<typename eT>
-inline 
+inline
 eT
 op_min::direct_min(const Mat<eT>& X, const uword row)
   {
@@ -186,8 +471,13 @@ op_min::min(const subview<eT>& X)
   {
   arma_extra_debug_sigprint();
   
-  arma_debug_check( (X.n_elem == 0), "min(): given object has no elements" );
-  
+  if(X.n_elem == 0)
+    {
+    arma_debug_check(true, "min(): object has no elements");
+    
+    return Datum<eT>::nan;
+    }
+    
   const uword X_n_rows = X.n_rows;
   const uword X_n_cols = X.n_cols;
   
@@ -223,9 +513,7 @@ op_min::min(const subview<eT>& X)
     {
     for(uword col=0; col < X_n_cols; ++col)
       {
-      eT tmp_val = op_min::direct_min(X.colptr(col), X_n_rows);
-      
-      if(tmp_val < min_val) { min_val = tmp_val; }
+      min_val = (std::min)(min_val, op_min::direct_min(X.colptr(col), X_n_rows));
       }
     }
   
@@ -247,11 +535,16 @@ op_min::min(const Base<typename T1::elem_type,T1>& X)
   
   const uword n_elem = P.get_n_elem();
   
-  arma_debug_check( (n_elem == 0), "min(): given object has no elements" );
+  if(n_elem == 0)
+    {
+    arma_debug_check(true, "min(): object has no elements");
+    
+    return Datum<eT>::nan;
+    }
   
   eT min_val = priv::most_pos<eT>();
   
-  if(Proxy<T1>::prefer_at_accessor == false)
+  if(Proxy<T1>::use_at == false)
     {
     typedef typename Proxy<T1>::ea_type ea_type;
     
@@ -331,6 +624,73 @@ op_min::min(const Base<typename T1::elem_type,T1>& X)
 template<typename T1>
 inline
 typename arma_not_cx<typename T1::elem_type>::result
+op_min::min(const BaseCube<typename T1::elem_type,T1>& X)
+  {
+  arma_extra_debug_sigprint();
+  
+  typedef typename T1::elem_type eT;
+  
+  const ProxyCube<T1> P(X.get_ref());
+  
+  const uword n_elem = P.get_n_elem();
+  
+  if(n_elem == 0)
+    {
+    arma_debug_check(true, "min(): object has no elements");
+    
+    return Datum<eT>::nan;
+    }
+  
+  eT min_val = priv::most_pos<eT>();
+  
+  if(ProxyCube<T1>::use_at == false)
+    {
+    typedef typename ProxyCube<T1>::ea_type ea_type;
+    
+    ea_type A = P.get_ea();
+    
+    uword i,j;
+    
+    for(i=0, j=1; j<n_elem; i+=2, j+=2)
+      {
+      const eT tmp_i = A[i];
+      const eT tmp_j = A[j];
+      
+      if(tmp_i < min_val) { min_val = tmp_i; }
+      if(tmp_j < min_val) { min_val = tmp_j; }
+      }
+    
+    if(i < n_elem)
+      {
+      const eT tmp_i = A[i];
+      
+      if(tmp_i < min_val) { min_val = tmp_i; }
+      }
+    }
+  else
+    {
+    const uword n_rows   = P.get_n_rows();
+    const uword n_cols   = P.get_n_cols();
+    const uword n_slices = P.get_n_slices();
+    
+    for(uword slice=0; slice < n_slices; ++slice)
+    for(uword   col=0;   col < n_cols;   ++col  )
+    for(uword   row=0;   row < n_rows;   ++row  )
+      {
+      const eT tmp = P.at(row,col,slice);
+
+      if(tmp < min_val) { min_val = tmp; }
+      }
+    }
+  
+  return min_val;
+  }
+
+
+
+template<typename T1>
+inline
+typename arma_not_cx<typename T1::elem_type>::result
 op_min::min_with_index(const Proxy<T1>& P, uword& index_of_min_val)
   {
   arma_extra_debug_sigprint();
@@ -339,12 +699,17 @@ op_min::min_with_index(const Proxy<T1>& P, uword& index_of_min_val)
   
   const uword n_elem = P.get_n_elem();
   
-  arma_debug_check( (n_elem == 0), "min(): given object has no elements" );
+  if(n_elem == 0)
+    {
+    arma_debug_check(true, "min(): object has no elements");
+    
+    return Datum<eT>::nan;
+    }
   
   eT    best_val   = priv::most_pos<eT>();
   uword best_index = 0;
   
-  if(Proxy<T1>::prefer_at_accessor == false)
+  if(Proxy<T1>::use_at == false)
     {
     typedef typename Proxy<T1>::ea_type ea_type;
     
@@ -404,8 +769,69 @@ op_min::min_with_index(const Proxy<T1>& P, uword& index_of_min_val)
 
 
 
+template<typename T1>
+inline
+typename arma_not_cx<typename T1::elem_type>::result
+op_min::min_with_index(const ProxyCube<T1>& P, uword& index_of_min_val)
+  {
+  arma_extra_debug_sigprint();
+  
+  typedef typename T1::elem_type eT;
+  
+  const uword n_elem = P.get_n_elem();
+  
+  if(n_elem == 0)
+    {
+    arma_debug_check(true, "min(): object has no elements");
+    
+    return Datum<eT>::nan;
+    }
+  
+  eT    best_val   = priv::most_pos<eT>();
+  uword best_index = 0;
+  
+  if(ProxyCube<T1>::use_at == false)
+    {
+    typedef typename ProxyCube<T1>::ea_type ea_type;
+    
+    ea_type A = P.get_ea();
+    
+    for(uword i=0; i < n_elem; ++i)
+      {
+      const eT tmp = A[i];
+      
+      if(tmp < best_val)  { best_val = tmp;  best_index = i; }
+      }
+    }
+  else
+    {
+    const uword n_rows   = P.get_n_rows();
+    const uword n_cols   = P.get_n_cols();
+    const uword n_slices = P.get_n_slices();
+    
+    uword count = 0;
+    
+    for(uword slice=0; slice < n_slices; ++slice)
+    for(uword   col=0;   col < n_cols;   ++col  )
+    for(uword   row=0;   row < n_rows;   ++row  )
+      {
+      const eT tmp = P.at(row,col,slice);
+      
+      if(tmp < best_val)  { best_val = tmp;  best_index = count; }
+      
+      ++count;
+      }
+    }
+  
+  index_of_min_val = best_index;
+  
+  return best_val;
+  }
+
+
+
 template<typename T>
-inline 
+inline
 std::complex<T>
 op_min::direct_min(const std::complex<T>* const X, const uword n_elem)
   {
@@ -431,7 +857,7 @@ op_min::direct_min(const std::complex<T>* const X, const uword n_elem)
 
 
 template<typename T>
-inline 
+inline
 std::complex<T>
 op_min::direct_min(const std::complex<T>* const X, const uword n_elem, uword& index_of_min_val)
   {
@@ -468,7 +894,7 @@ op_min::direct_min(const Mat< std::complex<T> >& X, const uword row)
   const uword X_n_cols = X.n_cols;
   
   uword index   = 0;
-  T   min_val = priv::most_pos<T>();
+  T     min_val = priv::most_pos<T>();
   
   for(uword col=0; col<X_n_cols; ++col)
     {
@@ -493,9 +919,16 @@ op_min::min(const subview< std::complex<T> >& X)
   {
   arma_extra_debug_sigprint();
   
-  arma_debug_check( (X.n_elem == 0), "min(): given object has no elements" );
+  typedef typename std::complex<T> eT;
   
-  const Mat< std::complex<T> >& A = X.m;
+  if(X.n_elem == 0)
+    {
+    arma_debug_check(true, "min(): object has no elements");
+    
+    return Datum<eT>::nan;
+    }
+  
+  const Mat<eT>& A = X.m;
   
   const uword X_n_rows = X.n_rows;
   const uword X_n_cols = X.n_cols;
@@ -563,11 +996,16 @@ op_min::min(const Base<typename T1::elem_type,T1>& X)
   
   const uword n_elem = P.get_n_elem();
   
-  arma_debug_check( (n_elem == 0), "min(): given object has no elements" );
+  if(n_elem == 0)
+    {
+    arma_debug_check(true, "min(): object has no elements");
+    
+    return Datum<eT>::nan;
+    }
   
   T min_val = priv::most_pos<T>();
   
-  if(Proxy<T1>::prefer_at_accessor == false)
+  if(Proxy<T1>::use_at == false)
     {
     typedef typename Proxy<T1>::ea_type ea_type;
     
@@ -635,6 +1073,78 @@ op_min::min(const Base<typename T1::elem_type,T1>& X)
 template<typename T1>
 inline
 typename arma_cx_only<typename T1::elem_type>::result
+op_min::min(const BaseCube<typename T1::elem_type,T1>& X)
+  {
+  arma_extra_debug_sigprint();
+  
+  typedef typename T1::elem_type            eT;
+  typedef typename get_pod_type<eT>::result T;
+  
+  const ProxyCube<T1> P(X.get_ref());
+  
+  const uword n_elem = P.get_n_elem();
+  
+  if(n_elem == 0)
+    {
+    arma_debug_check(true, "min(): object has no elements");
+    
+    return Datum<eT>::nan;
+    }
+  
+  T min_val = priv::most_pos<T>();
+  
+  if(ProxyCube<T1>::use_at == false)
+    {
+    typedef typename ProxyCube<T1>::ea_type ea_type;
+    
+    ea_type A = P.get_ea();
+    
+    uword index = 0;
+    
+    for(uword i=0; i<n_elem; ++i)
+      {
+      const T tmp = std::abs(A[i]);
+      
+      if(tmp < min_val)
+        {
+        min_val = tmp;
+        index   = i;
+        }
+      }
+    
+    return( A[index] );
+    }
+  else
+    {
+    const uword n_rows   = P.get_n_rows();
+    const uword n_cols   = P.get_n_cols();
+    const uword n_slices = P.get_n_slices();
+    
+    eT min_val_orig = eT(0);
+    
+    for(uword slice=0; slice < n_slices; ++slice)
+    for(uword   col=0;   col < n_cols;   ++col  )
+    for(uword   row=0;   row < n_rows;   ++row  )
+      {
+      const eT tmp_orig = P.at(row,col,slice);
+      const  T tmp      = std::abs(tmp_orig);
+      
+      if(tmp < min_val)
+        {
+        min_val      = tmp;
+        min_val_orig = tmp_orig;
+        }
+      }
+    
+    return min_val_orig;
+    }
+  }
+
+
+
+template<typename T1>
+inline
+typename arma_cx_only<typename T1::elem_type>::result
 op_min::min_with_index(const Proxy<T1>& P, uword& index_of_min_val)
   {
   arma_extra_debug_sigprint();
@@ -644,11 +1154,16 @@ op_min::min_with_index(const Proxy<T1>& P, uword& index_of_min_val)
   
   const uword n_elem = P.get_n_elem();
   
-  arma_debug_check( (n_elem == 0), "min(): given object has no elements" );
+  if(n_elem == 0)
+    {
+    arma_debug_check(true, "min(): object has no elements");
+    
+    return Datum<eT>::nan;
+    }
   
   T best_val = priv::most_pos<T>();
   
-  if(Proxy<T1>::prefer_at_accessor == false)
+  if(Proxy<T1>::use_at == false)
     {
     typedef typename Proxy<T1>::ea_type ea_type;
     
@@ -725,6 +1240,81 @@ op_min::min_with_index(const Proxy<T1>& P, uword& index_of_min_val)
     index_of_min_val = best_index;
     
     return P.at(best_row, best_col);
+    }
+  }
+
+
+
+template<typename T1>
+inline
+typename arma_cx_only<typename T1::elem_type>::result
+op_min::min_with_index(const ProxyCube<T1>& P, uword& index_of_min_val)
+  {
+  arma_extra_debug_sigprint();
+  
+  typedef typename T1::elem_type            eT;
+  typedef typename get_pod_type<eT>::result T;
+  
+  const uword n_elem = P.get_n_elem();
+  
+  if(n_elem == 0)
+    {
+    arma_debug_check(true, "min(): object has no elements");
+    
+    return Datum<eT>::nan;
+    }
+  
+  T best_val = priv::most_pos<T>();
+  
+  if(ProxyCube<T1>::use_at == false)
+    {
+    typedef typename ProxyCube<T1>::ea_type ea_type;
+    
+    ea_type A = P.get_ea();
+    
+    uword best_index = 0;
+    
+    for(uword i=0; i < n_elem; ++i)
+      {
+      const T tmp = std::abs(A[i]);
+      
+      if(tmp < best_val)  { best_val = tmp;  best_index = i; }
+      }
+    
+    index_of_min_val = best_index;
+    
+    return( A[best_index] );
+    }
+  else
+    {
+    const uword n_rows   = P.get_n_rows();
+    const uword n_cols   = P.get_n_cols();
+    const uword n_slices = P.get_n_slices();
+    
+    eT    best_val_orig = eT(0);
+    uword best_index    = 0;
+    uword count         = 0;
+    
+    for(uword slice=0; slice < n_slices; ++slice)
+    for(uword   col=0;   col < n_cols;   ++col  )
+    for(uword   row=0;   row < n_rows;   ++row  )
+      {
+      const eT tmp_orig = P.at(row,col,slice);
+      const  T tmp      = std::abs(tmp_orig);
+      
+      if(tmp < best_val)
+        {
+        best_val      = tmp;
+        best_val_orig = tmp_orig;
+        best_index    = count;
+        }
+      
+      ++count;
+      }
+    
+    index_of_min_val = best_index;
+    
+    return best_val_orig;
     }
   }
 

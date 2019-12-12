@@ -1,10 +1,17 @@
-// Copyright (C) 2009-2010 Conrad Sanderson
-// Copyright (C) 2009-2010 NICTA (www.nicta.com.au)
-// Copyright (C) 2009-2010 Dimitrios Bouzas
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup fn_kron
@@ -12,10 +19,8 @@
 
 
 
-//! \brief
-//! kronecker product of two matrices,
-//! with the matrices having the same element type
 template<typename T1, typename T2>
+arma_warn_unused
 arma_inline
 const Glue<T1,T2,glue_kron>
 kron(const Base<typename T1::elem_type,T1>& A, const Base<typename T1::elem_type,T2>& B)
@@ -27,10 +32,8 @@ kron(const Base<typename T1::elem_type,T1>& A, const Base<typename T1::elem_type
 
 
 
-//! \brief
-//! kronecker product of two matrices,
-//! with the matrices having different element types
 template<typename T, typename T1, typename T2>
+arma_warn_unused
 inline
 Mat<typename eT_promoter<T1,T2>::eT>
 kron(const Base<std::complex<T>,T1>& X, const Base<T,T2>& Y)
@@ -41,8 +44,8 @@ kron(const Base<std::complex<T>,T1>& X, const Base<T,T2>& Y)
 
   promote_type<eT1,T>::check();
   
-  const unwrap<T1> tmp1(X.get_ref());
-  const unwrap<T2> tmp2(Y.get_ref());
+  const quasi_unwrap<T1> tmp1(X.get_ref());
+  const quasi_unwrap<T2> tmp2(Y.get_ref());
   
   const Mat<eT1>& A = tmp1.M;
   const Mat<T  >& B = tmp2.M;
@@ -56,10 +59,8 @@ kron(const Base<std::complex<T>,T1>& X, const Base<T,T2>& Y)
 
 
 
-//! \brief
-//! kronecker product of two matrices,
-//! with the matrices having different element types
 template<typename T, typename T1, typename T2>
+arma_warn_unused
 inline
 Mat<typename eT_promoter<T1,T2>::eT>
 kron(const Base<T,T1>& X, const Base<std::complex<T>,T2>& Y)
@@ -70,8 +71,8 @@ kron(const Base<T,T1>& X, const Base<std::complex<T>,T2>& Y)
 
   promote_type<T,eT2>::check();
   
-  const unwrap<T1> tmp1(X.get_ref());
-  const unwrap<T2> tmp2(Y.get_ref());
+  const quasi_unwrap<T1> tmp1(X.get_ref());
+  const quasi_unwrap<T2> tmp2(Y.get_ref());
   
   const Mat<T  >& A = tmp1.M;
   const Mat<eT2>& B = tmp2.M;
@@ -81,6 +82,19 @@ kron(const Base<T,T1>& X, const Base<std::complex<T>,T2>& Y)
   glue_kron::direct_kron(out, A, B);
   
   return out;
+  }
+
+
+
+template<typename T1, typename T2>
+arma_warn_unused
+arma_inline
+const SpGlue<T1, T2, spglue_kron>
+kron(const SpBase<typename T1::elem_type,T1>& A, const SpBase<typename T1::elem_type,T2>& B)
+  {
+  arma_extra_debug_sigprint();
+  
+  return SpGlue<T1, T2, spglue_kron>(A.get_ref(), B.get_ref());
   }
 
 

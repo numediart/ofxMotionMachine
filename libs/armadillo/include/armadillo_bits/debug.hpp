@@ -1,10 +1,17 @@
-// Copyright (C) 2008-2013 Conrad Sanderson
-// Copyright (C) 2008-2013 NICTA (www.nicta.com.au)
-// Copyright (C) 2011 Stanislav Funiak
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup debug
@@ -15,16 +22,13 @@
 template<typename T>
 inline
 std::ostream&
-arma_stream_err1(std::ostream* user_stream)
+arma_cout_stream(std::ostream* user_stream)
   {
-  static std::ostream* stream_err1 = &(ARMA_DEFAULT_OSTREAM);
+  static std::ostream* cout_stream = &(ARMA_COUT_STREAM);
   
-  if(user_stream != NULL)
-    {
-    stream_err1 = user_stream;
-    }
+  if(user_stream != NULL)  { cout_stream = user_stream; }
   
-  return *stream_err1;
+  return (*cout_stream);
   }
 
 
@@ -32,81 +36,108 @@ arma_stream_err1(std::ostream* user_stream)
 template<typename T>
 inline
 std::ostream&
-arma_stream_err2(std::ostream* user_stream)
+arma_cerr_stream(std::ostream* user_stream)
   {
-  static std::ostream* stream_err2 = &(ARMA_DEFAULT_OSTREAM);
+  static std::ostream* cerr_stream = &(ARMA_CERR_STREAM);
   
-  if(user_stream != NULL)
-    {
-    stream_err2 = user_stream;
-    }
+  if(user_stream != NULL)  { cerr_stream = user_stream; }
   
-  return *stream_err2;
+  return (*cerr_stream);
   }
 
 
 
 inline
+void
+set_cout_stream(std::ostream& user_stream)
+  {
+  arma_cout_stream<char>(&user_stream);
+  }
+
+
+
+inline
+void
+set_cerr_stream(std::ostream& user_stream)
+  {
+  arma_cerr_stream<char>(&user_stream);
+  }
+
+
+
+inline
+std::ostream&
+get_cout_stream()
+  {
+  return arma_cout_stream<char>(NULL);
+  }
+
+
+
+inline
+std::ostream&
+get_cerr_stream()
+  {
+  return arma_cerr_stream<char>(NULL);
+  }
+
+
+
+//! do not use this function - it's deprecated and will be removed
+inline
+arma_deprecated
 void
 set_stream_err1(std::ostream& user_stream)
   {
-  arma_stream_err1<char>(&user_stream);
+  set_cerr_stream(user_stream);
   }
 
 
 
+//! do not use this function - it's deprecated and will be removed
 inline
+arma_deprecated
 void
 set_stream_err2(std::ostream& user_stream)
   {
-  arma_stream_err2<char>(&user_stream);
+  set_cerr_stream(user_stream);
   }
 
 
 
+//! do not use this function - it's deprecated and will be removed
 inline
+arma_deprecated
 std::ostream&
 get_stream_err1()
   {
-  return arma_stream_err1<char>(NULL);
+  return get_cerr_stream();
   }
 
 
 
+//! do not use this function - it's deprecated and will be removed
 inline
+arma_deprecated
 std::ostream&
 get_stream_err2()
   {
-  return arma_stream_err2<char>(NULL);
+  return get_cerr_stream();
   }
 
 
 
-//
-// arma_stop
-
-//! print a message to get_stream_err1() and/or throw a logic_error exception
+//! print a message to get_cerr_stream() and throw logic_error exception
 template<typename T1>
 arma_cold
 arma_noinline
 static
 void
-arma_stop(const T1& x)
+arma_stop_logic_error(const T1& x)
   {
   #if defined(ARMA_PRINT_ERRORS)
     {
-    std::ostream& out = get_stream_err1();
-    
-    out.flush();
-    
-    out << '\n';
-    out << "error: " << x << '\n';
-    out << '\n';
-    out.flush();
-    }
-  #else
-    {
-    arma_ignore(x);
+    get_cerr_stream() << "\nerror: " << x << std::endl;
     }
   #endif
   
@@ -115,6 +146,7 @@ arma_stop(const T1& x)
 
 
 
+//! print a message to get_cerr_stream() and throw bad_alloc exception
 template<typename T1>
 arma_cold
 arma_noinline
@@ -124,14 +156,7 @@ arma_stop_bad_alloc(const T1& x)
   {
   #if defined(ARMA_PRINT_ERRORS)
     {
-    std::ostream& out = get_stream_err2();
-    
-    out.flush();
-    
-    out << '\n';
-    out << "error: " << x << '\n';
-    out << '\n';
-    out.flush();
+    get_cerr_stream() << "\nerror: " << x << std::endl;
     }
   #else
     {
@@ -144,38 +169,21 @@ arma_stop_bad_alloc(const T1& x)
 
 
 
-//
-// arma_bad
-
-//! print a message to get_stream_err2() and/or throw a run-time error exception
+//! print a message to get_cerr_stream() and throw runtime_error exception
 template<typename T1>
 arma_cold
 arma_noinline
 static
 void
-arma_bad(const T1& x, const bool hurl = true)
+arma_stop_runtime_error(const T1& x)
   {
   #if defined(ARMA_PRINT_ERRORS)
     {
-    std::ostream& out = get_stream_err2();
-    
-    out.flush();
-    
-    out << '\n';
-    out << "error: " << x << '\n';
-    out << '\n';
-    out.flush();
-    }
-  #else
-    {
-    arma_ignore(x);
+    get_cerr_stream() << "\nerror: " << x << std::endl;
     }
   #endif
   
-  if(hurl == true)
-    {
-    throw std::runtime_error( std::string(x) );
-    }
+  throw std::runtime_error( std::string(x) );
   }
 
 
@@ -189,7 +197,7 @@ inline
 void
 arma_print()
   {
-  get_stream_err1() << std::endl;
+  get_cerr_stream() << std::endl;
   }
 
 
@@ -200,7 +208,7 @@ static
 void
 arma_print(const T1& x)
   {
-  get_stream_err1() << x << std::endl;
+  get_cerr_stream() << x << std::endl;
   }
 
 
@@ -212,7 +220,7 @@ static
 void
 arma_print(const T1& x, const T2& y)
   {
-  get_stream_err1() << x << y << std::endl;
+  get_cerr_stream() << x << y << std::endl;
   }
 
 
@@ -224,7 +232,7 @@ static
 void
 arma_print(const T1& x, const T2& y, const T3& z)
   {
-  get_stream_err1() << x << y << z << std::endl;
+  get_cerr_stream() << x << y << z << std::endl;
   }
 
 
@@ -243,7 +251,7 @@ inline
 void
 arma_sigprint(const char* x)
   {
-  get_stream_err1() << "@ " << x;
+  get_cerr_stream() << "@ " << x;
   }
 
 
@@ -256,7 +264,7 @@ inline
 void
 arma_bktprint()
   {
-  get_stream_err1() << std::endl;
+  get_cerr_stream() << std::endl;
   }
 
 
@@ -265,7 +273,7 @@ inline
 void
 arma_bktprint(const T1& x)
   {
-  get_stream_err1() << " [" << x << ']' << std::endl;
+  get_cerr_stream() << " [" << x << ']' << std::endl;
   }
 
 
@@ -275,7 +283,7 @@ inline
 void
 arma_bktprint(const T1& x, const T2& y)
   {
-  get_stream_err1() << " [" << x << y << ']' << std::endl;
+  get_cerr_stream() << " [" << x << y << ']' << std::endl;
   }
 
 
@@ -290,7 +298,7 @@ inline
 void
 arma_thisprint(const void* this_ptr)
   {
-  get_stream_err1() << " [this = " << this_ptr << ']' << std::endl;
+  get_cerr_stream() << " [this = " << this_ptr << ']' << std::endl;
   }
 
 
@@ -305,12 +313,17 @@ arma_cold
 arma_noinline
 static
 void
-arma_warn(const bool state, const T1& x)
+arma_warn(const T1& x)
   {
-  if(state==true)
+  #if defined(ARMA_PRINT_ERRORS)
     {
-    get_stream_err2() << x << std::endl;
+    get_cerr_stream() << "\nwarning: " << x << '\n';
     }
+  #else
+    {
+    arma_ignore(x);
+    }
+  #endif
   }
 
 
@@ -319,12 +332,18 @@ arma_cold
 arma_noinline
 static
 void
-arma_warn(const bool state, const T1& x, const T2& y)
+arma_warn(const T1& x, const T2& y)
   {
-  if(state==true)
+  #if defined(ARMA_PRINT_ERRORS)
     {
-    get_stream_err2() << x << y << std::endl;
+    get_cerr_stream() << "\nwarning: " << x << y << '\n';
     }
+  #else
+    {
+    arma_ignore(x);
+    arma_ignore(y);
+    }
+  #endif
   }
 
 
@@ -333,12 +352,19 @@ arma_cold
 arma_noinline
 static
 void
-arma_warn(const bool state, const T1& x, const T2& y, const T3& z)
+arma_warn(const T1& x, const T2& y, const T3& z)
   {
-  if(state==true)
+  #if defined(ARMA_PRINT_ERRORS)
     {
-    get_stream_err2() << x << y << z << std::endl;
+    get_cerr_stream() << "\nwarning: " << x << y << z << '\n';
     }
+  #else
+    {
+    arma_ignore(x);
+    arma_ignore(y);
+    arma_ignore(z);
+    }
+  #endif
   }
 
 
@@ -353,10 +379,7 @@ inline
 void
 arma_check(const bool state, const T1& x)
   {
-  if(state==true)
-    {
-    arma_stop(arma_boost::str_wrapper(x));
-    }
+  if(state)  { arma_stop_logic_error(arma_str::str_wrapper(x)); }
   }
 
 
@@ -366,10 +389,7 @@ inline
 void
 arma_check(const bool state, const T1& x, const T2& y)
   {
-  if(state==true)
-    {
-    arma_stop( std::string(x) + std::string(y) );
-    }
+  if(state)  { arma_stop_logic_error( std::string(x) + std::string(y) ); }
   }
 
 
@@ -379,10 +399,7 @@ inline
 void
 arma_check_bad_alloc(const bool state, const T1& x)
   {
-  if(state==true)
-    {
-    arma_stop_bad_alloc(x);
-    }
+  if(state)  { arma_stop_bad_alloc(x); }
   }
 
 
@@ -396,7 +413,7 @@ arma_inline
 void
 arma_set_error(bool& err_state, char*& err_msg, const bool expression, const char* message)
   {
-  if(expression == true)
+  if(expression)
     {
     err_state = true;
     err_msg   = const_cast<char*>(message);
@@ -415,7 +432,7 @@ static
 std::string
 arma_incompat_size_string(const uword A_n_rows, const uword A_n_cols, const uword B_n_rows, const uword B_n_cols, const char* x)
   {
-  std::stringstream tmp;
+  std::ostringstream tmp;
   
   tmp << x << ": incompatible matrix dimensions: " << A_n_rows << 'x' << A_n_cols << " and " << B_n_rows << 'x' << B_n_cols;
   
@@ -430,7 +447,7 @@ static
 std::string
 arma_incompat_size_string(const uword A_n_rows, const uword A_n_cols, const uword A_n_slices, const uword B_n_rows, const uword B_n_cols, const uword B_n_slices, const char* x)
   {
-  std::stringstream tmp;
+  std::ostringstream tmp;
   
   tmp << x << ": incompatible cube dimensions: " << A_n_rows << 'x' << A_n_cols << 'x' << A_n_slices << " and " << B_n_rows << 'x' << B_n_cols << 'x' << B_n_slices;
   
@@ -446,7 +463,7 @@ static
 std::string
 arma_incompat_size_string(const subview_cube<eT>& Q, const Mat<eT>& A, const char* x)
   {
-  std::stringstream tmp;
+  std::ostringstream tmp;
   
   tmp << x
       << ": interpreting matrix as cube with dimensions: "
@@ -464,7 +481,7 @@ arma_incompat_size_string(const subview_cube<eT>& Q, const Mat<eT>& A, const cha
 
 
 //
-// functions for checking whether two matrices have the same dimensions
+// functions for checking whether two dense matrices have the same dimensions
 
 
 
@@ -475,7 +492,7 @@ arma_assert_same_size(const uword A_n_rows, const uword A_n_cols, const uword B_
   {
   if( (A_n_rows != B_n_rows) || (A_n_cols != B_n_cols) )
     {
-    arma_stop( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
     }
   }
 
@@ -496,7 +513,7 @@ arma_assert_same_size(const Mat<eT1>& A, const Mat<eT2>& B, const char* x)
   
   if( (A_n_rows != B_n_rows) || (A_n_cols != B_n_cols) )
     {
-    arma_stop( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
     }
   }
 
@@ -517,7 +534,7 @@ arma_assert_same_size(const Proxy<eT1>& A, const Proxy<eT2>& B, const char* x)
   
   if( (A_n_rows != B_n_rows) || (A_n_cols != B_n_cols) )
     {
-    arma_stop( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
     }
   }
 
@@ -537,7 +554,7 @@ arma_assert_same_size(const subview<eT1>& A, const subview<eT2>& B, const char* 
   
   if( (A_n_rows != B_n_rows) || (A_n_cols != B_n_cols) )
     {
-    arma_stop( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
     }
   }
 
@@ -557,7 +574,7 @@ arma_assert_same_size(const Mat<eT1>& A, const subview<eT2>& B, const char* x)
   
   if( (A_n_rows != B_n_rows) || (A_n_cols != B_n_cols) )
     {
-    arma_stop( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
     }
   }
 
@@ -577,7 +594,7 @@ arma_assert_same_size(const subview<eT1>& A, const Mat<eT2>& B, const char* x)
   
   if( (A_n_rows != B_n_rows) || (A_n_cols != B_n_cols) )
     {
-    arma_stop( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
     }
   }
 
@@ -597,7 +614,7 @@ arma_assert_same_size(const Mat<eT1>& A, const Proxy<eT2>& B, const char* x)
   
   if( (A_n_rows != B_n_rows) || (A_n_cols != B_n_cols) )
     {
-    arma_stop( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
     }
   }
 
@@ -617,7 +634,7 @@ arma_assert_same_size(const Proxy<eT1>& A, const Mat<eT2>& B, const char* x)
   
   if( (A_n_rows != B_n_rows) || (A_n_cols != B_n_cols) )
     {
-    arma_stop( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
     }
   }
 
@@ -637,7 +654,7 @@ arma_assert_same_size(const Proxy<eT1>& A, const subview<eT2>& B, const char* x)
   
   if( (A_n_rows != B_n_rows) || (A_n_cols != B_n_cols) )
     {
-    arma_stop( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
     }
   }
 
@@ -657,7 +674,32 @@ arma_assert_same_size(const subview<eT1>& A, const Proxy<eT2>& B, const char* x)
   
   if( (A_n_rows != B_n_rows) || (A_n_cols != B_n_cols) )
     {
-    arma_stop( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
+    }
+  }
+
+
+
+//
+// functions for checking whether two sparse matrices have the same dimensions
+
+
+
+template<typename eT1, typename eT2>
+arma_hot
+inline
+void
+arma_assert_same_size(const SpMat<eT1>& A, const SpMat<eT2>& B, const char* x)
+  {
+  const uword A_n_rows = A.n_rows;
+  const uword A_n_cols = A.n_cols;
+  
+  const uword B_n_rows = B.n_rows;
+  const uword B_n_cols = B.n_cols;
+  
+  if( (A_n_rows != B_n_rows) || (A_n_cols != B_n_cols) )
+    {
+    arma_stop_logic_error( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
     }
   }
 
@@ -675,7 +717,7 @@ arma_assert_same_size(const uword A_n_rows, const uword A_n_cols, const uword A_
   {
   if( (A_n_rows != B_n_rows) || (A_n_cols != B_n_cols) || (A_n_slices != B_n_slices) )
     {
-    arma_stop( arma_incompat_size_string(A_n_rows, A_n_cols, A_n_slices, B_n_rows, B_n_cols, B_n_slices, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A_n_rows, A_n_cols, A_n_slices, B_n_rows, B_n_cols, B_n_slices, x) );
     }
   }
 
@@ -690,7 +732,7 @@ arma_assert_same_size(const Cube<eT1>& A, const Cube<eT2>& B, const char* x)
   {
   if( (A.n_rows != B.n_rows) || (A.n_cols != B.n_cols) || (A.n_slices != B.n_slices) )
     {
-    arma_stop( arma_incompat_size_string(A.n_rows, A.n_cols, A.n_slices, B.n_rows, B.n_cols, B.n_slices, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A.n_rows, A.n_cols, A.n_slices, B.n_rows, B.n_cols, B.n_slices, x) );
     }
   }
 
@@ -704,7 +746,7 @@ arma_assert_same_size(const Cube<eT1>& A, const subview_cube<eT2>& B, const char
   {
   if( (A.n_rows != B.n_rows) || (A.n_cols != B.n_cols) || (A.n_slices != B.n_slices) )
     {
-    arma_stop( arma_incompat_size_string(A.n_rows, A.n_cols, A.n_slices, B.n_rows, B.n_cols, B.n_slices, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A.n_rows, A.n_cols, A.n_slices, B.n_rows, B.n_cols, B.n_slices, x) );
     }
   }
 
@@ -718,7 +760,7 @@ arma_assert_same_size(const subview_cube<eT1>& A, const Cube<eT2>& B, const char
   {
   if( (A.n_rows != B.n_rows) || (A.n_cols != B.n_cols) || (A.n_slices != B.n_slices) )
     {
-    arma_stop( arma_incompat_size_string(A.n_rows, A.n_cols, A.n_slices, B.n_rows, B.n_cols, B.n_slices, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A.n_rows, A.n_cols, A.n_slices, B.n_rows, B.n_cols, B.n_slices, x) );
     }
   }
 
@@ -732,7 +774,7 @@ arma_assert_same_size(const subview_cube<eT1>& A, const subview_cube<eT2>& B, co
   {
   if( (A.n_rows != B.n_rows) || (A.n_cols != B.n_cols) || (A.n_slices != B.n_slices))
     {
-    arma_stop( arma_incompat_size_string(A.n_rows, A.n_cols, A.n_slices, B.n_rows, B.n_cols, B.n_slices, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A.n_rows, A.n_cols, A.n_slices, B.n_rows, B.n_cols, B.n_slices, x) );
     }
   }
 
@@ -755,7 +797,7 @@ arma_assert_same_size(const ProxyCube<eT1>& A, const ProxyCube<eT2>& B, const ch
   
   if( (A_n_rows != B_n_rows) || (A_n_cols != B_n_cols) || (A_n_slices != B_n_slices))
     {
-    arma_stop( arma_incompat_size_string(A_n_rows, A_n_cols, A_n_slices, B_n_rows, B_n_cols, B_n_slices, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A_n_rows, A_n_cols, A_n_slices, B_n_rows, B_n_cols, B_n_slices, x) );
     }
   }
 
@@ -774,7 +816,7 @@ arma_assert_same_size(const Cube<eT1>& A, const Mat<eT2>& B, const char* x)
   {
   if( (A.n_rows != B.n_rows) || (A.n_cols != B.n_cols) || (A.n_slices != 1) )
     {
-    arma_stop( arma_incompat_size_string(A.n_rows, A.n_cols, A.n_slices, B.n_rows, B.n_cols, 1, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A.n_rows, A.n_cols, A.n_slices, B.n_rows, B.n_cols, 1, x) );
     }
   }
 
@@ -788,7 +830,7 @@ arma_assert_same_size(const Mat<eT1>& A, const Cube<eT2>& B, const char* x)
   {
   if( (A.n_rows != B.n_rows) || (A.n_cols != B.n_cols) || (1 != B.n_slices) )
     {
-    arma_stop( arma_incompat_size_string(A.n_rows, A.n_cols, 1, B.n_rows, B.n_cols, B.n_slices, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A.n_rows, A.n_cols, 1, B.n_rows, B.n_cols, B.n_slices, x) );
     }
   }
 
@@ -802,7 +844,7 @@ arma_assert_same_size(const subview_cube<eT1>& A, const Mat<eT2>& B, const char*
   {
   if( (A.n_rows != B.n_rows) || (A.n_cols != B.n_cols) || (A.n_slices != 1) )
     {
-    arma_stop( arma_incompat_size_string(A.n_rows, A.n_cols, A.n_slices, B.n_rows, B.n_cols, 1, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A.n_rows, A.n_cols, A.n_slices, B.n_rows, B.n_cols, 1, x) );
     }
   }
 
@@ -816,7 +858,7 @@ arma_assert_same_size(const Mat<eT1>& A, const subview_cube<eT2>& B, const char*
   {
   if( (A.n_rows != B.n_rows) || (A.n_cols != B.n_cols) || (1 != B.n_slices) )
     {
-    arma_stop( arma_incompat_size_string(A.n_rows, A.n_cols, 1, B.n_rows, B.n_cols, B.n_slices, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A.n_rows, A.n_cols, 1, B.n_rows, B.n_cols, B.n_slices, x) );
     }
   }
 
@@ -837,14 +879,14 @@ arma_assert_cube_as_mat(const Mat<eT>& M, const T1& Q, const char* x, const bool
     {
     if( ( (Q_n_rows == 1) || (Q_n_cols == 1) || (Q_n_slices == 1) ) == false )
       {
-      std::stringstream tmp;
+      std::ostringstream tmp;
         
       tmp << x
           << ": can't interpret cube with dimensions "
           << Q_n_rows << 'x' << Q_n_cols << 'x' << Q_n_slices 
           << " as a matrix; one of the dimensions must be 1";
       
-      arma_stop( tmp.str() );
+      arma_stop_logic_error( tmp.str() );
       }
     }
   else
@@ -853,46 +895,46 @@ arma_assert_cube_as_mat(const Mat<eT>& M, const T1& Q, const char* x, const bool
       {
       if( (M_vec_state == 1) && (Q_n_cols != 1) )
         {
-        std::stringstream tmp;
+        std::ostringstream tmp;
         
         tmp << x
             << ": can't interpret cube with dimensions "
             << Q_n_rows << 'x' << Q_n_cols << 'x' << Q_n_slices
             << " as a column vector";
         
-        arma_stop( tmp.str() );
+        arma_stop_logic_error( tmp.str() );
         }
       
       if( (M_vec_state == 2) && (Q_n_rows != 1) )
         {
-        std::stringstream tmp;
+        std::ostringstream tmp;
         
         tmp << x
             << ": can't interpret cube with dimensions "
             << Q_n_rows << 'x' << Q_n_cols << 'x' << Q_n_slices
             << " as a row vector";
         
-        arma_stop( tmp.str() );
+        arma_stop_logic_error( tmp.str() );
         }
       }
     else
       {
       if( (Q_n_cols != 1) && (Q_n_rows != 1) )
         {
-        std::stringstream tmp;
+        std::ostringstream tmp;
         
         tmp << x
             << ": can't interpret cube with dimensions "
             << Q_n_rows << 'x' << Q_n_cols << 'x' << Q_n_slices
             << " as a vector";
         
-        arma_stop( tmp.str() );
+        arma_stop_logic_error( tmp.str() );
         }
       }
     }
   
   
-  if(check_compat_size == true)
+  if(check_compat_size)
     {
     const uword M_n_rows = M.n_rows;
     const uword M_n_cols = M.n_cols;
@@ -910,7 +952,7 @@ arma_assert_cube_as_mat(const Mat<eT>& M, const T1& Q, const char* x, const bool
           == false
         )
         {
-        std::stringstream tmp;
+        std::ostringstream tmp;
         
         tmp << x
             << ": can't interpret cube with dimensions "
@@ -918,7 +960,7 @@ arma_assert_cube_as_mat(const Mat<eT>& M, const T1& Q, const char* x, const bool
             << " as a matrix with dimensions "
             << M_n_rows << 'x' << M_n_cols;
         
-        arma_stop( tmp.str() );
+        arma_stop_logic_error( tmp.str() );
         }
       }
     else
@@ -927,7 +969,7 @@ arma_assert_cube_as_mat(const Mat<eT>& M, const T1& Q, const char* x, const bool
         {
         if( (M_vec_state == 1) && (Q_n_rows != M_n_rows) )
           {
-          std::stringstream tmp;
+          std::ostringstream tmp;
           
           tmp << x
               << ": can't interpret cube with dimensions "
@@ -935,12 +977,12 @@ arma_assert_cube_as_mat(const Mat<eT>& M, const T1& Q, const char* x, const bool
               << " as a column vector with dimensions "
               << M_n_rows << 'x' << M_n_cols;
           
-          arma_stop( tmp.str() );
+          arma_stop_logic_error( tmp.str() );
           }
         
         if( (M_vec_state == 2) && (Q_n_cols != M_n_cols) )
           {
-          std::stringstream tmp;
+          std::ostringstream tmp;
           
           tmp << x
               << ": can't interpret cube with dimensions "
@@ -948,14 +990,14 @@ arma_assert_cube_as_mat(const Mat<eT>& M, const T1& Q, const char* x, const bool
               << " as a row vector with dimensions "
               << M_n_rows << 'x' << M_n_cols;
           
-          arma_stop( tmp.str() );
+          arma_stop_logic_error( tmp.str() );
           }
         }
       else
         {
         if( ( (M_n_cols == Q_n_slices) || (M_n_rows == Q_n_slices) ) == false )
           {
-          std::stringstream tmp;
+          std::ostringstream tmp;
           
           tmp << x
               << ": can't interpret cube with dimensions "
@@ -963,7 +1005,7 @@ arma_assert_cube_as_mat(const Mat<eT>& M, const T1& Q, const char* x, const bool
               << " as a vector with dimensions "
               << M_n_rows << 'x' << M_n_cols;
           
-          arma_stop( tmp.str() );
+          arma_stop_logic_error( tmp.str() );
           }
         }
       }
@@ -984,7 +1026,7 @@ arma_assert_mul_size(const uword A_n_rows, const uword A_n_cols, const uword B_n
   {
   if(A_n_cols != B_n_rows)
     {
-    arma_stop( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A_n_rows, A_n_cols, B_n_rows, B_n_cols, x) );
     }
   }
 
@@ -1002,7 +1044,7 @@ arma_assert_mul_size(const Mat<eT1>& A, const Mat<eT2>& B, const char* x)
   
   if(A_n_cols != B_n_rows)
     {
-    arma_stop( arma_incompat_size_string(A.n_rows, A_n_cols, B_n_rows, B.n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A.n_rows, A_n_cols, B_n_rows, B.n_cols, x) );
     }
   }
 
@@ -1023,7 +1065,7 @@ arma_assert_mul_size(const Mat<eT1>& A, const Mat<eT2>& B, const bool do_trans_A
     const uword final_A_n_rows = (do_trans_A == false) ? A.n_rows : A.n_cols;
     const uword final_B_n_cols = (do_trans_B == false) ? B.n_cols : B.n_rows;
     
-    arma_stop( arma_incompat_size_string(final_A_n_rows, final_A_n_cols, final_B_n_rows, final_B_n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(final_A_n_rows, final_A_n_cols, final_B_n_rows, final_B_n_cols, x) );
     }
   }
 
@@ -1043,7 +1085,7 @@ arma_assert_trans_mul_size(const uword A_n_rows, const uword A_n_cols, const uwo
     const uword final_A_n_rows = (do_trans_A == false) ? A_n_rows : A_n_cols;
     const uword final_B_n_cols = (do_trans_B == false) ? B_n_cols : B_n_rows;
     
-    arma_stop( arma_incompat_size_string(final_A_n_rows, final_A_n_cols, final_B_n_rows, final_B_n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(final_A_n_rows, final_A_n_cols, final_B_n_rows, final_B_n_cols, x) );
     }
   }
 
@@ -1057,7 +1099,7 @@ arma_assert_mul_size(const Mat<eT1>& A, const subview<eT2>& B, const char* x)
   {
   if(A.n_cols != B.n_rows)
     {
-    arma_stop( arma_incompat_size_string(A.n_rows, A.n_cols, B.n_rows, B.n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A.n_rows, A.n_cols, B.n_rows, B.n_cols, x) );
     }
   }
 
@@ -1071,7 +1113,7 @@ arma_assert_mul_size(const subview<eT1>& A, const Mat<eT2>& B, const char* x)
   {
   if(A.n_cols != B.n_rows)
     {
-    arma_stop( arma_incompat_size_string(A.n_rows, A.n_cols, B.n_rows, B.n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A.n_rows, A.n_cols, B.n_rows, B.n_cols, x) );
     }
   }
 
@@ -1085,7 +1127,99 @@ arma_assert_mul_size(const subview<eT1>& A, const subview<eT2>& B, const char* x
   {
   if(A.n_cols != B.n_rows)
     {
-    arma_stop( arma_incompat_size_string(A.n_rows, A.n_cols, B.n_rows, B.n_cols, x) );
+    arma_stop_logic_error( arma_incompat_size_string(A.n_rows, A.n_cols, B.n_rows, B.n_cols, x) );
+    }
+  }
+
+
+
+template<typename T1>
+arma_hot
+inline
+void
+arma_assert_blas_size(const T1& A)
+  {
+  if(sizeof(uword) >= sizeof(blas_int))
+    {
+    bool overflow;
+    
+    overflow = (A.n_rows > ARMA_MAX_BLAS_INT);
+    overflow = (A.n_cols > ARMA_MAX_BLAS_INT) || overflow;
+    
+    if(overflow)
+      {
+      arma_stop_runtime_error("integer overflow: matrix dimensions are too large for integer type used by BLAS and LAPACK");
+      }
+    }
+  }
+
+
+
+template<typename T1, typename T2>
+arma_hot
+inline
+void
+arma_assert_blas_size(const T1& A, const T2& B)
+  {
+  if(sizeof(uword) >= sizeof(blas_int))
+    {
+    bool overflow;
+    
+    overflow = (A.n_rows > ARMA_MAX_BLAS_INT);
+    overflow = (A.n_cols > ARMA_MAX_BLAS_INT) || overflow;
+    overflow = (B.n_rows > ARMA_MAX_BLAS_INT) || overflow;
+    overflow = (B.n_cols > ARMA_MAX_BLAS_INT) || overflow;
+    
+    if(overflow)
+      {
+      arma_stop_runtime_error("integer overflow: matrix dimensions are too large for integer type used by BLAS and LAPACK");
+      }
+    }
+  }
+
+
+
+template<typename T1>
+arma_hot
+inline
+void
+arma_assert_atlas_size(const T1& A)
+  {
+  if(sizeof(uword) >= sizeof(int))
+    {
+    bool overflow;
+    
+    overflow = (A.n_rows > INT_MAX);
+    overflow = (A.n_cols > INT_MAX) || overflow;
+    
+    if(overflow)
+      {
+      arma_stop_runtime_error("integer overflow: matrix dimensions are too large for integer type used by ATLAS");
+      }
+    }
+  }
+
+
+
+template<typename T1, typename T2>
+arma_hot
+inline
+void
+arma_assert_atlas_size(const T1& A, const T2& B)
+  {
+  if(sizeof(uword) >= sizeof(int))
+    {
+    bool overflow;
+    
+    overflow = (A.n_rows > INT_MAX);
+    overflow = (A.n_cols > INT_MAX) || overflow;
+    overflow = (B.n_rows > INT_MAX) || overflow;
+    overflow = (B.n_cols > INT_MAX) || overflow;
+    
+    if(overflow)
+      {
+      arma_stop_runtime_error("integer overflow: matrix dimensions are too large for integer type used by ATLAS");
+      }
     }
   }
 
@@ -1104,14 +1238,16 @@ arma_assert_mul_size(const subview<eT1>& A, const subview<eT2>& B, const char* x
   
   #undef ARMA_EXTRA_DEBUG
   
-  #define arma_debug_print                 true ? (void)0 : arma_print
-  #define arma_debug_warn                  true ? (void)0 : arma_warn
-  #define arma_debug_check                 true ? (void)0 : arma_check
-  #define arma_debug_set_error             true ? (void)0 : arma_set_error
-  #define arma_debug_assert_same_size      true ? (void)0 : arma_assert_same_size
-  #define arma_debug_assert_mul_size       true ? (void)0 : arma_assert_mul_size
-  #define arma_debug_assert_trans_mul_size true ? (void)0 : arma_assert_trans_mul_size
-  #define arma_debug_assert_cube_as_mat    true ? (void)0 : arma_assert_cube_as_mat
+  #define arma_debug_print                   true ? (void)0 : arma_print
+  #define arma_debug_warn                    true ? (void)0 : arma_warn
+  #define arma_debug_check                   true ? (void)0 : arma_check
+  #define arma_debug_set_error               true ? (void)0 : arma_set_error
+  #define arma_debug_assert_same_size        true ? (void)0 : arma_assert_same_size
+  #define arma_debug_assert_mul_size         true ? (void)0 : arma_assert_mul_size
+  #define arma_debug_assert_trans_mul_size   true ? (void)0 : arma_assert_trans_mul_size
+  #define arma_debug_assert_cube_as_mat      true ? (void)0 : arma_assert_cube_as_mat
+  #define arma_debug_assert_blas_size        true ? (void)0 : arma_assert_blas_size
+  #define arma_debug_assert_atlas_size       true ? (void)0 : arma_assert_atlas_size
   
 #else
   
@@ -1123,6 +1259,8 @@ arma_assert_mul_size(const subview<eT1>& A, const subview<eT2>& B, const char* x
   #define arma_debug_assert_mul_size       arma_assert_mul_size
   #define arma_debug_assert_trans_mul_size arma_assert_trans_mul_size
   #define arma_debug_assert_cube_as_mat    arma_assert_cube_as_mat
+  #define arma_debug_assert_blas_size      arma_assert_blas_size
+  #define arma_debug_assert_atlas_size     arma_assert_atlas_size
   
 #endif
 
@@ -1171,27 +1309,34 @@ arma_assert_mul_size(const subview<eT1>& A, const subview<eT2>& B, const char* x
         const bool  little_endian = (endian_test.b[0] == 1);
         const char* nickname      = ARMA_VERSION_NAME;
         
-        std::ostream& out = get_stream_err1();
+        std::ostream& out = get_cerr_stream();
         
         out << "@ ---" << '\n';
         out << "@ Armadillo "
             << arma_version::major << '.' << arma_version::minor << '.' << arma_version::patch
             << " (" << nickname << ")\n";
         
-        out << "@ arma_config::use_wrapper  = " << arma_config::use_wrapper  << '\n';
-        out << "@ arma_config::use_cxx11    = " << arma_config::use_cxx11    << '\n';
+        out << "@ arma_config::wrapper      = " << arma_config::wrapper      << '\n';
+        out << "@ arma_config::cxx11        = " << arma_config::cxx11        << '\n';
+        out << "@ arma_config::posix        = " << arma_config::posix        << '\n';
+        out << "@ arma_config::openmp       = " << arma_config::openmp       << '\n';
         out << "@ arma_config::lapack       = " << arma_config::lapack       << '\n';
         out << "@ arma_config::blas         = " << arma_config::blas         << '\n';
+        out << "@ arma_config::newarp       = " << arma_config::newarp       << '\n';
         out << "@ arma_config::arpack       = " << arma_config::arpack       << '\n';
+        out << "@ arma_config::superlu      = " << arma_config::superlu      << '\n';
         out << "@ arma_config::atlas        = " << arma_config::atlas        << '\n';
         out << "@ arma_config::hdf5         = " << arma_config::hdf5         << '\n';
         out << "@ arma_config::good_comp    = " << arma_config::good_comp    << '\n';
         out << "@ arma_config::extra_code   = " << arma_config::extra_code   << '\n';
+        out << "@ arma_config::hidden_args  = " << arma_config::hidden_args  << '\n';
         out << "@ arma_config::mat_prealloc = " << arma_config::mat_prealloc << '\n';
+        out << "@ arma_config::mp_threshold = " << arma_config::mp_threshold << '\n';
+        out << "@ arma_config::mp_threads   = " << arma_config::mp_threads   << '\n';
         out << "@ sizeof(void*)    = " << sizeof(void*)    << '\n';
-        out << "@ sizeof(uword)    = " << sizeof(uword)    << '\n';
         out << "@ sizeof(int)      = " << sizeof(int)      << '\n';
         out << "@ sizeof(long)     = " << sizeof(long)     << '\n';
+        out << "@ sizeof(uword)    = " << sizeof(uword)    << '\n';
         out << "@ sizeof(blas_int) = " << sizeof(blas_int) << '\n';
         out << "@ little_endian    = " << little_endian    << '\n';
         out << "@ ---" << std::endl;

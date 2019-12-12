@@ -1,10 +1,17 @@
-// Copyright (C) 2009-2010 Conrad Sanderson
-// Copyright (C) 2009-2010 NICTA (www.nicta.com.au)
-// Copyright (C) 2009-2010 Dimitrios Bouzas
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 
@@ -16,7 +23,15 @@
 class glue_kron
   {
   public:
-
+  
+  template<typename T1, typename T2>
+  struct traits
+    {
+    static const bool is_row  = (T1::is_row && T2::is_row);
+    static const bool is_col  = (T1::is_col && T2::is_col);
+    static const bool is_xvec = false;
+    };
+  
   template<typename eT> inline static void direct_kron(Mat<eT>&                out, const Mat<eT>&                A, const Mat<eT>&                B);
   template<typename T>  inline static void direct_kron(Mat< std::complex<T> >& out, const Mat< std::complex<T> >& A, const Mat<T>&                 B);
   template<typename T>  inline static void direct_kron(Mat< std::complex<T> >& out, const Mat<T>&                 A, const Mat< std::complex<T> >& B);
@@ -27,4 +42,3 @@ class glue_kron
 
 
 //! @}
-

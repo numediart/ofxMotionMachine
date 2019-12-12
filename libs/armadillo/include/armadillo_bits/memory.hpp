@@ -1,9 +1,17 @@
-// Copyright (C) 2012-2014 Conrad Sanderson
-// Copyright (C) 2012-2014 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup memory
@@ -14,14 +22,12 @@ class memory
   {
   public:
   
-                        arma_inline             static uword enlarge_to_mult_of_chunksize(const uword n_elem);
+  inline arma_deprecated static uword enlarge_to_mult_of_chunksize(const uword n_elem);
   
-  template<typename eT>      inline arma_malloc static eT*   acquire(const uword n_elem);
+  template<typename eT> inline arma_malloc     static eT*         acquire(const uword n_elem);
+  template<typename eT> inline arma_deprecated static eT* acquire_chunked(const uword n_elem);
   
-  template<typename eT>      inline arma_malloc static eT*   acquire_chunked(const uword n_elem);
-  
-  template<typename eT> arma_inline             static void  release(eT* mem);
-  
+  template<typename eT> arma_inline static void release(eT* mem);
   
   template<typename eT> arma_inline static bool      is_aligned(const eT*  mem);
   template<typename eT> arma_inline static void mark_as_aligned(      eT*& mem);
@@ -30,16 +36,13 @@ class memory
 
 
 
-arma_inline
+//! no longer used; this function will be removed
+inline
+arma_deprecated
 uword
 memory::enlarge_to_mult_of_chunksize(const uword n_elem)
   {
-  const uword chunksize = arma_config::spmat_chunksize;
-  
-  // this relies on integer division
-  const uword n_elem_mod = (n_elem > 0) ? (((n_elem-1) / chunksize) + 1) * chunksize : uword(0);
-  
-  return n_elem_mod;
+  return n_elem;
   }
 
 
@@ -50,6 +53,8 @@ arma_malloc
 eT*
 memory::acquire(const uword n_elem)
   {
+  if(n_elem == 0)  { return NULL; }
+  
   arma_debug_check
     (
     ( size_t(n_elem) > (std::numeric_limits<size_t>::max() / sizeof(eT)) ),
@@ -64,21 +69,29 @@ memory::acquire(const uword n_elem)
     }
   #elif defined(ARMA_USE_MKL_ALLOC)
     {
-    out_memptr = (eT *) mkl_malloc( sizeof(eT)*n_elem, 128 );
+    out_memptr = (eT *) mkl_malloc( sizeof(eT)*n_elem, 32 );
     }
   #elif defined(ARMA_HAVE_POSIX_MEMALIGN)
     {
-    eT* memptr;
+    eT* memptr = NULL;
     
-    const size_t alignment = 16;  // change the 16 to 64 if you wish to align to the cache line
+    const size_t n_bytes   = sizeof(eT)*size_t(n_elem);
+    const size_t alignment = (n_bytes >= size_t(1024)) ? size_t(32) : size_t(16);
     
-    int status = posix_memalign((void **)&memptr, ( (alignment >= sizeof(void*)) ? alignment : sizeof(void*) ), sizeof(eT)*n_elem);
+    // TODO: investigate apparent memory leak when using alignment >= 64 (as shown on Fedora 28, glibc 2.27)
+    int status = posix_memalign((void **)&memptr, ( (alignment >= sizeof(void*)) ? alignment : sizeof(void*) ), n_bytes);
     
     out_memptr = (status == 0) ? memptr : NULL;
     }
   #elif defined(_MSC_VER)
     {
-    out_memptr = (eT *) _aligned_malloc( sizeof(eT)*n_elem, 16 );  // lives in malloc.h
+    //out_memptr = (eT *) malloc(sizeof(eT)*n_elem);
+    //out_memptr = (eT *) _aligned_malloc( sizeof(eT)*n_elem, 16 );  // lives in malloc.h
+    
+    const size_t n_bytes   = sizeof(eT)*size_t(n_elem);
+    const size_t alignment = (n_bytes >= size_t(1024)) ? size_t(32) : size_t(16);
+    
+    out_memptr = (eT *) _aligned_malloc( n_bytes, alignment );
     }
   #else
     {
@@ -89,26 +102,21 @@ memory::acquire(const uword n_elem)
   
   // TODO: for mingw, use __mingw_aligned_malloc
   
-  if(n_elem > 0)
-    {
-    arma_check_bad_alloc( (out_memptr == NULL), "arma::memory::acquire(): out of memory" );
-    }
+  arma_check_bad_alloc( (out_memptr == NULL), "arma::memory::acquire(): out of memory" );
   
   return out_memptr;
   }
 
 
 
-//! get memory in multiples of chunks, holding at least n_elem
+//! no longer used; this function will be removed; replace with call to memory::acquire()
 template<typename eT>
 inline
-arma_malloc
+arma_deprecated
 eT*
 memory::acquire_chunked(const uword n_elem)
   {
-  const uword n_elem_mod = memory::enlarge_to_mult_of_chunksize(n_elem);
-  
-  return memory::acquire<eT>(n_elem_mod);
+  return memory::acquire<eT>(n_elem);
   }
 
 
@@ -118,6 +126,8 @@ arma_inline
 void
 memory::release(eT* mem)
   {
+  if(mem == NULL)  { return; }
+  
   #if   defined(ARMA_USE_TBB_ALLOC)
     {
     scalable_free( (void *)(mem) );
@@ -132,6 +142,7 @@ memory::release(eT* mem)
     }
   #elif defined(_MSC_VER)
     {
+    //free( (void *)(mem) );
     _aligned_free( (void *)(mem) );
     }
   #else

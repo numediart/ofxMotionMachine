@@ -1,10 +1,17 @@
-// Copyright (C) 2010-2012 Conrad Sanderson
-// Copyright (C) 2010-2012 NICTA (www.nicta.com.au)
-// Copyright (C) 2011 Stanislav Funiak
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 
@@ -15,7 +22,7 @@
 struct span_alt {};
 
 
-template<typename Dummy = int>
+template<typename junk = int>
 class span_base
   {
   public:
@@ -23,8 +30,8 @@ class span_base
   };
 
 
-template<typename Dummy>
-const span_alt span_base<Dummy>::all = span_alt();
+template<typename junk>
+const span_alt span_base<junk>::all = span_alt();
 
 
 class span : public span_base<>
@@ -37,23 +44,22 @@ class span : public span_base<>
   
   inline
   span()
-    : whole(true)
+    : a(0)
+    , b(0)
+    , whole(true)
     {
     }
   
   
   inline
   span(const span_alt&)
-    : whole(true)
+    : a(0)
+    , b(0)
+    , whole(true)
     {
     }
   
-  // TODO:
-  // if the "explicit" keyword is removed or commented out,
-  // the compiler will be able to automatically convert integers to an instance of the span class.
-  // this is useful for Cube::operator()(span&, span&, span&),
-  // but it might have unintended consequences or interactions elsewhere.
-  // as such, removal of "explicit" needs thorough testing.
+  
   inline
   explicit
   span(const uword in_a)
@@ -64,7 +70,10 @@ class span : public span_base<>
     }
   
   
+  // the "explicit" keyword is required here to prevent a C++11 compiler
+  // automatically converting {a,b} into an instance of span() when submatrices are specified
   inline
+  explicit
   span(const uword in_a, const uword in_b)
     : a(in_a)
     , b(in_b)

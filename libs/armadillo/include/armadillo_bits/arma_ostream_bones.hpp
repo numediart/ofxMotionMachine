@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2014 Conrad Sanderson
-// Copyright (C) 2008-2014 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup arma_ostream
@@ -41,21 +49,21 @@ class arma_ostream
   
   template<typename eT> inline static void print_elem_zero(std::ostream& o, const bool modify);
   
-  template<typename eT> arma_inline static void print_elem(std::ostream& o, const eT&              x, const bool modify);
-  template<typename  T>      inline static void print_elem(std::ostream& o, const std::complex<T>& x, const bool modify);
+  template<typename eT> inline static void print_elem(std::ostream& o, const eT&              x, const bool modify);
+  template<typename  T> inline static void print_elem(std::ostream& o, const std::complex<T>& x, const bool modify);
 
-  template<typename eT> inline static void print(std::ostream& o, const  Mat<eT>& m, const bool modify);
-  template<typename eT> inline static void print(std::ostream& o, const Cube<eT>& m, const bool modify);
+  template<typename eT> arma_cold inline static void print(std::ostream& o, const  Mat<eT>& m, const bool modify);
+  template<typename eT> arma_cold inline static void print(std::ostream& o, const Cube<eT>& m, const bool modify);
   
-  template<typename oT> inline static void print(std::ostream& o, const field<oT>&         m);
-  template<typename oT> inline static void print(std::ostream& o, const subview_field<oT>& m);
+  template<typename oT> arma_cold inline static void print(std::ostream& o, const field<oT>&         m);
+  template<typename oT> arma_cold inline static void print(std::ostream& o, const subview_field<oT>& m);
 
 
-  template<typename eT> inline static void print_dense(std::ostream& o, const SpMat<eT>& m, const bool modify);
-  template<typename eT> inline static void       print(std::ostream& o, const SpMat<eT>& m, const bool modify);
+  template<typename eT> arma_cold inline static void print_dense(std::ostream& o, const SpMat<eT>& m, const bool modify);
+  template<typename eT> arma_cold inline static void       print(std::ostream& o, const SpMat<eT>& m, const bool modify);
   
-  inline static void print(std::ostream& o, const SizeMat&  S);
-  inline static void print(std::ostream& o, const SizeCube& S);
+  arma_cold inline static void print(std::ostream& o, const SizeMat&  S);
+  arma_cold inline static void print(std::ostream& o, const SizeCube& S);
   };
 
 

@@ -1,9 +1,17 @@
-// Copyright (C) 2009-2012 Conrad Sanderson
-// Copyright (C) 2009-2012 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup fn_stddev
@@ -12,70 +20,63 @@
 
 
 template<typename T1>
-inline
-const mtOp<typename T1::pod_type, T1, op_stddev>
-stddev
-  (
-  const T1& X,
-  const uword norm_type = 0,
-  const uword dim = 0,
-  const typename enable_if< is_arma_type<T1>::value       == true  >::result* junk1 = 0,
-  const typename enable_if< resolves_to_vector<T1>::value == false >::result* junk2 = 0
-  )
-  {
-  arma_extra_debug_sigprint();
-  arma_ignore(junk1);
-  arma_ignore(junk2);
-  
-  return mtOp<typename T1::pod_type, T1, op_stddev>(X, norm_type, dim);
-  }
-
-
-
-template<typename T1>
-inline
-const mtOp<typename T1::pod_type, T1, op_stddev>
-stddev
-  (
-  const T1& X,
-  const uword norm_type,
-  const uword dim,
-  const typename enable_if<resolves_to_vector<T1>::value == true>::result* junk = 0
-  )
-  {
-  arma_extra_debug_sigprint();
-  arma_ignore(junk);
-  
-  return mtOp<typename T1::pod_type, T1, op_stddev>(X, norm_type, dim);
-  }
-
-
-
-template<typename T1>
-inline
 arma_warn_unused
-typename T1::pod_type
-stddev
-  (
-  const T1& X,
-  const uword norm_type = 0,
-  const arma_empty_class junk1 = arma_empty_class(),
-  const typename enable_if<resolves_to_vector<T1>::value == true>::result* junk2 = 0
-  )
+inline
+typename
+enable_if2
+  <
+  is_arma_type<T1>::value && resolves_to_vector<T1>::yes, 
+  typename T1::pod_type
+  >::result
+stddev(const T1& X, const uword norm_type = 0)
   {
   arma_extra_debug_sigprint();
-  arma_ignore(junk1);
-  arma_ignore(junk2);
-  
+
   return std::sqrt( op_var::var_vec(X, norm_type) );
   }
 
 
 
-template<typename T>
-arma_inline
+template<typename T1>
 arma_warn_unused
-const typename arma_scalar_only<T>::result
+inline
+typename
+enable_if2
+  <
+  is_arma_type<T1>::value && resolves_to_vector<T1>::no, 
+  const mtOp<typename T1::pod_type, T1, op_stddev>
+  >::result
+stddev(const T1& X, const uword norm_type = 0)
+  {
+  arma_extra_debug_sigprint();
+
+  return mtOp<typename T1::pod_type, T1, op_stddev>(X, norm_type, 0);
+  }
+
+
+
+template<typename T1>
+arma_warn_unused
+inline
+typename
+enable_if2
+  <
+  is_arma_type<T1>::value,
+  const mtOp<typename T1::pod_type, T1, op_stddev>
+  >::result
+stddev(const T1& X, const uword norm_type, const uword dim)
+  {
+  arma_extra_debug_sigprint();
+
+  return mtOp<typename T1::pod_type, T1, op_stddev>(X, norm_type, dim);
+  }
+
+
+
+template<typename T>
+arma_warn_unused
+arma_inline
+typename arma_scalar_only<T>::result
 stddev(const T&)
   {
   return T(0);

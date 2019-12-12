@@ -1,9 +1,17 @@
-// Copyright (C) 2013 Conrad Sanderson
-// Copyright (C) 2013 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 
@@ -25,7 +33,7 @@ op_any::any_vec_helper(const Base<typename T1::elem_type, T1>& X)
   
   const uword n_elem = P.get_n_elem();
   
-  if(Proxy<T1>::prefer_at_accessor == false)
+  if(Proxy<T1>::use_at == false)
     {
     typename Proxy<T1>::ea_type Pea = P.get_ea();
     
@@ -51,6 +59,53 @@ op_any::any_vec_helper(const Base<typename T1::elem_type, T1>& X)
 
 
 
+template<typename eT>
+inline
+bool
+op_any::any_vec_helper(const subview<eT>& X)
+  {
+  arma_extra_debug_sigprint();
+  
+  const uword X_n_rows = X.n_rows;
+  const uword X_n_cols = X.n_cols;
+  
+  if(X_n_rows == 1)
+    {
+    for(uword col=0; col < X_n_cols; ++col)
+      {
+      if(X.at(0,col) != eT(0))  { return true; }
+      }
+    }
+  else
+    {
+    for(uword col=0; col < X_n_cols; ++col)
+      {
+      const eT* X_colmem = X.colptr(col);
+      
+      for(uword row=0; row < X_n_rows; ++row)
+        {
+        if(X_colmem[row] != eT(0))  { return true; }
+        }
+      }
+    }
+  
+  return false;
+  }
+
+
+
+template<typename T1>
+inline
+bool
+op_any::any_vec_helper(const Op<T1, op_vectorise_col>& X)
+  {
+  arma_extra_debug_sigprint();
+  
+  return op_any::any_vec_helper(X.m);
+  }
+
+
+
 template<typename T1, typename op_type>
 inline
 bool
@@ -72,7 +127,7 @@ op_any::any_vec_helper
   const Proxy<T1> P(X.m);
   
   
-  if(Proxy<T1>::prefer_at_accessor == false)
+  if(Proxy<T1>::use_at == false)
     {
     typename Proxy<T1>::ea_type Pea = P.get_ea();
     
@@ -149,9 +204,9 @@ op_any::any_vec_helper
   
   arma_debug_assert_same_size(A, B, "relational operator");
   
-  const bool prefer_at_accessor = Proxy<T1>::prefer_at_accessor || Proxy<T2>::prefer_at_accessor;
+  const bool use_at = (Proxy<T1>::use_at || Proxy<T2>::use_at);
   
-  if(prefer_at_accessor == false)
+  if(use_at == false)
     {
     ea_type1 PA = A.get_ea();
     ea_type2 PB = B.get_ea();
@@ -230,7 +285,7 @@ op_any::apply_helper(Mat<uword>& out, const Proxy<T1>& P, const uword dim)
     
     uword* out_mem = out.memptr();
     
-    if(is_Mat<typename Proxy<T1>::stored_type>::value == true)
+    if(is_Mat<typename Proxy<T1>::stored_type>::value)
       {
       const unwrap<typename Proxy<T1>::stored_type> U(P.Q);
       
@@ -261,7 +316,7 @@ op_any::apply_helper(Mat<uword>& out, const Proxy<T1>& P, const uword dim)
     
     uword* out_mem = out.memptr();
     
-    if(is_Mat<typename Proxy<T1>::stored_type>::value == true)
+    if(is_Mat<typename Proxy<T1>::stored_type>::value)
       {
       const unwrap<typename Proxy<T1>::stored_type> U(P.Q);
       

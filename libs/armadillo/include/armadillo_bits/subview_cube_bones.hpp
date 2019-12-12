@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2014 Conrad Sanderson
-// Copyright (C) 2008-2014 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup subview_cube
@@ -66,7 +74,9 @@ class subview_cube : public BaseCube<eT, subview_cube<eT> >
   template<typename T1> inline void operator-= (const Base<eT,T1>& x);
   template<typename T1> inline void operator%= (const Base<eT,T1>& x);
   template<typename T1> inline void operator/= (const Base<eT,T1>& x);
-
+  
+  template<typename gen_type> inline void operator=(const GenCube<eT,gen_type>& x);
+  
   inline static void       extract(Cube<eT>& out, const subview_cube& in);
   inline static void  plus_inplace(Cube<eT>& out, const subview_cube& in);
   inline static void minus_inplace(Cube<eT>& out, const subview_cube& in);
@@ -79,8 +89,20 @@ class subview_cube : public BaseCube<eT, subview_cube<eT> >
   inline static void schur_inplace(Mat<eT>& out, const subview_cube& in);
   inline static void   div_inplace(Mat<eT>& out, const subview_cube& in);
   
+  template<typename functor> inline void  for_each(functor F);
+  template<typename functor> inline void  for_each(functor F) const;
+  
   template<typename functor> inline void transform(functor F);
   template<typename functor> inline void     imbue(functor F);
+  
+  #if defined(ARMA_USE_CXX11)
+  inline void each_slice(const std::function< void(      Mat<eT>&) >& F);
+  inline void each_slice(const std::function< void(const Mat<eT>&) >& F) const;
+  #endif
+  
+  inline void replace(const eT old_val, const eT new_val);
+  
+  inline void clean(const pod_type threshold);
   
   inline void fill(const eT val);
   inline void zeros();
@@ -88,8 +110,10 @@ class subview_cube : public BaseCube<eT, subview_cube<eT> >
   inline void randu();
   inline void randn();
   
-  inline arma_warn_unused eT min() const;
-  inline arma_warn_unused eT max() const;
+  inline arma_warn_unused bool is_finite() const;
+  
+  inline arma_warn_unused bool has_inf() const;
+  inline arma_warn_unused bool has_nan() const;
   
   inline eT  at_alt    (const uword i) const;
   
@@ -110,6 +134,95 @@ class subview_cube : public BaseCube<eT, subview_cube<eT> >
   
   inline bool check_overlap(const subview_cube& x) const;
   inline bool check_overlap(const Mat<eT>&      x) const;
+  
+  
+  class const_iterator;
+  
+  class iterator
+    {
+    public:
+    
+    inline iterator();
+    inline iterator(const iterator& X);
+    inline iterator(subview_cube<eT>& in_sv, const uword in_row, const uword in_col, const uword in_slice);
+    
+    inline arma_warn_unused eT& operator*();
+    
+    inline                  iterator& operator++();
+    inline arma_warn_unused iterator  operator++(int);
+    
+    inline arma_warn_unused bool operator==(const       iterator& rhs) const;
+    inline arma_warn_unused bool operator!=(const       iterator& rhs) const;
+    inline arma_warn_unused bool operator==(const const_iterator& rhs) const;
+    inline arma_warn_unused bool operator!=(const const_iterator& rhs) const;
+    
+    typedef std::forward_iterator_tag iterator_category;
+    typedef eT                        value_type;
+    typedef std::ptrdiff_t            difference_type;  // TODO: not certain on this one
+    typedef eT*                       pointer;
+    typedef eT&                       reference;
+    
+    arma_aligned Cube<eT>* M;
+    arma_aligned eT*       current_ptr;
+    arma_aligned uword     current_row;
+    arma_aligned uword     current_col;
+    arma_aligned uword     current_slice;
+    
+    arma_aligned const uword aux_row1;
+    arma_aligned const uword aux_col1;
+    
+    arma_aligned const uword aux_row2_p1;
+    arma_aligned const uword aux_col2_p1;
+    };
+  
+  
+  class const_iterator
+    {
+    public:
+    
+    inline const_iterator();
+    inline const_iterator(const       iterator& X);
+    inline const_iterator(const const_iterator& X);
+    inline const_iterator(const subview_cube<eT>& in_sv, const uword in_row, const uword in_col, const uword in_slice);
+    
+    inline arma_warn_unused const eT& operator*();
+    
+    inline                  const_iterator& operator++();
+    inline arma_warn_unused const_iterator  operator++(int);
+    
+    inline arma_warn_unused bool operator==(const       iterator& rhs) const;
+    inline arma_warn_unused bool operator!=(const       iterator& rhs) const;
+    inline arma_warn_unused bool operator==(const const_iterator& rhs) const;
+    inline arma_warn_unused bool operator!=(const const_iterator& rhs) const;
+    
+    // So that we satisfy the STL iterator types.
+    typedef std::forward_iterator_tag iterator_category;
+    typedef eT                        value_type;
+    typedef std::ptrdiff_t            difference_type;  // TODO: not certain on this one
+    typedef const eT*                 pointer;
+    typedef const eT&                 reference;
+    
+    arma_aligned const Cube<eT>* M;
+    arma_aligned const eT*       current_ptr;
+    arma_aligned       uword     current_row;
+    arma_aligned       uword     current_col;
+    arma_aligned       uword     current_slice;
+    
+    arma_aligned const uword aux_row1;
+    arma_aligned const uword aux_col1;
+    
+    arma_aligned const uword aux_row2_p1;
+    arma_aligned const uword aux_col2_p1;
+    };
+  
+  
+  inline       iterator  begin();
+  inline const_iterator  begin() const;
+  inline const_iterator cbegin() const;
+  
+  inline       iterator  end();
+  inline const_iterator  end() const;
+  inline const_iterator cend() const;
   
   
   private:

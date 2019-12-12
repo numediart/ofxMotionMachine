@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2012 Conrad Sanderson
-// Copyright (C) 2008-2012 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup mtGlue
@@ -19,15 +27,16 @@ class mtGlue : public Base<out_eT, mtGlue<out_eT, T1, T2, glue_type> >
   typedef          out_eT                       elem_type;
   typedef typename get_pod_type<out_eT>::result pod_type;
   
-  static const bool is_row = ( is_glue_mixed_elem<glue_type>::value && (T1::is_row || T2::is_row) ) || ( is_glue_mixed_times<glue_type>::value && T1::is_row );
-  static const bool is_col = ( is_glue_mixed_elem<glue_type>::value && (T1::is_col || T2::is_col) ) || ( is_glue_mixed_times<glue_type>::value && T2::is_col );
+  static const bool is_row  = glue_type::template traits<T1,T2>::is_row;
+  static const bool is_col  = glue_type::template traits<T1,T2>::is_col;
+  static const bool is_xvec = glue_type::template traits<T1,T2>::is_xvec;
   
   arma_inline  mtGlue(const T1& in_A, const T2& in_B);
   arma_inline  mtGlue(const T1& in_A, const T2& in_B, const uword in_aux_uword);
   arma_inline ~mtGlue();
   
-  arma_aligned const T1&   A;         //!< first operand
-  arma_aligned const T2&   B;         //!< second operand
+  arma_aligned const T1&   A;         //!< first operand;  must be derived from Base
+  arma_aligned const T2&   B;         //!< second operand; must be derived from Base
   arma_aligned       uword aux_uword; //!< storage of auxiliary data, uword format
   };
 

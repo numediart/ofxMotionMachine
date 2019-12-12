@@ -1,9 +1,17 @@
-// Copyright (C) 2012-2014 Conrad Sanderson
-// Copyright (C) 2012-2014 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup SpBase
@@ -42,21 +50,23 @@ struct SpBase
   {
   arma_inline const derived& get_ref() const;
   
+  arma_inline bool is_alias(const SpMat<elem_type>& X) const;
+  
   inline const SpOp<derived,spop_htrans>  t() const;  //!< Hermitian transpose
   inline const SpOp<derived,spop_htrans> ht() const;  //!< Hermitian transpose
   inline const SpOp<derived,spop_strans> st() const;  //!< simple transpose
   
-  inline void print(const std::string extra_text = "") const;
-  inline void print(std::ostream& user_stream, const std::string extra_text = "") const;
+  arma_cold inline void print(                           const std::string extra_text = "") const;
+  arma_cold inline void print(std::ostream& user_stream, const std::string extra_text = "") const;
   
-  inline void raw_print(const std::string extra_text = "") const;
-  inline void raw_print(std::ostream& user_stream, const std::string extra_text = "") const;
+  arma_cold inline void raw_print(                           const std::string extra_text = "") const;
+  arma_cold inline void raw_print(std::ostream& user_stream, const std::string extra_text = "") const;
   
-  inline void print_dense(const std::string extra_text = "") const;
-  inline void print_dense(std::ostream& user_stream, const std::string extra_text = "") const;
+  arma_cold inline void print_dense(                           const std::string extra_text = "") const;
+  arma_cold inline void print_dense(std::ostream& user_stream, const std::string extra_text = "") const;
   
-  inline void raw_print_dense(const std::string extra_text = "") const;
-  inline void raw_print_dense(std::ostream& user_stream, const std::string extra_text = "") const;
+  arma_cold inline void raw_print_dense(                           const std::string extra_text = "") const;
+  arma_cold inline void raw_print_dense(std::ostream& user_stream, const std::string extra_text = "") const;
   
   inline arma_warn_unused elem_type min() const;
   inline arma_warn_unused elem_type max() const;
@@ -66,6 +76,31 @@ struct SpBase
   
   inline elem_type min(uword& row_of_min_val, uword& col_of_min_val) const;
   inline elem_type max(uword& row_of_max_val, uword& col_of_max_val) const;
+  
+  inline arma_warn_unused uword index_min() const;
+  inline arma_warn_unused uword index_max() const;
+  
+  inline arma_warn_unused bool is_symmetric() const;
+  inline arma_warn_unused bool is_symmetric(const typename get_pod_type<elem_type>::result tol) const;
+  
+  inline arma_warn_unused bool is_hermitian() const;
+  inline arma_warn_unused bool is_hermitian(const typename get_pod_type<elem_type>::result tol) const;
+  
+  inline arma_warn_unused bool is_trimatu() const;
+  inline arma_warn_unused bool is_trimatl() const;
+  inline arma_warn_unused bool is_diagmat() const;
+  inline arma_warn_unused bool is_empty()   const;
+  inline arma_warn_unused bool is_square()  const;
+  inline arma_warn_unused bool is_vec()     const;
+  inline arma_warn_unused bool is_colvec()  const;
+  inline arma_warn_unused bool is_rowvec()  const;
+  inline arma_warn_unused bool is_finite()  const;
+  inline arma_warn_unused bool has_inf()    const;
+  inline arma_warn_unused bool has_nan()    const;
+  
+  inline const SpOp<derived,spop_vectorise_col> as_col() const;
+  inline const SpOp<derived,spop_vectorise_row> as_row() const;
+  
   };
 
 

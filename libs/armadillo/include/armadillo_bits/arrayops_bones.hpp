@@ -1,9 +1,17 @@
-// Copyright (C) 2011-2014 Conrad Sanderson
-// Copyright (C) 2011-2014 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup arrayops
@@ -20,23 +28,28 @@ class arrayops
   
   
   template<typename eT>
-  arma_hot inline static void
+  arma_cold inline static void
   copy_small(eT* dest, const eT* src, const uword n_elem);
   
   
   template<typename eT>
   arma_hot inline static void
-  copy_forwards(eT* dest, const eT* src, const uword n_elem);
-  
-  
-  template<typename eT>
-  arma_hot inline static void
-  copy_backwards(eT* dest, const eT* src, const uword n_elem);
-  
-  
-  template<typename eT>
-  arma_hot inline static void
   fill_zeros(eT* dest, const uword n_elem);
+  
+  
+  template<typename eT>
+  arma_hot inline static void
+  replace(eT* mem, const uword n_elem, const eT old_val, const eT new_val);
+  
+  
+  template<typename eT>
+  arma_hot inline static void
+  clean(eT* mem, const uword n_elem, const eT abs_limit, const typename arma_not_cx<eT>::result* junk = 0);
+  
+  
+  template<typename T>
+  arma_hot inline static void
+  clean(std::complex<T>* mem, const uword n_elem, const T abs_limit);
   
   
   // 
@@ -122,7 +135,7 @@ class arrayops
   inplace_set_base(eT* dest, const eT val, const uword n_elem);
   
   template<typename eT>
-  arma_hot inline static
+  arma_cold inline static
   void
   inplace_set_small(eT* dest, const eT val, const uword n_elem);
   
@@ -175,50 +188,29 @@ class arrayops
   // scalar = op(array)
   
   template<typename eT>
-  arma_hot arma_pure inline static
+  arma_hot inline static
   eT
   accumulate(const eT* src, const uword n_elem);
   
   template<typename eT>
-  arma_hot arma_pure inline static
+  arma_hot inline static
   eT
   product(const eT* src, const uword n_elem);
   
   template<typename eT>
-  arma_hot arma_pure inline static
+  arma_hot inline static
   bool
   is_finite(const eT* src, const uword n_elem);
   
   template<typename eT>
-  arma_hot arma_pure inline static
-  typename get_pod_type<eT>::result
-  norm_1(const eT* src, const uword n_elem);
+  arma_hot inline static
+  bool
+  has_inf(const eT* src, const uword n_elem);
   
   template<typename eT>
-  arma_hot arma_pure inline static
-  eT
-  norm_2(const eT* src, const uword n_elem, const typename arma_not_cx<eT>::result* junk = 0);
-  
-  template<typename T>
-  arma_hot arma_pure inline static
-  T
-  norm_2(const std::complex<T>* src, const uword n_elem);
-  
-  template<typename eT>
-  arma_hot arma_pure inline static
-  typename get_pod_type<eT>::result
-  norm_k(const eT* src, const uword n_elem, const int k);
-  
-  template<typename eT>
-  arma_hot arma_pure inline static
-  typename get_pod_type<eT>::result
-  norm_max(const eT* src, const uword n_elem);
-  
-  template<typename eT>
-  arma_hot arma_pure inline static
-  typename get_pod_type<eT>::result
-  norm_min(const eT* src, const uword n_elem);
-  
+  arma_hot inline static
+  bool
+  has_nan(const eT* src, const uword n_elem);
   };
 
 

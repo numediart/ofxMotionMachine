@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2012 Conrad Sanderson
-// Copyright (C) 2008-2012 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup podarray
@@ -100,63 +108,63 @@ podarray<eT>::podarray(const eT* X, const uword new_n_elem)
 
 
 
-template<typename eT>
-template<typename T1>
-inline
-podarray<eT>::podarray(const Proxy<T1>& P)
-  : n_elem(P.get_n_elem())
-  {
-  arma_extra_debug_sigprint_this(this);
-  
-  const uword P_n_elem = P.get_n_elem();
-    
-  init_cold(P_n_elem);
-  
-  eT* out_mem = (*this).memptr();
-    
-  if(Proxy<T1>::prefer_at_accessor == false)
-    {
-    typename Proxy<T1>::ea_type A = P.get_ea();
-    
-    uword i,j;
-    for(i=0, j=1; j < P_n_elem; i+=2, j+=2)
-      {
-      const eT val_i = A[i];
-      const eT val_j = A[j];
-      
-      out_mem[i] = val_i;
-      out_mem[j] = val_j;
-      }
-    
-    if(i < P_n_elem)
-      {
-      out_mem[i] = A[i];
-      }
-    }
-  else
-    {
-    const uword P_n_rows = P.get_n_rows();
-    const uword P_n_cols = P.get_n_cols();
-    
-    if(P_n_rows != 1)
-      {
-      uword count = 0;
-      
-      for(uword col=0; col < P_n_cols; ++col)
-      for(uword row=0; row < P_n_rows; ++row, ++count)
-        {
-        out_mem[count] = P.at(row,col);
-        }
-      }
-    else
-      {
-      for(uword col=0; col < P_n_cols; ++col)
-        {
-        out_mem[col] = P.at(0,col);
-        }
-      }
-    }
-  }
+// template<typename eT>
+// template<typename T1>
+// inline
+// podarray<eT>::podarray(const Proxy<T1>& P)
+//   : n_elem(P.get_n_elem())
+//   {
+//   arma_extra_debug_sigprint_this(this);
+//   
+//   const uword P_n_elem = P.get_n_elem();
+//     
+//   init_cold(P_n_elem);
+//   
+//   eT* out_mem = (*this).memptr();
+//     
+//   if(Proxy<T1>::use_at == false)
+//     {
+//     typename Proxy<T1>::ea_type A = P.get_ea();
+//     
+//     uword i,j;
+//     for(i=0, j=1; j < P_n_elem; i+=2, j+=2)
+//       {
+//       const eT val_i = A[i];
+//       const eT val_j = A[j];
+//       
+//       out_mem[i] = val_i;
+//       out_mem[j] = val_j;
+//       }
+//     
+//     if(i < P_n_elem)
+//       {
+//       out_mem[i] = A[i];
+//       }
+//     }
+//   else
+//     {
+//     const uword P_n_rows = P.get_n_rows();
+//     const uword P_n_cols = P.get_n_cols();
+//     
+//     if(P_n_rows != 1)
+//       {
+//       uword count = 0;
+//       
+//       for(uword col=0; col < P_n_cols; ++col)
+//       for(uword row=0; row < P_n_rows; ++row, ++count)
+//         {
+//         out_mem[count] = P.at(row,col);
+//         }
+//       }
+//     else
+//       {
+//       for(uword col=0; col < P_n_cols; ++col)
+//         {
+//         out_mem[col] = P.at(0,col);
+//         }
+//       }
+//     }
+//   }
 
 
 
@@ -334,14 +342,23 @@ podarray<eT>::copy_row(const Mat<eT>& A, const uword row)
       break;
     
     case 8:  out[7] = A.at(row, 7);
+    // fallthrough
     case 7:  out[6] = A.at(row, 6);
+    // fallthrough
     case 6:  out[5] = A.at(row, 5);
+    // fallthrough
     case 5:  out[4] = A.at(row, 4);
+    // fallthrough
     case 4:  out[3] = A.at(row, 3);
+    // fallthrough
     case 3:  out[2] = A.at(row, 2);
+    // fallthrough
     case 2:  out[1] = A.at(row, 1);
+    // fallthrough
     case 1:  out[0] = A.at(row, 0);
+    // fallthrough
     case 0:  ;
+    // fallthrough
     }
   }
 

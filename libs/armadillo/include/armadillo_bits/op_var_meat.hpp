@@ -1,9 +1,17 @@
-// Copyright (C) 2009-2012 Conrad Sanderson
-// Copyright (C) 2009-2012 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup op_var
@@ -30,46 +38,48 @@ op_var::apply(Mat<typename T1::pod_type>& out, const mtOp<typename T1::pod_type,
   const uword norm_type = in.aux_uword_a;
   const uword dim       = in.aux_uword_b;
   
-  arma_debug_check( (norm_type > 1), "var(): incorrect usage. norm_type must be 0 or 1");
-  arma_debug_check( (dim > 1),       "var(): incorrect usage. dim must be 0 or 1"      );
+  arma_debug_check( (norm_type > 1), "var(): parameter 'norm_type' must be 0 or 1" );
+  arma_debug_check( (dim > 1),       "var(): parameter 'dim' must be 0 or 1"       );
   
   const uword X_n_rows = X.n_rows;
   const uword X_n_cols = X.n_cols;
   
   if(dim == 0)
     {
-    arma_extra_debug_print("op_var::apply(), dim = 0");
+    arma_extra_debug_print("op_var::apply(): dim = 0");
     
-    arma_debug_check( (X_n_rows == 0), "var(): given object has zero rows" );
+    out.set_size((X_n_rows > 0) ? 1 : 0, X_n_cols);
     
-    out.set_size(1, X_n_cols);
-    
-    out_eT* out_mem = out.memptr();
-    
-    for(uword col=0; col<X_n_cols; ++col)
+    if(X_n_rows > 0)
       {
-      out_mem[col] = op_var::direct_var( X.colptr(col), X_n_rows, norm_type );
+      out_eT* out_mem = out.memptr();
+      
+      for(uword col=0; col<X_n_cols; ++col)
+        {
+        out_mem[col] = op_var::direct_var( X.colptr(col), X_n_rows, norm_type );
+        }
       }
     }
   else
   if(dim == 1)
     {
-    arma_extra_debug_print("op_var::apply(), dim = 1");
+    arma_extra_debug_print("op_var::apply(): dim = 1");
     
-    arma_debug_check( (X_n_cols == 0), "var(): given object has zero columns" );
+    out.set_size(X_n_rows, (X_n_cols > 0) ? 1 : 0);
     
-    out.set_size(X_n_rows, 1);
-    
-    podarray<in_eT> dat(X_n_cols);
-    
-    in_eT*  dat_mem = dat.memptr();
-    out_eT* out_mem = out.memptr();
-    
-    for(uword row=0; row<X_n_rows; ++row)
+    if(X_n_cols > 0)
       {
-      dat.copy_row(X, row);
+      podarray<in_eT> dat(X_n_cols);
       
-      out_mem[row] = op_var::direct_var( dat_mem, X_n_cols, norm_type );
+      in_eT*  dat_mem = dat.memptr();
+      out_eT* out_mem = out.memptr();
+      
+      for(uword row=0; row<X_n_rows; ++row)
+        {
+        dat.copy_row(X, row);
+        
+        out_mem[row] = op_var::direct_var( dat_mem, X_n_cols, norm_type );
+        }
       }
     }
   }
@@ -83,15 +93,11 @@ op_var::var_vec(const Base<typename T1::elem_type, T1>& X, const uword norm_type
   {
   arma_extra_debug_sigprint();
   
-  typedef typename T1::elem_type eT;
+  arma_debug_check( (norm_type > 1), "var(): parameter 'norm_type' must be 0 or 1" );
   
-  arma_debug_check( (norm_type > 1), "var(): incorrect usage. norm_type must be 0 or 1");
+  const quasi_unwrap<T1> U(X.get_ref());
   
-  const Proxy<T1> P(X.get_ref());
-  
-  const podarray<eT> tmp(P);
-  
-  return op_var::direct_var(tmp.memptr(), tmp.n_elem, norm_type);
+  return op_var::direct_var(U.M.memptr(), U.M.n_elem, norm_type);
   }
 
 
@@ -103,7 +109,7 @@ op_var::var_vec(const subview_col<eT>& X, const uword norm_type)
   {
   arma_extra_debug_sigprint();
   
-  arma_debug_check( (norm_type > 1), "var(): incorrect usage. norm_type must be 0 or 1");
+  arma_debug_check( (norm_type > 1), "var(): parameter 'norm_type' must be 0 or 1" );
   
   return op_var::direct_var(X.colptr(0), X.n_rows, norm_type);
   }
@@ -118,7 +124,7 @@ op_var::var_vec(const subview_row<eT>& X, const uword norm_type)
   {
   arma_extra_debug_sigprint();
   
-  arma_debug_check( (norm_type > 1), "var(): incorrect usage. norm_type must be 0 or 1");
+  arma_debug_check( (norm_type > 1), "var(): parameter 'norm_type' must be 0 or 1" );
   
   const Mat<eT>& A = X.m;
   

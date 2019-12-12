@@ -1,77 +1,21 @@
-// Copyright (C) 2008-2012 Conrad Sanderson
-// Copyright (C) 2008-2012 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup op_sort
 //! @{
-
-
-
-template<typename eT>
-class arma_ascend_sort_helper
-  {
-  public:
-  
-  arma_inline
-  bool
-  operator() (eT a, eT b) const
-    {
-    return (a < b);
-    }
-  };
-  
-
-
-template<typename eT>
-class arma_descend_sort_helper
-  {
-  public:
-  
-  arma_inline
-  bool
-  operator() (eT a, eT b) const
-    {
-    return (a > b);
-    }
-  };
-  
-
-
-template<typename T>
-class arma_ascend_sort_helper< std::complex<T> >
-  {
-  public:
-  
-  typedef typename std::complex<T> eT;
-  
-  inline
-  bool
-  operator() (const eT& a, const eT& b) const
-    {
-    return (std::abs(a) < std::abs(b));
-    }
-  };
-
-
-
-template<typename T>
-class arma_descend_sort_helper< std::complex<T> >
-  {
-  public:
-  
-  typedef typename std::complex<T> eT;
-  
-  inline
-  bool
-  operator() (const eT& a, const eT& b) const
-    {
-    return (std::abs(a) > std::abs(b));
-    }
-  };
 
 
 
@@ -84,13 +28,13 @@ op_sort::direct_sort(eT* X, const uword n_elem, const uword sort_type)
   
   if(sort_type == 0)
     {
-    arma_ascend_sort_helper<eT> comparator;
+    arma_lt_comparator<eT> comparator;
     
     std::sort(&X[0], &X[n_elem], comparator);
     }
   else
     {
-    arma_descend_sort_helper<eT> comparator;
+    arma_gt_comparator<eT> comparator;
     
     std::sort(&X[0], &X[n_elem], comparator);
     }
@@ -105,7 +49,7 @@ op_sort::direct_sort_ascending(eT* X, const uword n_elem)
   {
   arma_extra_debug_sigprint();
   
-  arma_ascend_sort_helper<eT> comparator;
+  arma_lt_comparator<eT> comparator;
     
   std::sort(&X[0], &X[n_elem], comparator);
   }
@@ -158,24 +102,12 @@ op_sort::copy_row(Mat<eT>& A, const eT* X, const uword row)
 
 
 
-template<typename T1>
+template<typename eT>
 inline
 void
-op_sort::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_sort>& in)
+op_sort::apply_noalias(Mat<eT>& out, const Mat<eT>& X, const uword sort_type, const uword dim)
   {
   arma_extra_debug_sigprint();
-  
-  typedef typename T1::elem_type eT;
-  
-  const unwrap_check<T1>   tmp(in.m, out);
-  const Mat<eT>&       X = tmp.M;
-  
-  const uword sort_type = in.aux_uword_a;
-  const uword dim       = in.aux_uword_b;
-  
-  arma_debug_check( (sort_type > 1),          "sort(): incorrect usage. sort_type must be 0 or 1");
-  arma_debug_check( (dim > 1),                "sort(): incorrect usage. dim must be 0 or 1"      );
-  arma_debug_check( (X.is_finite() == false), "sort(): given object has non-finite elements"     );
   
   if( (X.n_rows * X.n_cols) <= 1 )
     {
@@ -183,10 +115,12 @@ op_sort::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_sort>& in)
     return;
     }
   
+  arma_debug_check( (sort_type > 1), "sort(): parameter 'sort_type' must be 0 or 1" );
+  arma_debug_check( (X.has_nan()),   "sort(): detected NaN"                         );
   
   if(dim == 0)  // sort the contents of each column
     {
-    arma_extra_debug_print("op_sort::apply(), dim = 0");
+    arma_extra_debug_print("op_sort::apply(): dim = 0");
     
     out = X;
     
@@ -203,14 +137,14 @@ op_sort::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_sort>& in)
     {
     if(X.n_rows == 1)  // a row vector
       {
-      arma_extra_debug_print("op_sort::apply(), dim = 1, vector specific");
+      arma_extra_debug_print("op_sort::apply(): dim = 1, vector specific");
       
       out = X;
       op_sort::direct_sort(out.memptr(), out.n_elem, sort_type);
       }
     else  // not a row vector
       {
-      arma_extra_debug_print("op_sort::apply(), dim = 1, generic");
+      arma_extra_debug_print("op_sort::apply(): dim = 1, generic");
       
       out.copy_size(X);
       
@@ -229,8 +163,72 @@ op_sort::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_sort>& in)
         }
       }
     }
-  
   }
+
+
+
+template<typename T1>
+inline
+void
+op_sort::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_sort>& in)
+  {
+  arma_extra_debug_sigprint();
+  
+  typedef typename T1::elem_type eT;
+  
+  const quasi_unwrap<T1> U(in.m);
+  
+  const Mat<eT>& X = U.M;
+  
+  const uword sort_type = in.aux_uword_a;
+  const uword dim       = in.aux_uword_b;
+  
+  if(U.is_alias(out))
+    {
+    Mat<eT> tmp;
+    
+    op_sort::apply_noalias(tmp, X, sort_type, dim);
+    
+    out.steal_mem(tmp);
+    }
+  else
+    {
+    op_sort::apply_noalias(out, X, sort_type, dim);
+    }
+  }
+
+
+
+template<typename T1>
+inline
+void
+op_sort_vec::apply(Mat<typename T1::elem_type>& out, const Op<T1,op_sort_vec>& in)
+  {
+  arma_extra_debug_sigprint();
+  
+  typedef typename T1::elem_type eT;
+  
+  const quasi_unwrap<T1> U(in.m);
+  
+  const Mat<eT>& X = U.M;
+  
+  const uword sort_type = in.aux_uword_a;
+  const uword dim       = (T1::is_xvec) ? uword(U.M.is_rowvec() ? 1 : 0) : uword((T1::is_row) ? 1 : 0);
+  
+  if(U.is_alias(out))
+    {
+    Mat<eT> tmp;
+    
+    op_sort::apply_noalias(tmp, X, sort_type, dim);
+    
+    out.steal_mem(tmp);
+    }
+  else
+    {
+    op_sort::apply_noalias(out, X, sort_type, dim);
+    }
+  }
+
 
 
 //! @}

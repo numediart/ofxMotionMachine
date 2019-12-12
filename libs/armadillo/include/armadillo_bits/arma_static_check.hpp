@@ -1,9 +1,17 @@
-// Copyright (C) 2008-2011 Conrad Sanderson
-// Copyright (C) 2008-2011 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
 
 
 //! \addtogroup arma_static_check
@@ -11,7 +19,7 @@
 
 
 
-template<bool ERROR___INCORRECT_OR_UNSUPPORTED_TYPE>
+template<bool ERROR___TYPE_MISMATCH_OR_UNSUPPORTED_TYPE>
 struct arma_type_check_cxx1998
   {
   arma_inline
@@ -20,7 +28,7 @@ struct arma_type_check_cxx1998
   apply()
     {
     static const char
-    junk[ ERROR___INCORRECT_OR_UNSUPPORTED_TYPE ? -1 : +1 ];
+    junk[ ERROR___TYPE_MISMATCH_OR_UNSUPPORTED_TYPE ? -1 : +1 ];
     }
   };
 
@@ -43,7 +51,7 @@ struct arma_type_check_cxx1998<false>
   
   #define arma_static_check(condition, message)  static_assert( !(condition), #message )
   
-  #define arma_type_check(condition)  static_assert( !(condition), "error: incorrect or unsupported type" )
+  #define arma_type_check(condition)  static_assert( !(condition), "error: type mismatch or unsupported type" )
   
 #else
 

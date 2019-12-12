@@ -1,9 +1,21 @@
-// Copyright (C) 2014 Conrad Sanderson
-// Copyright (C) 2014 NICTA (www.nicta.com.au)
+// Copyright 2008-2016 Conrad Sanderson (http://conradsanderson.id.au)
+// Copyright 2008-2016 National ICT Australia (NICTA)
 // 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+// ------------------------------------------------------------------------
+
+
+//! \addtogroup gmm_diag
+//! @{
 
 
 namespace gmm_priv
@@ -43,8 +55,33 @@ gmm_diag<eT>::gmm_diag(const gmm_diag<eT>& x)
 
 template<typename eT>
 inline
-const gmm_diag<eT>&
+gmm_diag<eT>&
 gmm_diag<eT>::operator=(const gmm_diag<eT>& x)
+  {
+  arma_extra_debug_sigprint();
+  
+  init(x);
+  
+  return *this;
+  }
+
+
+
+template<typename eT>
+inline
+gmm_diag<eT>::gmm_diag(const gmm_full<eT>& x)
+  {
+  arma_extra_debug_sigprint_this(this);
+  
+  init(x);
+  }
+
+
+
+template<typename eT>
+inline
+gmm_diag<eT>&
+gmm_diag<eT>::operator=(const gmm_full<eT>& x)
   {
   arma_extra_debug_sigprint();
   
@@ -73,8 +110,6 @@ gmm_diag<eT>::reset()
   {
   arma_extra_debug_sigprint();
   
-  mah_aux.reset();
-  
   init(0, 0);
   }
 
@@ -86,8 +121,6 @@ void
 gmm_diag<eT>::reset(const uword in_n_dims, const uword in_n_gaus)
   {
   arma_extra_debug_sigprint();
-  
-  mah_aux.reset();
   
   init(in_n_dims, in_n_gaus);
   }
@@ -112,7 +145,7 @@ gmm_diag<eT>::set_params(const Base<eT,T1>& in_means_expr, const Base<eT,T2>& in
   
   arma_debug_check
     (
-    (size(in_means) != size(in_dcovs)) || (in_hefts.n_cols != in_means.n_cols) || (in_hefts.n_rows != 1),
+    (arma::size(in_means) != arma::size(in_dcovs)) || (in_hefts.n_cols != in_means.n_cols) || (in_hefts.n_rows != 1),
     "gmm_diag::set_params(): given parameters have inconsistent and/or wrong sizes"
     );
   
@@ -125,7 +158,7 @@ gmm_diag<eT>::set_params(const Base<eT,T1>& in_means_expr, const Base<eT,T2>& in
   
   const eT s = accu(in_hefts);
   
-  arma_debug_check( ((s < (eT(1) - Datum<eT>::eps)) || (s > (eT(1) + Datum<eT>::eps))), "gmm_diag::set_params(): sum of given hefts is not 1" );
+  arma_debug_check( ((s < (eT(1) - eT(0.001))) || (s > (eT(1) + eT(0.001)))), "gmm_diag::set_params(): sum of given hefts is not 1" );
   
   access::rw(means) = in_means;
   access::rw(dcovs) = in_dcovs;
@@ -148,8 +181,8 @@ gmm_diag<eT>::set_means(const Base<eT,T1>& in_means_expr)
   
   const Mat<eT>& in_means = tmp.M;
   
-  arma_debug_check( (size(in_means) != size(means)), "gmm_diag::set_means(): given means have incompatible size" );
-  arma_debug_check( (in_means.is_finite() == false), "gmm_diag::set_means(): given means have non-finite values" );
+  arma_debug_check( (arma::size(in_means) != arma::size(means)), "gmm_diag::set_means(): given means have incompatible size" );
+  arma_debug_check( (in_means.is_finite() == false),             "gmm_diag::set_means(): given means have non-finite values" );
   
   access::rw(means) = in_means;
   }
@@ -168,9 +201,9 @@ gmm_diag<eT>::set_dcovs(const Base<eT,T1>& in_dcovs_expr)
   
   const Mat<eT>& in_dcovs = tmp.M;
   
-  arma_debug_check( (size(in_dcovs) != size(dcovs)),     "gmm_diag::set_dcovs(): given dcovs have incompatible size"       );
-  arma_debug_check( (in_dcovs.is_finite() == false),     "gmm_diag::set_dcovs(): given dcovs have non-finite values"       );
-  arma_debug_check( (any(vectorise(in_dcovs) <= eT(0))), "gmm_diag::set_dcovs(): given dcovs have negative or zero values" );
+  arma_debug_check( (arma::size(in_dcovs) != arma::size(dcovs)), "gmm_diag::set_dcovs(): given dcovs have incompatible size"       );
+  arma_debug_check( (in_dcovs.is_finite() == false),             "gmm_diag::set_dcovs(): given dcovs have non-finite values"       );
+  arma_debug_check( (any(vectorise(in_dcovs) <= eT(0))),         "gmm_diag::set_dcovs(): given dcovs have negative or zero values" );
   
   access::rw(dcovs) = in_dcovs;
   
@@ -191,17 +224,27 @@ gmm_diag<eT>::set_hefts(const Base<eT,T1>& in_hefts_expr)
   
   const Mat<eT>& in_hefts = tmp.M;
   
-  arma_debug_check( (size(in_hefts) != size(hefts)),     "gmm_diag::set_hefts(): given hefts have incompatible size" );
-  arma_debug_check( (in_hefts.is_finite() == false),     "gmm_diag::set_hefts(): given hefts have non-finite values" );
-  arma_debug_check( (any(vectorise(in_hefts) <  eT(0))), "gmm_diag::set_hefts(): given hefts have negative values"   );
+  arma_debug_check( (arma::size(in_hefts) != arma::size(hefts)), "gmm_diag::set_hefts(): given hefts have incompatible size" );
+  arma_debug_check( (in_hefts.is_finite() == false),             "gmm_diag::set_hefts(): given hefts have non-finite values" );
+  arma_debug_check( (any(vectorise(in_hefts) <  eT(0))),         "gmm_diag::set_hefts(): given hefts have negative values"   );
   
   const eT s = accu(in_hefts);
   
-  arma_debug_check( ((s < (eT(1) - Datum<eT>::eps)) || (s > (eT(1) + Datum<eT>::eps))), "gmm_diag::set_hefts(): sum of given hefts is not 1" );
+  arma_debug_check( ((s < (eT(1) - eT(0.001))) || (s > (eT(1) + eT(0.001)))), "gmm_diag::set_hefts(): sum of given hefts is not 1" );
   
-  access::rw(hefts) = in_hefts;
+  // make sure all hefts are positive and non-zero
   
-  log_hefts = log(hefts);  // TODO: possible issue when one of the hefts is zero
+  const eT* in_hefts_mem = in_hefts.memptr();
+        eT*    hefts_mem = access::rw(hefts).memptr();
+  
+  for(uword i=0; i < hefts.n_elem; ++i)
+    {
+    hefts_mem[i] = (std::max)( in_hefts_mem[i], std::numeric_limits<eT>::min() );
+    }
+  
+  access::rw(hefts) /= accu(hefts);
+  
+  log_hefts = log(hefts);
   }
 
 
@@ -240,6 +283,7 @@ gmm_diag<eT>::load(const std::string name)
   if( (status == false) || (Q.n_slices != 2) )
     {
     reset();
+    arma_debug_warn("gmm_diag::load(): problem with loading or incompatible format");
     return false;
     }
   
@@ -269,11 +313,14 @@ gmm_diag<eT>::save(const std::string name) const
   
   Cube<eT> Q(means.n_rows + 1, means.n_cols, 2);
   
-  Q.slice(0).row(0) = hefts;
-  Q.slice(1).row(0).zeros();  // reserved for future use
-  
-  Q.slice(0).submat(1, 0, size(means)) = means;
-  Q.slice(1).submat(1, 0, size(dcovs)) = dcovs;
+  if(Q.n_elem > 0)
+    {
+    Q.slice(0).row(0) = hefts;
+    Q.slice(1).row(0).zeros();  // reserved for future use
+    
+    Q.slice(0).submat(1, 0, arma::size(means)) = means;
+    Q.slice(1).submat(1, 0, arma::size(dcovs)) = dcovs;
+    }
   
   const bool status = Q.save(name, arma_binary);
   
@@ -292,7 +339,7 @@ gmm_diag<eT>::generate() const
   const uword N_dims = means.n_rows;
   const uword N_gaus = means.n_cols;
   
-  Col<eT> out( (N_gaus > 0) ? N_dims : uword(0) );
+  Col<eT> out( ((N_gaus > 0) ? N_dims : uword(0)), fill::randn );
   
   if(N_gaus > 0)
     {
@@ -308,7 +355,6 @@ gmm_diag<eT>::generate() const
       if(val <= csum)  { gaus_id = j; break; }
       }
     
-    out =  randn< Col<eT> >(N_dims);    
     out %= sqrt(dcovs.col(gaus_id));
     out += means.col(gaus_id);
     }
@@ -328,11 +374,13 @@ gmm_diag<eT>::generate(const uword N_vec) const
   const uword N_dims = means.n_rows;
   const uword N_gaus = means.n_cols;
   
-  Mat<eT> out( ( (N_gaus > 0) ? N_dims : uword(0) ), N_vec );
+  Mat<eT> out( ( (N_gaus > 0) ? N_dims : uword(0) ), N_vec, fill::randn );
   
   if(N_gaus > 0)
     {
     const eT* hefts_mem = hefts.memptr();
+    
+    const Mat<eT> sqrt_dcovs = sqrt(dcovs);
     
     for(uword i=0; i < N_vec; ++i)
       {
@@ -350,8 +398,7 @@ gmm_diag<eT>::generate(const uword N_vec) const
       
       subview_col<eT> out_col = out.col(i);
       
-      out_col =  randn< Col<eT> >(N_dims);    
-      out_col %= sqrt(dcovs.col(gaus_id));
+      out_col %= sqrt_dcovs.col(gaus_id);
       out_col += means.col(gaus_id);
       }
     }
@@ -410,19 +457,11 @@ gmm_diag<eT>::log_p(const T1& expr, const gmm_empty_arg& junk1, typename enable_
   arma_ignore(junk1);
   arma_ignore(junk2);
   
-  if(is_subview<T1>::value)
-    {
-    const subview<eT>& X = reinterpret_cast< const subview<eT>& >(expr);
-    
-    return internal_vec_log_p(X);
-    }
-  else
-    {
-    const unwrap<T1>   tmp(expr);
-    const Mat<eT>& X = tmp.M;
-    
-    return internal_vec_log_p(X);
-    }
+  const quasi_unwrap<T1> tmp(expr);
+  
+  const Mat<eT>& X = tmp.M;
+  
+  return internal_vec_log_p(X);
   }
 
 
@@ -436,19 +475,45 @@ gmm_diag<eT>::log_p(const T1& expr, const uword gaus_id, typename enable_if<((is
   arma_extra_debug_sigprint();
   arma_ignore(junk2);
   
-  if(is_subview<T1>::value)
-    {
-    const subview<eT>& X = reinterpret_cast< const subview<eT>& >(expr);
-    
-    return internal_vec_log_p(X, gaus_id);
-    }
-  else
-    {
-    const unwrap<T1>   tmp(expr);
-    const Mat<eT>& X = tmp.M;
-    
-    return internal_vec_log_p(X, gaus_id);
-    }
+  const quasi_unwrap<T1> tmp(expr);
+  
+  const Mat<eT>& X = tmp.M;
+  
+  return internal_vec_log_p(X, gaus_id);
+  }
+
+
+
+template<typename eT>
+template<typename T1>
+inline
+eT
+gmm_diag<eT>::sum_log_p(const Base<eT,T1>& expr) const
+  {
+  arma_extra_debug_sigprint();
+  
+  const quasi_unwrap<T1> tmp(expr.get_ref());
+  
+  const Mat<eT>& X = tmp.M;
+  
+  return internal_sum_log_p(X);
+  }
+
+
+
+template<typename eT>
+template<typename T1>
+inline
+eT
+gmm_diag<eT>::sum_log_p(const Base<eT,T1>& expr, const uword gaus_id) const
+  {
+  arma_extra_debug_sigprint();
+  
+  const quasi_unwrap<T1> tmp(expr.get_ref());
+  
+  const Mat<eT>& X = tmp.M;
+  
+  return internal_sum_log_p(X, gaus_id);
   }
 
 
@@ -461,19 +526,11 @@ gmm_diag<eT>::avg_log_p(const Base<eT,T1>& expr) const
   {
   arma_extra_debug_sigprint();
   
-  if(is_subview<T1>::value)
-    {
-    const subview<eT>& X = reinterpret_cast< const subview<eT>& >( expr.get_ref() );
-    
-    return internal_avg_log_p(X);
-    }
-  else
-    {
-    const unwrap<T1>   tmp(expr.get_ref());
-    const Mat<eT>& X = tmp.M;
-    
-    return internal_avg_log_p(X);
-    }
+  const quasi_unwrap<T1> tmp(expr.get_ref());
+  
+  const Mat<eT>& X = tmp.M;
+  
+  return internal_avg_log_p(X);
   }
 
 
@@ -486,19 +543,11 @@ gmm_diag<eT>::avg_log_p(const Base<eT,T1>& expr, const uword gaus_id) const
   {
   arma_extra_debug_sigprint();
   
-  if(is_subview<T1>::value)
-    {
-    const subview<eT>& X = reinterpret_cast< const subview<eT>& >( expr.get_ref() );
-    
-    return internal_avg_log_p(X, gaus_id);
-    }
-  else
-    {
-    const unwrap<T1>   tmp(expr.get_ref());
-    const Mat<eT>& X = tmp.M;
-    
-    return internal_avg_log_p(X, gaus_id);
-    }
+  const quasi_unwrap<T1> tmp(expr.get_ref());
+  
+  const Mat<eT>& X = tmp.M;
+  
+  return internal_avg_log_p(X, gaus_id);
   }
 
 
@@ -512,19 +561,11 @@ gmm_diag<eT>::assign(const T1& expr, const gmm_dist_mode& dist, typename enable_
   arma_extra_debug_sigprint();
   arma_ignore(junk);
   
-  if(is_subview_col<T1>::value)
-    {
-    const subview_col<eT>& X = reinterpret_cast< const subview_col<eT>& >(expr);
-    
-    return internal_scalar_assign(X, dist);
-    }
-  else
-    {
-    const unwrap<T1>   tmp(expr);
-    const Mat<eT>& X = tmp.M;
-    
-    return internal_scalar_assign(X, dist);
-    }
+  const quasi_unwrap<T1> tmp(expr);
+  
+  const Mat<eT>& X = tmp.M;
+  
+  return internal_scalar_assign(X, dist);
   }
 
 
@@ -540,19 +581,11 @@ gmm_diag<eT>::assign(const T1& expr, const gmm_dist_mode& dist, typename enable_
   
   urowvec out;
   
-  if(is_subview<T1>::value)
-    {
-    const subview<eT>& X = reinterpret_cast< const subview<eT>& >(expr);
-    
-    internal_vec_assign(out, X, dist);
-    }
-  else
-    {
-    const unwrap<T1>   tmp(expr);
-    const Mat<eT>& X = tmp.M;
-    
-    internal_vec_assign(out, X, dist);
-    }
+  const quasi_unwrap<T1> tmp(expr);
+  
+  const Mat<eT>& X = tmp.M;
+  
+  internal_vec_assign(out, X, dist);
   
   return out;
   }
@@ -655,8 +688,8 @@ gmm_diag<eT>::learn
   const unwrap<T1>   tmp_X(data.get_ref());
   const Mat<eT>& X = tmp_X.M;
   
-  if(X.is_empty()          )  { arma_warn(true, "gmm_diag::learn(): given matrix is empty"             ); reset(); return false; }
-  if(X.is_finite() == false)  { arma_warn(true, "gmm_diag::learn(): given matrix has non-finite values"); reset(); return false; }
+  if(X.is_empty()          )  { arma_debug_warn("gmm_diag::learn(): given matrix is empty"             ); return false; }
+  if(X.is_finite() == false)  { arma_debug_warn("gmm_diag::learn(): given matrix has non-finite values"); return false; }
   
   if(N_gaus == 0)  { reset(); return true; }
   
@@ -671,29 +704,32 @@ gmm_diag<eT>::learn
       {
       const eT val = mah_aux_mem[i];
       
-      mah_aux_mem[i] = (val != eT(0)) ? eT(1) / val : eT(1);
+      mah_aux_mem[i] = ((val != eT(0)) && arma_isfinite(val)) ? eT(1) / val : eT(1);
       }
     }
   
-  // mah_aux.print("mah_aux:");
+  
+  // copy current model, in case of failure by k-means and/or EM
+  
+  const gmm_diag<eT> orig = (*this);
   
   
   // initial means
   
   if(seed_mode == keep_existing)
     {
-    if(means.is_empty()        )  { arma_warn(true, "gmm_diag::learn(): no existing means"      ); reset(); return false; }
-    if(X.n_rows != means.n_rows)  { arma_warn(true, "gmm_diag::learn(): dimensionality mismatch"); reset(); return false; }
+    if(means.is_empty()        )  { arma_debug_warn("gmm_diag::learn(): no existing means"      ); return false; }
+    if(X.n_rows != means.n_rows)  { arma_debug_warn("gmm_diag::learn(): dimensionality mismatch"); return false; }
     
     // TODO: also check for number of vectors?
     }
   else
     {
-    if(X.n_cols < N_gaus)  { arma_warn(true, "gmm_diag::learn(): number of vectors is less than number of gaussians"); reset(); return false; }
+    if(X.n_cols < N_gaus)  { arma_debug_warn("gmm_diag::learn(): number of vectors is less than number of gaussians"); return false; }
     
     reset(X.n_rows, N_gaus);
     
-    if(print_mode)  { get_stream_err2() << "gmm_diag::learn(): generating initial means\n"; }
+    if(print_mode)  { get_cout_stream() << "gmm_diag::learn(): generating initial means\n"; get_cout_stream().flush(); }
     
          if(dist_mode == eucl_dist)  { generate_initial_means<1>(X, seed_mode); }
     else if(dist_mode == maha_dist)  { generate_initial_means<2>(X, seed_mode); }
@@ -704,29 +740,29 @@ gmm_diag<eT>::learn
   
   if(km_iter > 0)
     {
-    const arma_ostream_state stream_state(get_stream_err2());
+    const arma_ostream_state stream_state(get_cout_stream());
     
     bool status = false;
     
-         if(dist_mode == eucl_dist)  { status = km_iterate<1>(X, km_iter, print_mode); }
-    else if(dist_mode == maha_dist)  { status = km_iterate<2>(X, km_iter, print_mode); }
+         if(dist_mode == eucl_dist)  { status = km_iterate<1>(X, km_iter, print_mode, "gmm_diag::learn(): k-means"); }
+    else if(dist_mode == maha_dist)  { status = km_iterate<2>(X, km_iter, print_mode, "gmm_diag::learn(): k-means"); }
     
-    stream_state.restore(get_stream_err2());
+    stream_state.restore(get_cout_stream());
     
-    if(status == false)  { arma_warn(true, "gmm_diag::learn(): k-means algorithm failed"); reset(); return false; }
+    if(status == false)  { arma_debug_warn("gmm_diag::learn(): k-means algorithm failed; not enough data, or too many gaussians requested"); init(orig); return false; }
     }
   
   
   // initial dcovs
   
-  const eT vfloor = (eT(var_floor) > eT(0)) ? eT(var_floor) : std::numeric_limits<eT>::min();
+  const eT var_floor_actual = (eT(var_floor) > eT(0)) ? eT(var_floor) : std::numeric_limits<eT>::min();
   
   if(seed_mode != keep_existing)
     {
-    if(print_mode)  { get_stream_err2() << "gmm_diag::learn(): generating initial covariances\n"; }
+    if(print_mode)  { get_cout_stream() << "gmm_diag::learn(): generating initial covariances\n"; get_cout_stream().flush(); }
     
-         if(dist_mode == eucl_dist)  { generate_initial_dcovs_and_hefts<1>(X, vfloor); }
-    else if(dist_mode == maha_dist)  { generate_initial_dcovs_and_hefts<2>(X, vfloor); }
+         if(dist_mode == eucl_dist)  { generate_initial_params<1>(X, var_floor_actual); }
+    else if(dist_mode == maha_dist)  { generate_initial_params<2>(X, var_floor_actual); }
     }
   
   
@@ -734,18 +770,95 @@ gmm_diag<eT>::learn
   
   if(em_iter > 0)
     {
-    const arma_ostream_state stream_state(get_stream_err2());
+    const arma_ostream_state stream_state(get_cout_stream());
     
-    const bool status = em_iterate(X, em_iter, vfloor, print_mode);
+    const bool status = em_iterate(X, em_iter, var_floor_actual, print_mode);
     
-    stream_state.restore(get_stream_err2());
+    stream_state.restore(get_cout_stream());
     
-    if(status == false)  { arma_warn(true, "gmm_diag::learn(): EM algorithm failed"); reset(); return false; }
+    if(status == false)  { arma_debug_warn("gmm_diag::learn(): EM algorithm failed"); init(orig); return false; }
     }
   
   mah_aux.reset();
   
   init_constants();
+  
+  return true;
+  }
+
+
+
+template<typename eT>
+template<typename T1>
+inline
+bool
+gmm_diag<eT>::kmeans_wrapper
+  (
+        Mat<eT>&       user_means,
+  const Base<eT,T1>&   data,
+  const uword          N_gaus,
+  const gmm_seed_mode& seed_mode,
+  const uword          km_iter,
+  const bool           print_mode
+  )
+  {
+  arma_extra_debug_sigprint();
+  
+  const bool seed_mode_ok = \
+       (seed_mode == keep_existing)
+    || (seed_mode == static_subset)
+    || (seed_mode == static_spread)
+    || (seed_mode == random_subset)
+    || (seed_mode == random_spread);
+  
+  arma_debug_check( (seed_mode_ok == false), "kmeans(): unknown seed_mode" );
+  
+  const unwrap<T1>   tmp_X(data.get_ref());
+  const Mat<eT>& X = tmp_X.M;
+  
+  if(X.is_empty()          )  { arma_debug_warn("kmeans(): given matrix is empty"             ); return false; }
+  if(X.is_finite() == false)  { arma_debug_warn("kmeans(): given matrix has non-finite values"); return false; }
+  
+  if(N_gaus == 0)  { reset(); return true; }
+  
+  
+  // initial means
+  
+  if(seed_mode == keep_existing)
+    {
+    access::rw(means) = user_means;
+    
+    if(means.is_empty()        )  { arma_debug_warn("kmeans(): no existing means"      ); return false; }
+    if(X.n_rows != means.n_rows)  { arma_debug_warn("kmeans(): dimensionality mismatch"); return false; }
+    
+    // TODO: also check for number of vectors?
+    }
+  else
+    {
+    if(X.n_cols < N_gaus)  { arma_debug_warn("kmeans(): number of vectors is less than number of means"); return false; }
+    
+    access::rw(means).zeros(X.n_rows, N_gaus);
+    
+    if(print_mode)  { get_cout_stream() << "kmeans(): generating initial means\n"; }
+    
+    generate_initial_means<1>(X, seed_mode);
+    }
+  
+  
+  // k-means
+  
+  if(km_iter > 0)
+    {
+    const arma_ostream_state stream_state(get_cout_stream());
+    
+    bool status = false;
+    
+    status = km_iterate<1>(X, km_iter, print_mode, "kmeans()");
+    
+    stream_state.restore(get_cout_stream());
+    
+    if(status == false)  { arma_debug_warn("kmeans(): clustering failed; not enough data, or too many means requested"); return false; }
+    }
   
   return true;
   }
@@ -782,6 +895,38 @@ gmm_diag<eT>::init(const gmm_diag<eT>& x)
 template<typename eT>
 inline
 void
+gmm_diag<eT>::init(const gmm_full<eT>& x)
+  {
+  arma_extra_debug_sigprint();
+  
+  access::rw(hefts) = x.hefts;
+  access::rw(means) = x.means;
+  
+  const uword N_dims = x.means.n_rows;
+  const uword N_gaus = x.means.n_cols;
+  
+  access::rw(dcovs).zeros(N_dims,N_gaus);
+  
+  for(uword g=0; g < N_gaus; ++g)
+    {
+    const Mat<eT>& fcov = x.fcovs.slice(g);
+    
+    eT* dcov_mem = access::rw(dcovs).colptr(g);
+    
+    for(uword d=0; d < N_dims; ++d)
+      {
+      dcov_mem[d] = fcov.at(d,d);
+      }
+    }
+  
+  init_constants();
+  }
+
+
+
+template<typename eT>
+inline
+void
 gmm_diag<eT>::init(const uword in_n_dims, const uword in_n_gaus)
   {
   arma_extra_debug_sigprint();
@@ -809,18 +954,97 @@ gmm_diag<eT>::init_constants()
   const uword N_dims = means.n_rows;
   const uword N_gaus = means.n_cols;
   
+  // 
+  
+  inv_dcovs.copy_size(dcovs);
+  
+  const eT*     dcovs_mem =     dcovs.memptr();
+        eT* inv_dcovs_mem = inv_dcovs.memptr();
+  
+  const uword dcovs_n_elem = dcovs.n_elem;
+  
+  for(uword i=0; i < dcovs_n_elem; ++i)
+    {
+    inv_dcovs_mem[i] = eT(1) / (std::max)( dcovs_mem[i], std::numeric_limits<eT>::min() );
+    }
+  
+  //
+  
   const eT tmp = (eT(N_dims)/eT(2)) * std::log(eT(2) * Datum<eT>::pi);
   
   log_det_etc.set_size(N_gaus);
   
-  for(uword i=0; i<N_gaus; ++i)
+  for(uword g=0; g < N_gaus; ++g)
     {
-    const eT logdet = accu( log(dcovs.col(i)) );
+    const eT* dcovs_colmem = dcovs.colptr(g);
     
-    log_det_etc[i] = eT(-1) * ( tmp + eT(0.5) * logdet );
+    eT log_det_val = eT(0);
+    
+    for(uword d=0; d < N_dims; ++d)
+      {
+      log_det_val += std::log( (std::max)( dcovs_colmem[d], std::numeric_limits<eT>::min() ) );
+      }
+    
+    log_det_etc[g] = eT(-1) * ( tmp + eT(0.5) * log_det_val );
     }
   
-  log_hefts = log(hefts);  // TODO: possible issue when one of the hefts is zero
+  //
+  
+  eT* hefts_mem = access::rw(hefts).memptr();
+  
+  for(uword g=0; g < N_gaus; ++g)
+    {
+    hefts_mem[g] = (std::max)( hefts_mem[g], std::numeric_limits<eT>::min() );
+    }
+  
+  log_hefts = log(hefts);
+  }
+
+
+
+template<typename eT>
+inline
+umat
+gmm_diag<eT>::internal_gen_boundaries(const uword N) const
+  {
+  arma_extra_debug_sigprint();
+  
+  #if defined(ARMA_USE_OPENMP)
+    const uword n_threads_avail = (omp_in_parallel()) ? uword(1) : uword(omp_get_max_threads());
+    const uword n_threads       = (n_threads_avail > 0) ? ( (n_threads_avail <= N) ? n_threads_avail : 1 ) : 1;
+  #else
+    static const uword n_threads = 1;
+  #endif
+  
+  // get_cout_stream() << "gmm_diag::internal_gen_boundaries(): n_threads: " << n_threads << '\n';
+  
+  umat boundaries(2, n_threads);
+  
+  if(N > 0)
+    {
+    const uword chunk_size = N / n_threads;
+    
+    uword count = 0;
+    
+    for(uword t=0; t<n_threads; t++)
+      {
+      boundaries.at(0,t) = count;
+      
+      count += chunk_size;
+      
+      boundaries.at(1,t) = count-1;
+      }
+    
+    boundaries.at(1,n_threads-1) = N - 1;
+    }
+  else
+    {
+    boundaries.zeros();
+    }
+  
+  // get_cout_stream() << "gmm_diag::internal_gen_boundaries(): boundaries: " << '\n' << boundaries << '\n';
+  
+  return boundaries;
   }
 
 
@@ -866,8 +1090,8 @@ gmm_diag<eT>::internal_scalar_log_p(const eT* x, const uword g) const
   {
   arma_extra_debug_sigprint();
   
-  const eT* mean = means.colptr(g);
-  const eT* dcov = dcovs.colptr(g);
+  const eT*     mean =     means.colptr(g);
+  const eT* inv_dcov = inv_dcovs.colptr(g);
   
   const uword N_dims = means.n_rows;
   
@@ -884,15 +1108,15 @@ gmm_diag<eT>::internal_scalar_log_p(const eT* x, const uword g) const
     tmp_i -= mean[i];
     tmp_j -= mean[j];
     
-    val_i += (tmp_i*tmp_i) / dcov[i];
-    val_j += (tmp_j*tmp_j) / dcov[j];
+    val_i += (tmp_i*tmp_i) * inv_dcov[i];
+    val_j += (tmp_j*tmp_j) * inv_dcov[j];
     }
   
   if(i < N_dims)
     {
     const eT tmp = x[i] - mean[i];
     
-    val_i += (tmp*tmp) / dcov[i];
+    val_i += (tmp*tmp) * inv_dcov[i];
     }
   
   return eT(-0.5)*(val_i + val_j) + log_det_etc.mem[g];
@@ -901,10 +1125,9 @@ gmm_diag<eT>::internal_scalar_log_p(const eT* x, const uword g) const
 
 
 template<typename eT>
-template<typename T1>
 inline
 Row<eT>
-gmm_diag<eT>::internal_vec_log_p(const T1& X) const
+gmm_diag<eT>::internal_vec_log_p(const Mat<eT>& X) const
   {
   arma_extra_debug_sigprint();
   
@@ -914,11 +1137,38 @@ gmm_diag<eT>::internal_vec_log_p(const T1& X) const
   
   Row<eT> out(N);
   
-  eT* out_mem = out.memptr();
-  
-  for(uword i=0; i < N; ++i)
+  if(N > 0)
     {
-    out_mem[i] = internal_scalar_log_p( X.colptr(i) );
+    #if defined(ARMA_USE_OPENMP)
+      {
+      const umat boundaries = internal_gen_boundaries(N);
+      
+      const uword n_threads = boundaries.n_cols;
+      
+      #pragma omp parallel for schedule(static)
+      for(uword t=0; t < n_threads; ++t)
+        {
+        const uword start_index = boundaries.at(0,t);
+        const uword   end_index = boundaries.at(1,t);
+        
+        eT* out_mem = out.memptr();
+        
+        for(uword i=start_index; i <= end_index; ++i)
+          {
+          out_mem[i] = internal_scalar_log_p( X.colptr(i) );
+          }
+        }
+      }
+    #else
+      {
+      eT* out_mem = out.memptr();
+      
+      for(uword i=0; i < N; ++i)
+        {
+        out_mem[i] = internal_scalar_log_p( X.colptr(i) );
+        }
+      }
+    #endif
     }
   
   return out;
@@ -927,25 +1177,51 @@ gmm_diag<eT>::internal_vec_log_p(const T1& X) const
 
 
 template<typename eT>
-template<typename T1>
 inline
 Row<eT>
-gmm_diag<eT>::internal_vec_log_p(const T1& X, const uword gaus_id) const
+gmm_diag<eT>::internal_vec_log_p(const Mat<eT>& X, const uword gaus_id) const
   {
   arma_extra_debug_sigprint();
   
   arma_debug_check( (X.n_rows != means.n_rows), "gmm_diag::log_p(): incompatible dimensions" );
-  arma_debug_check( (gaus_id  >= means.n_cols), "gmm_diag::log_p(): gaus_id is out of range" );
+  arma_debug_check( (gaus_id  >= means.n_cols), "gmm_diag::log_p(): specified gaussian is out of range" );
   
   const uword N = X.n_cols;
   
   Row<eT> out(N);
   
-  eT* out_mem = out.memptr();
-  
-  for(uword i=0; i < N; ++i)
+  if(N > 0)
     {
-    out_mem[i] = internal_scalar_log_p( X.colptr(i), gaus_id );
+    #if defined(ARMA_USE_OPENMP)
+      {
+      const umat boundaries = internal_gen_boundaries(N);
+      
+      const uword n_threads = boundaries.n_cols;
+      
+      #pragma omp parallel for schedule(static)
+      for(uword t=0; t < n_threads; ++t)
+        {
+        const uword start_index = boundaries.at(0,t);
+        const uword   end_index = boundaries.at(1,t);
+        
+        eT* out_mem = out.memptr();
+        
+        for(uword i=start_index; i <= end_index; ++i)
+          {
+          out_mem[i] = internal_scalar_log_p( X.colptr(i), gaus_id );
+          }
+        }
+      }
+    #else
+      {
+      eT* out_mem = out.memptr();
+      
+      for(uword i=0; i < N; ++i)
+        {
+        out_mem[i] = internal_scalar_log_p( X.colptr(i), gaus_id );
+        }
+      }
+    #endif
     }
   
   return out;
@@ -954,59 +1230,257 @@ gmm_diag<eT>::internal_vec_log_p(const T1& X, const uword gaus_id) const
 
 
 template<typename eT>
-template<typename T1>
 inline
 eT
-gmm_diag<eT>::internal_avg_log_p(const T1& X) const
+gmm_diag<eT>::internal_sum_log_p(const Mat<eT>& X) const
   {
   arma_extra_debug_sigprint();
   
-  arma_debug_check( (X.n_rows != means.n_rows), "gmm_diag::avg_log_p(): incompatible dimensions" );
-  
-  running_mean_scalar<eT> running_mean;
-  
+  arma_debug_check( (X.n_rows != means.n_rows), "gmm_diag::sum_log_p(): incompatible dimensions" );
+    
   const uword N = X.n_cols;
   
-  for(uword i=0; i<N; ++i)
-    {
-    running_mean( internal_scalar_log_p( X.colptr(i) ) );
-    }
+  if(N == 0)  { return (-Datum<eT>::inf); }
   
-  return ( (N > 0) ? running_mean.mean() : (-Datum<eT>::inf) );
+  
+  #if defined(ARMA_USE_OPENMP)
+    {
+    const umat boundaries = internal_gen_boundaries(N);
+    
+    const uword n_threads = boundaries.n_cols;
+    
+    Col<eT> t_accs(n_threads, fill::zeros);
+    
+    #pragma omp parallel for schedule(static)
+    for(uword t=0; t < n_threads; ++t)
+      {
+      const uword start_index = boundaries.at(0,t);
+      const uword   end_index = boundaries.at(1,t);
+      
+      eT t_acc = eT(0);
+      
+      for(uword i=start_index; i <= end_index; ++i)
+        {
+        t_acc += internal_scalar_log_p( X.colptr(i) );
+        }
+      
+      t_accs[t] = t_acc;
+      }
+    
+    return eT(accu(t_accs));
+    }
+  #else
+    {
+    eT acc = eT(0);
+    
+    for(uword i=0; i<N; ++i)
+      {
+      acc += internal_scalar_log_p( X.colptr(i) );
+      }
+    
+    return acc;
+    }
+  #endif
   }
 
 
 
 template<typename eT>
-template<typename T1>
 inline
 eT
-gmm_diag<eT>::internal_avg_log_p(const T1& X, const uword gaus_id) const
+gmm_diag<eT>::internal_sum_log_p(const Mat<eT>& X, const uword gaus_id) const
   {
   arma_extra_debug_sigprint();
   
-  arma_debug_check( (X.n_rows != means.n_rows), "gmm_diag::avg_log_p(): incompatible dimensions" );
-  arma_debug_check( (gaus_id  >= means.n_cols), "gmm_diag::avg_log_p(): specified gaussian is out of range"    );
-  
-  running_mean_scalar<eT> running_mean;
-  
+  arma_debug_check( (X.n_rows != means.n_rows), "gmm_diag::sum_log_p(): incompatible dimensions"            );
+  arma_debug_check( (gaus_id  >= means.n_cols), "gmm_diag::sum_log_p(): specified gaussian is out of range" );
+    
   const uword N = X.n_cols;
   
-  for(uword i=0; i<N; ++i)
-    {
-    running_mean( internal_scalar_log_p( X.colptr(i), gaus_id ) );
-    }
+  if(N == 0)  { return (-Datum<eT>::inf); }
   
-  return ( (N > 0) ? running_mean.mean() : (-Datum<eT>::inf) );
+  
+  #if defined(ARMA_USE_OPENMP)
+    {
+    const umat boundaries = internal_gen_boundaries(N);
+    
+    const uword n_threads = boundaries.n_cols;
+    
+    Col<eT> t_accs(n_threads, fill::zeros);
+    
+    #pragma omp parallel for schedule(static)
+    for(uword t=0; t < n_threads; ++t)
+      {
+      const uword start_index = boundaries.at(0,t);
+      const uword   end_index = boundaries.at(1,t);
+      
+      eT t_acc = eT(0);
+      
+      for(uword i=start_index; i <= end_index; ++i)
+        {
+        t_acc += internal_scalar_log_p( X.colptr(i), gaus_id );
+        }
+      
+      t_accs[t] = t_acc;
+      }
+    
+    return eT(accu(t_accs));
+    }
+  #else
+    {
+    eT acc = eT(0);
+    
+    for(uword i=0; i<N; ++i)
+      {
+      acc += internal_scalar_log_p( X.colptr(i), gaus_id );
+      }
+    
+    return acc;
+    }
+  #endif
   }
 
 
 
 template<typename eT>
-template<typename T1>
+inline
+eT
+gmm_diag<eT>::internal_avg_log_p(const Mat<eT>& X) const
+  {
+  arma_extra_debug_sigprint();
+  
+  arma_debug_check( (X.n_rows != means.n_rows), "gmm_diag::avg_log_p(): incompatible dimensions" );
+    
+  const uword N = X.n_cols;
+  
+  if(N == 0)  { return (-Datum<eT>::inf); }
+  
+  
+  #if defined(ARMA_USE_OPENMP)
+    {
+    const umat boundaries = internal_gen_boundaries(N);
+    
+    const uword n_threads = boundaries.n_cols;
+    
+    field< running_mean_scalar<eT> > t_running_means(n_threads);
+    
+    
+    #pragma omp parallel for schedule(static)
+    for(uword t=0; t < n_threads; ++t)
+      {
+      const uword start_index = boundaries.at(0,t);
+      const uword   end_index = boundaries.at(1,t);
+      
+      running_mean_scalar<eT>& current_running_mean = t_running_means[t];
+      
+      for(uword i=start_index; i <= end_index; ++i)
+        {
+        current_running_mean( internal_scalar_log_p( X.colptr(i) ) );
+        }
+      }
+    
+    
+    eT avg = eT(0);
+    
+    for(uword t=0; t < n_threads; ++t)
+      {
+      running_mean_scalar<eT>& current_running_mean = t_running_means[t];
+      
+      const eT w = eT(current_running_mean.count()) / eT(N);
+      
+      avg += w * current_running_mean.mean();
+      }
+    
+    return avg;
+    }
+  #else
+    {
+    running_mean_scalar<eT> running_mean;
+    
+    for(uword i=0; i<N; ++i)
+      {
+      running_mean( internal_scalar_log_p( X.colptr(i) ) );
+      }
+    
+    return running_mean.mean();
+    }
+  #endif
+  }
+
+
+
+template<typename eT>
+inline
+eT
+gmm_diag<eT>::internal_avg_log_p(const Mat<eT>& X, const uword gaus_id) const
+  {
+  arma_extra_debug_sigprint();
+  
+  arma_debug_check( (X.n_rows != means.n_rows), "gmm_diag::avg_log_p(): incompatible dimensions"            );
+  arma_debug_check( (gaus_id  >= means.n_cols), "gmm_diag::avg_log_p(): specified gaussian is out of range" );
+  
+  const uword N = X.n_cols;
+  
+  if(N == 0)  { return (-Datum<eT>::inf); }
+  
+  
+  #if defined(ARMA_USE_OPENMP)
+    {
+    const umat boundaries = internal_gen_boundaries(N);
+    
+    const uword n_threads = boundaries.n_cols;
+    
+    field< running_mean_scalar<eT> > t_running_means(n_threads);
+    
+    
+    #pragma omp parallel for schedule(static)
+    for(uword t=0; t < n_threads; ++t)
+      {
+      const uword start_index = boundaries.at(0,t);
+      const uword   end_index = boundaries.at(1,t);
+      
+      running_mean_scalar<eT>& current_running_mean = t_running_means[t];
+      
+      for(uword i=start_index; i <= end_index; ++i)
+        {
+        current_running_mean( internal_scalar_log_p( X.colptr(i), gaus_id) );
+        }
+      }
+    
+    
+    eT avg = eT(0);
+    
+    for(uword t=0; t < n_threads; ++t)
+      {
+      running_mean_scalar<eT>& current_running_mean = t_running_means[t];
+      
+      const eT w = eT(current_running_mean.count()) / eT(N);
+      
+      avg += w * current_running_mean.mean();
+      }
+    
+    return avg;
+    }
+  #else
+    {
+    running_mean_scalar<eT> running_mean;
+    
+    for(uword i=0; i<N; ++i)
+      {
+      running_mean( internal_scalar_log_p( X.colptr(i), gaus_id ) );
+      }
+    
+    return running_mean.mean();
+    }
+  #endif
+  }
+
+
+
+template<typename eT>
 inline
 uword
-gmm_diag<eT>::internal_scalar_assign(const T1& X, const gmm_dist_mode& dist_mode) const
+gmm_diag<eT>::internal_scalar_assign(const Mat<eT>& X, const gmm_dist_mode& dist_mode) const
   {
   arma_extra_debug_sigprint();
   
@@ -1027,11 +1501,7 @@ gmm_diag<eT>::internal_scalar_assign(const T1& X, const gmm_dist_mode& dist_mode
       {
       const eT tmp_dist = distance<eT,1>::eval(N_dims, X_mem, means.colptr(g), X_mem);
       
-      if(tmp_dist <= best_dist)
-        {
-        best_dist = tmp_dist;
-        best_g    = g;
-        }
+      if(tmp_dist <= best_dist)  { best_dist = tmp_dist;  best_g = g; }
       }
     
     return best_g;
@@ -1048,11 +1518,7 @@ gmm_diag<eT>::internal_scalar_assign(const T1& X, const gmm_dist_mode& dist_mode
       {
       const eT tmp_p = internal_scalar_log_p(X_mem, g) + log_hefts_mem[g];
       
-      if(tmp_p >= best_p)
-        {
-        best_p = tmp_p;
-        best_g = g;
-        }
+      if(tmp_p >= best_p)  { best_p = tmp_p;  best_g = g; }
       }
     
     return best_g;
@@ -1068,10 +1534,9 @@ gmm_diag<eT>::internal_scalar_assign(const T1& X, const gmm_dist_mode& dist_mode
 
 
 template<typename eT>
-template<typename T1>
 inline
 void
-gmm_diag<eT>::internal_vec_assign(urowvec& out, const T1& X, const gmm_dist_mode& dist_mode) const
+gmm_diag<eT>::internal_vec_assign(urowvec& out, const Mat<eT>& X, const gmm_dist_mode& dist_mode) const
   {
   arma_extra_debug_sigprint();
   
@@ -1088,52 +1553,94 @@ gmm_diag<eT>::internal_vec_assign(urowvec& out, const T1& X, const gmm_dist_mode
   
   if(dist_mode == eucl_dist)
     {
-    for(uword i=0; i<X_n_cols; ++i)
+    #if defined(ARMA_USE_OPENMP)
       {
-      const eT* X_colptr = X.colptr(i);
-       
-      eT    best_dist = Datum<eT>::inf;
-      uword best_g    = 0;
-      
-      for(uword g=0; g<N_gaus; ++g)
+      #pragma omp parallel for schedule(static)
+      for(uword i=0; i<X_n_cols; ++i)
         {
-        const eT tmp_dist = distance<eT,1>::eval(N_dims, X_colptr, means.colptr(g), X_colptr);
+        const eT* X_colptr = X.colptr(i);
         
-        if(tmp_dist <= best_dist)
+        eT    best_dist = Datum<eT>::inf;
+        uword best_g    = 0;
+        
+        for(uword g=0; g<N_gaus; ++g)
           {
-          best_dist = tmp_dist;
-          best_g    = g;
+          const eT tmp_dist = distance<eT,1>::eval(N_dims, X_colptr, means.colptr(g), X_colptr);
+          
+          if(tmp_dist <= best_dist)  { best_dist = tmp_dist;  best_g = g; }
           }
+        
+        out_mem[i] = best_g;
         }
-      
-      out_mem[i] = best_g;
       }
+    #else
+      {
+      for(uword i=0; i<X_n_cols; ++i)
+        {
+        const eT* X_colptr = X.colptr(i);
+        
+        eT    best_dist = Datum<eT>::inf;
+        uword best_g    = 0;
+        
+        for(uword g=0; g<N_gaus; ++g)
+          {
+          const eT tmp_dist = distance<eT,1>::eval(N_dims, X_colptr, means.colptr(g), X_colptr);
+          
+          if(tmp_dist <= best_dist)  { best_dist = tmp_dist;  best_g = g; }
+          }
+        
+        out_mem[i] = best_g;
+        }
+      }
+    #endif
     }
   else
   if(dist_mode == prob_dist)
     {
-    const eT* log_hefts_mem = log_hefts.memptr();
-    
-    for(uword i=0; i<X_n_cols; ++i)
+    #if defined(ARMA_USE_OPENMP)
       {
-      const eT* X_colptr = X.colptr(i);
-       
-      eT    best_p = -Datum<eT>::inf;
-      uword best_g = 0;
+      const eT* log_hefts_mem = log_hefts.memptr();
       
-      for(uword g=0; g<N_gaus; ++g)
+      #pragma omp parallel for schedule(static)
+      for(uword i=0; i<X_n_cols; ++i)
         {
-        const eT tmp_p = internal_scalar_log_p(X_colptr, g) + log_hefts_mem[g];
+        const eT* X_colptr = X.colptr(i);
         
-        if(tmp_p >= best_p)
+        eT    best_p = -Datum<eT>::inf;
+        uword best_g = 0;
+        
+        for(uword g=0; g<N_gaus; ++g)
           {
-          best_p = tmp_p;
-          best_g = g;
+          const eT tmp_p = internal_scalar_log_p(X_colptr, g) + log_hefts_mem[g];
+          
+          if(tmp_p >= best_p)  { best_p = tmp_p;  best_g = g; }
           }
+        
+        out_mem[i] = best_g;
         }
-      
-      out_mem[i] = best_g;
       }
+    #else
+      {
+      const eT* log_hefts_mem = log_hefts.memptr();
+      
+      for(uword i=0; i<X_n_cols; ++i)
+        {
+        const eT* X_colptr = X.colptr(i);
+         
+        eT    best_p = -Datum<eT>::inf;
+        uword best_g = 0;
+        
+        for(uword g=0; g<N_gaus; ++g)
+          {
+          const eT tmp_p = internal_scalar_log_p(X_colptr, g) + log_hefts_mem[g];
+          
+          if(tmp_p >= best_p)  { best_p = tmp_p;  best_g = g; }
+          }
+        
+        out_mem[i] = best_g;
+        }
+      }
+    #endif
     }
   else
     {
@@ -1160,57 +1667,132 @@ gmm_diag<eT>::internal_raw_hist(urowvec& hist, const Mat<eT>& X, const gmm_dist_
   
   if(N_gaus == 0)  { return; }
   
-  uword* hist_mem = hist.memptr();
-  
-  if(dist_mode == eucl_dist)
+  #if defined(ARMA_USE_OPENMP)
     {
-    for(uword i=0; i<X_n_cols; ++i)
-      {
-      const eT* X_colptr = X.colptr(i);
-       
-      eT    best_dist = Datum<eT>::inf;
-      uword best_g    = 0;
-      
-      for(uword g=0; g < N_gaus; ++g)
-        {
-        const eT tmp_dist = distance<eT,1>::eval(N_dims, X_colptr, means.colptr(g), X_colptr);
-        
-        if(tmp_dist <= best_dist)
-          {
-          best_dist = tmp_dist;
-          best_g    = g;
-          }
-        }
-      
-      hist_mem[best_g]++;
-      }
-    }
-  else
-  if(dist_mode == prob_dist)
-    {
-    const eT* log_hefts_mem = log_hefts.memptr();
+    const umat boundaries = internal_gen_boundaries(X_n_cols);
     
-    for(uword i=0; i<X_n_cols; ++i)
+    const uword n_threads = boundaries.n_cols;
+    
+    field<urowvec> thread_hist(n_threads);
+    
+    for(uword t=0; t < n_threads; ++t)  { thread_hist(t).zeros(N_gaus); }
+    
+    
+    if(dist_mode == eucl_dist)
       {
-      const eT* X_colptr = X.colptr(i);
-        
-      eT    best_p = -Datum<eT>::inf;
-      uword best_g = 0;
-      
-      for(uword g=0; g < N_gaus; ++g)
+      #pragma omp parallel for schedule(static)
+      for(uword t=0; t < n_threads; ++t)
         {
-        const eT tmp_p = internal_scalar_log_p(X_colptr, g) + log_hefts_mem[g];
+        uword* thread_hist_mem = thread_hist(t).memptr();
         
-        if(tmp_p >= best_p)
+        const uword start_index = boundaries.at(0,t);
+        const uword   end_index = boundaries.at(1,t);
+        
+        for(uword i=start_index; i <= end_index; ++i)
           {
-          best_p = tmp_p;
-          best_g = g;
+          const eT* X_colptr = X.colptr(i);
+          
+          eT    best_dist = Datum<eT>::inf;
+          uword best_g    = 0;
+          
+          for(uword g=0; g < N_gaus; ++g)
+            {
+            const eT tmp_dist = distance<eT,1>::eval(N_dims, X_colptr, means.colptr(g), X_colptr);
+            
+            if(tmp_dist <= best_dist)  { best_dist = tmp_dist;  best_g = g; }
+            }
+          
+          thread_hist_mem[best_g]++;
           }
         }
+      }
+    else
+    if(dist_mode == prob_dist)
+      {
+      const eT* log_hefts_mem = log_hefts.memptr();
       
-      hist_mem[best_g]++;
+      #pragma omp parallel for schedule(static)
+      for(uword t=0; t < n_threads; ++t)
+        {
+        uword* thread_hist_mem = thread_hist(t).memptr();
+        
+        const uword start_index = boundaries.at(0,t);
+        const uword   end_index = boundaries.at(1,t);
+        
+        for(uword i=start_index; i <= end_index; ++i)
+          {
+          const eT* X_colptr = X.colptr(i);
+            
+          eT    best_p = -Datum<eT>::inf;
+          uword best_g = 0;
+          
+          for(uword g=0; g < N_gaus; ++g)
+            {
+            const eT tmp_p = internal_scalar_log_p(X_colptr, g) + log_hefts_mem[g];
+            
+            if(tmp_p >= best_p)  { best_p = tmp_p;  best_g = g; }
+            }
+          
+          thread_hist_mem[best_g]++;
+          }
+        }
+      }
+    
+    // reduction
+    hist = thread_hist(0);
+    
+    for(uword t=1; t < n_threads; ++t)
+      {
+      hist += thread_hist(t);
       }
     }
+  #else
+    {
+    uword* hist_mem = hist.memptr();
+    
+    if(dist_mode == eucl_dist)
+      {
+      for(uword i=0; i<X_n_cols; ++i)
+        {
+        const eT* X_colptr = X.colptr(i);
+         
+        eT    best_dist = Datum<eT>::inf;
+        uword best_g    = 0;
+        
+        for(uword g=0; g < N_gaus; ++g)
+          {
+          const eT tmp_dist = distance<eT,1>::eval(N_dims, X_colptr, means.colptr(g), X_colptr);
+          
+          if(tmp_dist <= best_dist)  { best_dist = tmp_dist;  best_g = g; }
+          }
+        
+        hist_mem[best_g]++;
+        }
+      }
+    else
+    if(dist_mode == prob_dist)
+      {
+      const eT* log_hefts_mem = log_hefts.memptr();
+      
+      for(uword i=0; i<X_n_cols; ++i)
+        {
+        const eT* X_colptr = X.colptr(i);
+        
+        eT    best_p = -Datum<eT>::inf;
+        uword best_g = 0;
+        
+        for(uword g=0; g < N_gaus; ++g)
+          {
+          const eT tmp_p = internal_scalar_log_p(X_colptr, g) + log_hefts_mem[g];
+          
+          if(tmp_p >= best_p)  { best_p = tmp_p;  best_g = g; }
+          }
+        
+        hist_mem[best_g]++;
+        }
+      }
+    }
+  #endif
   }
 
 
@@ -1221,6 +1803,8 @@ inline
 void
 gmm_diag<eT>::generate_initial_means(const Mat<eT>& X, const gmm_seed_mode& seed_mode)
   {
+  arma_extra_debug_sigprint();
+  
   const uword N_dims = means.n_rows;
   const uword N_gaus = means.n_cols;
   
@@ -1228,10 +1812,8 @@ gmm_diag<eT>::generate_initial_means(const Mat<eT>& X, const gmm_seed_mode& seed
     {
     uvec initial_indices;
     
-         if(seed_mode == static_subset)  { initial_indices = linspace<uvec>(0, X.n_cols-1, N_gaus);             }
-    else if(seed_mode == random_subset)  { initial_indices = sort_index(randu<vec>(X.n_cols)).rows(0,N_gaus-1); }
-    
-    // not using randi() here as on some primitive systems it produces vectors with non-unique values
+         if(seed_mode == static_subset)  { initial_indices = linspace<uvec>(0, X.n_cols-1, N_gaus); }
+    else if(seed_mode == random_subset)  { initial_indices = randperm<uvec>(X.n_cols, N_gaus);      }
     
     // initial_indices.print("initial_indices:");
     
@@ -1240,6 +1822,12 @@ gmm_diag<eT>::generate_initial_means(const Mat<eT>& X, const gmm_seed_mode& seed
   else
   if( (seed_mode == static_spread) || (seed_mode == random_spread) )
     {
+    // going through all of the samples can be extremely time consuming;
+    // instead, if there are enough samples, randomly choose samples with probability 0.1
+    
+    const bool  use_sampling = ((X.n_cols/uword(100)) > N_gaus);
+    const uword step         = (use_sampling) ? uword(10) : uword(1);
+    
     uword start_index = 0;
     
          if(seed_mode == static_spread)  { start_index = X.n_cols / 2;                                         }
@@ -1255,8 +1843,20 @@ gmm_diag<eT>::generate_initial_means(const Mat<eT>& X, const gmm_seed_mode& seed
       {
       eT    max_dist = eT(0);
       uword best_i   = uword(0);
+      uword start_i  = uword(0);
       
-      for(uword i=0; i < X.n_cols; ++i)
+      if(use_sampling)
+        {
+        uword start_i_proposed = uword(0);
+        
+        if(seed_mode == static_spread)  { start_i_proposed = g % uword(10);                               }
+        if(seed_mode == random_spread)  { start_i_proposed = as_scalar(randi<uvec>(1, distr_param(0,9))); }
+        
+        if(start_i_proposed < X.n_cols)  { start_i = start_i_proposed; }
+        }
+      
+      
+      for(uword i=start_i; i < X.n_cols; i += step)
         {
         rs.reset();
         
@@ -1276,7 +1876,7 @@ gmm_diag<eT>::generate_initial_means(const Mat<eT>& X, const gmm_seed_mode& seed
         
         if( (rs.mean() >= max_dist) && (ignore_i == false))
           {
-          max_dist = rs.mean(); best_i = i;
+          max_dist = eT(rs.mean()); best_i = i;
           }
         }
       
@@ -1285,7 +1885,7 @@ gmm_diag<eT>::generate_initial_means(const Mat<eT>& X, const gmm_seed_mode& seed
       }
     }
   
-  // get_stream_err2() << "generate_initial_means():" << '\n';
+  // get_cout_stream() << "generate_initial_means():" << '\n';
   // means.print();
   }
 
@@ -1295,44 +1895,147 @@ template<typename eT>
 template<uword dist_id>
 inline
 void
-gmm_diag<eT>::generate_initial_dcovs_and_hefts(const Mat<eT>& X, const eT var_floor)
+gmm_diag<eT>::generate_initial_params(const Mat<eT>& X, const eT var_floor)
   {
+  arma_extra_debug_sigprint();
+  
   const uword N_dims = means.n_rows;
   const uword N_gaus = means.n_cols;
   
-  field< running_stat_vec< Col<eT> > > rs(N_gaus);
-  
   const eT* mah_aux_mem = mah_aux.memptr();
   
-  for(uword i=0; i<X.n_cols; ++i)
+  const uword X_n_cols = X.n_cols;
+  
+  if(X_n_cols == 0)  { return; }
+  
+  // as the covariances are calculated via accumulators,
+  // the means also need to be calculated via accumulators to ensure numerical consistency
+  
+  Mat<eT> acc_means(N_dims, N_gaus, fill::zeros);
+  Mat<eT> acc_dcovs(N_dims, N_gaus, fill::zeros);
+  
+  Row<uword> acc_hefts(N_gaus, fill::zeros);
+  
+  uword* acc_hefts_mem = acc_hefts.memptr();
+  
+  #if defined(ARMA_USE_OPENMP)
     {
-    const eT* X_colptr = X.colptr(i);
+    const umat boundaries = internal_gen_boundaries(X_n_cols);
     
-    double min_dist = Datum<eT>::inf;
-    uword  best_g   = 0;
+    const uword n_threads = boundaries.n_cols;
     
-    for(uword g=0; g<N_gaus; ++g)
+    field< Mat<eT>    > t_acc_means(n_threads);
+    field< Mat<eT>    > t_acc_dcovs(n_threads);
+    field< Row<uword> > t_acc_hefts(n_threads);
+    
+    for(uword t=0; t < n_threads; ++t)
       {
-      const double dist = distance<eT,dist_id>::eval(N_dims, X_colptr, means.colptr(g), mah_aux_mem);
-      
-      if(dist <= min_dist)  { min_dist = dist; best_g = g; }
+      t_acc_means(t).zeros(N_dims, N_gaus);
+      t_acc_dcovs(t).zeros(N_dims, N_gaus);
+      t_acc_hefts(t).zeros(N_gaus);
       }
     
-    rs(best_g)(X.unsafe_col(i));
+    #pragma omp parallel for schedule(static)
+    for(uword t=0; t < n_threads; ++t)
+      {
+      uword* t_acc_hefts_mem = t_acc_hefts(t).memptr();
+      
+      const uword start_index = boundaries.at(0,t);
+      const uword   end_index = boundaries.at(1,t);
+      
+      for(uword i=start_index; i <= end_index; ++i)
+        {
+        const eT* X_colptr = X.colptr(i);
+        
+        eT     min_dist = Datum<eT>::inf;
+        uword  best_g   = 0;
+        
+        for(uword g=0; g<N_gaus; ++g)
+          {
+          const eT dist = distance<eT,dist_id>::eval(N_dims, X_colptr, means.colptr(g), mah_aux_mem);
+          
+          if(dist < min_dist)  { min_dist = dist;  best_g = g; }
+          }
+        
+        eT* t_acc_mean = t_acc_means(t).colptr(best_g);
+        eT* t_acc_dcov = t_acc_dcovs(t).colptr(best_g);
+        
+        for(uword d=0; d<N_dims; ++d)
+          {
+          const eT x_d = X_colptr[d];
+          
+          t_acc_mean[d] += x_d;
+          t_acc_dcov[d] += x_d*x_d;
+          }
+        
+        t_acc_hefts_mem[best_g]++;
+        }
+      }
+    
+    // reduction
+    acc_means = t_acc_means(0);
+    acc_dcovs = t_acc_dcovs(0);
+    acc_hefts = t_acc_hefts(0);
+    
+    for(uword t=1; t < n_threads; ++t)
+      {
+      acc_means += t_acc_means(t);
+      acc_dcovs += t_acc_dcovs(t);
+      acc_hefts += t_acc_hefts(t);
+      }
     }
+  #else
+    {
+    for(uword i=0; i<X_n_cols; ++i)
+      {
+      const eT* X_colptr = X.colptr(i);
+      
+      eT     min_dist = Datum<eT>::inf;
+      uword  best_g   = 0;
+      
+      for(uword g=0; g<N_gaus; ++g)
+        {
+        const eT dist = distance<eT,dist_id>::eval(N_dims, X_colptr, means.colptr(g), mah_aux_mem);
+        
+        if(dist < min_dist)  { min_dist = dist;  best_g = g; }
+        }
+      
+      eT* acc_mean = acc_means.colptr(best_g);
+      eT* acc_dcov = acc_dcovs.colptr(best_g);
+      
+      for(uword d=0; d<N_dims; ++d)
+        {
+        const eT x_d = X_colptr[d];
+        
+        acc_mean[d] += x_d;
+        acc_dcov[d] += x_d*x_d;
+        }
+      
+      acc_hefts_mem[best_g]++;
+      }
+    }
+  #endif
+  
+  eT* hefts_mem = access::rw(hefts).memptr();
   
   for(uword g=0; g<N_gaus; ++g)
     {
-    if( rs(g).count() >= eT(2) )
+    const eT*   acc_mean = acc_means.colptr(g);
+    const eT*   acc_dcov = acc_dcovs.colptr(g);
+    const uword acc_heft = acc_hefts_mem[g];
+    
+    eT* mean = access::rw(means).colptr(g);
+    eT* dcov = access::rw(dcovs).colptr(g);
+    
+    for(uword d=0; d<N_dims; ++d)
       {
-      access::rw(dcovs).col(g) = rs(g).var(1);
-      }
-    else
-      {
-      access::rw(dcovs).col(g).ones();
+      const eT tmp = acc_mean[d] / eT(acc_heft);
+      
+      mean[d] = (acc_heft >= 1) ? tmp : eT(0);
+      dcov[d] = (acc_heft >= 2) ? eT((acc_dcov[d] / eT(acc_heft)) - (tmp*tmp)) : eT(var_floor);
       }
     
-    access::rw(hefts)(g) = (std::max)(eT(1), rs(g).count()) / eT(X.n_cols);
+    hefts_mem[g] = eT(acc_heft) / eT(X_n_cols);
     }
   
   em_fix_params(var_floor);
@@ -1345,204 +2048,203 @@ template<typename eT>
 template<uword dist_id>
 inline
 bool
-gmm_diag<eT>::km_iterate(const Mat<eT>& X, const uword max_iter, const bool verbose)
+gmm_diag<eT>::km_iterate(const Mat<eT>& X, const uword max_iter, const bool verbose, const char* signature)
   {
   arma_extra_debug_sigprint();
   
   if(verbose)
     {
-    get_stream_err2().unsetf(ios::showbase);
-    get_stream_err2().unsetf(ios::uppercase);
-    get_stream_err2().unsetf(ios::showpos);
-    get_stream_err2().unsetf(ios::scientific);
+    get_cout_stream().unsetf(ios::showbase);
+    get_cout_stream().unsetf(ios::uppercase);
+    get_cout_stream().unsetf(ios::showpos);
+    get_cout_stream().unsetf(ios::scientific);
     
-    get_stream_err2().setf(ios::right);
-    get_stream_err2().setf(ios::fixed);
+    get_cout_stream().setf(ios::right);
+    get_cout_stream().setf(ios::fixed);
     }
+  
+  const uword X_n_cols = X.n_cols;
+  
+  if(X_n_cols == 0)  { return true; }
   
   const uword N_dims = means.n_rows;
   const uword N_gaus = means.n_cols;
   
-  Mat<eT> old_means = means;
-  Mat<eT> new_means = means;
-  
-  running_mean_scalar<double> rs_delta;
-  
-  field< running_mean_vec<eT> > running_means(N_gaus);
-  
   const eT* mah_aux_mem = mah_aux.memptr();
   
+  Mat<eT>    acc_means(N_dims, N_gaus, fill::zeros);
+  Row<uword> acc_hefts(N_gaus, fill::zeros);
+  Row<uword> last_indx(N_gaus, fill::zeros);
   
-  #if defined(_OPENMP)
-    const arma_omp_state save_omp_state;
+  Mat<eT> new_means = means;
+  Mat<eT> old_means = means;
+  
+  running_mean_scalar<eT> rs_delta;
+  
+  #if defined(ARMA_USE_OPENMP)
+    const umat boundaries = internal_gen_boundaries(X_n_cols);
+    const uword n_threads = boundaries.n_cols;
     
-    omp_set_dynamic(0);
-    
-    //const uword n_cores = 0;
-    const uword n_cores   = uword(omp_get_num_procs());
-    const uword n_threads = (n_cores > 0) ? ( (n_cores <= X.n_cols) ? n_cores : 1 ) : 1;
-    
-    field< field< running_mean_vec<eT> > > t_running_means(n_threads);
-    
-    for(uword t=0; t < n_threads; ++t)  { t_running_means[t].set_size(N_gaus); }
-    
-    field< uvec > t_boundary(n_threads);
-    
-    const uword chunk_size = X.n_cols / n_threads;
-    
-    uword vec_count = 0;
-    
-    for(uword t=0; t<n_threads; t++)
-      {
-      t_boundary[t].set_size(2);
-      
-      t_boundary[t][0] = vec_count;
-      
-      vec_count += chunk_size;
-      
-      t_boundary[t][1] = vec_count-1;
-      }
-    
-    t_boundary[n_threads-1][1] = X.n_cols - 1;
-    
-    vec tmp_mean(N_dims);
-    
-    if(verbose)
-      {
-      get_stream_err2() << "gmm_diag::learn(): k-means: n_threads:  " << n_threads  << '\n';
-      get_stream_err2() << "gmm_diag::learn(): k-means: chunk_size: " << chunk_size << '\n';
-      }
+    field< Mat<eT>    > t_acc_means(n_threads);
+    field< Row<uword> > t_acc_hefts(n_threads);
+    field< Row<uword> > t_last_indx(n_threads);
+  #else
+    const uword n_threads = 1;
   #endif
   
+  if(verbose)  { get_cout_stream() << signature << ": n_threads: " << n_threads  << '\n'; get_cout_stream().flush(); }
   
   for(uword iter=1; iter <= max_iter; ++iter)
     {
-    #if defined(_OPENMP)
+    #if defined(ARMA_USE_OPENMP)
       {
       for(uword t=0; t < n_threads; ++t)
         {
-        for(uword g=0; g < N_gaus; ++g)  { t_running_means[t][g].reset(); }
+        t_acc_means(t).zeros(N_dims, N_gaus);
+        t_acc_hefts(t).zeros(N_gaus);
+        t_last_indx(t).zeros(N_gaus);
         }
       
-      
-      // km_update_stats() is the "map" operation, which produces partial means
-      
-      #pragma omp parallel for
+      #pragma omp parallel for schedule(static)
       for(uword t=0; t < n_threads; ++t)
         {
-        const uvec& boundary = t_boundary[t];
+        Mat<eT>& t_acc_means_t   = t_acc_means(t);
+        uword*   t_acc_hefts_mem = t_acc_hefts(t).memptr();
+        uword*   t_last_indx_mem = t_last_indx(t).memptr();
         
-        field< running_mean_vec<eT> >& current_running_means = t_running_means[t];
+        const uword start_index = boundaries.at(0,t);
+        const uword   end_index = boundaries.at(1,t);
         
-        km_update_stats<dist_id>(X, boundary[0], boundary[1], old_means, current_running_means);
+        for(uword i=start_index; i <= end_index; ++i)
+          {
+          const eT* X_colptr = X.colptr(i);
+          
+          eT     min_dist = Datum<eT>::inf;
+          uword  best_g   = 0;
+          
+          for(uword g=0; g<N_gaus; ++g)
+            {
+            const eT dist = distance<eT,dist_id>::eval(N_dims, X_colptr, old_means.colptr(g), mah_aux_mem);
+            
+            if(dist < min_dist)  { min_dist = dist;  best_g = g; }
+            }
+          
+          eT* t_acc_mean = t_acc_means_t.colptr(best_g);
+          
+          for(uword d=0; d<N_dims; ++d)  { t_acc_mean[d] += X_colptr[d]; }
+          
+          t_acc_hefts_mem[best_g]++;
+          t_last_indx_mem[best_g] = i;
+          }
         }
       
+      // reduction
       
-      // the "reduce" operation, which combines the partial means produced by the separate threads;
-      // takes into account the counts for each mean
+      acc_means = t_acc_means(0);
+      acc_hefts = t_acc_hefts(0);
       
-      for(uword g=0; g < N_gaus; ++g)
+      for(uword t=1; t < n_threads; ++t)
         {
-        uword total_count = 0;
-        
-        for(uword t=0; t < n_threads; ++t)  { total_count += t_running_means[t][g].count(); }
-        
-        tmp_mean.zeros();
-        
-        bool  dead       = true;
-        uword last_index = 0;
-        
-        if(total_count > 0)
-          {
-          for(uword t=0; t < n_threads; ++t)
-            {
-            const eT w = eT(t_running_means[t][g].count()) / eT(total_count);
-            
-            if(w > eT(0))
-              {
-              tmp_mean += w * t_running_means[t][g].mean();
-              
-              dead       = false;
-              last_index = t_running_means[t][g].last_index();
-              }
-            }
-          }
-        
-        running_means[g].reset();
-        
-        if(dead == false)  { running_means[g](tmp_mean, last_index); }
+        acc_means += t_acc_means(t);
+        acc_hefts += t_acc_hefts(t);
+        }
+      
+      for(uword g=0; g < N_gaus;    ++g)
+      for(uword t=0; t < n_threads; ++t)
+        {
+        if( t_acc_hefts(t)(g) >= 1 )  { last_indx(g) = t_last_indx(t)(g); }
         }
       }
     #else
       {
-      for(uword g=0; g < N_gaus; ++g)  { running_means[g].reset(); }
+      uword* acc_hefts_mem = acc_hefts.memptr();
+      uword* last_indx_mem = last_indx.memptr();
       
-      km_update_stats<dist_id>(X, 0, X.n_cols-1, old_means, running_means);
+      for(uword i=0; i < X_n_cols; ++i)
+        {
+        const eT* X_colptr = X.colptr(i);
+        
+        eT     min_dist = Datum<eT>::inf;
+        uword  best_g   = 0;
+        
+        for(uword g=0; g<N_gaus; ++g)
+          {
+          const eT dist = distance<eT,dist_id>::eval(N_dims, X_colptr, old_means.colptr(g), mah_aux_mem);
+          
+          if(dist < min_dist)  { min_dist = dist;  best_g = g; }
+          }
+        
+        eT* acc_mean = acc_means.colptr(best_g);
+        
+        for(uword d=0; d<N_dims; ++d)  { acc_mean[d] += X_colptr[d]; }
+        
+        acc_hefts_mem[best_g]++;
+        last_indx_mem[best_g] = i;
+        }
       }
     #endif
     
-    uword n_dead_means = 0;
+    // generate new means
+    
+    uword* acc_hefts_mem = acc_hefts.memptr();
     
     for(uword g=0; g < N_gaus; ++g)
       {
-      if(running_means[g].count() > 0)
-        {
-        new_means.col(g) = running_means[g].mean();
-        }
-      else
-        {
-        n_dead_means++;
-        }
-      }
-    
-    if(n_dead_means > 0)
-      {
-      if(verbose)  { get_stream_err2() << "gmm_diag::learn(): k-means: recovering from dead means\n"; }
+      const eT*   acc_mean = acc_means.colptr(g);
+      const uword acc_heft = acc_hefts_mem[g];
       
-      if(n_dead_means == 1)
+      eT* new_mean = access::rw(new_means).colptr(g);
+  
+      for(uword d=0; d<N_dims; ++d)
         {
-        uword dead_g         = 0;
-        uword populous_g     = 0;
-        uword populous_count = running_means(0).count(); 
-        
-        for(uword g=1; g < N_gaus; ++g)
-          {
-          const uword count = running_means(g).count();
-          
-          if(count == 0)  { dead_g = g; }
-          
-          if(populous_count < count)
-            {
-            populous_count = count;
-            populous_g     = g;
-            }
-          }
-        
-        if( (populous_count <= 2) || (dead_g == populous_g) )  { return false; }
-        
-        new_means.col(dead_g) = X.unsafe_col( running_means(populous_g).last_index() );
-        }
-      else
-        {
-        uword dead_g = 0;
-        
-        for(uword live_g = 0; live_g < N_gaus; ++live_g)
-          {
-          if(running_means(live_g).count() >= 2)
-            {
-            for(; dead_g < N_gaus; ++dead_g)
-              {
-              if(running_means(dead_g).count() == 0)  { break; }
-              }
-            
-            new_means.col(dead_g) = X.unsafe_col( running_means(live_g).last_index() );
-            
-            dead_g++;
-            }
-          }
+        new_mean[d] = (acc_heft >= 1) ? (acc_mean[d] / eT(acc_heft)) : eT(0);
         }
       }
     
+    
+    // heuristics to resurrect dead means
+    
+    const uvec dead_gs = find(acc_hefts == uword(0));
+    
+    if(dead_gs.n_elem > 0)
+      {
+      if(verbose)  { get_cout_stream() << signature << ": recovering from dead means\n"; get_cout_stream().flush(); }
+      
+      uword* last_indx_mem = last_indx.memptr();
+    
+      const uvec live_gs = sort( find(acc_hefts >= uword(2)), "descend" );
+      
+      if(live_gs.n_elem == 0)  { return false; }
+      
+      uword live_gs_count  = 0;
+      
+      for(uword dead_gs_count = 0; dead_gs_count < dead_gs.n_elem; ++dead_gs_count)
+        {
+        const uword dead_g_id = dead_gs(dead_gs_count);
+        
+        uword proposed_i = 0;
+        
+        if(live_gs_count < live_gs.n_elem)
+          {
+          const uword live_g_id = live_gs(live_gs_count);  ++live_gs_count;
+          
+          if(live_g_id == dead_g_id)  { return false; }
+          
+          // recover by using a sample from a known good mean
+          proposed_i = last_indx_mem[live_g_id];
+          }
+        else
+          {
+          // recover by using a randomly seleced sample (last resort)
+          proposed_i = as_scalar(randi<uvec>(1, distr_param(0,X_n_cols-1)));
+          }
+        
+        if(proposed_i >= X_n_cols)  { return false; }
+        
+        new_means.col(dead_g_id) = X.col(proposed_i);
+        }
+      }
+
     rs_delta.reset();
     
     for(uword g=0; g < N_gaus; ++g)
@@ -1552,15 +2254,16 @@ gmm_diag<eT>::km_iterate(const Mat<eT>& X, const uword max_iter, const bool verb
     
     if(verbose)
       {
-      get_stream_err2() << "gmm_diag::learn(): k-means: iteration: ";
-      get_stream_err2().unsetf(ios::scientific);
-      get_stream_err2().setf(ios::fixed);
-      get_stream_err2().width(std::streamsize(4));
-      get_stream_err2() << iter;
-      get_stream_err2() << "   delta: ";
-      get_stream_err2().unsetf(ios::fixed);
-      //get_stream_err2().setf(ios::scientific);
-      get_stream_err2() << rs_delta.mean() << '\n';
+      get_cout_stream() << signature << ": iteration: ";
+      get_cout_stream().unsetf(ios::scientific);
+      get_cout_stream().setf(ios::fixed);
+      get_cout_stream().width(std::streamsize(4));
+      get_cout_stream() << iter;
+      get_cout_stream() << "   delta: ";
+      get_cout_stream().unsetf(ios::fixed);
+      //get_cout_stream().setf(ios::scientific);
+      get_cout_stream() << rs_delta.mean() << '\n';
+      get_cout_stream().flush();
       }
     
     arma::swap(old_means, new_means);
@@ -1570,50 +2273,9 @@ gmm_diag<eT>::km_iterate(const Mat<eT>& X, const uword max_iter, const bool verb
   
   access::rw(means) = old_means;
   
+  if(means.is_finite() == false)  { return false; }
+  
   return true;
-  }
-
-
-
-template<typename eT>
-template<uword dist_id>
-inline
-void
-gmm_diag<eT>::km_update_stats(const Mat<eT>& X, const uword start_index, const uword end_index, const Mat<eT>& old_means, field< running_mean_vec<eT> >& running_means) const
-  {
-  arma_extra_debug_sigprint();
-  
-  // get_stream_err2() << "km_update_stats(): start_index: " << start_index << '\n';
-  // get_stream_err2() << "km_update_stats():   end_index: " <<   end_index << '\n';
-  
-  const uword N_dims = means.n_rows;
-  const uword N_gaus = means.n_cols;
-  
-  const eT* mah_aux_mem = mah_aux.memptr();
-  
-  for(uword i=start_index; i <= end_index; ++i)
-    {
-    const eT* X_colptr = X.colptr(i);
-    
-    double best_dist = Datum<eT>::inf;
-    uword  best_g    = 0;
-    
-    for(uword g=0; g < N_gaus; ++g)
-      {
-      const double dist = distance<eT,dist_id>::eval(N_dims, X_colptr, old_means.colptr(g), mah_aux_mem);
-      
-      // get_stream_err2() << "g: " << g << "   dist: " << dist << '\n';
-      // old_means.col(g).print("old_means.col(g):");
-      // vec tmp(old_means.colptr(g), old_means.n_rows);
-      // tmp.print("tmp:");
-      
-      if(dist <= best_dist)  { best_dist = dist; best_g = g; }
-      }
-    
-    // get_stream_err2() << "best_g: " << best_g << '\n';
-    
-    running_means[best_g]( X.unsafe_col(i), i );
-    }
   }
 
 
@@ -1626,37 +2288,25 @@ gmm_diag<eT>::em_iterate(const Mat<eT>& X, const uword max_iter, const eT var_fl
   {
   arma_extra_debug_sigprint();
   
+  if(X.n_cols == 0)  { return true; }
+  
   const uword N_dims = means.n_rows;
   const uword N_gaus = means.n_cols;
   
   if(verbose)
     {
-    get_stream_err2().unsetf(ios::showbase);
-    get_stream_err2().unsetf(ios::uppercase);
-    get_stream_err2().unsetf(ios::showpos);
-    get_stream_err2().unsetf(ios::scientific);
+    get_cout_stream().unsetf(ios::showbase);
+    get_cout_stream().unsetf(ios::uppercase);
+    get_cout_stream().unsetf(ios::showpos);
+    get_cout_stream().unsetf(ios::scientific);
     
-    get_stream_err2().setf(ios::right);
-    get_stream_err2().setf(ios::fixed);
+    get_cout_stream().setf(ios::right);
+    get_cout_stream().setf(ios::fixed);
     }
   
-  #if defined(_OPENMP)
-    const arma_omp_state save_omp_state;
-    
-    omp_set_dynamic(0);
-    
-    // const uword n_cores = 0;
-    const uword n_cores   = uword(omp_get_num_procs());
-    const uword n_threads = (n_cores > 0) ? ( (n_cores <= X.n_cols) ? n_cores : 1 ) : 1;
-  #else
-    // static const uword n_cores   = 0;
-    static const uword n_threads = 1;
-  #endif
+  const umat boundaries = internal_gen_boundaries(X.n_cols);
   
-  // get_stream_err2() << "n_cores:   " << n_cores   << '\n';
-  // get_stream_err2() << "n_threads: " << n_threads << '\n';
-  
-  field< uvec    > t_boundary(n_threads);
+  const uword n_threads = boundaries.n_cols;
   
   field< Mat<eT> > t_acc_means(n_threads); 
   field< Mat<eT> > t_acc_dcovs(n_threads);
@@ -1668,8 +2318,6 @@ gmm_diag<eT>::em_iterate(const Mat<eT>& X, const uword max_iter, const eT var_fl
   
   for(uword t=0; t<n_threads; t++)
     {
-    t_boundary[t].set_size(2);
-    
     t_acc_means[t].set_size(N_dims, N_gaus);
     t_acc_dcovs[t].set_size(N_dims, N_gaus);
     
@@ -1677,31 +2325,11 @@ gmm_diag<eT>::em_iterate(const Mat<eT>& X, const uword max_iter, const eT var_fl
     t_gaus_log_lhoods[t].set_size(N_gaus);
     }
   
-  const uword chunk_size = X.n_cols / n_threads;
   
-  uword count = 0;
-  
-  for(uword t=0; t<n_threads; t++)
+  if(verbose)
     {
-    t_boundary[t][0] = count;
-    
-    count += chunk_size;
-    
-    t_boundary[t][1] = count-1;
+    get_cout_stream() << "gmm_diag::learn(): EM: n_threads: " << n_threads  << '\n';
     }
-  
-  t_boundary[n_threads-1][1] = X.n_cols - 1;
-  
-  // get_stream_err2() << "t_boundary.n_elem: " << t_boundary.n_elem << '\n';
-  // t_boundary.print("t_boundary:");
-  
-  #if defined(_OPENMP)
-    if(verbose)
-      {
-      get_stream_err2() << "gmm_diag::learn(): EM: n_threads:  " << n_threads  << '\n';
-      get_stream_err2() << "gmm_diag::learn(): EM: chunk_size: " << chunk_size << '\n';
-      }
-  #endif
   
   eT old_avg_log_p = -Datum<eT>::inf;
   
@@ -1709,26 +2337,27 @@ gmm_diag<eT>::em_iterate(const Mat<eT>& X, const uword max_iter, const eT var_fl
     {
     init_constants();
     
-    em_update_params(X, t_boundary, t_acc_means, t_acc_dcovs, t_acc_norm_lhoods, t_gaus_log_lhoods, t_progress_log_lhood);
+    em_update_params(X, boundaries, t_acc_means, t_acc_dcovs, t_acc_norm_lhoods, t_gaus_log_lhoods, t_progress_log_lhood);
     
     em_fix_params(var_floor);
     
-    const eT new_avg_log_p = mean(t_progress_log_lhood);
+    const eT new_avg_log_p = accu(t_progress_log_lhood) / eT(t_progress_log_lhood.n_elem);
     
     if(verbose)
       {
-      get_stream_err2() << "gmm_diag::learn(): EM: iteration: ";
-      get_stream_err2().unsetf(ios::scientific);
-      get_stream_err2().setf(ios::fixed);
-      get_stream_err2().width(std::streamsize(4));
-      get_stream_err2() << iter;
-      get_stream_err2() << "   avg_log_p: ";
-      get_stream_err2().unsetf(ios::fixed);
-      //get_stream_err2().setf(ios::scientific);
-      get_stream_err2() << new_avg_log_p << '\n';
+      get_cout_stream() << "gmm_diag::learn(): EM: iteration: ";
+      get_cout_stream().unsetf(ios::scientific);
+      get_cout_stream().setf(ios::fixed);
+      get_cout_stream().width(std::streamsize(4));
+      get_cout_stream() << iter;
+      get_cout_stream() << "   avg_log_p: ";
+      get_cout_stream().unsetf(ios::fixed);
+      //get_cout_stream().setf(ios::scientific);
+      get_cout_stream() << new_avg_log_p << '\n';
+      get_cout_stream().flush();
       }
     
-    if(is_finite(new_avg_log_p) == false)  { return false; }
+    if(arma_isfinite(new_avg_log_p) == false)  { return false; }
     
     if(std::abs(old_avg_log_p - new_avg_log_p) <= Datum<eT>::eps)  { break; }
     
@@ -1754,7 +2383,7 @@ void
 gmm_diag<eT>::em_update_params
   (
   const Mat<eT>&          X,
-  const field< uvec    >& t_boundary,
+  const umat&             boundaries,
         field< Mat<eT> >& t_acc_means,
         field< Mat<eT> >& t_acc_dcovs,
         field< Col<eT> >& t_acc_norm_lhoods,
@@ -1764,29 +2393,28 @@ gmm_diag<eT>::em_update_params
   {
   arma_extra_debug_sigprint();
   
-  const uword n_threads = t_boundary.n_elem;
+  const uword n_threads = boundaries.n_cols;
   
   
   // em_generate_acc() is the "map" operation, which produces partial accumulators for means, diagonal covariances and hefts
     
-  #if defined(_OPENMP)
+  #if defined(ARMA_USE_OPENMP)
     {
-    #pragma omp parallel for
+    #pragma omp parallel for schedule(static)
     for(uword t=0; t<n_threads; t++)
       {
-      const uvec&    boundary           = t_boundary[t];
-            Mat<eT>& acc_means          = t_acc_means[t];
-            Mat<eT>& acc_dcovs          = t_acc_dcovs[t];
-            Col<eT>& acc_norm_lhoods    = t_acc_norm_lhoods[t];
-            Col<eT>& gaus_log_lhoods    = t_gaus_log_lhoods[t];
-            eT&      progress_log_lhood = t_progress_log_lhood[t];
+      Mat<eT>& acc_means          = t_acc_means[t];
+      Mat<eT>& acc_dcovs          = t_acc_dcovs[t];
+      Col<eT>& acc_norm_lhoods    = t_acc_norm_lhoods[t];
+      Col<eT>& gaus_log_lhoods    = t_gaus_log_lhoods[t];
+      eT&      progress_log_lhood = t_progress_log_lhood[t];
       
-      em_generate_acc(X, boundary, acc_means, acc_dcovs, acc_norm_lhoods, gaus_log_lhoods, progress_log_lhood);
+      em_generate_acc(X, boundaries.at(0,t), boundaries.at(1,t), acc_means, acc_dcovs, acc_norm_lhoods, gaus_log_lhoods, progress_log_lhood);
       }
     }
   #else
     {
-    em_generate_acc(X, t_boundary[0], t_acc_means[0], t_acc_dcovs[0], t_acc_norm_lhoods[0], t_gaus_log_lhoods[0], t_progress_log_lhood[0]);
+    em_generate_acc(X, boundaries.at(0,0), boundaries.at(1,0), t_acc_means[0], t_acc_dcovs[0], t_acc_norm_lhoods[0], t_gaus_log_lhoods[0], t_progress_log_lhood[0]);
     }
   #endif
   
@@ -1811,25 +2439,67 @@ gmm_diag<eT>::em_update_params
   
   
   eT* hefts_mem = access::rw(hefts).memptr();
-    
+  
+  
+  //// update each component without sanity checking
+  //for(uword g=0; g < N_gaus; ++g)
+  //  {
+  //  const eT acc_norm_lhood = (std::max)( final_acc_norm_lhoods[g], std::numeric_limits<eT>::min() );
+  //  
+  //  eT* mean_mem = access::rw(means).colptr(g);
+  //  eT* dcov_mem = access::rw(dcovs).colptr(g);
+  //  
+  //  eT* acc_mean_mem = final_acc_means.colptr(g);
+  //  eT* acc_dcov_mem = final_acc_dcovs.colptr(g);
+  //  
+  //  hefts_mem[g] = acc_norm_lhood / eT(X.n_cols);
+  //  
+  //  for(uword d=0; d < N_dims; ++d)
+  //    {
+  //    const eT tmp = acc_mean_mem[d] / acc_norm_lhood;
+  //    
+  //    mean_mem[d] = tmp;
+  //    dcov_mem[d] = acc_dcov_mem[d] / acc_norm_lhood - tmp*tmp;
+  //    }
+  //  }
+  
+  
+  // conditionally update each component;  if only a subset of the hefts was updated, em_fix_params() will sanitise them
   for(uword g=0; g < N_gaus; ++g)
     {
-    eT* mean_mem = access::rw(means).colptr(g);
-    eT* dcov_mem = access::rw(dcovs).colptr(g);
+    const eT acc_norm_lhood = (std::max)( final_acc_norm_lhoods[g], std::numeric_limits<eT>::min() );
+    
+    if(arma_isfinite(acc_norm_lhood) == false)  { continue; }
     
     eT* acc_mean_mem = final_acc_means.colptr(g);
     eT* acc_dcov_mem = final_acc_dcovs.colptr(g);
     
-    const eT acc_norm_lhood = final_acc_norm_lhoods[g];
-    
-    hefts_mem[g] = acc_norm_lhood / eT(X.n_cols);
+    bool ok = true;
     
     for(uword d=0; d < N_dims; ++d)
       {
-      const eT tmp = acc_mean_mem[d] / acc_norm_lhood;
+      const eT tmp1 = acc_mean_mem[d] / acc_norm_lhood;
+      const eT tmp2 = acc_dcov_mem[d] / acc_norm_lhood - tmp1*tmp1;
       
-      mean_mem[d] = tmp;
-      dcov_mem[d] = acc_dcov_mem[d] / acc_norm_lhood - tmp*tmp;
+      acc_mean_mem[d] = tmp1;
+      acc_dcov_mem[d] = tmp2;
+      
+      if(arma_isfinite(tmp2) == false)  { ok = false; }
+      }
+    
+    
+    if(ok)
+      {
+      hefts_mem[g] = acc_norm_lhood / eT(X.n_cols);
+      
+      eT* mean_mem = access::rw(means).colptr(g);
+      eT* dcov_mem = access::rw(dcovs).colptr(g);
+      
+      for(uword d=0; d < N_dims; ++d)
+        {
+        mean_mem[d] = acc_mean_mem[d];
+        dcov_mem[d] = acc_dcov_mem[d];
+        }
       }
     }
   }
@@ -1842,7 +2512,8 @@ void
 gmm_diag<eT>::em_generate_acc
   (
   const Mat<eT>& X,
-  const uvec&    boundary,
+  const uword    start_index,
+  const uword      end_index,
         Mat<eT>& acc_means,
         Mat<eT>& acc_dcovs,
         Col<eT>& acc_norm_lhoods,
@@ -1861,14 +2532,12 @@ gmm_diag<eT>::em_generate_acc
   acc_norm_lhoods.zeros();
   gaus_log_lhoods.zeros();
   
-  const uword n_dim  = means.n_rows;
+  const uword N_dims = means.n_rows;
   const uword N_gaus = means.n_cols;
   
   const eT* log_hefts_mem       = log_hefts.memptr();
         eT* gaus_log_lhoods_mem = gaus_log_lhoods.memptr();
   
-  const uword start_index = boundary[0];
-  const uword   end_index = boundary[1];
   
   for(uword i=start_index; i <= end_index; i++)
     {
@@ -1897,7 +2566,7 @@ gmm_diag<eT>::em_generate_acc
       eT* acc_mean_mem = acc_means.colptr(g);
       eT* acc_dcov_mem = acc_dcovs.colptr(g);
       
-      for(uword d=0; d < n_dim; ++d)
+      for(uword d=0; d < N_dims; ++d)
         {
         const eT x_d = x[d];
         const eT y_d = x_d * norm_lhood;
@@ -1923,20 +2592,60 @@ gmm_diag<eT>::em_fix_params(const eT var_floor)
   const uword N_dims = means.n_rows;
   const uword N_gaus = means.n_cols;
   
-  for(uword g=0; g < N_gaus; ++g)
+  const eT var_ceiling = std::numeric_limits<eT>::max();
+  
+  const uword dcovs_n_elem = dcovs.n_elem;
+        eT*   dcovs_mem    = access::rw(dcovs).memptr();
+  
+  for(uword i=0; i < dcovs_n_elem; ++i)
     {
-    eT* dcov_mem = access::rw(dcovs).colptr(g);
+    eT& var_val = dcovs_mem[i];
     
-    for(uword d=0; d < N_dims; ++d)
+         if(var_val < var_floor  )  { var_val = var_floor;   }
+    else if(var_val > var_ceiling)  { var_val = var_ceiling; }
+    else if(arma_isnan(var_val)  )  { var_val = eT(1);       }
+    }
+  
+  
+  eT* hefts_mem = access::rw(hefts).memptr();
+  
+  for(uword g1=0; g1 < N_gaus; ++g1)
+    {
+    if(hefts_mem[g1] > eT(0))
       {
-      if(dcov_mem[d] < var_floor)  { dcov_mem[d] = var_floor; }
+      const eT* means_colptr_g1 = means.colptr(g1);
+      
+      for(uword g2=(g1+1); g2 < N_gaus; ++g2)
+        {
+        if( (hefts_mem[g2] > eT(0)) && (std::abs(hefts_mem[g1] - hefts_mem[g2]) <= std::numeric_limits<eT>::epsilon()) )
+          {
+          const eT dist = distance<eT,1>::eval(N_dims, means_colptr_g1, means.colptr(g2), means_colptr_g1);
+          
+          if(dist == eT(0)) { hefts_mem[g2] = eT(0); }
+          }
+        }
       }
+    }
+  
+  const eT heft_floor   = std::numeric_limits<eT>::min();
+  const eT heft_initial = eT(1) / eT(N_gaus);
+  
+  for(uword i=0; i < N_gaus; ++i)
+    {
+    eT& heft_val = hefts_mem[i];
+    
+         if(heft_val < heft_floor)  { heft_val = heft_floor;   }
+    else if(heft_val > eT(1)     )  { heft_val = eT(1);        }
+    else if(arma_isnan(heft_val) )  { heft_val = heft_initial; }
     }
   
   const eT heft_sum = accu(hefts);
   
-  if(heft_sum != eT(1))  { access::rw(hefts) / heft_sum; }
+  if((heft_sum < (eT(1) - Datum<eT>::eps)) || (heft_sum > (eT(1) + Datum<eT>::eps)))  { access::rw(hefts) /= heft_sum; }
   }
 
 
-}
+} // namespace gmm_priv
+
+
+//! @}
