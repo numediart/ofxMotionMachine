@@ -18,7 +18,7 @@ Moment::Moment( unsigned int idx, double frameRate ) {
 
     setIndex( idx, frameRate );
 }
-Moment::Moment( double time, unsigned int idx ) {
+Moment::Moment( double time, unsigned long int idx ) {
 
     _time = time;
     _frameRate = 0.0;
@@ -38,7 +38,7 @@ void Moment::setTime( double time, double frameRate ) {
     _time = time;
 }
 
-void Moment::setIndex( int idx, double frameRate ) {
+void Moment::setIndex( long int idx, double frameRate ) {
 
     _time = (double)idx / frameRate;
     _frameRate = frameRate;
@@ -50,12 +50,12 @@ void Moment::setTime( double time ) {
     setTime( time, _frameRate );
 }
 
-void Moment::setIndex( unsigned int idx ) {
+void Moment::setIndex( unsigned long int idx ) {
 
     setIndex( idx, _frameRate );
 }
 
-void Moment::setIndex( int idx ) {
+void Moment::setIndex( long int idx ) {
 
     setIndex( idx, _frameRate );
 }
