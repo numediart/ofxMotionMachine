@@ -547,10 +547,10 @@ bool Track::setJointOffsetRotation() {
         throw std::runtime_error( "Track::setJointOffsetRotation : empty rotation matrix with a rotation true flag" );
     bool debug = false;
 
-    this->rotationOffset.resize( 4, this->nOfNodes() );//for each mocap format, the orientation offset is stored in the destination node of the bone
     Frame frame0 = this->frame( (unsigned int)0 );
     if( this->hasGlobalCoordinate == false ) {
-        for( boneMapType::iterator it = this->boneList->begin(); it != this->boneList->end(); it++ ) {
+		this->rotationOffset.resize(4, this->nOfNodes());//for each mocap format, the orientation offset is stored in the destination node of the bone
+		for( boneMapType::iterator it = this->boneList->begin(); it != this->boneList->end(); it++ ) {
             for( int j = 0; j < it->second.jointChildren.size(); j++ ) {//loop on the ids of the destination joints of the current bone.
                 int dest = it->second.jointChildren[j];
 
@@ -577,7 +577,8 @@ bool Track::setJointOffsetRotation() {
     }
 	if (frame0.getPosition().n_elem == 0)
 		return false;
-    arma::colvec frontalAxis;
+	this->rotationOffset.resize(4, this->nOfNodes());//for each mocap format, the orientation offset is stored in the destination node of the bone
+	arma::colvec frontalAxis;
     arma::colvec longAxis;
     arma::colvec tempVec;
 
