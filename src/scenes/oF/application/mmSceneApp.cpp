@@ -219,7 +219,7 @@ void MoMa::SceneApp::update(ofEventArgs &args) {
                     //listener[l].track->clear();
                 }
 
-                int nOfNodes = message.getNumArgs() / 3;
+                int nOfNodes = listener[l].track->nOfNodes(); //message.getNumArgs() / 3;
                 arma::mat lPos(3, nOfNodes);
 
                 for (int n = 0; n < nOfNodes; n++) {
@@ -253,18 +253,23 @@ void MoMa::SceneApp::update(ofEventArgs &args) {
                     //listener[l].track->clear();
                 }
 
-                int nOfNodes = message.getNumArgs() / 7;
-                arma::mat lPos(3, nOfNodes);
-                arma::mat lRot(4, nOfNodes);
-                for (int n = 0; n < nOfNodes; n++) {
+				int nOfNodes = listener[l].track->nOfNodes();//message.getNumArgs() / 7;
+				int nOfBones = listener[l].track->nOfBones();//message.getNumArgs() / 7;
 
-                    lPos(X, n) = message.getArgAsFloat(7 * n);
-                    lPos(Y, n) = message.getArgAsFloat(7 * n + 1);
-                    lPos(Z, n) = message.getArgAsFloat(7 * n + 2);
-                    lRot(qX, n) = message.getArgAsFloat(7 * n + 3);
-                    lRot(qY, n) = message.getArgAsFloat(7 * n + 4);
-                    lRot(qZ, n) = message.getArgAsFloat(7 * n + 5);
-                    lRot(qW, n) = message.getArgAsFloat(7 * n + 6);
+				arma::mat lPos(3, nOfNodes);
+                arma::mat lRot(4, nOfBones);
+
+				for (int n = 0; n < nOfNodes; n++) {
+
+					lPos(X, n) = message.getArgAsFloat(3 * n);
+					lPos(Y, n) = message.getArgAsFloat(3 * n + 1);
+					lPos(Z, n) = message.getArgAsFloat(3 * n + 2);
+				}
+				for (int n = 0; n < nOfBones; n++) {
+                    lRot(qX, n) = message.getArgAsFloat(3 * nOfNodes + 4 * n + 0);
+                    lRot(qY, n) = message.getArgAsFloat(3 * nOfNodes + 4 * n + 1);
+                    lRot(qZ, n) = message.getArgAsFloat(3 * nOfNodes + 4 * n + 2);
+                    lRot(qW, n) = message.getArgAsFloat(3 * nOfNodes + 4 * n + 3);
 
                 }
                 if (listener[l].track->rotation.isTimed())
@@ -1345,8 +1350,12 @@ void MoMa::SceneApp::draw(const Frame &frame) {
 
                 for (boneMapType::iterator it = frame.boneList->begin(); it != frame.boneList->end(); it++) {
                     ofVec3f beg = toVec3f(frame.getPosition().col(it->second.jointParent));
+					if (beg==ofVec3f(0.0,0.0,0.0))
+						continue;
                     for (int bEnd = 0; bEnd < it->second.jointChildren.size(); bEnd++) {
                         ofVec3f end = toVec3f(frame.getPosition().col(it->second.jointChildren[bEnd]));
+						if (end == ofVec3f(0.0, 0.0, 0.0))
+							continue;
                         ofSetLineWidth(2);
                         ofLine(beg, end);
                     }
@@ -1359,9 +1368,11 @@ void MoMa::SceneApp::draw(const Frame &frame) {
 
             sphere.setRadius(nodeSize / 2); // Set position and radius
             for (int s = 0; s < frame.nOfNodes(); s++) {
-
+				ofVec3f posit = toVec3f(frame.node(s).position);
+				if (posit == ofVec3f(0.0, 0.0, 0.0))
+					continue;
                 ofPushMatrix();
-                ofTranslate(toVec3f(frame.node(s).position));
+                ofTranslate(posit);
                 sphere.draw();
                 ofPopMatrix();
             }
@@ -1689,7 +1700,7 @@ void MoMa::SceneApp::setFrameRate(float rate) {
     // appAtPos.time = getTimeFromIndex( appAtPos.index ); // Check app time
 }
 
-void MoMa::SceneApp::setPlayerSize(unsigned int nOfFrames) {
+void MoMa::SceneApp::setPlayerSize(unsigned long nOfFrames) {
 
     maxBound.setIndex(nOfFrames - 1, frameRate);
     highBound.setIndex(maxBound.index(), frameRate);

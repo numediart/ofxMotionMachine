@@ -260,7 +260,7 @@ namespace MoMa {
         void setPlaybackMode( int mode ); // Set playback mode
         void setFrameRate( float rate ); // Set playback rate
         
-        void setPlayerSize( unsigned int nOfFrames ); // Define size
+        void setPlayerSize( unsigned long nOfFrames ); // Define size
         void setPlayerSize( double minTime,double maxTime); // Define size in sec
         unsigned int getAppIndex( void ) const ; // Query app index
         double getAppTime( void ) const; // Query app time
